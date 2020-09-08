@@ -1,8 +1,9 @@
 <template>
   <v-app>
     
-    <v-main> 
-      <Sidebar id="Sidebar"/>  
+    <v-main>
+      <Sidebar  v-if="$route.name!= 'Login'" id="Sidebar" 
+         /> 
       <content>
         <router-view/> 
       </content>
@@ -19,6 +20,7 @@
 
 <script>
 import Sidebar from "./components/Sidebar";
+
 
 
 export default {

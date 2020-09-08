@@ -4,6 +4,8 @@ import VueRouter from "vue-router";
 import Order from "../views/Order.vue";
 import Stock from "../views/Stock.vue";
 import Delivery from "../views/DeliveryOrder.vue";
+import Login from "../views/Login.vue"
+import Delivered from "../views/Delivered.vue"
 
 
 
@@ -15,6 +17,11 @@ const router = new VueRouter({
 
 routes : [
   {
+    path: "/login",
+    name: "Login",
+    component: Login
+  },
+  {
     path: "/order",
     name: "Order",
     component: Order
@@ -23,6 +30,11 @@ routes : [
     path: "/stock",
     name: "Stock",
     component: Stock
+  },
+  {
+    path: "/delivered",
+    name: "Delivered",
+    component: Delivered
   },
   {
     path: "/delivery",

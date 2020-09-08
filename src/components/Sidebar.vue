@@ -38,9 +38,7 @@
   </v-app>
 </template>
 <style>
-#inspire {
-  background-color: #e1bee7;
-}
+
 </style>
 
 <script>
@@ -52,6 +50,7 @@ export default {
     items: [
       { icon: "mdi-view-dashboard", text: "Order", link: "/order" },
       { icon: "mdi-history", text: "Stock", link: "/stock" },
+      { icon: " mdi-clipboard-outline", text: "Delivered", link: "/delivered" },
       { icon: "mdi-content-copy", text: "Delivery Order", link: "/delivery" }
     ]
   })

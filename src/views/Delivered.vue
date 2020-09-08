@@ -1,14 +1,12 @@
 <template>
   <v-card class="ma-5 mb-12 pa-5">
     <v-card-title>
-      Stock
+      Delivered
       <v-spacer></v-spacer>
-    
     </v-card-title>
     <v-data-table
       :headers="headers"
       :items="desserts"
-   
     ></v-data-table>
   </v-card>
  
@@ -29,7 +27,7 @@
           },
           { text: 'Expected Output', value: 'calories' },
           { text: 'Ordered Quantity', value: 'fat' },
-          { text: 'Status', value: 'carbs' },
+         
         
         ],
         desserts: [
@@ -37,70 +35,69 @@
             name: 'Frozen Yogurt',
             calories: 159,
             fat: 6.0,
-            carbs: "Enough",
+       
           
           },
           {
             name: 'Ice cream sandwich',
             calories: 237,
             fat: 9.0,
-            carbs: "Enough",
+         
            
           },
           {
             name: 'Eclair',
             calories: 262,
             fat: 16.0,
-            carbs: "Enough",
+           
          
           },
           {
             name: 'Cupcake',
             calories: 305,
             fat: 3.7,
-            carbs: "Enough",
+        
          
           },
           {
             name: 'Gingerbread',
             calories: 356,
             fat: 16.0,
-            carbs:"Enough",
+      
       
           },
           {
             name: 'Jelly bean',
             calories: 375,
             fat: 0.0,
-            carbs: "Enough",
-        
+     
           },
           {
             name: 'Lollipop',
             calories: 392,
             fat: 0.2,
-            carbs: "Enough",
+       
           
           },
           {
             name: 'Honeycomb',
             calories: 408,
             fat: 3.2,
-            carbs: "Enough",
+      
            
           },
           {
             name: 'Donut',
             calories: 452,
             fat: 25.0,
-            carbs: "Enough",
+     
       
           },
           {
             name: 'KitKat',
             calories: 518,
             fat: 26.0,
-            carbs: "Enough",
+
         
           },
         ],

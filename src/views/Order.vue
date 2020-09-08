@@ -12,17 +12,23 @@
           hide-details
         ></v-text-field>
         <v-spacer></v-spacer>
-     <v-list>
-       <v-btn class="ma-5" color="purple darken-2" 
-        rounded outlined dark @click="dialog = !dialog">
-          <v-icon>mdi-plus </v-icon> 
-          <v-toolbar-title>Add Order</v-toolbar-title>
-        </v-btn>
-     </v-list>
-        <v-dialog v-model="dialog" width="800px">
+        <v-list>
+          <v-btn
+            class="ma-5"
+            color="purple darken-2"
+            rounded
+            outlined
+            dark
+            @click="dialog = !dialog"
+          >
+            <v-icon>mdi-plus</v-icon>
+            <v-toolbar-title>Add Order</v-toolbar-title>
+          </v-btn>
+        </v-list>
+        <v-dialog v-model="dialog" width="400px">
           <v-card>
             <v-spacer></v-spacer>
-            <v-card-title class="deep-purple lighten-3 align-center" >Add Order</v-card-title>
+            <v-card-title class="deep-purple lighten-3 align-center">Add Order</v-card-title>
             <v-container>
               <v-row class="mx-2">
                 <v-col class="align-center justify-space-between" cols="12">
@@ -33,23 +39,46 @@
                     <v-text-field placeholder="Name"></v-text-field>
                   </v-row>
                 </v-col>
-                <v-col cols="6">
+
+                <v-col cols="12">
+                  <v-text-field prepend-icon="mdi-map-marker" placeholder="Address"></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field type="tel" prepend-icon="mdi-phone" placeholder="+63 900 000 0000"></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-dialog
+                    ref="dialog"
+                    v-model="modal"
+                    :return-value.sync="date"
+                    persistent
+                    lazy
+                    full-width
+                    width="290px"
+                  >
+                    <template v-slot:activator="{ on }">
+                      <v-text-field
+                        v-model="date"
+                        label="Picker in dialog"
+                        prepend-icon="mdi-calendar-plus"
+                        readonly
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker v-model="date" scrollable>
+                      <v-spacer></v-spacer>
+                      <v-btn flat color="primary" @click="modal = false">Cancel</v-btn>
+                      <v-btn flat color="primary" @click="$refs.dialog.save(date)">OK</v-btn>
+                    </v-date-picker>
+                  </v-dialog>
+                </v-col>
+                <v-col cols="12">
                   <v-text-field
-                    prepend-icon="mdi-account-card-details-outline"
-                    placeholder="Company"
+                    prepend-icon="mdi-plus"
+                    min="1"
+                    type="number"
+                    placeholder="Quantity"
                   ></v-text-field>
-                </v-col>
-                <v-col cols="6">
-                  <v-text-field placeholder="Job title"></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field prepend-icon="mdi-mail" placeholder="Email"></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field type="tel" prepend-icon="mdi-phone" placeholder="(000) 000 - 0000"></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field prepend-icon="mdi-text" placeholder="Notes"></v-text-field>
                 </v-col>
               </v-row>
             </v-container>
@@ -60,121 +89,255 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+        <template v-bind:class="desserts">
+          <v-dialog v-model="editDialog" width="400px">
+            <v-card>
+              <v-spacer></v-spacer>
+              <v-card-title class="deep-purple lighten-3 align-center">Update order</v-card-title>
+              <v-container>
+                <v-row class="mx-2">
+                  <v-col class="align-center justify-space-between" cols="12">
+                    <v-row align="center" class="mr-0">
+                      <v-avatar size="40px" class="mx-3">
+                        <img src="//ssl.gstatic.com/s2/oz/images/sge/grey_silhouette.png" alt>
+                      </v-avatar>
+                      <v-text-field placeholder="Name" v-model="updateName"></v-text-field>
+                    </v-row>
+                  </v-col>
+
+                  <v-col cols="12">
+                    <v-text-field
+                      v-model="updateAddress"
+                      prepend-icon="mdi-map-marker"
+                      placeholder="address"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-text-field
+                      v-model="updateContact"
+                      type="tel"
+                      prepend-icon="mdi-phone"
+                      placeholder="+63 900 000 0000"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-dialog
+                      ref="dialog"
+                      v-model="modal"
+                      :return-value.sync="date"
+                      persistent
+                      lazy
+                      full-width
+                      width="290px"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-text-field
+                          v-model="date"
+                          label="Picker in dialog"
+                          prepend-icon="mdi-calendar-plus"
+                          readonly
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker v-model="date" scrollable>
+                        <v-spacer></v-spacer>
+                        <v-btn flat color="primary" @click="modal = false">Cancel</v-btn>
+                        <v-btn flat color="primary" @click="$refs.dialog.save(date)">OK</v-btn>
+                      </v-date-picker>
+                    </v-dialog>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-text-field
+                      v-model="updateQuantity"
+                      prepend-icon="mdi-plus"
+                      min="1"
+                      type="number"
+                      placeholder="Quantity"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-container>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn text color="primary" @click="editDialog = false">Cancel</v-btn>
+                <v-btn text @click="editDialog = false">Save</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </template>
       </v-card-title>
-      <v-data-table :headers="headers" :items="desserts" :search="search"></v-data-table>
+
+      <v-data-table :headers="headers" :items="desserts" :search="search">
+        <template v-slot:item.action="{ item }">
+          <v-icon
+            normal
+            @click="deleteItem(item)"
+            class="mr-2"
+            v-b-popover.hover.top
+            title="Delivered"
+          >mdi-truck-check-outline</v-icon>
+          <v-icon
+            @click="editDialog = !editDialog,editItem(item) "
+            class="mr-2"
+            normal
+            v-b-popover.hover.top
+            title="Edit"
+          >mdi-table-edit</v-icon>
+          <v-icon
+            normal
+            @click="deleteItem(item)"
+            class="mr-2"
+            v-b-popover.hover.top
+            title="Cancel"
+          >mdi-cancel</v-icon>
+        </template>
+      </v-data-table>
     </v-card>
   </v-app>
 </template>
-
-
 <style>
+.mr-2:hover {
+  color: purple;
+}
 </style>
 
 <script>
-
-
+import Swal from "sweetalert2";
 export default {
   name: "Order",
-  components: {
 
+  methods: {
+    deleteItem(item) {
+      console.log(item);
+    },
+    editItem(item) {
+      this.updateName = item.name;
+      this.updateContact = item.contact;
+      this.updateAddress = item.address;
+      this.updateQuantity = item.orderQuantity;
+      console.log(item.contact);
+    },
+    alertDelete(item) {
+      Swal.fire({
+        title: "Are you sure?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "primary",
+        confirmButtonText: "Delete",
+        reverseButtons: true
+      }).then(result => {
+        if (result.value) {
+          this.deleteItem(item);
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            type: "success",
+            showConfirmButton: false,
+            timer: 1500
+          });
+        }
+      });
+    }
   },
+  components: {},
   data() {
     return {
+      hover: false,
+      date: new Date().toISOString().substr(0, 10),
+      menu: false,
+      modal: false,
+      editDialog: false,
+      menu2: false,
       search: "",
+      updateContact: "",
+      updateQuantity: "",
+      updateName: "",
+      updateAddress: "",
       dialog: false,
       headers: [
         {
-          text: "Dessert (100g serving)",
+          text: "Customer's Name",
           align: "start",
           sortable: false,
           value: "name"
         },
-        { text: "Calories", value: "calories" },
-        { text: "Fat (g)", value: "fat" },
-        { text: "Carbs (g)", value: "carbs" },
-        { text: "Protein (g)", value: "protein" },
-        { text: "Iron (%)", value: "iron" }
+        { text: "Contact Number", value: "contact" },
+        { text: "Order Quantity", value: "orderQuantity" },
+        { text: "Address", value: "address", sortable: false },
+        { text: "Actions", value: "action", sortable: false },
+        { text: "Status", value: "status" }
       ],
       desserts: [
         {
           name: "Frozen Yogurt",
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-          iron: "1%"
+          contact: 159,
+          address: "Talamban",
+          orderQuantity: 6.0,
+          status: "Order"
         },
         {
           name: "Ice cream sandwich",
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-          iron: "1%"
+          contact: 237,
+          address: "Talamban",
+          orderQuantity: 9.0,
+          status: "Order"
         },
         {
           name: "Eclair",
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-          iron: "7%"
+          contact: 262,
+          address: "Talamban",
+          orderQuantity: 16.0,
+          status: "Order"
         },
         {
           name: "Cupcake",
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-          iron: "8%"
+          contact: 305,
+          address: "Talamban",
+          orderQuantity: 3.7,
+          status: "Order"
         },
         {
           name: "Gingerbread",
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-          iron: "16%"
+          contact: 356,
+          address: "Talamban",
+          orderQuantity: 16.0,
+          status: "Order"
         },
         {
           name: "Jelly bean",
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-          iron: "0%"
+          contact: 375,
+          address: "Talamban",
+          orderQuantity: 0.0,
+          status: "Order"
         },
         {
           name: "Lollipop",
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-          iron: "2%"
+          contact: 392,
+          address: "Talamban",
+          orderQuantity: 0.2,
+          status: "Order"
         },
         {
           name: "Honeycomb",
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5,
-          iron: "45%"
+          contact: 408,
+          address: "Talamban",
+          orderQuantity: 3.2,
+          status: "Order"
         },
         {
           name: "Donut",
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9,
-          iron: "22%"
+          contact: 452,
+          address: "Talamban",
+          orderQuantity: 25.0,
+          status: "Order"
         },
         {
           name: "KitKat",
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
-          iron: "6%"
+          contact: 518,
+          address: "Talamban",
+          orderQuantity: 26.0,
+          status: "Order"
         }
       ]
     };
