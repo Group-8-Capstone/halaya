@@ -21,6 +21,7 @@
       return {
         search: '',
         headers: [
+          { text: 'Date', value: 'date' },
           {
             text: 'Kilo of Ube',
             align: 'start',
@@ -34,75 +35,54 @@
         ],
         desserts: [
           {
-            name: 'Frozen Yogurt',
+            date:'9-14-2020',
+            name: '5',
             calories: 159,
-            fat: 6.0,
+            fat: 6,
             carbs: "Enough",
           
           },
           {
-            name: 'Ice cream sandwich',
+            date:'9-15-2020',
+            name: '6',
             calories: 237,
-            fat: 9.0,
+            fat: 9,
             carbs: "Enough",
            
           },
           {
-            name: 'Eclair',
+            date:'9-16-2020',
+            name: '8',
             calories: 262,
-            fat: 16.0,
+            fat: 16,
             carbs: "Enough",
          
           },
           {
-            name: 'Cupcake',
-            calories: 305,
-            fat: 3.7,
+            date:'9-17-2020',
+            name: '8',
+            calories: 262,
+            fat: 16,
             carbs: "Enough",
          
           },
           {
-            name: 'Gingerbread',
-            calories: 356,
-            fat: 16.0,
-            carbs:"Enough",
-      
+            date:'9-18-2020',
+            name: '8',
+            calories: 262,
+            fat: 16,
+            carbs: "Enough",
+         
           },
           {
-            name: 'Jelly bean',
-            calories: 375,
-            fat: 0.0,
+            date:'9-19-2020',
+            name: '8',
+            calories: 262,
+            fat: 16,
             carbs: "Enough",
+         
+          },
         
-          },
-          {
-            name: 'Lollipop',
-            calories: 392,
-            fat: 0.2,
-            carbs: "Enough",
-          
-          },
-          {
-            name: 'Honeycomb',
-            calories: 408,
-            fat: 3.2,
-            carbs: "Enough",
-           
-          },
-          {
-            name: 'Donut',
-            calories: 452,
-            fat: 25.0,
-            carbs: "Enough",
-      
-          },
-          {
-            name: 'KitKat',
-            calories: 518,
-            fat: 26.0,
-            carbs: "Enough",
-        
-          },
         ],
       }
     },
