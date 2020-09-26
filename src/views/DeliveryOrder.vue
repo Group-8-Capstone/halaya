@@ -35,7 +35,6 @@
           },
           { text: 'Contact Number', value: 'calories' },
           { text: 'Adress', value: 'fat' },
-          
           { text: 'Quantity Order', value: 'carbs' },
           
         ],

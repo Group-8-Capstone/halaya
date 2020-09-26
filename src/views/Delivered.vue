@@ -33,10 +33,10 @@ import axios from "axios";
             text: 'Name',
             align: 'start',
             sortable: false,
-            value: 'customersName',
+            value: 'customer_name',
           },
-          { text: 'Contact Number', value: 'contactNumber' },
-          { text: 'Quantity Order', value: 'orderQuantity' },
+          { text: 'Contact Number', value: 'contact_number' },
+          { text: 'Quantity Order', value: 'order_quantity' },
           
         ],
       }
