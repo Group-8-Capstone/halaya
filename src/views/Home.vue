@@ -45,6 +45,8 @@
       >
         <v-select
           :items="Dates"
+          v-model="filterBy"
+          @change="filtering"
           label=" Filter by"
           dense
           class="dropdownFilter"
@@ -118,15 +120,17 @@ export default {
           colorText: "cardText5",
         },
       ],
-      Dates: ["Weekly", "Monthly", "Yearly"],
+      Dates: ["Daily", "Weekly", "Monthly", "Yearly"],
       Yearly: [],
       series: [],
       chartOptions: {},
+      filterBy: "",
+      dailyData: null,
     };
   },
   mounted() {
     axios.get("http://localhost:8000/api/sales").then((response) => {
-      this.showDailyData(response.data);
+      this.dailyData = response.data;
     });
   },
   components: {
@@ -141,19 +145,7 @@ export default {
     },
   },
   methods: {
-    showDailyData(Data) {
-      console.log("testing ------------------", Data);
-
-      let series = []; // serries which is total
-      let dataCategories = []; // categories which is date
-
-      Data.forEach((element) => {
-        dataCategories.push(element.delivery_date);
-        series.push(element.total);
-        console.log(element.delivery_date);
-        console.log(element.total);
-      });
-
+    initializeData(category, series) {
       this.series = [
         {
           name: "Sales",
@@ -161,6 +153,7 @@ export default {
           color: "rgb(177, 117, 235)",
         },
       ];
+
       this.chartOptions = {
         chart: {
           height: 350,
@@ -194,9 +187,30 @@ export default {
           },
         },
         xaxis: {
-          categories: dataCategories, // categories,
+          categories: category, // categories,
         },
       };
+    },
+
+    daily(data) {
+      let category = [];
+      let series = [];
+
+      data.forEach((element) => {
+        category.push(element.delivery_date);
+
+        series.push(element.total);
+      });
+      console.log(category, series);
+      this.initializeData(category, series);
+    },
+    filtering() {
+      let graphFilter = this.filterBy;
+      switch (graphFilter) {
+        case "Daily":
+          this.daily(this.dailyData);
+          break;
+      }
     },
   },
 };
