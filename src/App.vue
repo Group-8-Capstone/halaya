@@ -1,36 +1,31 @@
 <template>
   <v-app>
     <v-main>
-      <Sidebar  v-if="$route.name!= 'Login'" id="Sidebar" 
-         /> 
+      <Sidebar v-if="$route.name!= 'Login'" id="Sidebar"/>
       <content>
-        <router-view/> 
+        <router-view/>
       </content>
     </v-main>
   </v-app>
 </template>
 <style>
-#Sidebar{
+#Sidebar {
   position: absolute;
 }
 </style>
 
 
-<script> 
-
+<script>
 import Sidebar from "./components/Sidebar";
-
-
 
 export default {
   name: "App",
   components: {
     Sidebar,
-
   },
 
   data: () => ({
     //
-  })
+  }),
 };
 </script>
