@@ -4,8 +4,9 @@ import VueRouter from "vue-router";
 import Order from "../views/Order.vue";
 import Stock from "../views/Stock.vue";
 import Delivery from "../views/DeliveryOrder.vue";
-import Login from "../views/Login.vue"
-import Delivered from "../views/Delivered.vue"
+import Login from "../views/Login.vue";
+import Delivered from "../views/Delivered.vue";
+import DeliveryDetails from "../views/DeliveryDetails";
 
 
 
@@ -40,6 +41,11 @@ routes : [
     path: "/delivery",
     name: "Delivery",
     component: Delivery
+  },
+  {
+    path: "deliveryDetails",
+    name: "DeliveryDetails",
+    component: DeliveryDetails
   },
   {
     path: "/about",
