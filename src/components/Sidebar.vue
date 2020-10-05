@@ -10,13 +10,7 @@
               <img src="../assets/wawens.png">
             </v-list-item-avatar>
       <v-toolbar-title class="title">WAWENS UBE HALAYA</v-toolbar-title>
-      <v-spacer></v-spacer>
     </v-app-bar>
-<<<<<<< HEAD
-    <v-navigation-drawer v-model="drawer" app color="deep-purple lighten-2"  fixed
-     dark id="drawer">
-=======
-    <hr>
     <v-navigation-drawer
       v-model="drawer"
       app
@@ -25,11 +19,10 @@
       dark
       id="drawer"
     >
->>>>>>> a1b51f948a339dd9988a80b7d9ca81cde8b91be7
       <template v-slot:prepend>
         <v-list-item>
           <v-list-item-content>
-            <v-list-item-avatar size="205">
+            <v-list-item-avatar size="200">
               <img src="../assets/wawens.png">
             </v-list-item-avatar>
             <v-spacer></v-spacer>
