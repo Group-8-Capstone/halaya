@@ -2,13 +2,17 @@
   <v-app id="inspire">
     <v-app-bar app color="purple darken-3" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-list-item-avatar size="50">
+              <img src="../assets/wawens.png">
+            </v-list-item-avatar>
       <v-toolbar-title class="title">WAWENS UBE HALAYA</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon>
         <v-icon>mdi-logout</v-icon>
       </v-btn>
     </v-app-bar>
-    <v-navigation-drawer v-model="drawer" app color="deep-purple lighten-2" dark id="drawer">
+    <v-navigation-drawer v-model="drawer" app color="deep-purple lighten-2"  fixed
+     dark id="drawer">
       <template v-slot:prepend>
         <v-list-item>
           <v-list-item-content>
