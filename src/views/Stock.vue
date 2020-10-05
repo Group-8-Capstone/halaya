@@ -133,7 +133,7 @@ import {
       search: "", 
       ubeKilo: "",
       stocks:[],
-       items: ['Ube', 'Condensed milk', 'Butter', 'Sugar','Coconut milk'],
+       items: ['Ube', 'Condensed milk', 'Butter', 'Sugar','Evaporated milk'],
       stockDialog: false,
         headers: [
           { text: 'Ingredients', value: 'ingredients_name' },
