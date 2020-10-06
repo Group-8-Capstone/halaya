@@ -7,6 +7,7 @@ import Delivery from "../views/DeliveryOrder.vue";
 import Login from "../views/Login.vue"
 import Delivered from "../views/Delivered.vue";
 import Home from "../views/Home.vue";
+import DeliveryDetails from "../views/DeliveryDetails";
 
 
 
@@ -45,6 +46,11 @@ const router = new VueRouter({
       path: "/delivery",
       name: "Delivery",
       component: Delivery
+    },
+    {
+      path: "/delivery-details",
+      name: "DeliveryDetails",
+      component: DeliveryDetails
     },
     {
       path: "/dashboard",

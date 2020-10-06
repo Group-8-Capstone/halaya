@@ -2,17 +2,16 @@
   <div>
     <v-row>
       <v-col v-for="(item, index) in deliveryOrders" :key="index">
-        <v-card :loading="loading" class="mx-auto my-2" max-width="310">
-          <v-progress-linear color="deep-purple" height="8" indeterminate></v-progress-linear>
+        <v-card :loading="loading" class="mx-2 my-2" max-width="310">
           <v-img height="100%" width="100%" src="../assets/ubeCard.jpg"></v-img>
-          <v-card-title>Wawen's Ube Halaya</v-card-title>
+          <v-card-title class="pa-1">Wawen's Ube Halaya</v-card-title>
           <v-divider class="mx-4"></v-divider>
-          <v-card-title>{{item.title}}</v-card-title>
+          <v-card-title class="pa-1">{{item.title}}</v-card-title>
           <v-card-text>
             <div>Five delivery locations for this round of delivery.</div>
             <v-chip-group
               v-model="selection"
-              active-class="deep-purple accent-4 white--text"
+              active-class="deep-purple accent-4 white--text pa-1px"
               column
             >
               <v-chip>{{item.distance1}}</v-chip>
@@ -22,8 +21,13 @@
               <v-chip>{{item.distance5}}</v-chip>
             </v-chip-group>
           </v-card-text>
-          <v-card-actions>
-            <v-btn color="deep-purple lighten-2" text @click="reserve">View Delivery Details</v-btn>
+          <v-card-actions class="pa-1">
+            <router-link
+              to="/delivery-details"
+              tag="v-btn"
+            >
+            <v-btn color="deep-purple lighten-2" text @click="viewOrderDetails()">View Delivery Details</v-btn>
+            </router-link>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -79,6 +83,13 @@ export default {
         }
       ]
     };
+  },
+  methods:
+  {
+    viewOrderDetails(){
+      this.$v.$touch()
+
+    }
   }
 };
 </script>
