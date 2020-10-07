@@ -6,10 +6,11 @@
       dark
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-list-item-avatar size="50">
+              <img src="../assets/wawens.png">
+            </v-list-item-avatar>
       <v-toolbar-title class="title">WAWENS UBE HALAYA</v-toolbar-title>
-      <v-spacer></v-spacer>
     </v-app-bar>
-    <hr>
     <v-navigation-drawer
       v-model="drawer"
       app
@@ -21,7 +22,7 @@
       <template v-slot:prepend>
         <v-list-item>
           <v-list-item-content>
-            <v-list-item-avatar size="205">
+            <v-list-item-avatar size="200">
               <img src="../assets/wawens.png">
             </v-list-item-avatar>
             <v-spacer></v-spacer>

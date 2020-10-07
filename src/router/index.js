@@ -24,7 +24,7 @@ const router = new VueRouter({
     },
     {
       path: "/",
-      name: "dashboard",
+      name: "home",
       component: Home
     },
     {
@@ -46,11 +46,6 @@ const router = new VueRouter({
       path: "/delivery",
       name: "Delivery",
       component: Delivery
-    },
-    {
-      path: "/dashboard",
-      name: "dashboard",
-      component: Home
     },
     {
       path: "/about",
