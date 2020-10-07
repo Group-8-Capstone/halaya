@@ -16,10 +16,16 @@ const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
 
-  routes: [{
+  routes: [
+    {
+      path: "/dashboard",
+      name: "dashboard",
+      component: Home
+    },
+    {
       path: "/",
-      name: "Login",
-      component: Login
+      name: "home",
+      component: Home
     },
     {
       path: "/order",
@@ -40,11 +46,6 @@ const router = new VueRouter({
       path: "/delivery",
       name: "Delivery",
       component: Delivery
-    },
-    {
-      path: "/dashboard",
-      name: "dashboard",
-      component: Home
     },
     {
       path: "/about",
