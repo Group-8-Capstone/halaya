@@ -1,13 +1,13 @@
 <template>
-  <div>
-    <v-row>
-      <v-col v-for="(item, index) in deliveryOrders" :key="index">
-        <v-card :loading="loading" class="mx-2 my-2" max-width="310">
+  <div> 
+    <v-row class="py-0 my-0">
+      <v-col v-for="(item, index) in deliveryOrders" :key="index" class="py-0 my-1">
+        <v-card :loading="loading" class="mx-2 my-1" max-width="275">
           <v-img height="100%" width="100%" src="../assets/ubeCard.jpg"></v-img>
-          <v-card-title class="pa-1">Wawen's Ube Halaya</v-card-title>
+          <v-card-title class="pa-0 ml-2">Wawen's Ube Halaya</v-card-title>
           <v-divider class="mx-4"></v-divider>
-          <v-card-title class="pa-1">{{item.title}}</v-card-title>
-          <v-card-text>
+          <v-card-title class="pa-0 ml-2">{{item.title}}</v-card-title>
+          <v-card-text class="pa-0 ml-2">
             <div>Five delivery locations for this round of delivery.</div>
             <v-chip-group
               v-model="selection"
@@ -21,12 +21,12 @@
               <v-chip>{{item.distance5}}</v-chip>
             </v-chip-group>
           </v-card-text>
-          <v-card-actions class="pa-1">
+          <v-card-actions class="pa-0">
             <router-link
               to="/delivery-details"
               tag="v-btn"
             >
-            <v-btn color="deep-purple lighten-2" text @click="viewOrderDetails()">View Delivery Details</v-btn>
+            <v-btn color="deep-purple lighten-2" text><v-icon>mdi-format-list-bulleted-square</v-icon>View Delivery Details</v-btn>
             </router-link>
           </v-card-actions>
         </v-card>
@@ -86,10 +86,7 @@ export default {
   },
   methods:
   {
-    viewOrderDetails(){
-      this.$v.$touch()
 
-    }
   }
 };
 </script>
