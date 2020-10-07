@@ -2,7 +2,7 @@
   <v-app id="inspire">
     <v-app-bar
       app
-      color="deep-purple"
+      color="deep-purple darken-1"
       dark
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
@@ -18,11 +18,12 @@
       color="deep-purple lighten-2"
       dark
       id="drawer"
+      class="mx-auto"
     >
       <template v-slot:prepend>
         <v-list-item>
           <v-list-item-content>
-            <v-list-item-avatar size="200">
+            <v-list-item-avatar size="100">
               <img src="../assets/wawens.png">
             </v-list-item-avatar>
             <v-spacer></v-spacer>
@@ -36,7 +37,9 @@
         </v-list-item>
       </template>
       <hr style="background-color:purple; height: 2px; width:90%; margin:5%;" />
-      <v-list-item-group active-class="white purple--text">
+      <v-list-item-group  v-model="model" active-class="white purple--text"
+        mandatory
+        color="white" >
         <v-list-item
           v-for="(item, index) in items"
           :key="index"
@@ -46,12 +49,13 @@
             :to="item.link"
             link=""
           >
-            <v-list-item-action>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>{{ item.text }}</v-list-item-title>
-            </v-list-item-content>
+            <v-list-item-icon>
+            <v-icon v-text="item.icon"></v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title v-text="item.text"></v-list-item-title>
+          </v-list-item-content>
           </v-list-item>
         </v-list-item>
       </v-list-item-group>
@@ -77,6 +81,7 @@ export default {
   data: () => ({
     dialog: false,
     drawer: null,
+    model:1,
     items: [
       { icon: "mdi-view-dashboard", text: "Dashboard", link: "/dashboard" },
       { icon: "mdi mdi-cart-plus", text: "Order", link: "/order" },

@@ -17,7 +17,7 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
 
   routes: [{
-      path: "/login",
+      path: "/",
       name: "Login",
       component: Login
     },

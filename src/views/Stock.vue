@@ -143,6 +143,9 @@
       :items="stocks"
       :search="search"
     >
+    <template v-slot:item.usedIng="{item}">{{usedIngArray}}
+     
+      </template>
      <template v-slot:item.action="{ item }">
           <v-icon
             @click="editDialog = !editDialog, editIngredients(item)"
@@ -152,8 +155,8 @@
           >mdi-table-edit</v-icon>
         </template></v-data-table>
     </v-col>
-    <v-col cols="8">
-      <v-card  
+    <!-- <v-col cols="8">
+      <v-card 
       class="mx-auto"
       outlined>
     <v-card-title>Check Stock</v-card-title>
@@ -179,7 +182,7 @@
     </template>
   </v-simple-table>
   </v-card>
-  </v-col>
+  </v-col> -->
      </v-row>
   </v-card>
 </template>
@@ -224,6 +227,7 @@ import {
       item:[],
       stocks:[],
       editStockItem:[],
+      usedIngArray:[],
       stockDialog: false,
       editDialog:false,
       addUsedStockDialog:false,
@@ -234,6 +238,10 @@ import {
             align: 'start',
             sortable: true,
             value: 'ingredients_unit',
+          },
+           {
+            text: 'Used Ingredients Unit',
+            value: 'usedIng',
           },
           { text: 'Status', value: 'ingredients_status' },
           { text: "Actions", value: "action", sortable: false },
@@ -284,7 +292,7 @@ import {
       this.fetchStock();
       this.postExpectedProduct();
       this.postSumOrder();
-      this.checkStatus();
+      this.fetchUsedIngredients();
       setInterval(this.fetchStock(),3000)
     },
   
@@ -301,7 +309,7 @@ import {
     postExpectedProduct(){
       axios.get("http://127.0.0.1:8000/api/fetch/expectedProduct").then(response=>{
         this.expectedProduct=response.data;
-        this.checkStatus();
+        // this.checkStatus();
       })
     },
     postSumOrder(){
@@ -316,11 +324,11 @@ import {
        this.editDialog=false;
       })
     },
-    checkStatus(){
-       axios.get("http://127.0.0.1:8000/api/fetch/stockStatus").then(response=>{
-        this.stockAvailability=response.data;
-      })
-    },
+    // checkStatus(){
+    //    axios.get("http://127.0.0.1:8000/api/fetch/stockStatus").then(response=>{
+    //     this.stockAvailability=response.data;
+    //   })
+    // },
     addIngredientsAmount(){
       this.$v.$touch();
       if(this.availableIngredients=== "" || this.availableIngredients===""){
@@ -345,15 +353,19 @@ import {
         this.stocks = response.data
         for( var i = 0; i<response.data.length; i++){
              if(nameArray.includes(response.data[i].ingredients_name)){
-                console.log('good')
-
             } else {
               nameArray.push(response.data[i].ingredients_name);
-              console.log(nameArray)
               this.itemSelect = nameArray;
             }
             continue;
             }
+      })
+      
+    },
+      fetchUsedIngredients(){
+      axios.get("http://127.0.0.1:8000/api/fetch/fetchUsedIng").then(response=>{
+        this.usedIngArray = response.data
+        console.log(this.usedIngArray);
       })
       
     },
