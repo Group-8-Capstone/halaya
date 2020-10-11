@@ -135,6 +135,14 @@
     <v-row class="mx-2">
       <v-col cols="12">
         <v-data-table :headers="headers" :items="IngredientsArray" :search="search">
+              <template v-slot:item.ingredients_status="{ item }" >
+              <v-chip
+            :color="getColor(item.ingredients_status)"
+            dark
+          >
+            {{ item.ingredients_status }}
+          </v-chip>
+        </template>
           <template v-slot:item.action="{ item }">
             <v-icon
               @click="editDialog = !editDialog, editIngredients(item)"
@@ -168,17 +176,10 @@
         </tr>
       </tbody>
     </template>
-<<<<<<< HEAD
-  </v-simple-table>
-  </v-card>
-  </v-col> -->
-     </v-row>
-=======
           </v-simple-table>-->
         </v-card>
       </v-col>
     </v-row>
->>>>>>> 91de54ce55536577d86bcf831306a38328375dfb
   </v-card>
 </template>
 <style>
@@ -217,35 +218,6 @@ export default {
       stockStatus: "Enough",
       search: "",
       ubeKilo: "",
-<<<<<<< HEAD
-      availableIngredients:"",
-      usedIngredientsAmount:"",
-      itemSelect:[],
-      item:[],
-      stocks:[],
-      editStockItem:[],
-      usedIngArray:[],
-      stockDialog: false,
-      editDialog:false,
-      addUsedStockDialog:false,
-        headers: [
-          { text: 'Ingredients', value: 'ingredients_name' },
-          {
-            text: 'Ingredients Unit',
-            align: 'start',
-            sortable: true,
-            value: 'ingredients_unit',
-          },
-           {
-            text: 'Used Ingredients Unit',
-            value: 'usedIng',
-          },
-          { text: 'Status', value: 'ingredients_status' },
-          { text: "Actions", value: "action", sortable: false },
-        ],
-      }},
-       validations: {
-=======
       availableIngredients: "",
       usedIngredientsAmount: "",
       itemSelect: [],
@@ -277,7 +249,6 @@ export default {
     };
   },
   validations: {
->>>>>>> 91de54ce55536577d86bcf831306a38328375dfb
     ingredientsUnit: {
       required
     },
@@ -321,15 +292,7 @@ export default {
     }
   },
   created() {
-<<<<<<< HEAD
-      this.fetchStock();
-      this.postExpectedProduct();
-      this.postSumOrder();
-      this.fetchUsedIngredients();
-      setInterval(this.fetchStock(),3000)
-    },
-  
-=======
+    
     // this.fetchUsedIngredients();
     this.fetchStock();
     this.postExpectedProduct();
@@ -337,9 +300,14 @@ export default {
     this.checkStatus();
     setInterval(this.fetchStock(), 3000);
   },
->>>>>>> 91de54ce55536577d86bcf831306a38328375dfb
 
   methods: {
+    getColor (status) {
+        if (status ==='Lacking') return 'red'
+        else if (status ==='Enough') return 'green'
+        else if (status ==='Calculating...') return 'blue'
+        else return 'green'
+      }, 
     showDialog() {
       this.reloadDataAddStock();
       this.stockDialog = !this.stockDialog;
@@ -348,13 +316,6 @@ export default {
       this.reloadDataAddUsedAmount();
       this.addUsedStockDialog = !this.addUsedStockDialog;
     },
-<<<<<<< HEAD
-    postExpectedProduct(){
-      axios.get("http://127.0.0.1:8000/api/fetch/expectedProduct").then(response=>{
-        this.expectedProduct=response.data;
-        // this.checkStatus();
-      })
-=======
     postExpectedProduct() {
       axios
         .get("http://127.0.0.1:8000/api/fetch/expectedProduct")
@@ -362,7 +323,6 @@ export default {
           this.expectedProduct = response.data;
           this.checkStatus();
         });
->>>>>>> 91de54ce55536577d86bcf831306a38328375dfb
     },
     postSumOrder() {
       axios.get("http://127.0.0.1:8000/api/fetch/sumOrder").then(response => {
@@ -377,14 +337,6 @@ export default {
           this.editDialog = false;
         });
     },
-<<<<<<< HEAD
-    // checkStatus(){
-    //    axios.get("http://127.0.0.1:8000/api/fetch/stockStatus").then(response=>{
-    //     this.stockAvailability=response.data;
-    //   })
-    // },
-    addIngredientsAmount(){
-=======
     checkStatus() {
       axios
         .get("http://127.0.0.1:8000/api/fetch/stockStatus")
@@ -393,7 +345,6 @@ export default {
         });
     },
     addIngredientsAmount() {
->>>>>>> 91de54ce55536577d86bcf831306a38328375dfb
       this.$v.$touch();
       if (
         this.availableIngredients === "" ||
@@ -414,33 +365,6 @@ export default {
           });
       }
     },
-<<<<<<< HEAD
-    fetchStock(){
-      let nameArray =[];
-      axios.get("http://127.0.0.1:8000/api/fetch/stock").then(response=>{
-        this.stocks = response.data
-        for( var i = 0; i<response.data.length; i++){
-             if(nameArray.includes(response.data[i].ingredients_name)){
-            } else {
-              nameArray.push(response.data[i].ingredients_name);
-              this.itemSelect = nameArray;
-            }
-            continue;
-            }
-      })
-      
-    },
-      fetchUsedIngredients(){
-      axios.get("http://127.0.0.1:8000/api/fetch/fetchUsedIng").then(response=>{
-        this.usedIngArray = response.data
-        console.log(this.usedIngArray);
-      })
-      
-    },
-     editIngredients(item) {
-        axios.get('http://127.0.0.1:8000/api/post/editStock/'+ item.id).then((response) => {
-            this.editStockItem = response.data;  
-=======
     fetchStock() {
       let nameArray = [];
       axios.get("http://127.0.0.1:8000/api/fetch/stock").then(response => {
@@ -450,7 +374,6 @@ export default {
             console.log("good");
           } else {
             nameArray.push(response.data[i].ingredients_name);
-            // console.log("Name Array: ", nameArray)
             this.itemSelect = nameArray;
           }
           continue;
@@ -480,7 +403,6 @@ export default {
         .get("http://127.0.0.1:8000/api/post/editStock/" + item.id)
         .then(response => {
           this.editStockItem = response.data;
->>>>>>> 91de54ce55536577d86bcf831306a38328375dfb
         });
     },
     reloadDataAddStock() {
