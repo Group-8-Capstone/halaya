@@ -197,7 +197,15 @@
         </template>
       </v-card-title>
       <v-data-table :headers="headers" :items="orders" :search="search">
-        <template v-slot:item.action="{ item }">
+        <template v-slot:item.order_status="{ item }" >
+           <v-chip
+        :color="getColor(item.order_status)"
+        dark
+      >
+        {{ item.order_status }}
+      </v-chip>
+    </template>
+        <template v-slot:item.action="{ item }" >
           <v-icon
             normal
             class="mr-2"
@@ -211,7 +219,7 @@
             title="Edit"
           >mdi-table-edit</v-icon>
           <v-icon
-            @click="alertDelete(item)"
+            @click="alertCancel(item)"
             normal
             class="mr-2"
             title="Cancel"
@@ -236,6 +244,14 @@
 }
 .validation {
   color:red;
+  
+}
+.cancel{
+   color:red;
+   background-color: #00B300
+}
+.order{
+  color:#00B300;
 }
 </style>
 
@@ -285,7 +301,8 @@ export default {
         { text: "Address", value: "customer_address", sortable: false },
         { text: "Delivery Date", value: "delivery_date", sortable: false },
         { text: "Actions", value: "action", sortable: false },
-        { text: "Status", value: "order_status" }
+        { text: "Status", value: "order_status" },
+       
       ],
     };
   },
@@ -343,7 +360,12 @@ export default {
       setInterval(this.loadOrder(),3000)
     },
   methods: 
-  {    
+  {   
+     getColor (status) {
+        if (status ==='Canceled') return 'orange'
+        else if (status ==='On order') return 'green'
+        else return 'green'
+      }, 
     showDialog(){
       this.reloadData()
       this.dialog = !this.dialog
@@ -378,6 +400,7 @@ export default {
         this.orderQuantity="",
         this.deliveryDate=new Date().toISOString().substr(0, 10),
         this.loadOrder();
+        this.getColor();
         this.$v.$reset();
     },
     updateDeliveredStatus(){
@@ -392,7 +415,7 @@ export default {
       })
     },
     deleteItem(item) {
-      axios.delete('http://127.0.0.1:8000/api/post/delete/'+ item.id).then((response)=> {
+      axios.put('http://127.0.0.1:8000/api/post/updateCanceledStat/'+ item.id).then((response)=> {
         this.loadOrder()
       });
       
@@ -402,7 +425,7 @@ export default {
             this.post = response.data;  
         });
     },
-    alertDelete(item) {
+    alertCancel(item) {
       Swal.fire({
         title: "Are you sure?",
         icon: "warning",

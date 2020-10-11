@@ -135,6 +135,14 @@
     <v-row class="mx-2">
       <v-col cols="12">
         <v-data-table :headers="headers" :items="IngredientsArray" :search="search">
+              <template v-slot:item.ingredients_status="{ item }" >
+              <v-chip
+            :color="getColor(item.ingredients_status)"
+            dark
+          >
+            {{ item.ingredients_status }}
+          </v-chip>
+        </template>
           <template v-slot:item.action="{ item }">
             <v-icon
               @click="editDialog = !editDialog, editIngredients(item)"
@@ -284,6 +292,7 @@ export default {
     }
   },
   created() {
+    
     // this.fetchUsedIngredients();
     this.fetchStock();
     this.postExpectedProduct();
@@ -293,6 +302,12 @@ export default {
   },
 
   methods: {
+    getColor (status) {
+        if (status ==='Lacking') return 'red'
+        else if (status ==='Enough') return 'green'
+        else if (status ==='Calculating...') return 'blue'
+        else return 'green'
+      }, 
     showDialog() {
       this.reloadDataAddStock();
       this.stockDialog = !this.stockDialog;
@@ -359,7 +374,6 @@ export default {
             console.log("good");
           } else {
             nameArray.push(response.data[i].ingredients_name);
-            // console.log("Name Array: ", nameArray)
             this.itemSelect = nameArray;
           }
           continue;
