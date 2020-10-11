@@ -47,7 +47,7 @@
                 prepend-icon="mdi-plus"
                 min="1"
                 type="number"
-                placeholder="Amount (kg/ml)"
+                placeholder="Amount (kg/number of cans)"
                 v-model="ingredientsUnit"
                 :error-messages="ingredientsUnitErrors"
                 @input="$v.ingredientsUnit.$touch()"
@@ -87,7 +87,7 @@
                 prepend-icon="mdi-plus"
                 min="1"
                 type="number"
-                placeholder="Amount (kg/ml)"
+                placeholder="Amount (kg/number of cans)"
                 v-model="usedIngredientsAmount"
                 :error-messages="ingredientsUsedAmountErrors"
                 @input="$v.usedIngredientsAmount.$touch()"
@@ -202,12 +202,12 @@ export default {
   data() {
     return {
       sumOrder: null,
-      expectedProduct: null,
+      // expectedProduct: null,
       stockAvailability: null,
       search: "",
       ingredientsUnit: "",
       ingredientsName: "",
-      stockStatus: "Enough",
+      stockStatus: "calculating...",
       search: "",
       ubeKilo: "",
       availableIngredients: "",
@@ -286,9 +286,9 @@ export default {
   created() {
     // this.fetchUsedIngredients();
     this.fetchStock();
-    this.postExpectedProduct();
+    // this.postExpectedProduct();
     this.postSumOrder();
-    this.checkStatus();
+    // this.checkStatus();
     setInterval(this.fetchStock(), 3000);
   },
 
@@ -301,14 +301,14 @@ export default {
       this.reloadDataAddUsedAmount();
       this.addUsedStockDialog = !this.addUsedStockDialog;
     },
-    postExpectedProduct() {
-      axios
-        .get("http://127.0.0.1:8000/api/fetch/expectedProduct")
-        .then(response => {
-          this.expectedProduct = response.data;
-          this.checkStatus();
-        });
-    },
+    // postExpectedProduct() {
+    //   axios
+    //     .get("http://127.0.0.1:8000/api/fetch/expectedProduct")
+    //     .then(response => {
+    //       this.expectedProduct = response.data;
+    //       this.checkStatus();
+    //     });
+    // },
     postSumOrder() {
       axios.get("http://127.0.0.1:8000/api/fetch/sumOrder").then(response => {
         this.sumOrder = response.data;
@@ -322,13 +322,17 @@ export default {
           this.editDialog = false;
         });
     },
-    checkStatus() {
-      axios
-        .get("http://127.0.0.1:8000/api/fetch/stockStatus")
-        .then(response => {
-          this.stockAvailability = response.data;
-        });
-    },
+    // checkStatus() {
+    //   axios
+    //     .get("http://127.0.0.1:8000/api/fetch/stockStatus")
+    //     .then(response => {
+    //       this.stockAvailability = response.data;
+    //       for (var i = 0; i < response.data.length; i++){
+    //         // this.stockStatus = response.data[i].ingredients_status;
+    //         // console.log('status: ', this.stockStatus);
+    //       }
+    //     });
+    // },
     addIngredientsAmount() {
       this.$v.$touch();
       if (
@@ -367,13 +371,11 @@ export default {
 
         let results = [];
         for (var i = 0; i < response.data.length; i++) {
-          // console.log("containsObject: ", this.containsObject(results,response.data[i].id));
           if (this.containsObject(results,response.data[i].id)) {
             console.log("good");
           } else {
             results.push(response.data[i]);
             this.IngredientsArray = results;
-            // console.log('ingredients array: ', JSON.stringify(this.IngredientsArray));
           }
           continue;
         }
@@ -407,7 +409,7 @@ export default {
     addStock() {
       this.$v.$touch();
       if (this.ingredientsName === "" && this.ingredientsStatus === "") {
-        this.stockDialog = true;
+        this.stockDialog = true;  
       } else {
         var upperName =
           this.ingredientsName.charAt(0).toUpperCase() +
@@ -417,10 +419,38 @@ export default {
           ingredientsUnit: this.ingredientsUnit,
           stockStatus: this.stockStatus
         };
+        let headers = {
+            "Access-Control-Allow-Origin": '*',
+            'Content-Type': 'application/json',
+          };
+        // axios
+        //   .post("http://127.0.0.1:8000/api/create/stock", headers, newStock)
+        //   .then(response => {
+        //     if (response.data.message == "existed") {
+        //       Swal.fire({
+        //         title: "Stock item is already existed",
+        //         text: "You can update stock amount instead",
+        //         showConfirmButton: true,
+        //         icon: "warning",
+        //         timer: 5000
+        //       });
+        //     } else if (response.data.message == "not existed") {
+        //       Swal.fire({
+        //         title: "Successfully added ingredients item",
+        //         showConfirmButton: true,
+        //         icon: "success",
+        //         timer: 5000
+        //       });
+        //     }
+        //     this.stockDialog = false;
+        //     this.reloadDataAddStock();
+        //     // this.postExpectedProduct();
+        //   });
         axios
-          .post("http://127.0.0.1:8000/api/create/stock", newStock)
+          .post("http://127.0.0.1:8000/api/posts/newIngredients", newStock)
           .then(response => {
-            if (response.data.message == "existed") {
+            console.log('testing.....', response.data);
+            if (response.data == "existed") {
               Swal.fire({
                 title: "Stock item is already existed",
                 text: "You can update stock amount instead",
@@ -428,9 +458,9 @@ export default {
                 icon: "warning",
                 timer: 5000
               });
-            } else if (response.data.message == "not existed") {
+            } else if (response.data == "not existed") {
               Swal.fire({
-                title: "Successfully added ingrdients item",
+                title: "Successfully added ingredients item",
                 showConfirmButton: true,
                 icon: "success",
                 timer: 5000
@@ -438,7 +468,7 @@ export default {
             }
             this.stockDialog = false;
             this.reloadDataAddStock();
-            this.postExpectedProduct();
+            // this.postExpectedProduct();
           });
       }
     }
