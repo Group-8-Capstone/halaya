@@ -7,8 +7,8 @@
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-list-item-avatar size="50">
-              <img src="../assets/wawens.png">
-            </v-list-item-avatar>
+        <img src="../assets/wawens.png">
+      </v-list-item-avatar>
       <v-toolbar-title class="title">WAWENS UBE HALAYA</v-toolbar-title>
     </v-app-bar>
     <v-navigation-drawer
@@ -60,7 +60,7 @@
         <br>
         <v-btn
           depressed
-          color="primary"
+          color="deep-purple lighten-2"
         >
           Logout
         </v-btn>
