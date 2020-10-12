@@ -64,6 +64,7 @@ const router = new VueRouter({
       name: "dashboard",
       component: Home
     },
+    {
       path: "/setting",
       name: "BusinessSetting",
       component: Setting
