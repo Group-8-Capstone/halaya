@@ -10,7 +10,9 @@
        color="white"
       dense
       dark
-    >
+      elevation=40
+    
+      >
         <!-- <v-switch
        color="purple"
         value="purple"
@@ -61,6 +63,8 @@
               </v-list-item>
             </v-list>
           </v-menu>
+   
+       
     </v-app-bar>
      
     <v-navigation-drawer

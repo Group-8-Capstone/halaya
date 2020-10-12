@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@mapbox/mapbox-gl-geocoder": "^4.7.0",
+    "@turf/helpers": "^6.1.4",
     "@turf/turf": "^5.1.6",
     "apexcharts": "^3.21.0",
     "axios": "^0.20.0",
