@@ -14,7 +14,7 @@ export default {
   data() {
     return {
       accessToken:
-        "pk.eyJ1IjoiamllbnhpeWEiLCJhIjoiY2tlYzZqOGV3MDNzOTJ6dW52ajg2dWRmbyJ9.iTipm8kvIY8h74WNo1vnAA",
+        " ",
     };
   },
   mounted() {
@@ -92,7 +92,9 @@ export default {
       type: "Feature Collection"
     };
 
-    
+    function getCoordinates(){
+      
+    }
 
     function getDistance(to) {
       //turf.js
