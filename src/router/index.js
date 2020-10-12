@@ -8,6 +8,9 @@ import Delivered from "../views/Delivered.vue";
 import Home from "../views/Home.vue";
 import DeliveryDetails from "../views/DeliveryDetails";
 
+import Setting from "../views/Setting.vue";
+import AccountSetting from "../components/ProfileAccount.vue";
+
 
 
 Vue.use(VueRouter);
@@ -15,15 +18,20 @@ Vue.use(VueRouter);
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
-
-  routes: [{
-      path: "/login",
+  routes: [
+    {
+      path: "/logout",
       name: "Login",
       component: Login
     },
     {
+      path: "/dashboard",
+      name: "dashboard",
+      component: Home
+    },
+    {
       path: "/",
-      name: "Home",
+      name: "home",
       component: Home
     },
     {
@@ -55,6 +63,15 @@ const router = new VueRouter({
       path: "/dashboard",
       name: "dashboard",
       component: Home
+    },
+      path: "/setting",
+      name: "BusinessSetting",
+      component: Setting
+    },
+    {
+      path: "/profileSetting",
+      name: "ProfileSetting",
+      component: AccountSetting
     },
     {
       path: "/about",

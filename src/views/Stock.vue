@@ -1,162 +1,161 @@
 <template>
   <v-card class="ma-5 mb-12 pa-5">
-    <v-card-title>
-      Stock
-      
-         </v-card-title>
-             <v-row>
-          <v-text-field
+    <v-card-title>Stock</v-card-title>
+    <v-row>
+      <v-text-field
         v-model="search"
         append-icon="mdi-magnify"
         label="Search"
         single-line
         hide-details
         class="ml-10"
-      > </v-text-field>
-    <v-spacer></v-spacer>
-           <v-list  class="mr-10" >
-        <v-btn    color="purple darken-2" rounded outlined dark @click="showDialogUsedAmount">
+      ></v-text-field>
+      <v-spacer></v-spacer>
+      <v-list class="mr-10">
+        <v-btn color="purple darken-2" rounded outlined dark @click="showDialogUsedAmount">
           <v-icon>mdi-plus</v-icon>
-        <label>Used Amount</label>
+          <label>Used Amount</label>
         </v-btn>
       </v-list>
-      <v-list  class="mr-10" >
-        <v-btn  color="purple darken-2" rounded outlined dark @click="showDialog">
+      <v-list class="mr-10">
+        <v-btn color="purple darken-2" rounded outlined dark @click="showDialog">
           <v-icon>mdi-plus</v-icon>
           <label>Add stock item</label>
         </v-btn>
       </v-list>
-      </v-row>
-      <v-dialog v-model="stockDialog" width="400px">
+    </v-row>
+    <v-dialog v-model="stockDialog" width="400px">
+      <v-card>
+        <v-spacer></v-spacer>
+        <v-card-title class="deep-purple lighten-1 align-center">
+          <v-list-item-title class="d-flex align-center justify-center mx-auto headline">ADD STOCK</v-list-item-title>
+        </v-card-title>
+        <v-container>
+          <v-row class="mx-2">
+            <v-col cols="12">
+              <v-text-field
+                prepend-icon="mdi-plus"
+                placeholder="ingredients name"
+                v-model="ingredientsName"
+                :error-messages="ingredientsNameErrors"
+                @input="$v.ingredientsName.$touch()"
+                @blur="$v.ingredientsName.$touch()"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <v-text-field
+                prepend-icon="mdi-plus"
+                min="1"
+                type="number"
+                placeholder="Amount (kg/ml)"
+                v-model="ingredientsUnit"
+                :error-messages="ingredientsUnitErrors"
+                @input="$v.ingredientsUnit.$touch()"
+                @blur="$v.ingredientsUnit.$touch()"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+        </v-container>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn text color="primary" @click="stockDialog = false">Cancel</v-btn>
+          <v-btn text @click="addStock()">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="addUsedStockDialog" width="400px">
+      <v-card>
+        <v-spacer></v-spacer>
+        <v-card-title class="deep-purple lighten-1 align-center">
+          <v-list-item-title class="d-flex align-center justify-center mx-auto headline">Amount used</v-list-item-title>
+        </v-card-title>
+        <v-container>
+          <v-row class="mx-2">
+            <v-col cols="12">
+              <v-select
+                :items="itemSelect"
+                filled
+                label="Available ingredients"
+                v-model="availableIngredients"
+                :error-messages="ingredientsAvailableErrors"
+                @input="$v.availableIngredients.$touch()"
+                @blur="$v.availableIngredients.$touch()"
+              ></v-select>
+            </v-col>
+            <v-col cols="12">
+              <v-text-field
+                prepend-icon="mdi-plus"
+                min="1"
+                type="number"
+                placeholder="Amount (kg/ml)"
+                v-model="usedIngredientsAmount"
+                :error-messages="ingredientsUsedAmountErrors"
+                @input="$v.usedIngredientsAmount.$touch()"
+                @blur="$v.usedIngredientsAmount.$touch()"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+        </v-container>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn text color="primary" @click="addUsedStockDialog = false">Cancel</v-btn>
+          <v-btn text @click="addIngredientsAmount()">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <template>
+      <v-dialog v-model="editDialog" width="350px">
         <v-card>
           <v-spacer></v-spacer>
           <v-card-title class="deep-purple lighten-1 align-center">
-            <v-list-item-title class="d-flex align-center justify-center mx-auto headline">ADD STOCK</v-list-item-title>
+            <v-list-item-title
+              class="d-flex align-center justify-center mx-auto headline"
+            >UPDATE AMOUNT</v-list-item-title>
           </v-card-title>
           <v-container>
             <v-row class="mx-2">
               <v-col cols="12">
                 <v-text-field
-                  prepend-icon="mdi-plus"
-                    placeholder="ingredients name"
-                    v-model="ingredientsName"
-                    :error-messages="ingredientsNameErrors"
-                    @input="$v.ingredientsName.$touch()"
-                    @blur="$v.ingredientsName.$touch()"
-                    
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                 <v-text-field
-                  prepend-icon="mdi-plus"
-                    min="1"
-                    type="number"
-                    placeholder="Ingredients amount in grams or ml"
-                    v-model="ingredientsUnit"
-                    :error-messages="ingredientsUnitErrors"
-                    @input="$v.ingredientsUnit.$touch()"
-                    @blur="$v.ingredientsUnit.$touch()"
-                ></v-text-field>
+                  v-model="editStockItem.ingredients_unit"
+                  prepend-icon="mdi-map-marker"
+                  placeholder="address"
+                >{{editStockItem.ingredients_unit}}</v-text-field>
               </v-col>
             </v-row>
           </v-container>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="stockDialog = false">Cancel</v-btn>
-            <v-btn text @click="addStock()">Save</v-btn>
+            <v-btn text color="primary" @click="editDialog = false,reloadDataAddStock()">Cancel</v-btn>
+            <v-btn text @click=" updateIngredients()">Save</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
-            <v-dialog v-model="addUsedStockDialog" width="400px">
-        <v-card>
-          <v-spacer></v-spacer>
-          <v-card-title class="deep-purple lighten-1 align-center">
-            <v-list-item-title class="d-flex align-center justify-center mx-auto headline">Amount used</v-list-item-title>
-          </v-card-title>
-          <v-container>
-            <v-row class="mx-2">
-              <v-col cols="12">
-                <v-select
-                :items="itemSelect"
-                filled
-                label="Available ingredients"
-                v-model="availableIngredients"
-                  :error-messages="ingredientsAvailableErrors"
-                    @input="$v.availableIngredients.$touch()"
-                    @blur="$v.availableIngredients.$touch()"
-              ></v-select>
-              </v-col>
-              <v-col cols="12">
-                 <v-text-field
-                  prepend-icon="mdi-plus"
-                    min="1"
-                    type="number"
-                    placeholder="Ingredients amount in grams or ml"
-                    v-model="usedIngredientsAmount"
-                    :error-messages="ingredientsUsedAmountErrors"
-                    @input="$v.usedIngredientsAmount.$touch()"
-                    @blur="$v.usedIngredientsAmount.$touch()"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-          </v-container>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="addUsedStockDialog = false">Cancel</v-btn>
-            <v-btn text @click="addIngredientsAmount()">Save</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
- 
-            <template>
-          <v-dialog v-model="editDialog" width="350px">
-            <v-card>
-              <v-spacer></v-spacer>
-                <v-card-title class="deep-purple lighten-1 align-center">
-             <v-list-item-title
-                    class="d-flex align-center justify-center  mx-auto headline"
-                  >UPDATE AMOUNT</v-list-item-title>
-            </v-card-title>  
-              <v-container >
-                <v-row class="mx-2">
-                  <v-col cols="12">
-                    <v-text-field
-                      v-model="editStockItem.ingredients_unit"
-                      prepend-icon="mdi-map-marker"
-                      placeholder="address"
-                    >{{editStockItem.ingredients_unit}}</v-text-field>
-                  </v-col>
-                </v-row>
-              </v-container>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn text color="primary" @click="editDialog = false,reloadDataAddStock()">Cancel</v-btn>
-                <v-btn text @click=" updateIngredients()">Save</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
+    </template>
+    <v-row class="mx-2">
+      <v-col cols="12">
+        <v-data-table :headers="headers" :items="IngredientsArray" :search="search">
+              <template v-slot:item.ingredients_status="{ item }" >
+              <v-chip
+            :color="getColor(item.ingredients_status)"
+            dark
+          >
+            {{ item.ingredients_status }}
+          </v-chip>
         </template>
-     <v-row class="mx-2">
-       <v-col cols="12">
-    <v-data-table
-      :headers="headers"
-      :items="stocks"
-      :search="search"
-    >
-     <template v-slot:item.action="{ item }">
-          <v-icon
-            @click="editDialog = !editDialog, editIngredients(item)"
-            class="mr-2"
-            normal
-            title="Update Item"
-          >mdi-table-edit</v-icon>
-        </template></v-data-table>
-    </v-col>
-    <v-col cols="8">
-      <v-card  
-      class="mx-auto"
-      outlined>
-    <v-card-title>Check Stock</v-card-title>
+          <template v-slot:item.action="{ item }">
+            <v-icon
+              @click="editDialog = !editDialog, editIngredients(item)"
+              class="mr-2"
+              normal
+              title="Update Item"
+            >mdi-table-edit</v-icon>
+          </template>
+        </v-data-table>
+      </v-col>
+      <v-col cols="8">
+        <v-card class="mx-auto" outlined>
+          <!-- <v-card-title>Check Stock</v-card-title>
       <v-simple-table height="200px">
     <template v-slot:default>
       <thead>
@@ -177,81 +176,91 @@
         </tr>
       </tbody>
     </template>
-  </v-simple-table>
-  </v-card>
-  </v-col>
-     </v-row>
+          </v-simple-table>-->
+        </v-card>
+      </v-col>
+    </v-row>
   </v-card>
 </template>
 <style>
-.button{
+.button {
   font-size-adjust: 12px;
-  width:150px;
+  width: 150px;
 }
-.enough{
+.enough {
   background-color: lightskyblue;
 }
-.need{
+.need {
   background-color: lightcoral;
 }
 </style>
 <script>
 import axios from "axios";
 import Swal from "sweetalert2";
-import { setInterval } from 'timers';
+import { setInterval } from "timers";
 import {
   required,
   minLength,
   maxLength,
   between
 } from "vuelidate/lib/validators";
-  export default {
-    name: "Stock",
-    data () {
-      return {
-      sumOrder:null,
-      expectedProduct:null,
-      stockAvailability:null,
-      search: '',
-      ingredientsUnit:'',
-      ingredientsName:'',
-      stockStatus:"Enough",
-      search: "", 
+import { release } from 'os';
+export default {
+  name: "Stock",
+  data() {
+    return {
+      sumOrder: null,
+      expectedProduct: null,
+      stockAvailability: null,
+      search: "",
+      ingredientsUnit: "",
+      ingredientsName: "",
+      stockStatus: "Enough",
+      search: "",
       ubeKilo: "",
-      availableIngredients:"",
-      usedIngredientsAmount:"",
-      itemSelect:[],
-      item:[],
-      stocks:[],
-      editStockItem:[],
+      availableIngredients: "",
+      usedIngredientsAmount: "",
+      itemSelect: [],
+      IngredientsArray: [],
+      item: [],
+      stocks: [],
+      items: ["Ube", "Condensed milk", "Butter", "Sugar", "Evaporated milk"],
+      editStockItem: [],
       stockDialog: false,
-      editDialog:false,
-      addUsedStockDialog:false,
-        headers: [
-          { text: 'Ingredients', value: 'ingredients_name' },
-          {
-            text: 'Ingredients Unit',
-            align: 'start',
-            sortable: true,
-            value: 'ingredients_unit',
-          },
-          { text: 'Status', value: 'ingredients_status' },
-          { text: "Actions", value: "action", sortable: false },
-        ],
-      }},
-       validations: {
+      editDialog: false,
+      addUsedStockDialog: false,
+      headers: [
+        { text: "Ingredients", value: "ingredients_name" },
+        {
+          text: "Ingredients Remaining Amount",
+          align: "start",
+          sortable: true,
+          value: "ingredients_unit"
+        },
+        {
+          text: "Used Ingredients Amount",
+          align: "start",
+          sortable: true,
+          value: "total"
+        },
+        { text: "Status", value: "ingredients_status" },
+        { text: "Actions", value: "action", sortable: false }
+      ]
+    };
+  },
+  validations: {
     ingredientsUnit: {
       required
     },
-     ingredientsName: {
+    ingredientsName: {
       required
     },
-     availableIngredients: {
+    availableIngredients: {
       required
     },
-     usedIngredientsAmount: {
+    usedIngredientsAmount: {
       required
-    },
+    }
   },
 
   computed: {
@@ -270,145 +279,183 @@ import {
     ingredientsAvailableErrors() {
       const errors = [];
       if (!this.$v.availableIngredients.$dirty) return errors;
-      !this.$v.availableIngredients.required && errors.push("name is required.");
+      !this.$v.availableIngredients.required &&
+        errors.push("name is required.");
       return errors;
     },
     ingredientsUsedAmountErrors() {
       const errors = [];
       if (!this.$v.usedIngredientsAmount.$dirty) return errors;
-      !this.$v.usedIngredientsAmount.required && errors.push("unit is required.");
+      !this.$v.usedIngredientsAmount.required &&
+        errors.push("unit is required.");
       return errors;
-    },
+    }
   },
   created() {
-      this.fetchStock();
-      this.postExpectedProduct();
-      this.postSumOrder();
-      this.checkStatus();
-      setInterval(this.fetchStock(),3000)
-    },
-  
+    
+    // this.fetchUsedIngredients();
+    this.fetchStock();
+    this.postExpectedProduct();
+    this.postSumOrder();
+    this.checkStatus();
+    setInterval(this.fetchStock(), 3000);
+  },
 
   methods: {
-    showDialog(){
-      this.reloadDataAddStock()
-      this.stockDialog = !this.stockDialog
+    getColor (status) {
+        if (status ==='Lacking') return 'red'
+        else if (status ==='Enough') return 'green'
+        else if (status ==='Calculating...') return 'blue'
+        else return 'green'
+      }, 
+    showDialog() {
+      this.reloadDataAddStock();
+      this.stockDialog = !this.stockDialog;
     },
-    showDialogUsedAmount(){
-      this.reloadDataAddUsedAmount()
-      this.addUsedStockDialog = !this.addUsedStockDialog
+    showDialogUsedAmount() {
+      this.reloadDataAddUsedAmount();
+      this.addUsedStockDialog = !this.addUsedStockDialog;
     },
-    postExpectedProduct(){
-      axios.get("http://127.0.0.1:8000/api/fetch/expectedProduct").then(response=>{
-        this.expectedProduct=response.data;
-        this.checkStatus();
-      })
-    },
-    postSumOrder(){
-      axios.get("http://127.0.0.1:8000/api/fetch/sumOrder").then(response=>{
-        this.sumOrder=response.data;
-
-      })
-    },
-    updateIngredients(){
-      axios.post("http://127.0.0.1:8000/api/post/updateStock",  this.editStockItem).then(response=>{
-       this.fetchStock();
-       this.editDialog=false;
-      })
-    },
-    checkStatus(){
-       axios.get("http://127.0.0.1:8000/api/fetch/stockStatus").then(response=>{
-        this.stockAvailability=response.data;
-      })
-    },
-    addIngredientsAmount(){
-      this.$v.$touch();
-      if(this.availableIngredients=== "" || this.availableIngredients===""){
-        this.addUsedStockDialog=true
-      }else{
-        let newAddedAmount={
-        availableIngredients:this.availableIngredients,
-        usedIngredientsAmount:this.usedIngredientsAmount
-      }
-       axios.post("http://127.0.0.1:8000/api/post/addStockAmount",newAddedAmount).then(response=>{
-       console.log(response);
-       this.reloadDataAddUsedAmount();
-       this.addUsedStockDialog=false;
-      })
-
-      }
-        
-    },
-    fetchStock(){
-      let nameArray =[];
-      axios.get("http://127.0.0.1:8000/api/fetch/stock").then(response=>{
-        this.stocks = response.data
-        for( var i = 0; i<response.data.length; i++){
-             if(nameArray.includes(response.data[i].ingredients_name)){
-                console.log('good')
-
-            } else {
-              nameArray.push(response.data[i].ingredients_name);
-              console.log(nameArray)
-              this.itemSelect = nameArray;
-            }
-            continue;
-            }
-      })
-      
-    },
-     editIngredients(item) {
-        axios.get('http://127.0.0.1:8000/api/post/editStock/'+ item.id).then((response) => {
-            this.editStockItem = response.data;  
+    postExpectedProduct() {
+      axios
+        .get("http://127.0.0.1:8000/api/fetch/expectedProduct")
+        .then(response => {
+          this.expectedProduct = response.data;
+          this.checkStatus();
         });
     },
-    reloadDataAddStock(){
-        this.ingredientsName="",
-        this.ingredientsUnit="",
-        this.fetchStock();
-        this.$v.$reset();
+    postSumOrder() {
+      axios.get("http://127.0.0.1:8000/api/fetch/sumOrder").then(response => {
+        this.sumOrder = response.data;
+      });
     },
-    reloadDataAddUsedAmount(){
-        this.availableIngredients="",
-        this.usedIngredientsAmount="",
+    updateIngredients() {
+      axios
+        .post("http://127.0.0.1:8000/api/post/updateStock", this.editStockItem)
+        .then(response => {
+          this.fetchStock();
+          this.editDialog = false;
+        });
+    },
+    checkStatus() {
+      axios
+        .get("http://127.0.0.1:8000/api/fetch/stockStatus")
+        .then(response => {
+          this.stockAvailability = response.data;
+        });
+    },
+    addIngredientsAmount() {
+      this.$v.$touch();
+      if (
+        this.availableIngredients === "" ||
+        this.availableIngredients === ""
+      ) {
+        this.addUsedStockDialog = true;
+      } else {
+        let newAddedAmount = {
+          availableIngredients: this.availableIngredients,
+          usedIngredientsAmount: this.usedIngredientsAmount
+        };
+        axios
+          .post("http://127.0.0.1:8000/api/post/addStockAmount", newAddedAmount)
+          .then(response => {
+            console.log(response);
+            this.reloadDataAddUsedAmount();
+            this.addUsedStockDialog = false;
+          });
+      }
+    },
+    fetchStock() {
+      let nameArray = [];
+      axios.get("http://127.0.0.1:8000/api/fetch/stock").then(response => {
+        this.stocks = response.data;
+        for (var i = 0; i < response.data.length; i++) {
+          if (nameArray.includes(response.data[i].ingredients_name)) {
+            console.log("good");
+          } else {
+            nameArray.push(response.data[i].ingredients_name);
+            this.itemSelect = nameArray;
+          }
+          continue;
+        }
+
+        let results = [];
+        for (var i = 0; i < response.data.length; i++) {
+          // console.log("containsObject: ", this.containsObject(results,response.data[i].id));
+          if (this.containsObject(results,response.data[i].id)) {
+            console.log("good");
+          } else {
+            results.push(response.data[i]);
+            this.IngredientsArray = results;
+            // console.log('ingredients array: ', JSON.stringify(this.IngredientsArray));
+          }
+          continue;
+        }
+      });
+    },
+    containsObject(arr,id) {
+      return arr.some(function(el) {
+        return el.id === id;
+      }); 
+    },
+    editIngredients(item) {
+      axios
+        .get("http://127.0.0.1:8000/api/post/editStock/" + item.id)
+        .then(response => {
+          this.editStockItem = response.data;
+        });
+    },
+    reloadDataAddStock() {
+      (this.ingredientsName = ""),
+        (this.ingredientsUnit = ""),
         this.fetchStock();
-        this.$v.$reset();
+      this.$v.$reset();
+    },
+    reloadDataAddUsedAmount() {
+      (this.availableIngredients = ""),
+        (this.usedIngredientsAmount = ""),
+        this.fetchStock();
+      this.$v.$reset();
     },
 
-    addStock(){
+    addStock() {
       this.$v.$touch();
-      if(this.ingredientsName===""&&this.ingredientsStatus===""){
-        this.stockDialog=true
-      } else{
-      var upperName = this.ingredientsName.charAt(0).toUpperCase() + this.ingredientsName.slice(1).toLowerCase();
-      let  newStock = {
-        ingredientsName:upperName,
-        ingredientsUnit:this.ingredientsUnit,
-        stockStatus:this.stockStatus,
+      if (this.ingredientsName === "" && this.ingredientsStatus === "") {
+        this.stockDialog = true;
+      } else {
+        var upperName =
+          this.ingredientsName.charAt(0).toUpperCase() +
+          this.ingredientsName.slice(1).toLowerCase();
+        let newStock = {
+          ingredientsName: upperName,
+          ingredientsUnit: this.ingredientsUnit,
+          stockStatus: this.stockStatus
+        };
+        axios
+          .post("http://127.0.0.1:8000/api/create/stock", newStock)
+          .then(response => {
+            if (response.data.message == "existed") {
+              Swal.fire({
+                title: "Stock item is already existed",
+                text: "You can update stock amount instead",
+                showConfirmButton: true,
+                icon: "warning",
+                timer: 5000
+              });
+            } else if (response.data.message == "not existed") {
+              Swal.fire({
+                title: "Successfully added ingrdients item",
+                showConfirmButton: true,
+                icon: "success",
+                timer: 5000
+              });
+            }
+            this.stockDialog = false;
+            this.reloadDataAddStock();
+            this.postExpectedProduct();
+          });
       }
-      axios.post("http://127.0.0.1:8000/api/create/stock", newStock)
-      .then(response=>{
-        if (response.data.message=='existed'){
-        Swal.fire({
-        title: "Stock item is already existed",
-        text: "You can update stock amount instead",
-        showConfirmButton: true,
-        icon: "warning",
-        timer: 5000
-      })
-        } else if (response.data.message=='not existed'){
-        Swal.fire({
-        title: "Successfully added ingrdients item",
-        showConfirmButton: true,
-        icon: "success",
-        timer: 5000
-      })
-        }
-      this.stockDialog = false
-      this.reloadDataAddStock();
-      this.postExpectedProduct()
-    })
     }
   }
-  }}
+};
 </script>
