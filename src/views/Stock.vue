@@ -155,28 +155,6 @@
       </v-col>
       <v-col cols="8">
         <v-card class="mx-auto" outlined>
-          <!-- <v-card-title>Check Stock</v-card-title>
-      <v-simple-table height="200px">
-    <template v-slot:default>
-      <thead>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Expected Stock Output</td>
-          <td>{{expectedProduct}}</td>
-        </tr>
-        <tr>
-          <td>Total Order</td>
-          <td>{{sumOrder}}</td>
-        </tr>
-        <tr
-        v-bind:class='{ "enough": stockAvailability == "Enough", "need": stockAvailability == "Not enough" }'>
-          <td>Status Order</td>
-          <td>{{stockAvailability}}</td>
-        </tr>
-      </tbody>
-    </template>
-          </v-simple-table>-->
         </v-card>
       </v-col>
     </v-row>
@@ -210,7 +188,6 @@ export default {
   data() {
     return {
       sumOrder: null,
-      // expectedProduct: null,
       stockAvailability: null,
       search: "",
       ingredientsUnit: "",
@@ -292,12 +269,8 @@ export default {
     }
   },
   created() {
-    
-    // this.fetchUsedIngredients();
     this.fetchStock();
-    // this.postExpectedProduct();
     this.postSumOrder();
-    // this.checkStatus();
     setInterval(this.fetchStock(), 3000);
   },
 
@@ -316,14 +289,6 @@ export default {
       this.reloadDataAddUsedAmount();
       this.addUsedStockDialog = !this.addUsedStockDialog;
     },
-    // postExpectedProduct() {
-    //   axios
-    //     .get("http://127.0.0.1:8000/api/fetch/expectedProduct")
-    //     .then(response => {
-    //       this.expectedProduct = response.data;
-    //       this.checkStatus();
-    //     });
-    // },
     postSumOrder() {
       axios.get("http://127.0.0.1:8000/api/fetch/sumOrder").then(response => {
         this.sumOrder = response.data;
@@ -337,17 +302,6 @@ export default {
           this.editDialog = false;
         });
     },
-    // checkStatus() {
-    //   axios
-    //     .get("http://127.0.0.1:8000/api/fetch/stockStatus")
-    //     .then(response => {
-    //       this.stockAvailability = response.data;
-    //       for (var i = 0; i < response.data.length; i++){
-    //         // this.stockStatus = response.data[i].ingredients_status;
-    //         // console.log('status: ', this.stockStatus);
-    //       }
-    //     });
-    // },
     addIngredientsAmount() {
       this.$v.$touch();
       if (
@@ -437,33 +391,10 @@ export default {
             "Access-Control-Allow-Origin": '*',
             'Content-Type': 'application/json',
           };
-        // axios
-        //   .post("http://127.0.0.1:8000/api/create/stock", headers, newStock)
-        //   .then(response => {
-        //     if (response.data.message == "existed") {
-        //       Swal.fire({
-        //         title: "Stock item is already existed",
-        //         text: "You can update stock amount instead",
-        //         showConfirmButton: true,
-        //         icon: "warning",
-        //         timer: 5000
-        //       });
-        //     } else if (response.data.message == "not existed") {
-        //       Swal.fire({
-        //         title: "Successfully added ingredients item",
-        //         showConfirmButton: true,
-        //         icon: "success",
-        //         timer: 5000
-        //       });
-        //     }
-        //     this.stockDialog = false;
-        //     this.reloadDataAddStock();
-        //     // this.postExpectedProduct();
-        //   });
         axios
           .post("http://127.0.0.1:8000/api/posts/newIngredients", newStock)
           .then(response => {
-            console.log('testing.....', response.data);
+            // console.log('testing.....', response.data);
             if (response.data == "existed") {
               Swal.fire({
                 title: "Stock item is already existed",
