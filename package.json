@@ -56,5 +56,17 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "description": "```\r npm install\r ```",
+  "main": "babel.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Princess-PN2k19/halaya_frontend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Princess-PN2k19/halaya_frontend/issues"
+  },
+  "homepage": "https://github.com/Princess-PN2k19/halaya_frontend#readme"
 }
