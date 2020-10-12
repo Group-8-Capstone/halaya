@@ -1,8 +1,8 @@
 <template>
   <v-app>
-    <v-card  class="ma-5 mb-12 pa-5">
+    <!-- <v-card  class="ma-5 mb-12 pa-5">
       <default-location/>
-    </v-card>
+    </v-card> -->
     <v-card id="cardtable" class="ma-5 mb-12 pa-5">
       <v-card-title>
         Order
@@ -260,12 +260,12 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { setInterval } from 'timers';
 import { required, minLength, maxLength, between } from 'vuelidate/lib/validators'
-import DefaultLocation from "../components/DefaultLocation.vue"
+// import DefaultLocation from "../components/DefaultLocation.vue"
 
 export default {
   name: "Order",
   components: {
-    DefaultLocation
+    // DefaultLocation
   },
   data() {
     return {
