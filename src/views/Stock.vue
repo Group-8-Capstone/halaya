@@ -117,11 +117,19 @@
             <v-row class="mx-2">
               <v-col cols="12">
                 <v-text-field
+                  v-model="editStockItem.ingredients_name"
+                  prepend-icon="mdi-map-marker"
+                  placeholder="ingredientsName"
+                >{{editStockItem.ingredients_name}}</v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
                   v-model="editStockItem.ingredients_unit"
                   prepend-icon="mdi-map-marker"
-                  placeholder="address"
+                  placeholder="ingredientsAmount"
                 >{{editStockItem.ingredients_unit}}</v-text-field>
               </v-col>
+              
             </v-row>
           </v-container>
           <v-card-actions>
@@ -359,6 +367,7 @@ export default {
         .get("http://127.0.0.1:8000/api/post/editStock/" + item.id)
         .then(response => {
           this.editStockItem = response.data;
+          console.log(response.data)
         });
     },
     reloadDataAddStock() {

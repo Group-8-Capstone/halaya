@@ -11,14 +11,6 @@
       dense
       dark
     >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-list-item-avatar size="50">
-        <img src="../assets/wawens.png">
-      </v-list-item-avatar>
-      <v-toolbar-title class="title">WAWENS UBE HALAYA</v-toolbar-title>
-      elevation=40
-    
-      >
         <!-- <v-switch
        color="purple"
         value="purple"
@@ -123,18 +115,6 @@
             <v-list-item-title v-text="item.text"></v-list-item-title>
           </v-list-item-content>
           </v-list-item>
-        </v-list-item>
-      </v-list-item-group>
-      <center>
-        <hr style="background-color:purple; height: 2px; width:90%; margin:5%;" />
-        <br>
-        <v-btn
-          depressed
-          color="deep-purple lighten-2"
-        >
-          Logout
-        </v-btn>
-      </center>
       </v-list>
     </v-navigation-drawer>
   </v-app>
