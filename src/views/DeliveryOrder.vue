@@ -1,7 +1,7 @@
 <template>
   <div> 
     <v-row class="py-0 my-0">
-      <v-col v-for="(item, index) in deliveryOrders" :key="index" class="py-0 my-1">
+      <v-col sm="4" v-for="(item, index) in deliveryOrders" :key="index" class="py-0 my-1">
         <v-card :loading="loading" class="mx-2 my-1" max-width="275">
           <v-img height="100%" width="100%" src="../assets/ubeCard.jpg"></v-img>
           <v-card-title class="pa-0 ml-2">Wawen's Ube Halaya</v-card-title>
