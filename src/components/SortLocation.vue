@@ -148,7 +148,7 @@ export default {
   height: 80vh;
 }
 .marker {
-  background-image: url("../assets/mapbox-icon.png");
+  /* background-image: url("../assets/wawens.png"); */
   background-size: cover;
   width: 50px;
   height: 50px;
