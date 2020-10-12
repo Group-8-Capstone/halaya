@@ -276,8 +276,8 @@ export default {
 
   methods: {
     getColor (status) {
-        if (status ==='Lacking') return 'red'
-        else if (status ==='Enough') return 'green'
+        if (status ==='Alert! Stock is Very Low') return 'red'
+        else if (status ==='Warning! Stock level is almost running out low') return 'orange'
         else if (status ==='Calculating...') return 'blue'
         else return 'green'
       }, 

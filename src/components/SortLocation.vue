@@ -14,7 +14,7 @@ export default {
   data() {
     return {
       accessToken:
-        "pk.eyJ1IjoiamllbnhpeWEiLCJhIjoiY2tlYzZqOGV3MDNzOTJ6dW52ajg2dWRmbyJ9.iTipm8kvIY8h74WNo1vnAA",
+        "pk.eyJ1IjoiamllbnhpeWEiLCJhIjoiY2tlaTM3d2VrMWcxczJybjc0cmZkamk3eiJ9.JzrYlG2kZ08Pkk24hvKDJw",
     };
   },
   mounted() {
@@ -92,7 +92,9 @@ export default {
       type: "Feature Collection"
     };
 
-    
+    function getCoordinates(){
+      
+    }
 
     function getDistance(to) {
       //turf.js
@@ -148,7 +150,7 @@ export default {
   height: 80vh;
 }
 .marker {
-  /* background-image: url("../assets/wawens.png"); */
+  /* background-image: url("../assets/mapbox-icon.png"); */
   background-size: cover;
   width: 50px;
   height: 50px;
