@@ -52,10 +52,13 @@
           class="dropdownFilter"
         ></v-select>
         <v-select
-          :items="Yearly"
           label=" Date"
+          v-model="filterByDate"
+          @change="filtering"
+          :items="Years"
           dense
           class="dropdownFilter"
+          :disabled="(filterBy.toLowerCase() === 'yearly' ) ? true : false "
         ></v-select>
       </v-col>
       <v-col sm="12">
@@ -72,9 +75,11 @@
         <div class="text-center">
           <v-pagination
             v-model="page"
-            :length="10"
+            :length="12"
             :total-visible="7"
             circle
+            v-if="filterBy !== 'Yearly' && filterBy !== 'Monthly'"
+            @input="pageChange"
           ></v-pagination>
         </div>
       </v-col>
@@ -87,7 +92,7 @@ import axios from "axios";
 export default {
   data() {
     return {
-      page: 8,
+      page: new Date().getMonth() + 1,
       ingredients: [
         {
           name: "Ube",
@@ -121,17 +126,16 @@ export default {
         },
       ],
       Dates: ["Daily", "Weekly", "Monthly", "Yearly"],
-      Yearly: [],
+      Years: [],
       series: [],
       chartOptions: {},
-      filterBy: "",
-      dailyData: null,
+      filterBy: "Daily",
+      filterByDate: new Date().getFullYear(),
     };
   },
   mounted() {
-    axios.get("http://localhost:8000/api/sales").then((response) => {
-      this.dailyData = response.data;
-    });
+    this.filterByYear();
+    this.daily();
   },
   components: {
     Graph,
@@ -188,28 +192,174 @@ export default {
         },
         xaxis: {
           categories: category, // categories,
+          title: {
+            text: this.clickTitle(),
+          },
         },
       };
     },
-
-    daily(data) {
-      let category = [];
-      let series = [];
-
-      data.forEach((element) => {
-        category.push(element.delivery_date);
-
-        series.push(element.total);
-      });
-      console.log(category, series);
-      this.initializeData(category, series);
+    daily() {
+      /**
+       * get the necessary DAILY DATA on mounted
+       */
+      let parameter = {
+        year: this.filterByDate,
+        month: this.page,
+      };
+      axios
+        .post("http://localhost:8000/api/sales/daily", parameter)
+        .then((response) => {
+          let category = [];
+          let series = [];
+          if (response.data.length > 0) {
+            response.data.forEach((element) => {
+              category.push(element.delivery_date);
+              series.push(element.total);
+            });
+            // console.log(category, series);
+            this.initializeData(category, series);
+          } else {
+            let year = this.filterByDate;
+            let month = String(this.page);
+            let days = "";
+            let lastday = Number(
+              new Date(new Date(year, month, 1) - 1).getDate()
+            );
+            if (month.length === 1) {
+              month = "0" + month;
+            }
+            console.log(month);
+            for (var i = 1; i < lastday + 1; i++) {
+              let days = String(i);
+              if (days.length === 1) {
+                days = "0" + days;
+              }
+              category.push(year + "-" + month + "-" + days);
+              series.push(0);
+              console.log(year + "-" + month + "-" + days);
+            }
+            this.initializeData(category, series);
+          }
+        });
     },
     filtering() {
+      /**
+       * when the filter by is clicked this method is called
+       */
       let graphFilter = this.filterBy;
       switch (graphFilter) {
         case "Daily":
-          this.daily(this.dailyData);
+          this.daily();
           break;
+        case "Weekly":
+          this.weekly();
+          break;
+        case "Monthly":
+          this.monthly();
+          break;
+        case "Yearly":
+          this.yearly();
+          break;
+      }
+    },
+    weekly() {
+      // 'w' + (index + 1)
+      let parameter = {
+        year: this.filterByDate,
+      };
+      axios
+        .post("http://localhost:8000/api/sales/weekly", parameter)
+        .then((response) => {
+          let weeklyCategory = [];
+          let weeklySeries = [];
+          let data = response.data;
+          if (data.length > 0) {
+            data.forEach((element, index) => {
+              if (element[0].totals === null) {
+                weeklySeries.push(0);
+                weeklyCategory.push("Week" + (index + 1));
+              } else {
+                weeklyCategory.push("Week" + (index + 1));
+                weeklySeries.push(element[0].totals);
+              }
+            });
+            this.initializeData(weeklyCategory, weeklySeries);
+          }
+        });
+    },
+    monthly() {
+      let parameter = {
+        year: this.filterByDate,
+      };
+      axios
+        .post("http://localhost:8000/api/sales/monthly", parameter)
+        .then((response) => {
+          let monthlyCategory = [];
+          let monthlySeries = [];
+          let WordMonths = [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
+          ];
+          let data = response.data;
+          if (data.length > 0) {
+            data.forEach((element) => {
+              let ConverttoNumber = Number(element.months) - 1;
+              monthlyCategory.push(WordMonths[ConverttoNumber]);
+              monthlySeries.push(element.totals);
+            });
+            this.initializeData(monthlyCategory, monthlySeries);
+          }
+        });
+    },
+    yearly() {
+      axios.get("http://localhost:8000/api/sales/yearly").then((response) => {
+        let yearlyCategory = [];
+        let yearlySeries = [];
+        let data = response.data;
+        console.log(data);
+        if (data.length > 0) {
+          data.forEach((element) => {
+            yearlyCategory.push(element.years);
+            yearlySeries.push(element.totals);
+          });
+          this.initializeData(yearlyCategory, yearlySeries);
+        }
+      });
+    },
+    filterByYear() {
+      axios
+        .get("http://localhost:8000/api/sales/filterYear")
+        .then((response) => {
+          let tempYears = [];
+          response.data.forEach((element) => {
+            tempYears.push(element.years);
+          });
+          this.Years = tempYears;
+        });
+    },
+    pageChange() {
+      console.log("page number: ", this.page);
+      this.filtering();
+    },
+    clickTitle() {
+      if (this.filterBy == "Daily") {
+        return "Days";
+      } else if (this.filterBy == "Monthly") {
+        return "Months";
+      } else if (this.filterBy == "Weekly") {
+        return "Weeks";
+      } else if (this.filterBy == "Yearly") {
+        return "Years";
       }
     },
   },
