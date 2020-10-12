@@ -2,9 +2,12 @@
   <v-card class="mx-auto my-2" max-width="1000">
     <v-card dark flat>
       <v-card-title class="pa-2 purple lighten-3">
-        <v-btn icon class="ml-5">
+        <router-link
+              to="/delivery"
+              id="backbtn"
+            ><v-btn id="backbtn" icon class="ml-5">
           <v-icon>mdi-arrow-left</v-icon>Back
-        </v-btn>
+        </v-btn></router-link>
         <h3 class="title font-weight-light text-center grow">Delivery</h3>
         <v-btn icon class="mr-5">
           <v-icon large color="purple">mdi-download</v-icon>
@@ -89,18 +92,18 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
 
-export default {
-  name: "Order",
-  components: {},
-  data() {
-    return {};
-  },
-  mounted() {
-    axios.get("http://localhost:8000/").then((response) => {
+// export default {
+//   name: "Order",
+//   components: {},
+//   data() {
+//     return {};
+//   },
+//   mounted() {
+//     axios.get("http://localhost:8000/").then((response) => {
       
-    });
-  },
-};
+//     });
+//   },
+// };
 </script>

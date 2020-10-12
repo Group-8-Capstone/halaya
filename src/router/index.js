@@ -7,7 +7,6 @@ import Login from "../views/Login.vue"
 import Delivered from "../views/Delivered.vue";
 import Home from "../views/Home.vue";
 import DeliveryDetails from "../views/DeliveryDetails";
-
 import Setting from "../views/Setting.vue";
 import AccountSetting from "../components/ProfileAccount.vue";
 
@@ -64,6 +63,7 @@ const router = new VueRouter({
       name: "dashboard",
       component: Home
     },
+    {
       path: "/setting",
       name: "BusinessSetting",
       component: Setting
