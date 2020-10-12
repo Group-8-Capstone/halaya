@@ -23,7 +23,8 @@
                 <v-text-field
       label="Ube Amount in kilograms"
       :rules="rules"
-      hide-details="auto"v-model="ube"
+      hide-details="auto"
+      v-model="ube"
      v-bind:disabled="disabled"
       
       value="good"
