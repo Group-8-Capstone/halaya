@@ -1,32 +1,29 @@
 <template>
-  <div> 
+  <div>
     <v-row class="py-0 my-0">
       <v-col sm="3" v-for="(item, index) in deliveryOrders" :key="index" class="py-0 my-1">
-        <v-card class="mx-2 my-1" max-width="275">
+        <v-card class="mx-2 my-1 pa-1" max-width="275">
           <v-img height="100%" width="100%" src="../assets/ubeCard.jpg"></v-img>
-          <v-card-title class="pa-0 ml-2">Wawen's Ube Halaya</v-card-title>
-          <v-divider class="mx-4"></v-divider>
-          <v-card-title class="pa-0 ml-2">{{item.title}}</v-card-title>
-          <v-card-text class="pa-0 ml-2">
-            <div>Five delivery locations for this round of delivery.</div>
-            <v-chip-group
-              v-model="selection"
-              active-class="deep-purple accent-4 white--text pa-1px"
-              column
-            >
-              <v-chip>{{item.distance1}}</v-chip>
-              <v-chip>{{item.distance2}}</v-chip>
-              <v-chip>{{item.distance3}}</v-chip>
-              <v-chip>{{item.distance4}}</v-chip>
-              <v-chip>{{item.distance5}}</v-chip>
-            </v-chip-group>
-          </v-card-text>
+          <v-container class="justify-center">
+            <v-card-title class="pa-0 ml-2">Wawen's Ube Halaya</v-card-title>
+            <v-divider class="mx-4"></v-divider>
+            <v-card-title class="pa-0 ml-2">{{item.title}}</v-card-title>
+            <v-card-text class="pa-0 ml-2">
+              <div>Five delivery locations for this round of delivery.</div>
+              <v-chip-group column>
+                <v-chip small>{{item.distance1}}</v-chip>
+                <v-chip small>{{item.distance2}}</v-chip>
+                <v-chip small>{{item.distance3}}</v-chip>
+                <v-chip small>{{item.distance4}}</v-chip>
+                <v-chip small>{{item.distance5}}</v-chip>
+              </v-chip-group>
+            </v-card-text>
+          </v-container>
           <v-card-actions class="pa-0">
-            <router-link
-              to="/delivery-details"
-              id="deliveryDetailsBtn"
-            >
-            <v-btn id="deliveryDetailsBtn" color="deep-purple lighten-2" text><v-icon>mdi-format-list-bulleted-square</v-icon>View Delivery Details</v-btn>
+            <router-link to="/delivery-details" id="deliveryDetailsBtn">
+              <v-btn id="deliveryDetailsBtn" color="deep-purple lighten-2" text>
+                <v-icon>mdi-format-list-bulleted-square</v-icon>View Delivery Details
+              </v-btn>
             </router-link>
           </v-card-actions>
         </v-card>
@@ -40,14 +37,13 @@ import axios from "axios";
 export default {
   data() {
     return {
-      selection:'',
       deliveryOrders: [
         {
           title: "Delivery 1",
           distance1: "0.5 km",
           distance2: "0.8 km",
-          distance3: "1 km",
-          distance4: "1 km",
+          distance3: "1.0 km",
+          distance4: "1.0 km",
           distance5: "1.1 km"
         },
         {
@@ -84,10 +80,25 @@ export default {
         }
       ]
     };
-  },
+  }
   // methods:
   // {
 
   // }
 };
 </script>
+
+<style>
+.v-chip--clickable {
+  pointer-events: none;
+  cursor: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+#deliveryDetailsBtn {
+  text-decoration: none;
+}
+</style>
