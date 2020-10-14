@@ -102,29 +102,29 @@
 
 <script>
 // import locations from "../components/SortLocation.vue";
-import axios from "axios";
+// import axios from "axios";
 
-export default {
-  name: "OrderDetails",
-  // components: { locations },
-  data() {
-    return {
-      orders: [],
-      search: "",
-    };
-  },
-  mounted() {
-    this.loadOrders();
-  },
+// export default {
+//   name: "OrderDetails",
+//   // components: { locations },
+//   data() {
+//     return {
+//       orders: [],
+//       search: "",
+//     };
+//   },
+//   mounted() {
+//     this.loadOrders();
+//   },
 
-  methods: {
-    loadOrders() {
-      axios.get("http://127.0.0.1:8000/api/posts/order").then(response => {
-        this.orders = response.data.data;
-      });
-    }
-  }
-};
+//   methods: {
+//     loadOrders() {
+//       axios.get("http://127.0.0.1:8000/api/posts/order").then(response => {
+//         this.orders = response.data.data;
+//       });
+//     }
+//   }
+// };
 
 // export default {
 //   name: "Order",
