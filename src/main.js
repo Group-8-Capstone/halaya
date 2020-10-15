@@ -6,9 +6,15 @@ import Vuelidate from 'vuelidate'
 
 import mapboxgl from "mapbox-gl";
 import turf from "@turf/turf";
+import { Form, HasError, AlertError } from 'vform'
 import '@turf/helpers';
 
 Vue.use(Vuelidate)
+window.Form = Form;
+Vue.component(HasError.name, HasError)
+Vue.component(AlertError.name, AlertError)
+
+Vue.component('profile-component', require('./components/ProfileAccount.vue').default);
 
 
 Vue.config.productionTip = false;

@@ -23,11 +23,11 @@ const router = new VueRouter({
       name: "Login",
       component: Login
     },
-    {
-      path: "/dashboard",
-      name: "dashboard",
-      component: Home
-    },
+    // {
+    //   path: "/dashboard",
+    //   name: "dashboard",
+    //   component: Home
+    // },
     {
       path: "/",
       name: "home",

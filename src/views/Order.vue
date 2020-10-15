@@ -93,9 +93,20 @@
                       no-title
                       scrollable
                     >
-                      <v-spacer></v-spacer>
-                    </v-date-picker>
-                  </v-menu>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                          v-model="deliveryDate"
+                          label="delivery date"
+                          prepend-icon="mdi-calendar"
+                          readonly
+                          v-bind="attrs"
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker v-model="deliveryDate" :min="deliveryDate"  :max="getEndDate" color="deep-purple lighten-1" no-title scrollable>
+                      </v-date-picker>
+                 </v-menu>
+
                 </v-col>
                 <v-col cols="12">
                   <v-text-field
