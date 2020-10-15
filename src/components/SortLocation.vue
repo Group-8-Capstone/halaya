@@ -25,76 +25,76 @@ export default {
       center: [123.921969, 10.329892],
       zoom: 12
     });
-    var customData = {
-      features: [
-        {
-          type: "Feature",
-          properties: {
-            title: "Sioki Sarix2 Store",
-            description: "A northside park that is home to the Lincoln Park Zoo",
-            distance: [0,0],
-          },
-          geometry: {
-            coordinates: [123.922302, 10.331634],
-            type: "Point"
-          }
-        },
-        {
-          type: "Feature",
-          properties: {
-            title: "Consuelo Village Chapel",
-            description: "A pplace for worship",
-            distance: [0,0],
-          },
-          geometry: {
-            coordinates: [123.948709, 10.359120],
-            type: "Point"
-          }
-        },
-        {
-          type: "Feature",
-          properties: {
-            title: "St. Martin Village",
-            description: "A pplace for worship",
-            distance: [0,0],
-          },
-          geometry: {
-            coordinates: [123.926741, 10.338254],
-            type: "Point"
-          }
-        },
-        {
-          type: "Feature",
-          properties: {
-            title: "Un Apartment",
-            description: "St. Mathew, St. Hermag Village",
-            distance: [0,0],
-          },
-          geometry: {
-            coordinates: [123.945994, 10.352769],
-            type: "Point"
-          }
-        },
-        {
-          type: "Feature",
-          properties: {
-            title: "Sta. Lucia Village",
-            description:
-              "aihasd bjshriuwba ieenchdoriryfnsie",
-            distance: [0,0],
-          },
-          geometry: {
-            coordinates: [123.918751, 10.330543],
-            type: "Point"
-          }
-        }
-      ],
-      type: "Feature Collection"
-    };
+    // var customData = {
+    //   features: [
+    //     {
+    //       type: "Feature",
+    //       properties: {
+    //         title: "Sioki Sarix2 Store",
+    //         description: "A northside park that is home to the Lincoln Park Zoo",
+    //         distance: [0,0],
+    //       },
+    //       geometry: {
+    //         coordinates: [123.922302, 10.331634],
+    //         type: "Point"
+    //       }
+    //     },
+    //     {
+    //       type: "Feature",
+    //       properties: {
+    //         title: "Consuelo Village Chapel",
+    //         description: "A pplace for worship",
+    //         distance: [0,0],
+    //       },
+    //       geometry: {
+    //         coordinates: [123.948709, 10.359120],
+    //         type: "Point"
+    //       }
+    //     },
+    //     {
+    //       type: "Feature",
+    //       properties: {
+    //         title: "St. Martin Village",
+    //         description: "A pplace for worship",
+    //         distance: [0,0],
+    //       },
+    //       geometry: {
+    //         coordinates: [123.926741, 10.338254],
+    //         type: "Point"
+    //       }
+    //     },
+    //     {
+    //       type: "Feature",
+    //       properties: {
+    //         title: "Un Apartment",
+    //         description: "St. Mathew, St. Hermag Village",
+    //         distance: [0,0],
+    //       },
+    //       geometry: {
+    //         coordinates: [123.945994, 10.352769],
+    //         type: "Point"
+    //       }
+    //     },
+    //     {
+    //       type: "Feature",
+    //       properties: {
+    //         title: "Sta. Lucia Village",
+    //         description:
+    //           "aihasd bjshriuwba ieenchdoriryfnsie",
+    //         distance: [0,0],
+    //       },
+    //       geometry: {
+    //         coordinates: [123.918751, 10.330543],
+    //         type: "Point"
+    //       }
+    //     }
+    //   ],
+    //   type: "Feature Collection"
+    // };
 
-    function getCoordinates(){
+    // function getCoordinates(){
       
-    }
+    // }
 
     function getDistance(to) {
       //turf.js
