@@ -10,7 +10,7 @@
         <h3 class="title font-weight-light text-center grow">Delivery</h3>
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn icon class="mr-5">
+            <v-btn icon class="mr-5" @click="generate()">
               <v-icon medium color="purple" v-bind="attrs" v-on="on">mdi-download</v-icon>
             </v-btn>
           </template>
@@ -26,7 +26,7 @@
     </v-card>
     <v-container>
       <v-row>
-        <div class="headline blue--text">October 11, 2020</div>
+        <div class="ml-2 headline blue--text">October 11, 2020</div>
       </v-row>
     </v-container>
     <v-card-text class="py-0">
@@ -101,6 +101,23 @@
 </template>
 
 <script>
+var pdfMake = require("pdfmake/build/pdfmake.js");
+var pdfFonts = require("pdfmake/build/vfs_fonts.js");
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+export default {
+  data() {
+    return {};
+  },
+  methods: {
+    generate() {
+      var docDefinition = {
+        content: "This is an sample PDF printed with pdfMake"
+      };
+      pdfMake.createPdf(docDefinition).download("Deivery.pdf");
+    }
+  }
+};
 // import locations from "../components/SortLocation.vue";
 // import axios from "axios";
 
