@@ -124,12 +124,11 @@
               </v-col>
               <v-col cols="12">
                 <v-text-field
-                  v-model="editStockItem.ingredients_unit"
+                  v-model="editStockItem.ingredients_remaining"
                   prepend-icon="mdi-map-marker"
                   placeholder="ingredientsAmount"
-                >{{editStockItem.ingredients_unit}}</v-text-field>
+                >{{editStockItem.ingredients_remaining}}</v-text-field>
               </v-col>
-              
             </v-row>
           </v-container>
           <v-card-actions>
@@ -220,7 +219,7 @@ export default {
           text: "Ingredients Remaining Amount",
           align: "start",
           sortable: true,
-          value: "ingredients_unit"
+          value: "ingredients_remaining"
         },
         {
           text: "Used Ingredients Amount",
@@ -297,15 +296,10 @@ export default {
       this.reloadDataAddUsedAmount();
       this.addUsedStockDialog = !this.addUsedStockDialog;
     },
-    postSumOrder() {
-      axios.get("http://127.0.0.1:8000/api/fetch/sumOrder").then(response => {
-        this.sumOrder = response.data;
-      });
-    },
     updateIngredients() {
-      axios
-        .post("http://127.0.0.1:8000/api/post/updateStock", this.editStockItem)
+      axios.post("http://127.0.0.1:8000/api/post/updateStock", this.editStockItem)
         .then(response => {
+          console.log(response);
           this.fetchStock();
           this.editDialog = false;
         });
@@ -317,7 +311,7 @@ export default {
         this.availableIngredients === ""
       ) {
         this.addUsedStockDialog = true;
-      } else {
+      }else {
         let newAddedAmount = {
           availableIngredients: this.availableIngredients,
           usedIngredientsAmount: this.usedIngredientsAmount
@@ -401,9 +395,9 @@ export default {
             'Content-Type': 'application/json',
           };
         axios
-          .post("http://127.0.0.1:8000/api/posts/newIngredients", newStock)
+          .post("http://127.0.0.1:8000/api/posts/ingredients", newStock)
           .then(response => {
-            // console.log('testing.....', response.data);
+    
             if (response.data == "existed") {
               Swal.fire({
                 title: "Stock item is already existed",
@@ -422,7 +416,7 @@ export default {
             }
             this.stockDialog = false;
             this.reloadDataAddStock();
-            // this.postExpectedProduct();
+            
           });
       }
     }

@@ -91,7 +91,6 @@
                         ></v-text-field>
                       </template>
                       <v-date-picker v-model="deliveryDate" :min="deliveryDate"  :max="getEndDate" color="deep-purple lighten-1" no-title scrollable>
-                        <v-spacer></v-spacer>
                       </v-date-picker>
                  </v-menu>
                 </v-col>

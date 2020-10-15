@@ -1,10 +1,31 @@
 <template>
-
+<div>
+    <v-card id="cardtable" class="ma-5 mb-12 pa-5">
+      <v-card-title>
+   
+         <v-text-field
+                v-model="search"
+                append-icon="mdi-magnify"
+                label="Search"
+                single-line
+                hide-details
+              ></v-text-field>
+            <v-btn
+            class="ma-5"
+            color="purple darken-2"
+            rounded
+            outlined
+            dark
+            @click="showDialog"
+          >
+            <v-icon>mdi-plus</v-icon>
+            <v-toolbar-title>Add Estimated Value</v-toolbar-title>
+          </v-btn>
+          <template>
+          <v-dialog v-model="addDialog" width="400px">
         <v-card
-    class="mx-auto ma-15 "
-    max-width="500"
-  >
-
+ 
+      >
     <v-card-title>
       Your ube halayas ingredients
     </v-card-title>
@@ -12,92 +33,113 @@
     <v-card-subtitle>
       Update your estimated ingredients value
     </v-card-subtitle>
-
     <v-divider></v-divider>
-     <v-row class=" ma-5">
-          <v-layout>
-       <v-spacer></v-spacer>
-        <v-btn  color="primary" v-bind:disabled="btnDisabled" outlined @click="editAmount()" class="ma-3" >Update</v-btn>
-    </v-layout>
-            <v-col cols="12">
-                <v-text-field
-      label="Ube Amount in kilograms"
+    <v-col cols="12">
+    <v-text-field
+      label="Added Ingredients"
       :rules="rules"
       hide-details="auto"
-      v-model="ube"
-     v-bind:disabled="disabled"
-      
-      value="good"
+      v-model="addedIngredientsName"
       outlined
     >
     </v-text-field>
    </v-col>
-    <v-col cols="12">
-    <v-text-field
-      label="Condensed Milk number of cans"
+   <v-col cols="12">
+                <v-text-field
+      label="Estimated Amount"
       :rules="rules"
       hide-details="auto"
-      v-bind:disabled="disabled"
-      v-model="condensed"
-      outlined
-    >
-</v-text-field>
-        </v-col>
-            <v-col cols="12">
-    <v-text-field
-      label="Evaporated Milk number of cans"
-      :rules="rules"
-      hide-details="auto"
-      v-bind:disabled="disabled"
-      v-model="evap"
+      v-model="addedEstimatedAmount"
       outlined
     >
     </v-text-field>
-     </v-col>
-     <v-col cols="12">
-
-    <v-text-field
-      label="Butter Amount"
-      :rules="rules"
-      hide-details="auto"
-       v-bind:disabled="disabled"
-       v-model="butter"
-        outlined
-    >
-    </v-text-field>
-     </v-col>
-     <v-col cols="12">
-    <v-text-field
-      label="Sugar Amount"
-      :rules="rules"
-      hide-details="auto"
-      v-bind:disabled="disabled"
-      v-model="sugar"
-      outlined
-    >
-    </v-text-field>
-            </v-col>
-             <v-layout align-center justify-center>
-            <v-flex xs6>
-                  <v-btn class=" ma-5" v-on:click="saveChanges"
-                   v-if="!isHidden" color="green" outlined >Save changes</v-btn>
-            </v-flex>
-        </v-layout>
-     </v-row>
-  </v-card> 
+   </v-col>
+      <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn text color="primary" @click="addDialog = false">Cancel</v-btn>
+              <v-btn text @click="addEstimatedValue">Save</v-btn>
+            </v-card-actions>
+          </v-card> 
+          </v-dialog>
+              <v-data-table :headers="headers" :items="estimatedValue" :search="search">
+              <template v-slot:item.action="{ item }" >
+                <v-icon
+                  @click="editDialog = !editDialog, editEstimatedValue(item) "
+                  class="mr-2"
+                  normal
+                  title="Edit"
+                >mdi-table-edit</v-icon>
+              </template>
+            </v-data-table>
+   
+    
+          <v-dialog v-model="editDialog" width="400px">
+            <v-card>
+              <v-spacer></v-spacer>
+                <v-card-title class="deep-purple lighten-1 align-center">
+             <v-list-item-title
+                    class="d-flex align-center justify-center  mx-auto headline"
+                  >UPDATE ESTIMATED VALUE</v-list-item-title>
+            </v-card-title>  
+              <v-container >
+                <v-row class="mx-2">
+                 
+                   <v-col cols="12">
+                    <v-text-field
+                    v-model="editValue.ingredients_name"
+                      prepend-icon="mdi-map-marker"
+                      placeholder="address"
+                      v-bind:disabled="disabled"
+                    ></v-text-field>
+                  </v-col>
+                   <v-col cols="12">
+                    <v-text-field
+                    v-model="editValue.ingredients_need_amount"
+                    prepend-icon="mdi-map-marker"
+               
+                    ></v-text-field>
+                  </v-col>
+                  
+                </v-row>
+              </v-container>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn text color="primary" @click="editDialog = false">Cancel</v-btn>
+                <v-btn text @click="updateEstimatedValue()">Save</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </template>
+      </v-card-title>
+     </v-card>
+</div>
 </template>
 
 <script>
 import axios from "axios";
+import Swal from "sweetalert2";
   export default {
     name: "BusinessSetting",
     data: () => ({
-      ube:'',
-      condensed:'',
-      evap:'',
-      butter:'',
-      sugar:'',
-      ingNames: [],
+      addedEstimatedAmount:'',
+      addedIngredientsName:'',
+      estimatedValue:[],
+      search:'',
+      editDialog:false,
+      addDialog:false,
+      editValue: [],
+      headers: [
+        {
+          text: "Ingredient's Name",
+          align: "start",
+          sortable: false,
+          value: 'ingredients_name'
+        },
+        { text: "Needed Value", value: "ingredients_need_amount" },
+        { text: "Actions", value: "action", sortable: false },
+      
+       
+      ],
       rules: [
         value => !!value || 'Required.',
       ],
@@ -114,51 +156,79 @@ import axios from "axios";
 
     }),
     mounted() {
+      this.fetchEstimatedValue();
+      setInterval(this.fetchEstimatedValue(),3000)
     
     },
-    created(){
-      this.getIngredientsName();
+    created(){ 
     },
     methods: {
       editAmount(){
-        console.log('good')
         this.disabled= false
         this.btnDisabled=true
         this.isHidden=false
       },
-      getIngredientsName(){
-        let nameArray = [];
-        axios.get("http://127.0.0.1:8000/api/fetch/stock").then(response => {
-          this.stocks = response.data;
-          for (var i = 0; i < response.data.length; i++) {
-            if (nameArray.includes(response.data[i].ingredients_name)) {
-              console.log("good");
-            } else {
-              nameArray.push(response.data[i].ingredients_name);
-              this.ingNames = nameArray;
-            }
-            continue;
-          }
-          console.log('names: ', nameArray)
+
+      addEstimatedValue(){
+        let param ={
+          ingredientsName:this.addedIngredientsName,
+          ingredientsEstimatedAmount:this.addedEstimatedAmount
+        }
+        axios.post("http://127.0.0.1:8000/api/post/neededValue",param).then(response=>{
+        this.addDialog=false,
+         Swal.fire({
+        title: "Successfully Added",
+        icon: "success",
+        timer: 3000
+      })
+      this.fetchEstimatedValue()
         })
       },
-      saveChanges(){
-        let ingredientsAmount = {
-          ingredientName: 'Ube',
-          amount: this.ube
-        }
-        console.log('ingredients ream amount: ', ingredientsAmount)
-        axios
-          .post("http://127.0.0.1:8000/api/post/saveRealNumbers", )
-            .then(response => {
-              console.log('response: ', response.data);
-        });
-        console.log("saved")
-        this.disabled= true
-        this.btnDisabled=false
-        this.isHidden = true
+      showDialog(){
+        this.addDialog=true
+      },
 
-      }
+      fetchEstimatedValue(){
+        axios.get("http://127.0.0.1:8000/api/fetch/estimatedValue").then(response=>{
+          this.estimatedValue=response.data;
+          console.log(response.data);
+        })
+
+      },
+
+      editEstimatedValue(item){
+        axios.get("http://127.0.0.1:8000/api/post/updateEstimatedValue/"+item.id).then(response=>{
+          this.editValue = response.data
+          console.log(this.editValue)
+        })
+
+      },
+       updateEstimatedValue(){
+       if (this.editValue.ingredients_need_amount===""){
+         Swal.fire({
+        title: "Please fill in all required field",
+        icon: "warning",
+        timer: 3000
+      }),
+        this.editDialog=this.editDialog;
+       }
+       else{
+        axios.post('http://127.0.0.1:8000/api/post/updateNewEstimatedValue', this.editValue).then(response => {
+        console.log(this.editValue)
+        this.editDialog=false;
+        Swal.fire({
+        title: "Successfully Updated",
+        icon: "success",
+        timer: 3000
+      })
+      this.fetchEstimatedValue();
+        
+        })
+         
+       
+       }
+       
+    },
     
     }
   }
