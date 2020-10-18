@@ -1,8 +1,8 @@
 <template>
   <v-app>
-    <!-- <v-card  class="ma-5 mb-12 pa-5">
+    <v-card  class="ma-5 mb-12 pa-5">
       <default-location/>
-    </v-card>-->
+    </v-card>
     <v-card id="cardtable" class="ma-5 mb-12 pa-5">
       <v-card-title>
         Order
@@ -93,6 +93,7 @@
                       no-title
                       scrollable
                     >
+                    </v-date-picker>
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
                           v-model="deliveryDate"
@@ -272,12 +273,12 @@ import {
   between
 } from "vuelidate/lib/validators";
 import * as turf from '@turf/turf';
-// import DefaultLocation from "../components/DefaultLocation.vue"
+import DefaultLocation from "../components/DefaultLocation.vue"
 
 export default {
   name: "Order",
   components: {
-    // DefaultLocation
+    DefaultLocation
   },
   data() {
     return {

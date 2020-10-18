@@ -209,7 +209,7 @@ export default {
       item: [],
       stocks: [],
       items: ["Ube", "Condensed milk", "Butter", "Sugar", "Evaporated milk"],
-      editStockItem: [],
+      editStockItem: {},
       stockDialog: false,
       editDialog: false,
       addUsedStockDialog: false,
@@ -316,8 +316,9 @@ export default {
           availableIngredients: this.availableIngredients,
           usedIngredientsAmount: this.usedIngredientsAmount
         };
+        console.log('used_amount', newAddedAmount);
         axios
-          .post("http://127.0.0.1:8000/api/post/addStockAmount", newAddedAmount)
+          .post("http://127.0.0.1:8000/api/post/usedIngredients", newAddedAmount)
           .then(response => {
             console.log(response);
             this.reloadDataAddUsedAmount();
@@ -360,8 +361,13 @@ export default {
       axios
         .get("http://127.0.0.1:8000/api/post/editStock/" + item.id)
         .then(response => {
-          this.editStockItem = response.data;
-          console.log(response.data)
+          let result = response.data;
+          var obj = {};
+          for (var i = 0; i < result.length; i++) {
+            obj[result[i].key] = result[i].value;
+          }
+          this.editStockItem = obj;
+          console.log("edit stock item", JSON.stringify(this.editStockItem))
         });
     },
     reloadDataAddStock() {
@@ -390,6 +396,7 @@ export default {
           ingredientsUnit: this.ingredientsUnit,
           stockStatus: this.stockStatus
         };
+        console.log('NewStock: ', newStock);
         let headers = {
             "Access-Control-Allow-Origin": '*',
             'Content-Type': 'application/json',
