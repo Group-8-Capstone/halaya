@@ -283,8 +283,8 @@ export default {
 
   methods: {
     getColor (status) {
-        if (status ==='Alert! Stock is Very Low') return 'red'
-        else if (status ==='Warning! Stock level is almost running out low') return 'orange'
+        if (status ==='Alert! Very Low') return 'red'
+        else if (status ==='Warning! Running Low') return 'orange'
         else if (status ==='Calculating...') return 'blue'
         else return 'green'
       }, 
@@ -297,12 +297,15 @@ export default {
       this.addUsedStockDialog = !this.addUsedStockDialog;
     },
     updateIngredients() {
-      axios.post("http://127.0.0.1:8000/api/post/updateStock", this.editStockItem)
-        .then(response => {
-          console.log(response);
-          this.fetchStock();
-          this.editDialog = false;
-        });
+    //  let arr = this.editStockItem.toArray();
+    //   console.log('editStockItem:', arr);
+    //   axios.post("http://127.0.0.1:8000/api/post/updateStock", this.editStockItem)
+    //     .then(response => {
+    //       console.log(response);
+    //       this.fetchStock();
+    //       this.editDialog = false;
+    //     });
+    console.log("testing..")
     },
     addIngredientsAmount() {
       this.$v.$touch();
@@ -361,12 +364,7 @@ export default {
       axios
         .get("http://127.0.0.1:8000/api/post/editStock/" + item.id)
         .then(response => {
-          let result = response.data;
-          var obj = {};
-          for (var i = 0; i < result.length; i++) {
-            obj[result[i].key] = result[i].value;
-          }
-          this.editStockItem = obj;
+          this.editStockItem = response.data;
           console.log("edit stock item", JSON.stringify(this.editStockItem))
         });
     },
