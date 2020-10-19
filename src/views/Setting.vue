@@ -2,57 +2,55 @@
 <div>
     <v-card id="cardtable" class="ma-5 mb-12 pa-5">
       <v-card-title>
-   
          <v-text-field
-                v-model="search"
-                append-icon="mdi-magnify"
-                label="Search"
-                single-line
-                hide-details
-              ></v-text-field>
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Search"
+          single-line
+          hide-details
+        ></v-text-field>
             <v-btn
             class="ma-5"
             color="purple darken-2"
             rounded
             outlined
             dark
-            @click="showDialog"
-          >
+            @click="showDialog">
             <v-icon>mdi-plus</v-icon>
             <v-toolbar-title>Add Estimated Value</v-toolbar-title>
           </v-btn>
-          <template>
           <v-dialog v-model="addDialog" width="400px">
-        <v-card
- 
-      >
+        <v-card>
     <v-card-title>
       Your ube halayas ingredients
     </v-card-title>
 
     <v-card-subtitle>
-      Update your estimated ingredients value
+      Add your estimated ingredients value
     </v-card-subtitle>
     <v-divider></v-divider>
     <v-col cols="12">
     <v-text-field
       label="Added Ingredients"
-      :rules="rules"
+       :error-messages="AddedIngredientsNameErrors"
+        @input="$v.addedIngredientsName.$touch()"
+        @blur="$v.addedIngredientsName.$touch()"
+        required
       hide-details="auto"
       v-model="addedIngredientsName"
-      outlined
-    >
+      outlined>
     </v-text-field>
    </v-col>
    <v-col cols="12">
-                <v-text-field
+    <v-text-field
       label="Estimated Amount"
-      :rules="rules"
+      :error-messages="AddedIngredientsValueErrors"
+      @input="$v.addedEstimatedAmount.$touch()"
+      @blur="$v.addedEstimatedAmount.$touch()"
+      required
       hide-details="auto"
       v-model="addedEstimatedAmount"
-      outlined
-    >
-    </v-text-field>
+      outlined></v-text-field>
    </v-col>
       <v-card-actions>
               <v-spacer></v-spacer>
@@ -61,18 +59,17 @@
             </v-card-actions>
           </v-card> 
           </v-dialog>
+           </v-card-title>
               <v-data-table :headers="headers" :items="estimatedValue" :search="search">
               <template v-slot:item.action="{ item }" >
                 <v-icon
                   @click="editDialog = !editDialog, editEstimatedValue(item) "
-                  class="mr-2"
+                 
                   normal
                   title="Edit"
                 >mdi-table-edit</v-icon>
               </template>
             </v-data-table>
-   
-    
           <v-dialog v-model="editDialog" width="400px">
             <v-card>
               <v-spacer></v-spacer>
@@ -83,7 +80,6 @@
             </v-card-title>  
               <v-container >
                 <v-row class="mx-2">
-                 
                    <v-col cols="12">
                     <v-text-field
                     v-model="editValue.ingredients_name"
@@ -95,11 +91,8 @@
                    <v-col cols="12">
                     <v-text-field
                     v-model="editValue.ingredients_need_amount"
-                    prepend-icon="mdi-map-marker"
-               
-                    ></v-text-field>
+                    prepend-icon="mdi-map-marker"></v-text-field>
                   </v-col>
-                  
                 </v-row>
               </v-container>
               <v-card-actions>
@@ -109,13 +102,11 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
-        </template>
-      </v-card-title>
      </v-card>
 </div>
 </template>
-
 <script>
+import { required, minLength, maxLength, between } from 'vuelidate/lib/validators'
 import axios from "axios";
 import Swal from "sweetalert2";
   export default {
@@ -137,8 +128,6 @@ import Swal from "sweetalert2";
         },
         { text: "Needed Value", value: "ingredients_need_amount" },
         { text: "Actions", value: "action", sortable: false },
-      
-       
       ],
       rules: [
         value => !!value || 'Required.',
@@ -155,6 +144,28 @@ import Swal from "sweetalert2";
       isHidden: true
 
     }),
+    validations: {
+    addedIngredientsName: {
+      required,
+    },
+    addedEstimatedAmount: {
+      required,
+    },
+      },
+      computed:{
+      AddedIngredientsNameErrors () {
+      const errors = []
+      if (!this.$v.addedIngredientsName.$dirty) return errors
+      !this.$v.addedIngredientsName.required && errors.push('Ingredients Name is required.')
+      return errors
+    },
+    AddedIngredientsValueErrors () {
+      const errors = []
+      if (!this.$v.addedEstimatedAmount.$dirty) return errors
+      !this.$v.addedEstimatedAmount.required && errors.push('Estimated Value is required.')
+      return errors
+    },
+      },
     mounted() {
       this.fetchEstimatedValue();
       setInterval(this.fetchEstimatedValue(),3000)
@@ -168,10 +179,19 @@ import Swal from "sweetalert2";
         this.btnDisabled=true
         this.isHidden=false
       },
+       reloadData(){
+
+        this.addedIngredientsName="",
+        this.addedEstimatedAmount="",
+        this.$v.$reset();
+    },
 
       addEstimatedValue(){
+         var upperIngredientsName =
+          this.addedIngredientsName.charAt(0).toUpperCase() +
+          this.addedIngredientsName.slice(1).toLowerCase();
         let param ={
-          ingredientsName:this.addedIngredientsName,
+          ingredientsName:upperIngredientsName,
           ingredientsEstimatedAmount:this.addedEstimatedAmount
         }
         axios.post("http://127.0.0.1:8000/api/post/neededValue",param).then(response=>{
@@ -182,10 +202,12 @@ import Swal from "sweetalert2";
         timer: 3000
       })
       this.fetchEstimatedValue()
+    
         })
       },
       showDialog(){
         this.addDialog=true
+        this.reloadData();
       },
 
       fetchEstimatedValue(){
@@ -205,7 +227,7 @@ import Swal from "sweetalert2";
       },
        updateEstimatedValue(){
        if (this.editValue.ingredients_need_amount===""){
-         Swal.fire({
+        Swal.fire({
         title: "Please fill in all required field",
         icon: "warning",
         timer: 3000
@@ -224,8 +246,6 @@ import Swal from "sweetalert2";
       this.fetchEstimatedValue();
         
         })
-         
-       
        }
        
     },
