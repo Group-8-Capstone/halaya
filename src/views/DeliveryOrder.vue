@@ -1,6 +1,16 @@
 <template>
   <div>
-    <v-row class="py-0 my-0">
+    <v-card class="ma-5 mb-12 pa-5">
+      <v-card-title>
+        Deliveries for Today
+      </v-card-title>
+      <v-data-table
+      :headers="headers"
+      :items="delivery"
+      :search="search"
+    ></v-data-table>
+    </v-card>
+    <!-- <v-row class="py-0 my-0">
       <v-col sm="3" v-for="(item, index) in deliveryOrders" :key="index" class="py-0 my-1">
         <v-card class="mx-2 my-1 pa-1" max-width="275">
           <v-img height="100%" width="100%" src="../assets/ubeCard.jpg"></v-img>
@@ -28,64 +38,99 @@
           </v-card-actions>
         </v-card>
       </v-col>
-    </v-row>
+    </v-row> -->
   </div>
 </template>
 
 <script>
 import axios from "axios";
-export default {
-  data() {
-    return {
-      deliveryOrders: [
-        {
-          title: "Delivery 1",
-          distance1: "0.5 km",
-          distance2: "0.8 km",
-          distance3: "1.0 km",
-          distance4: "1.0 km",
-          distance5: "1.1 km"
-        },
-        {
-          title: "Delivery 2",
-          distance1: "1.1 km",
-          distance2: "1.2 km",
-          distance3: "1.3 km",
-          distance4: "1.5 km",
-          distance5: "1.5 km"
-        },
-        {
-          title: "Delivery 3",
-          distance1: "1.5 km",
-          distance2: "1.5 km",
-          distance3: "1.5 km",
-          distance4: "1.6 km",
-          distance5: "1.6 km"
-        },
-        {
-          title: "Delivery 4",
-          distance1: "1.6 km",
-          distance2: "1.7 km",
-          distance3: "1.7 km",
-          distance4: "1.8 km",
-          distance5: "1.8 km"
-        },
-        {
-          title: "Delivery 5",
-          distance1: "1.8 km",
-          distance2: "1.8 km",
-          distance3: "1.9 km",
-          distance4: "1.9 km",
-          distance5: "1.2 km"
-        }
-      ]
-    };
+import { connect } from 'tls';
+  export default {
+    name: "Delivery",
+    data () {
+      return {
+        delivery:[],
+        search: '',
+        headers: [
+          {
+            text: 'Name',
+            align: 'start',
+            sortable: false,
+            value: 'customer_name',
+          },
+          { text: 'Contact Number', value: 'contact_number' },
+          { text: 'Address', value: 'customer_address' },
+          { text: 'Quantity Order', value: 'order_quantity' },
+          
+        ],
+      }
+    },
+    mounted() {
+      this.loadDelivery();
+    },
+
+    methods: {
+      loadDelivery(){
+      axios.get('http://127.0.0.1:8000/api/posts/delivery').then(response => {
+        // this.delivery = response.data.data
+        console.log('-------testing--------', response.data)
+      })
+    },
+    }
   }
+// import axios from "axios";
+// export default {
+//   data() {
+//     return {
+//       deliveryOrders: [
+//         {
+//           title: "Delivery 1",
+//           distance1: "0.5 km",
+//           distance2: "0.8 km",
+//           distance3: "1.0 km",
+//           distance4: "1.0 km",
+//           distance5: "1.1 km"
+//         },
+//         {
+//           title: "Delivery 2",
+//           distance1: "1.1 km",
+//           distance2: "1.2 km",
+//           distance3: "1.3 km",
+//           distance4: "1.5 km",
+//           distance5: "1.5 km"
+//         },
+//         {
+//           title: "Delivery 3",
+//           distance1: "1.5 km",
+//           distance2: "1.5 km",
+//           distance3: "1.5 km",
+//           distance4: "1.6 km",
+//           distance5: "1.6 km"
+//         },
+//         {
+//           title: "Delivery 4",
+//           distance1: "1.6 km",
+//           distance2: "1.7 km",
+//           distance3: "1.7 km",
+//           distance4: "1.8 km",
+//           distance5: "1.8 km"
+//         },
+//         {
+//           title: "Delivery 5",
+//           distance1: "1.8 km",
+//           distance2: "1.8 km",
+//           distance3: "1.9 km",
+//           distance4: "1.9 km",
+//           distance5: "1.2 km"
+//         }
+//       ]
+//     };
+//   }
   // methods:
   // {
 
   // }
-};
+// };
 </script>
 
 <style>

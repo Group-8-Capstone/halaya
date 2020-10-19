@@ -281,6 +281,7 @@ export default {
     DefaultLocation
   },
   data() {
+
     return {
       accessToken:
         "pk.eyJ1IjoiamllbnhpeWEiLCJhIjoiY2tlaTM3d2VrMWcxczJybjc0cmZkamk3eiJ9.JzrYlG2kZ08Pkk24hvKDJw",

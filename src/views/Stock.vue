@@ -277,7 +277,6 @@ export default {
   },
   created() {
     this.fetchStock();
-    // this.postSumOrder();
     setInterval(this.fetchStock(), 3000);
   },
 
@@ -402,7 +401,6 @@ export default {
         axios
           .post("http://127.0.0.1:8000/api/posts/ingredients", newStock)
           .then(response => {
-            console.log("response: ", response.data);
             if (response.data == "existed") {
               Swal.fire({
                 title: "Stock item is already existed",
@@ -419,6 +417,7 @@ export default {
                 timer: 5000
               });
             }
+            console.log(response.data)
             this.stockDialog = false;
             this.reloadDataAddStock();
             
