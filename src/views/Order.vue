@@ -22,8 +22,7 @@
             rounded
             outlined
             dark
-            @click="showDialog"
-          >
+            @click="showDialog">
             <v-icon>mdi-plus</v-icon>
             <v-toolbar-title>Add Order</v-toolbar-title>
           </v-btn>
@@ -263,11 +262,9 @@ import { required, minLength, maxLength, between } from 'vuelidate/lib/validator
 
 export default {
   name: "Order",
-  components: {
-    // DefaultLocation
-  },
-  data() {
+ data() {
     return {
+
       deliveryDate: new Date().toISOString().substr(0, 10),
       addDateMenu: false,
       updateDateMenu:false,
@@ -315,13 +312,12 @@ export default {
     contactNumber: {
       required,
       minLength: minLength(11),
-     maxLength: maxLength(11)
+      maxLength: maxLength(11)
     },
     orderQuantity: {
       required,
     },
   },
- 
   computed:{
     addressErrors () {
       const errors = []

@@ -277,7 +277,6 @@ export default {
   },
   created() {
     this.fetchStock();
-    this.postSumOrder();
     setInterval(this.fetchStock(), 3000);
   },
 
