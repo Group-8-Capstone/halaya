@@ -8,6 +8,8 @@ import Delivered from "../views/Delivered.vue";
 import Home from "../views/Home.vue";
 import DeliveryDetails from "../views/DeliveryDetails";
 import Setting from "../views/Setting.vue";
+import Ingredients from "../views/Ingredients.vue";
+import Product from "../views/Product.vue";
 import AccountSetting from "../components/ProfileAccount.vue";
 
 
@@ -23,11 +25,6 @@ const router = new VueRouter({
       name: "Login",
       component: Login
     },
-    // {
-    //   path: "/dashboard",
-    //   name: "dashboard",
-    //   component: Home
-    // },
     {
       path: "/",
       name: "home",
@@ -54,6 +51,11 @@ const router = new VueRouter({
       component: Delivery
     },
     {
+      path: "/product",
+      name: "Product",
+      component: Product
+    },
+    {
       path: "/delivery-details",
       name: "DeliveryDetails",
       component: DeliveryDetails
@@ -72,6 +74,11 @@ const router = new VueRouter({
       path: "/profileSetting",
       name: "ProfileSetting",
       component: AccountSetting
+    },
+    {
+      path: "/ingredients",
+      name: "Ingredients",
+      component: Ingredients
     },
     {
       path: "/about",
