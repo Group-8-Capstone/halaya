@@ -115,13 +115,13 @@
           </v-card-title>
           <v-container>
             <v-row class="mx-2">
-              <v-col cols="12">
+              <!-- <v-col cols="12">
                 <v-text-field
                   v-model="editStockItem.ingredients_name"
                   prepend-icon="mdi-map-marker"
                   placeholder="ingredientsName"
                 >{{editStockItem.ingredients_name}}</v-text-field>
-              </v-col>
+              </v-col> -->
               <v-col cols="12">
                 <v-text-field
                   v-model="editStockItem.ingredients_remaining"
@@ -216,13 +216,13 @@ export default {
       headers: [
         { text: "Ingredients", value: "ingredients_name" },
         {
-          text: "Ingredients Remaining Amount",
+          text: "Ingredients Remaining Quantity",
           align: "start",
           sortable: true,
           value: "ingredients_remaining"
         },
         {
-          text: "Used Ingredients Amount",
+          text: "Used Ingredients Quantity",
           align: "start",
           sortable: true,
           value: "total"
@@ -296,15 +296,14 @@ export default {
       this.addUsedStockDialog = !this.addUsedStockDialog;
     },
     updateIngredients() {
-    //  let arr = this.editStockItem.toArray();
-    //   console.log('editStockItem:', arr);
-    //   axios.post("http://127.0.0.1:8000/api/post/updateStock", this.editStockItem)
-    //     .then(response => {
-    //       console.log(response);
-    //       this.fetchStock();
-    //       this.editDialog = false;
-    //     });
-    console.log("testing..")
+      console.log('editSockItem: ', JSON.stringify(this.editStockItem));
+      axios.post("http://127.0.0.1:8000/api/post/updateStock", this.editStockItem)
+        .then(response => {
+          console.log(response);
+          this.fetchStock();
+          this.editDialog = false;
+        });
+    // console.log("testing..")
     },
     addIngredientsAmount() {
       this.$v.$touch();

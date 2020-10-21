@@ -1,25 +1,25 @@
 <template>
   <v-col sm='12'>
     <v-row>
-      <v-col sm="7">
+      <v-col>
         <v-row>
           <v-col
-            sm="4"
-            v-for="(element, index) in returnFirstIngredient"
+            v-for="(element, index) in IngredientsArray"
             :key="index"
           >
             <v-card
               class="mx-auto"
-              max-width="344"
+              min-height="190"
               outlined
             >
-              <v-card-title v-bind:class="element.colorHeader + ' FontSize'">{{element.name}}</v-card-title>
-              <v-card-text v-bind:class="element.colorText + ' FontSizeText'">{{element.amount}}</v-card-text>
+              <v-card-title >{{element.ingredients_name}}</v-card-title>
+              <v-card-text >{{element.ingredients_remaining}}</v-card-text>
+              <v-card-text >{{element.ingredients_status}}</v-card-text>
             </v-card>
           </v-col>
         </v-row>
       </v-col>
-      <v-col sm="5">
+      <!-- <v-col sm="5">
         <v-row>
           <v-col
             sm="6"
@@ -36,7 +36,7 @@
             </v-card>
           </v-col>
         </v-row>
-      </v-col>
+      </v-col> -->
     </v-row>
     <v-row>
       <v-col
@@ -93,38 +93,39 @@ export default {
   data() {
     return {
       page: new Date().getMonth() + 1,
-      ingredients: [
-        {
-          name: "Ube",
-          amount: "1 kg",
-          colorHeader: "cardTitle1",
-          colorText: "cardText1",
-        },
-        {
-          name: "Condence Milk",
-          amount: "1 kg",
-          colorHeader: "cardTitle2",
-          colorText: "cardText2",
-        },
-        {
-          name: "Evap Milk ",
-          amount: "1 kg",
-          colorHeader: "cardTitle3",
-          colorText: "cardText3",
-        },
-        {
-          name: "Butter",
-          amount: "1 kg",
-          colorHeader: "cardTitle4",
-          colorText: "cardText4",
-        },
-        {
-          name: "Sugar",
-          amount: "1 kg",
-          colorHeader: "cardTitle5",
-          colorText: "cardText5",
-        },
-      ],
+      IngredientsArray: [], 
+      // ingredients: [
+      //   {
+      //     name: "Ube",
+      //     amount: "1 kg",
+      //     colorHeader: "cardTitle1",
+      //     colorText: "cardText1",
+      //   },
+      //   {
+      //     name: "Condence Milk",
+      //     amount: "1 kg",
+      //     colorHeader: "cardTitle2",
+      //     colorText: "cardText2",
+      //   },
+      //   {
+      //     name: "Evap Milk ",
+      //     amount: "1 kg",
+      //     colorHeader: "cardTitle3",
+      //     colorText: "cardText3",
+      //   },
+      //   {
+      //     name: "Butter",
+      //     amount: "1 kg",
+      //     colorHeader: "cardTitle4",
+      //     colorText: "cardText4",
+      //   },
+      //   {
+      //     name: "Sugar",
+      //     amount: "1 kg",
+      //     colorHeader: "cardTitle5",
+      //     colorText: "cardText5",
+      //   },
+      // ],
       Dates: ["Daily", "Weekly", "Monthly", "Yearly"],
       Years: [],
       series: [],
@@ -140,15 +141,38 @@ export default {
   components: {
     Graph,
   },
+  created(){
+    this.fetchIngredients();
+  },
   computed: {
-    returnFirstIngredient() {
-      return this.ingredients.filter((element, index) => index < 3);
-    },
-    returnSecondIngredient() {
-      return this.ingredients.filter((element, index) => index > 2);
-    },
+    // returnFirstIngredient() {
+    //   return this.ingredients.filter((element, index) => index < 3);
+    // },
+    // returnSecondIngredient() {
+    //   return this.ingredients.filter((element, index) => index > 2);
+    // },
   },
   methods: {
+    fetchIngredients(){
+      axios.get("http://127.0.0.1:8000/api/fetch/stock").then(response => {
+        let results = [];
+        for (var i = 0; i < response.data.length; i++) {
+          if (this.containsObject(results,response.data[i].id)) {
+            console.log("good");
+          } else {
+            results.push(response.data[i]);
+            this.IngredientsArray = results;
+          }
+          continue;
+        }
+        console.log("ingredients array: ", this.IngredientsArray);
+      });
+    },
+    containsObject(arr,id) {
+      return arr.some(function(el) {
+        return el.id === id;
+      }); 
+    },
     initializeData(category, series) {
       this.series = [
         {
