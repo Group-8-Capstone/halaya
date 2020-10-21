@@ -273,18 +273,17 @@ import {
   between
 } from "vuelidate/lib/validators";
 import * as turf from '@turf/turf';
-import DefaultLocation from "../components/DefaultLocation.vue"
+// import DefaultLocation from "../components/DefaultLocation.vue"
 
 export default {
   name: "Order",
   components: {
-    DefaultLocation
+    // DefaultLocation
   },
   data() {
-
     return {
-      accessToken:
-        "pk.eyJ1IjoiamllbnhpeWEiLCJhIjoiY2tlaTM3d2VrMWcxczJybjc0cmZkamk3eiJ9.JzrYlG2kZ08Pkk24hvKDJw",
+      // accessToken:
+      //   "pk.eyJ1IjoiamllbnhpeWEiLCJhIjoiY2tlaTM3d2VrMWcxczJybjc0cmZkamk3eiJ9.JzrYlG2kZ08Pkk24hvKDJw",
       deliveryDate: new Date().toISOString().substr(0, 10),
       addDateMenu: false,
       updateDateMenu: false,

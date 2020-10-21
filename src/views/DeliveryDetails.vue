@@ -56,7 +56,6 @@
             </v-col>
           </v-row>
         </v-timeline-item>
-
         <v-timeline-item color="pink" small>
           <v-row class="pt-1">
             <v-col cols="3">
@@ -69,7 +68,6 @@
             </v-col>
           </v-row>
         </v-timeline-item>
-
         <v-timeline-item color="teal lighten-3" small>
           <v-row class="pt-1">
             <v-col cols="3">
@@ -105,19 +103,19 @@ var pdfMake = require("pdfmake/build/pdfmake.js");
 var pdfFonts = require("pdfmake/build/vfs_fonts.js");
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-export default {
-  data() {
-    return {};
-  },
-  methods: {
-    generate() {
-      var docDefinition = {
-        content: "This is an sample PDF printed with pdfMake"
-      };
-      pdfMake.createPdf(docDefinition).download("Deivery.pdf");
-    }
-  }
-};
+// export default {
+//   data() {
+//     return {};
+//   },
+//   methods: {
+//     generate() {
+//       var docDefinition = {
+//         content: "This is an sample PDF printed with pdfMake"
+//       };
+//       pdfMake.createPdf(docDefinition).download("Deivery.pdf");
+//     }
+//   }
+// };
 import locations from "../components/SortLocation.vue";
 // import axios from "axios";
 

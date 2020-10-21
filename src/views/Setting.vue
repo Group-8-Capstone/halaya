@@ -22,20 +22,21 @@
           <v-dialog v-model="addDialog" width="400px">
         <v-card>
     <v-card-title>
-      Your ube halayas ingredients
+       ESTIMATED INGREDIENTS VALUE
     </v-card-title>
 
     <v-card-subtitle>
-      Add your estimated ingredients value
+      Please fill in the required information 
     </v-card-subtitle>
     <v-divider></v-divider>
     <v-col cols="12">
     <v-text-field
+      color="purple"
       label="Added Ingredients"
-       :error-messages="AddedIngredientsNameErrors"
-        @input="$v.addedIngredientsName.$touch()"
-        @blur="$v.addedIngredientsName.$touch()"
-        required
+      :error-messages="AddedIngredientsNameErrors"
+      @input="$v.addedIngredientsName.$touch()"
+      @blur="$v.addedIngredientsName.$touch()"
+      required
       hide-details="auto"
       v-model="addedIngredientsName"
       outlined>
@@ -43,6 +44,7 @@
    </v-col>
    <v-col cols="12">
     <v-text-field
+      color="purple"
       label="Estimated Amount"
       :error-messages="AddedIngredientsValueErrors"
       @input="$v.addedEstimatedAmount.$touch()"
@@ -51,6 +53,18 @@
       hide-details="auto"
       v-model="addedEstimatedAmount"
       outlined></v-text-field>
+   </v-col>
+    <v-col cols="12">
+    <v-select
+          color="purple"
+          :items="items"
+          label="Product Category"
+           v-model="addedCategory"
+           :error-messages="addedCategoryErrors"
+          @input="$v.addedCategory.$touch()"
+          @blur="$v.addedCategory.$touch()"
+          outlined
+        ></v-select>
    </v-col>
       <v-card-actions>
               <v-spacer></v-spacer>
@@ -83,16 +97,29 @@
                    <v-col cols="12">
                     <v-text-field
                     v-model="editValue.ingredients_name"
-                      prepend-icon="mdi-map-marker"
-                      placeholder="address"
+                   
+                      label="Ingredients Name"
                       v-bind:disabled="disabled"
+                      outlined
                     ></v-text-field>
                   </v-col>
                    <v-col cols="12">
                     <v-text-field
+                    label="Estimated Amount"
+                     color="purple"
                     v-model="editValue.ingredients_need_amount"
-                    prepend-icon="mdi-map-marker"></v-text-field>
+                    outlined
+                   ></v-text-field>
                   </v-col>
+                  <v-col cols="12">
+                  <v-select
+                        :items="items"
+                        label="Product Category"
+                        color="purple"
+                        v-model="editValue.ingredients_category"
+                        outlined
+                      ></v-select>
+                </v-col>
                 </v-row>
               </v-container>
               <v-card-actions>
@@ -114,6 +141,7 @@ import Swal from "sweetalert2";
     data: () => ({
       addedEstimatedAmount:'',
       addedIngredientsName:'',
+      addedCategory:'',
       estimatedValue:[],
       search:'',
       editDialog:false,
@@ -127,8 +155,10 @@ import Swal from "sweetalert2";
           value: 'ingredients_name'
         },
         { text: "Needed Value", value: "ingredients_need_amount" },
+         { text: "Category", value: "ingredients_category" },
         { text: "Actions", value: "action", sortable: false },
       ],
+        items: ['Ube Halaya', 'Butchi', 'Ice Cream'],
       rules: [
         value => !!value || 'Required.',
       ],
@@ -151,6 +181,9 @@ import Swal from "sweetalert2";
     addedEstimatedAmount: {
       required,
     },
+     addedCategory: {
+      required,
+    },
       },
       computed:{
       AddedIngredientsNameErrors () {
@@ -165,6 +198,14 @@ import Swal from "sweetalert2";
       !this.$v.addedEstimatedAmount.required && errors.push('Estimated Value is required.')
       return errors
     },
+     addedCategoryErrors() {
+      const errors = []
+      if (!this.$v.addedCategory.$dirty) return errors
+      !this.$v.addedCategory.required && errors.push('Category is required.')
+      return errors
+    },
+
+
       },
     mounted() {
       this.fetchEstimatedValue();
@@ -187,14 +228,17 @@ import Swal from "sweetalert2";
     },
 
       addEstimatedValue(){
+         this.$v.$touch();
          var upperIngredientsName =
           this.addedIngredientsName.charAt(0).toUpperCase() +
           this.addedIngredientsName.slice(1).toLowerCase();
         let param ={
           ingredientsName:upperIngredientsName,
-          ingredientsEstimatedAmount:this.addedEstimatedAmount
+          ingredientsEstimatedAmount:this.addedEstimatedAmount,
+          ingredientsCategory:this.addedCategory
         }
         axios.post("http://127.0.0.1:8000/api/post/neededValue",param).then(response=>{
+        console.log(param)
         this.addDialog=false,
          Swal.fire({
         title: "Successfully Added",
