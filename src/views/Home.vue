@@ -7,36 +7,23 @@
             v-for="(element, index) in IngredientsArray"
             :key="index"
           >
-            <v-card
-              class="mx-auto"
-              min-height="190"
-              outlined
+            <v-card 
+              id="cards"
+              class="mx-auto text-center"
+              min-height="220"
+              min-width="140"
+              max-height="240"
+              
             >
-              <v-card-title >{{element.ingredients_name}}</v-card-title>
-              <v-card-text >{{element.ingredients_remaining}}</v-card-text>
-              <v-card-text >{{element.ingredients_status}}</v-card-text>
+              <v-card-title class="deep-purple lighten-5" id="title">{{element.ingredients_name}}</v-card-title>
+              <hr>
+              <v-spacer/>
+              <v-card-text id="qty">{{element.ingredients_remaining + ' kg/cans'}}</v-card-text>
+              <v-chip :color="getColor(element.ingredients_status)">{{element.ingredients_status}}</v-chip>
             </v-card>
           </v-col>
         </v-row>
       </v-col>
-      <!-- <v-col sm="5">
-        <v-row>
-          <v-col
-            sm="6"
-            color="red"
-            v-for="(element, index) in returnSecondIngredient"
-            :key="index"
-          >
-            <v-card
-              class="mx-auto"
-              outlined
-            >
-              <v-card-title v-bind:class="element.colorHeader + ' FontSize'">{{element.name}}</v-card-title>
-              <v-card-text v-bind:class="element.colorText  + ' FontSizeText'">{{element.amount}}</v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-col> -->
     </v-row>
     <v-row>
       <v-col
@@ -94,38 +81,6 @@ export default {
     return {
       page: new Date().getMonth() + 1,
       IngredientsArray: [], 
-      // ingredients: [
-      //   {
-      //     name: "Ube",
-      //     amount: "1 kg",
-      //     colorHeader: "cardTitle1",
-      //     colorText: "cardText1",
-      //   },
-      //   {
-      //     name: "Condence Milk",
-      //     amount: "1 kg",
-      //     colorHeader: "cardTitle2",
-      //     colorText: "cardText2",
-      //   },
-      //   {
-      //     name: "Evap Milk ",
-      //     amount: "1 kg",
-      //     colorHeader: "cardTitle3",
-      //     colorText: "cardText3",
-      //   },
-      //   {
-      //     name: "Butter",
-      //     amount: "1 kg",
-      //     colorHeader: "cardTitle4",
-      //     colorText: "cardText4",
-      //   },
-      //   {
-      //     name: "Sugar",
-      //     amount: "1 kg",
-      //     colorHeader: "cardTitle5",
-      //     colorText: "cardText5",
-      //   },
-      // ],
       Dates: ["Daily", "Weekly", "Monthly", "Yearly"],
       Years: [],
       series: [],
@@ -144,15 +99,13 @@ export default {
   created(){
     this.fetchIngredients();
   },
-  computed: {
-    // returnFirstIngredient() {
-    //   return this.ingredients.filter((element, index) => index < 3);
-    // },
-    // returnSecondIngredient() {
-    //   return this.ingredients.filter((element, index) => index > 2);
-    // },
-  },
   methods: {
+    getColor (status) {
+        if (status ==='Alert! Very Low') return 'red'
+        else if (status ==='Warning! Running Low') return 'orange'
+        else if (status ==='Calculating...') return 'blue'
+        else return 'green'
+    }, 
     fetchIngredients(){
       axios.get("http://127.0.0.1:8000/api/fetch/stock").then(response => {
         let results = [];
@@ -400,33 +353,15 @@ export default {
   height: 43px;
   margin-left: 2%;
 }
-.FontSize {
-  font-size: 18px;
-  color: white !important;
+#title{
+  justify-content: center;
 }
-.FontSizeText {
-  font-size: 15px;
-  color: white !important;
-  height: 70px;
+#qty{
+  font-weight: bold;
 }
-.cardTitle1,
-.cardText1 {
-  background-color: #03a9f4 !important;
-}
-.cardTitle2,
-.cardText2 {
-  background-color: #8bc34a !important;
-}
-.cardTitle3,
-.cardText3 {
-  background-color: #e84e40 !important;
-}
-.cardTitle4,
-.cardText4 {
-  background-color: #9c27b0 !important;
-}
-.cardTitle5,
-.cardText5 {
-  background-color: #ffc107 !important;
+#cards{
+  border: 1px solid;
+  border-color: purple;
+  border-radius: 10px;
 }
 </style>
