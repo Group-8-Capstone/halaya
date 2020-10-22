@@ -56,7 +56,6 @@
             </v-col>
           </v-row>
         </v-timeline-item>
-
         <v-timeline-item color="pink" small>
           <v-row class="pt-1">
             <v-col cols="3">
@@ -69,7 +68,6 @@
             </v-col>
           </v-row>
         </v-timeline-item>
-
         <v-timeline-item color="teal lighten-3" small>
           <v-row class="pt-1">
             <v-col cols="3">
@@ -111,6 +109,7 @@ import locations from "../components/SortLocation.vue";
 export default {
   name: "OrderDetails",
   components: { locations },
+
   //   data() {
   //     return {
   //       orders: [],
