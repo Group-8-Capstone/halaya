@@ -56,10 +56,10 @@ import { connect } from 'tls';
             text: 'Name',
             align: 'start',
             sortable: false,
-            value: 'customer_name',
+            value: 'reciever_name',
           },
-          { text: 'Contact Number', value: 'contact_number' },
-          { text: 'Address', value: 'customer_address' },
+          { text: 'Contact Number', value: 'active_contact' },
+          { text: 'Address', value: 'delivery_address' },
           { text: 'Quantity Order', value: 'order_quantity' },
           
         ],
@@ -71,10 +71,12 @@ import { connect } from 'tls';
 
     methods: {
       loadDelivery(){
-      axios.get('http://127.0.0.1:8000/api/posts/delivery').then(response => {
-        // this.delivery = response.data.data
+      axios.get('https://wawens-backend.herokuapp.com/api/orders/confirmed').then(response => {
+        this.delivery = response.data.data
         console.log('-------testing--------', response.data)
+
       })
+      .catch(error => console.log(error))
     },
     }
   }

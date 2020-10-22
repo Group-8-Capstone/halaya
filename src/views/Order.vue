@@ -92,7 +92,7 @@
                       color="deep-purple lighten-1"
                       no-title
                       scrollable
-                    >
+                    ></v-date-picker>
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
                           v-model="deliveryDate"
