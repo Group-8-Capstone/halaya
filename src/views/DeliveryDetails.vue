@@ -26,7 +26,7 @@
     </v-card>
     <v-container>
       <v-row>
-        <div class="ml-2 headline blue--text">October 11, 2020</div>
+        <div class="ml-2 headline blue--text">Today</div>
       </v-row>
     </v-container>
     <v-card-text class="py-0">

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="ma-5 mb-12 pa-5">
+    <!-- <v-card class="ma-5 mb-12 pa-5">
       <v-card-title>
         Deliveries for Today
       </v-card-title>
@@ -9,82 +9,106 @@
       :items="delivery"
       :search="search"
     ></v-data-table>
-    </v-card>
-    <!-- <v-row class="py-0 my-0">
-      <v-col sm="3" v-for="(item, index) in deliveryOrders" :key="index" class="py-0 my-1">
+    </v-card>-->
+    <v-row class="py-0 my-0">
+      <v-col sm="3" v-for="(item, index) in delivery" :key="index" class="py-0 my-1">
         <v-card class="mx-2 my-1 pa-1" max-width="275">
           <v-img height="100%" width="100%" src="../assets/ubeCard.jpg"></v-img>
-          <v-container class="justify-center">
-            <v-card-title class="pa-0 ml-2">Wawen's Ube Halaya</v-card-title>
+          <v-container>
+            <v-card-title id="cardTitle">Wawen's Ube Halaya</v-card-title>
             <v-divider class="mx-4"></v-divider>
-            <v-card-title class="pa-0 ml-2">{{item.title}}</v-card-title>
+            <v-row>
+              <v-card-actions class="pa-0">
+                <router-link to="/delivery-details" id="deliveryDetailsBtn">
+                  <v-btn id="deliveryDetailsBtn" text>
+                    <v-icon>mdi-format-list-bulleted-square</v-icon>
+                  </v-btn>
+                </router-link>
+              </v-card-actions>
+              <v-card-title class="pa-0 ml-2">Delivery</v-card-title>
+            </v-row>
             <v-card-text class="pa-0 ml-2">
-              <div>Five delivery locations for this round of delivery.</div>
               <v-chip-group column>
-                <v-chip small>{{item.distance1}}</v-chip>
-                <v-chip small>{{item.distance2}}</v-chip>
+                <v-chip small>{{item.delivery_address}}</v-chip>
+                <!-- <v-chip small>{{item.distance2}}</v-chip>
                 <v-chip small>{{item.distance3}}</v-chip>
                 <v-chip small>{{item.distance4}}</v-chip>
-                <v-chip small>{{item.distance5}}</v-chip>
+                <v-chip small>{{item.distance5}}</v-chip>-->
               </v-chip-group>
             </v-card-text>
           </v-container>
-          <v-card-actions class="pa-0">
-            <router-link to="/delivery-details" id="deliveryDetailsBtn">
-              <v-btn id="deliveryDetailsBtn" color="deep-purple lighten-2" text>
-                <v-icon>mdi-format-list-bulleted-square</v-icon>View Delivery Details
-              </v-btn>
-            </router-link>
-          </v-card-actions>
         </v-card>
       </v-col>
-    </v-row> -->
+    </v-row>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import { connect } from 'tls';
-  export default {
-    name: "Delivery",
-    data () {
-      return {
-        delivery:[],
-        search: '',
-        headers: [
-          {
-            text: 'Name',
-            align: 'start',
-            sortable: false,
-            value: 'reciever_name',
-          },
-          { text: 'Contact Number', value: 'active_contact' },
-          { text: 'Address', value: 'delivery_address' },
-          { text: 'Quantity Order', value: 'order_quantity' },
-          
-        ],
-      }
-    },
-    mounted() {
-      this.loadDelivery();
-    },
+import { connect } from "tls";
+import * as turf from "@turf/turf";
 
-    methods: {
-      loadDelivery(){
-      axios.get('https://wawens-backend.herokuapp.com/api/orders/confirmed').then(response => {
-        this.delivery = response.data.data
-        console.log('-------testing--------', response.data)
+export default {
+  name: "Delivery",
+  data() {
+    return {
+      accessToken:
+        "pk.eyJ1IjoiamllbnhpeWEiLCJhIjoiY2tlaTM3d2VrMWcxczJybjc0cmZkamk3eiJ9.JzrYlG2kZ08Pkk24hvKDJw",
+      delivery: [],
+      search: "",
+      address: "",
+      coordinates: [],
+      distance: 0
+    };
+  },
+  mounted() {
+    this.loadDelivery();
+  },
+  created() {
+    // this.loadDelivery();
+    this.getCoordinates();
+    // setInterval(this.loadDelivery(), 3000);
+  },
 
-      })
-      .catch(error => console.log(error))
+  methods: {
+    loadDelivery() {
+      axios
+        .get("https://wawens-backend.herokuapp.com/api/orders/confirmed")
+        .then(response => {
+          this.delivery = response.data;
+          console.log("-------testing--------", this.delivery);
+        })
+        .catch(error => console.log(error));
     },
+    getCoordinates(address) {
+      axios
+        .get(
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${
+            this.delivery_address
+          }.json?limit=2&access_token=${this.accessToken}`
+        )
+        .then(response => {
+          let res = JSON.stringify(response.data);
+          let result = JSON.parse(res);
+          console.log("/////////test////////", result);
+
+          //index 0 is the most relevant based on the mapbox geocoding documentatio
+          this.coordinates = result.features[0].geometry.coordinates;
+
+          //turf.js
+          var from_place = turf.point([123.921969, 10.329892]);
+          var to_place = turf.point(this.coordinates);
+          var options = { units: "kilometers" };
+          this.distance = turf.distance(from_place, to_place, options);
+        });
     }
   }
+};
 // import axios from "axios";
 // export default {
 //   data() {
 //     return {
-//       deliveryOrders: [
+//       delivery: [
 //         {
 //           title: "Delivery 1",
 //           distance1: "0.5 km",
@@ -128,10 +152,6 @@ import { connect } from 'tls';
 //       ]
 //     };
 //   }
-  // methods:
-  // {
-
-  // }
 // };
 </script>
 
@@ -145,7 +165,26 @@ import { connect } from 'tls';
   user-select: none;
 }
 
+.container {
+  padding: 1px;
+}
+
+#cardTitle {
+  justify-content: center;
+  font-size: 20px;
+  padding: 1px;
+}
+
 #deliveryDetailsBtn {
   text-decoration: none;
+  padding: 0px;
+  color: black;
+  width: 36!important;
+}
+
+.v-card__actions {
+    align-items: center;
+    display: flex;
+    padding: 0;
 }
 </style>
