@@ -103,55 +103,37 @@ var pdfMake = require("pdfmake/build/pdfmake.js");
 var pdfFonts = require("pdfmake/build/vfs_fonts.js");
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-// export default {
-//   data() {
-//     return {};
-//   },
-//   methods: {
-//     generate() {
-//       var docDefinition = {
-//         content: "This is an sample PDF printed with pdfMake"
-//       };
-//       pdfMake.createPdf(docDefinition).download("Deivery.pdf");
-//     }
-//   }
-// };
 import locations from "../components/SortLocation.vue";
 // import axios from "axios";
 
 export default {
   name: "OrderDetails",
   components: { locations },
-//   data() {
-//     return {
-//       orders: [],
-//       search: "",
-//     };
-//   },
-//   mounted() {
-//     this.loadOrders();
-//   },
 
-//   methods: {
-//     loadOrders() {
-//       axios.get("http://127.0.0.1:8000/api/posts/order").then(response => {
-//         this.orders = response.data.data;
-//       });
-//     }
-//   }
-// };
+  //   data() {
+  //     return {
+  //       orders: [],
+  //       search: "",
+  //     };
+  //   },
+  //   mounted() {
+  //     this.loadOrders();
+  //   },
 
-// export default {
-//   name: "Order",
-//   components: {},
-//   data() {
-//     return {};
-//   },
-//   mounted() {
-//     axios.get("http://localhost:8000/").then((response) => {
-
-//     });
-//   },
+  methods: {
+    generate() {
+      var docDefinition = {
+        content: "This is an sample PDF printed with pdfMake"
+      };
+      pdfMake.createPdf(docDefinition).download("Deivery.pdf");
+    }
+    //     loadOrders() {
+    //       axios.get("http://127.0.0.1:8000/api/posts/order").then(response => {
+    //         this.orders = response.data.data;
+    //       });
+    //     }
+    //   }
+  }
 };
 </script>
 

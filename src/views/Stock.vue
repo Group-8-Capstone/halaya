@@ -47,7 +47,7 @@
                 prepend-icon="mdi-plus"
                 min="1"
                 type="number"
-                placeholder="Amount (kg/number of cans)"
+                placeholder="Quantity (kg/number of cans)"
                 v-model="ingredientsUnit"
                 :error-messages="ingredientsUnitErrors"
                 @input="$v.ingredientsUnit.$touch()"
@@ -87,7 +87,7 @@
                 prepend-icon="mdi-plus"
                 min="1"
                 type="number"
-                placeholder="Amount (kg/number of cans)"
+                placeholder="Quantity (kg/number of cans)"
                 v-model="usedIngredientsAmount"
                 :error-messages="ingredientsUsedAmountErrors"
                 @input="$v.usedIngredientsAmount.$touch()"
@@ -115,13 +115,13 @@
           </v-card-title>
           <v-container>
             <v-row class="mx-2">
-              <v-col cols="12">
+              <!-- <v-col cols="12">
                 <v-text-field
                   v-model="editStockItem.ingredients_name"
                   prepend-icon="mdi-map-marker"
                   placeholder="ingredientsName"
                 >{{editStockItem.ingredients_name}}</v-text-field>
-              </v-col>
+              </v-col> -->
               <v-col cols="12">
                 <v-text-field
                   v-model="editStockItem.ingredients_remaining"
@@ -216,13 +216,13 @@ export default {
       headers: [
         { text: "Ingredients", value: "ingredients_name" },
         {
-          text: "Ingredients Remaining Amount",
+          text: "Ingredients Remaining Quantity",
           align: "start",
           sortable: true,
           value: "ingredients_remaining"
         },
         {
-          text: "Used Ingredients Amount",
+          text: "Used Ingredients Quantity",
           align: "start",
           sortable: true,
           value: "total"
@@ -282,8 +282,8 @@ export default {
 
   methods: {
     getColor (status) {
-        if (status ==='Alert! Stock is Very Low') return 'red'
-        else if (status ==='Warning! Stock level is almost running out low') return 'orange'
+        if (status ==='Alert! Very Low') return 'red'
+        else if (status ==='Warning! Running Low') return 'orange'
         else if (status ==='Calculating...') return 'blue'
         else return 'green'
       }, 
@@ -296,12 +296,14 @@ export default {
       this.addUsedStockDialog = !this.addUsedStockDialog;
     },
     updateIngredients() {
+      console.log('editSockItem: ', JSON.stringify(this.editStockItem));
       axios.post("http://127.0.0.1:8000/api/post/updateStock", this.editStockItem)
         .then(response => {
           console.log(response);
           this.fetchStock();
           this.editDialog = false;
         });
+    // console.log("testing..")
     },
     addIngredientsAmount() {
       this.$v.$touch();
@@ -360,12 +362,7 @@ export default {
       axios
         .get("http://127.0.0.1:8000/api/post/editStock/" + item.id)
         .then(response => {
-          let result = response.data;
-          var obj = {};
-          for (var i = 0; i < result.length; i++) {
-            obj[result[i].key] = result[i].value;
-          }
-          this.editStockItem = obj;
+          this.editStockItem = response.data;
           console.log("edit stock item", JSON.stringify(this.editStockItem))
         });
     },
