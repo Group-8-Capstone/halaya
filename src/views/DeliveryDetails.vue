@@ -56,7 +56,6 @@
             </v-col>
           </v-row>
         </v-timeline-item>
-
         <v-timeline-item color="pink" small>
           <v-row class="pt-1">
             <v-col cols="3">
@@ -69,7 +68,6 @@
             </v-col>
           </v-row>
         </v-timeline-item>
-
         <v-timeline-item color="teal lighten-3" small>
           <v-row class="pt-1">
             <v-col cols="3">
@@ -135,6 +133,36 @@ export default {
     //     }
     //   }
   }
+//   data() {
+//     return {
+//       orders: [],
+//       search: "",
+//     };
+//   },
+//   mounted() {
+//     this.loadOrders();
+//   },
+
+//   methods: {
+//     loadOrders() {
+//       axios.get("http://127.0.0.1:8000/api/posts/order").then(response => {
+//         this.orders = response.data.data;
+//       });
+//     }
+//   }
+// };
+
+// export default {
+//   name: "Order",
+//   components: {},
+//   data() {
+//     return {};
+//   },
+//   mounted() {
+//     axios.get("http://localhost:8000/").then((response) => {
+
+//     });
+//   },
 };
 </script>
 
