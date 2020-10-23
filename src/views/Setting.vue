@@ -1,6 +1,15 @@
 <template>
 <div>
     <v-card id="cardtable" class="ma-5 mb-12 pa-5">
+      <v-tabs
+        v-model="tabs"
+        right
+        color="deep-purple accent-4">
+        <v-tab>Ingredients Value</v-tab>
+         <v-tab>New Products</v-tab>
+      </v-tabs>
+      <v-tabs-items v-model="tabs">
+      <v-tab-item>
       <v-card-title>
          <v-text-field
           v-model="search"
@@ -78,12 +87,35 @@
               <template v-slot:item.action="{ item }" >
                 <v-icon
                   @click="editDialog = !editDialog, editEstimatedValue(item) "
-                 
                   normal
                   title="Edit"
                 >mdi-table-edit</v-icon>
               </template>
             </v-data-table>
+            </v-tab-item>
+            <v-tab-item>
+              <v-btn>Add Product</v-btn>
+              <v-card>
+                 <div class="modal-body">
+                         <form @submit="formSubmitProduct" enctype="multipart/form-data" action>
+                            <div class="form-group">
+                                <label for="addOns">Product</label>
+                            </div>
+                            <div class="form-group">
+                                <center>
+                                    <img class="addOnsImage" :src="imageURL"><br>
+                                    <input type="file" class="fileStyle" v-on:change="onImageChange"><br>
+                                </center>
+                            </div>
+                            <div style="text-align: right">
+                                <button type="button" class="btn btn-secondary" @click="hide()">Close</button>
+                                <button type="submit" class="btn btn-primary">Add Category</button>
+                            </div>
+                        </form>
+                    </div>
+              </v-card>
+            </v-tab-item>
+    </v-tabs-items>
           <v-dialog v-model="editDialog" width="400px">
             <v-card>
               <v-spacer></v-spacer>
@@ -132,6 +164,21 @@
      </v-card>
 </div>
 </template>
+<style>
+.addOnsImage{
+    width: 250px !important; 
+    height: 250px !important; 
+    margin-top: 2% !important; 
+}
+.fileStyle{
+    font-size: 17px !important;
+    width: 97px;
+    margin-top: 3%;
+    margin-bottom: 3%;
+}
+
+</style>
+
 <script>
 import { required, minLength, maxLength, between } from 'vuelidate/lib/validators'
 import axios from "axios";
@@ -141,6 +188,9 @@ import Swal from "sweetalert2";
     data: () => ({
       addedEstimatedAmount:'',
       addedIngredientsName:'',
+      imageURL: null,
+      tabs:null,
+      img:null,
       addedCategory:'',
       estimatedValue:[],
       search:'',
@@ -293,6 +343,29 @@ import Swal from "sweetalert2";
        }
        
     },
+     onImageChange(e){
+            this.image = e.target.files[0]
+            this.imageURL = URL.createObjectURL(e.target.files[0])
+        },
+        formSubmitProduct(e) {
+            if (this.img !== null && this.prodType !== null && this.productName !== null && this.lowPrice !== null && this.highPrice !== null && this.overPrice !== null && this.onlinelowPrice !== null && this.onlinehighPrice !== null & this.onlineoverPrice !== null){
+                e.preventDefault();
+                let currentObj = this;
+                const config = {
+                    headers: { 'content-type': 'multipart/form-data' }
+                }
+                let formData = new FormData();
+                formData.append('image', this.img)
+                axios.post('/formSubmit', formData, config).then(function (response) {
+                    currentObj.success = response.data.success
+                })
+                .catch(function (error) {
+                    currentObj.output = error;
+                });
+            }else{
+                this.errorMessage = 'All fields are required!'
+            }
+        },
     
     }
   }

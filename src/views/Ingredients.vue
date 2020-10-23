@@ -98,7 +98,7 @@
           <v-card-title >
            Ice Cream List of Ingredients
           </v-card-title>
-               <v-row>
+  <v-row>
   <v-flex d-flex>
    <v-layout wrap>
        <v-flex md4 v-for="item in array1" :key="item.id">

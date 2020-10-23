@@ -1,12 +1,20 @@
 <template>
-  <div>
-    <v-card class="ma-5 mb-12 pa-5">
-      <v-card-title>
-        Deliveries for Today
-      </v-card-title>
-      <v-data-table
+  <div class="ma-5 mb-12 pa-5">
+    <v-card>
+    <v-card-title>
+     Products
+      <v-spacer></v-spacer>
+      <v-text-field
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="Search"
+        single-line
+        hide-details
+      ></v-text-field>
+    </v-card-title>
+    <v-data-table
       :headers="headers"
-      :items="delivery"
+      :items="deliveredOrder"
       :search="search"
     ></v-data-table>
     </v-card>
@@ -14,12 +22,11 @@
 </template>
 <script>
 import axios from "axios";
-import { connect } from 'tls';
   export default {
     name: "Delivery",
     data () {
       return {
-        delivery:[],
+        deliveredOrder:[],
         search: '',
         headers: [
           {
@@ -28,9 +35,8 @@ import { connect } from 'tls';
             sortable: false,
             value: 'customer_name',
           },
-          { text: 'Quantity', value: '' },
-          { text: 'Date', value: 'customer_address' },
-         
+          { text: 'Available Quantity', value: 'contact_number' },
+          { text: 'Total Ordered Quantity', value: 'order_quantity' },
           
         ],
       }
@@ -40,6 +46,7 @@ import { connect } from 'tls';
     },
 
     methods: {
- 
-    }
+    },
+  
   }
+</script>
