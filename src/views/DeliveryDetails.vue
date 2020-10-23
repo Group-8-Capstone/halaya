@@ -109,6 +109,7 @@ import locations from "../components/SortLocation.vue";
 export default {
   name: "OrderDetails",
   components: { locations },
+
   //   data() {
   //     return {
   //       orders: [],
@@ -133,36 +134,6 @@ export default {
     //     }
     //   }
   }
-//   data() {
-//     return {
-//       orders: [],
-//       search: "",
-//     };
-//   },
-//   mounted() {
-//     this.loadOrders();
-//   },
-
-//   methods: {
-//     loadOrders() {
-//       axios.get("http://127.0.0.1:8000/api/posts/order").then(response => {
-//         this.orders = response.data.data;
-//       });
-//     }
-//   }
-// };
-
-// export default {
-//   name: "Order",
-//   components: {},
-//   data() {
-//     return {};
-//   },
-//   mounted() {
-//     axios.get("http://localhost:8000/").then((response) => {
-
-//     });
-//   },
 };
 </script>
 
