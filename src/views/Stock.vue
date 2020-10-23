@@ -121,7 +121,7 @@
                   prepend-icon="mdi-map-marker"
                   placeholder="ingredientsName"
                 >{{editStockItem.ingredients_name}}</v-text-field>
-              </v-col> -->
+              </v-col>-->
               <v-col cols="12">
                 <v-text-field
                   v-model="editStockItem.ingredients_remaining"
@@ -142,14 +142,9 @@
     <v-row class="mx-2">
       <v-col cols="12">
         <v-data-table :headers="headers" :items="IngredientsArray" :search="search">
-              <template v-slot:item.ingredients_status="{ item }" >
-              <v-chip
-            :color="getColor(item.ingredients_status)"
-            dark
-          >
-            {{ item.ingredients_status }}
-          </v-chip>
-        </template>
+          <template v-slot:item.ingredients_status="{ item }">
+            <v-chip :color="getColor(item.ingredients_status)" dark>{{ item.ingredients_status }}</v-chip>
+          </template>
           <template v-slot:item.action="{ item }">
             <v-icon
               @click="editDialog = !editDialog, editIngredients(item)"
@@ -161,8 +156,7 @@
         </v-data-table>
       </v-col>
       <v-col cols="8">
-        <v-card class="mx-auto" outlined>
-        </v-card>
+        <v-card class="mx-auto" outlined></v-card>
       </v-col>
     </v-row>
   </v-card>
@@ -189,7 +183,7 @@ import {
   maxLength,
   between
 } from "vuelidate/lib/validators";
-import { release } from 'os';
+import { release } from "os";
 export default {
   name: "Stock",
   data() {
@@ -281,12 +275,12 @@ export default {
   },
 
   methods: {
-    getColor (status) {
-        if (status ==='Alert! Very Low') return 'red'
-        else if (status ==='Warning! Running Low') return 'orange'
-        else if (status ==='Calculating...') return 'blue'
-        else return 'green'
-      }, 
+    getColor(status) {
+      if (status === "Alert! Very Low") return "red";
+      else if (status === "Warning! Running Low") return "orange";
+      else if (status === "Calculating...") return "blue";
+      else return "green";
+    },
     showDialog() {
       this.reloadDataAddStock();
       this.stockDialog = !this.stockDialog;
@@ -296,14 +290,15 @@ export default {
       this.addUsedStockDialog = !this.addUsedStockDialog;
     },
     updateIngredients() {
-      console.log('editSockItem: ', JSON.stringify(this.editStockItem));
-      axios.post("http://127.0.0.1:8000/api/post/updateStock", this.editStockItem)
+      console.log("editSockItem: ", JSON.stringify(this.editStockItem));
+      axios
+        .post("http://127.0.0.1:8000/api/post/updateStock", this.editStockItem)
         .then(response => {
           console.log(response);
           this.fetchStock();
           this.editDialog = false;
         });
-    // console.log("testing..")
+      // console.log("testing..")
     },
     addIngredientsAmount() {
       this.$v.$touch();
@@ -312,14 +307,17 @@ export default {
         this.availableIngredients === ""
       ) {
         this.addUsedStockDialog = true;
-      }else {
+      } else {
         let newAddedAmount = {
           availableIngredients: this.availableIngredients,
           usedIngredientsAmount: this.usedIngredientsAmount
         };
-        console.log('used_amount', newAddedAmount);
+        console.log("used_amount", newAddedAmount);
         axios
-          .post("http://127.0.0.1:8000/api/post/usedIngredients", newAddedAmount)
+          .post(
+            "http://127.0.0.1:8000/api/post/usedIngredients",
+            newAddedAmount
+          )
           .then(response => {
             console.log(response);
             this.reloadDataAddUsedAmount();
@@ -343,7 +341,7 @@ export default {
 
         let results = [];
         for (var i = 0; i < response.data.length; i++) {
-          if (this.containsObject(results,response.data[i].id)) {
+          if (this.containsObject(results, response.data[i].id)) {
             console.log("good");
           } else {
             results.push(response.data[i]);
@@ -353,17 +351,17 @@ export default {
         }
       });
     },
-    containsObject(arr,id) {
+    containsObject(arr, id) {
       return arr.some(function(el) {
         return el.id === id;
-      }); 
+      });
     },
     editIngredients(item) {
       axios
         .get("http://127.0.0.1:8000/api/post/editStock/" + item.id)
         .then(response => {
           this.editStockItem = response.data;
-          console.log("edit stock item", JSON.stringify(this.editStockItem))
+          console.log("edit stock item", JSON.stringify(this.editStockItem));
         });
     },
     reloadDataAddStock() {
@@ -382,7 +380,7 @@ export default {
     addStock() {
       this.$v.$touch();
       if (this.ingredientsName === "" && this.ingredientsStatus === "") {
-        this.stockDialog = true;  
+        this.stockDialog = true;
       } else {
         var upperName =
           this.ingredientsName.charAt(0).toUpperCase() +
@@ -392,11 +390,11 @@ export default {
           ingredientsUnit: this.ingredientsUnit,
           stockStatus: this.stockStatus
         };
-        console.log('NewStock: ', newStock);
+        console.log("NewStock: ", newStock);
         let headers = {
-            "Access-Control-Allow-Origin": '*',
-            'Content-Type': 'application/json',
-          };
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json"
+        };
         axios
           .post("http://127.0.0.1:8000/api/posts/ingredients", newStock)
           .then(response => {
@@ -416,10 +414,9 @@ export default {
                 timer: 5000
               });
             }
-            console.log(response.data)
+            console.log(response.data);
             this.stockDialog = false;
             this.reloadDataAddStock();
-            
           });
       }
     }
