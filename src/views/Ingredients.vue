@@ -314,6 +314,7 @@ export default {
     this.getHalayaIngredients();
     this.getButchiIngredients();
     this.getIceCreamIngredients();
+    this.getAllIngredientsName();
   },
   computed: {
     ingredientsNameErrors() {
@@ -359,17 +360,6 @@ export default {
             }
             continue;
           }
-
-          let nameArray = [];
-          for (var i = 0; i < response.data.length; i++) {
-            if (nameArray.includes(response.data[i].ingredients_name)) {
-              console.log("good");
-            } else {
-              nameArray.push(response.data[i].ingredients_name);
-              this.itemSelect = nameArray;
-            }
-            continue;
-          }
         });
     },
     getButchiIngredients() {
@@ -387,17 +377,6 @@ export default {
             continue;
           }
           // console.log("butchi: ", response.data);
-
-          let nameArray = [];
-          for (var i = 0; i < response.data.length; i++) {
-            if (nameArray.includes(response.data[i].ingredients_name)) {
-              console.log("good");
-            } else {
-              nameArray.push(response.data[i].ingredients_name);
-              this.itemSelect = nameArray;
-            }
-            continue;
-          }
         });
     },
     getIceCreamIngredients() {
@@ -415,8 +394,14 @@ export default {
             continue;
           }
           // console.log("ice cream: ", response.data);
-
-          let nameArray = [];
+        });
+    },
+    getAllIngredientsName(){
+      let nameArray = [];
+        axios
+        .get("http://127.0.0.1:8000/api/fetch/ingredientsName")
+        .then(response => {
+          
           for (var i = 0; i < response.data.length; i++) {
             if (nameArray.includes(response.data[i].ingredients_name)) {
               console.log("good");
