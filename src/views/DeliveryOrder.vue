@@ -29,7 +29,7 @@
             </v-row>
             <v-card-text class="pa-0 ml-2">
               <v-chip-group column>
-                <v-chip small>{{item.delivery_address}}</v-chip>
+                <v-chip small>{{distance}}</v-chip>
                 <!-- <v-chip small>{{item.distance2}}</v-chip>
                 <v-chip small>{{item.distance3}}</v-chip>
                 <v-chip small>{{item.distance4}}</v-chip>
@@ -58,7 +58,8 @@ export default {
       search: "",
       address: "",
       coordinates: [],
-      distance: 0
+      distance: [],
+      addresses: [],
     };
   },
   mounted() {
@@ -66,7 +67,7 @@ export default {
   },
   created() {
     // this.loadDelivery();
-    this.getCoordinates();
+    // this.getCoordinates();
     // setInterval(this.loadDelivery(), 3000);
   },
 
@@ -77,31 +78,70 @@ export default {
         .then(response => {
           this.delivery = response.data;
           console.log("-------testing--------", this.delivery);
+          console.log("!!!!!", this.delivery.delivery_address);
+          for (var i = 0; i < this.delivery.length; i++) {
+            let deliveryAddress = this.delivery_address;
+            this.addresses.push(deliveryAddress);
+            console.log("ADDRESSES", deliveryAddress);
+          }
+          
+          for (var i = 0; i < this.addresses.length; i++) {
+            let addressIndex = 0;
+            let delAddress = this.addresses[addressIndex];
+            axios
+              .get(
+                `https://api.mapbox.com/geocoding/v5/mapbox.places/${
+                  this.delAddress
+                }
+          .json?limit=2&access_token=${this.accessToken}`
+              )
+              .then(response => {
+                let res = JSON.stringify(response.data);
+                let result = JSON.parse(res);
+                console.log("/////////test////////", result);
+                //index 0 is the most relevant based on the mapbox geocoding documentation
+                this.coordinates = result.features[0].geometry.coordinates;
+                //turf.js
+                var from_place = turf.point([123.921969, 10.329892]);
+                var to_place = turf.point(this.coordinates);
+                console.log("ADDRESS:", to_place);
+                var options = { units: "kilometers" };
+                let initDistance = turf.distance(from_place, to_place, options);
+                this.distance.push(initDistance);
+                console.log("*******DISTANCE*******", this.distance);
+                return this.distance;
+                addressIndex++;
+                console.log("INDEX", addressIndex);
+              });
+          }
         })
         .catch(error => console.log(error));
     },
-    getCoordinates(address) {
-      axios
-        .get(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${
-            this.delivery_address
-          }.json?limit=2&access_token=${this.accessToken}`
-        )
-        .then(response => {
-          let res = JSON.stringify(response.data);
-          let result = JSON.parse(res);
-          console.log("/////////test////////", result);
+    // getCoordinates(address) {
+    //   axios
+    //     .get(
+    //       `https://api.mapbox.com/geocoding/v5/mapbox.places/
+    //         Shambala%20Veterinary%20Clinic%20Hernan%20Cortes%20St%20Mandaue%20City%20Cebu
+    //       .json?limit=2&access_token=${this.accessToken}`
+    //     )
+    //     .then(response => {
+    //       let res = JSON.stringify(response.data);
+    //       let result = JSON.parse(res);
+    //       console.log("/////////test////////", result);
 
-          //index 0 is the most relevant based on the mapbox geocoding documentatio
-          this.coordinates = result.features[0].geometry.coordinates;
+    //       //index 0 is the most relevant based on the mapbox geocoding documentation
+    //       this.coordinates = result.features[0].geometry.coordinates;
 
-          //turf.js
-          var from_place = turf.point([123.921969, 10.329892]);
-          var to_place = turf.point(this.coordinates);
-          var options = { units: "kilometers" };
-          this.distance = turf.distance(from_place, to_place, options);
-        });
-    }
+    //       //turf.js
+    //       var from_place = turf.point([123.921969, 10.329892]);
+    //       var to_place = turf.point(this.coordinates);
+    //       console.log("ADDRESS:", to_place);
+    //       var options = { units: "kilometers" };
+    //       this.distance = turf.distance(from_place, to_place, options);
+    //       console.log("*******DISTANCE*******", this.distance);
+    //       return this.distance;
+    //     });
+    // }
   }
 };
 // import axios from "axios";
@@ -179,12 +219,12 @@ export default {
   text-decoration: none;
   padding: 0px;
   color: black;
-  width: 36!important;
+  width: 36 !important;
 }
 
 .v-card__actions {
-    align-items: center;
-    display: flex;
-    padding: 0;
+  align-items: center;
+  display: flex;
+  padding: 0;
 }
 </style>
