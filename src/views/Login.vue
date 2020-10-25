@@ -1,19 +1,34 @@
 <template>
   <v-app id="inspire">
     <v-main>
-      <v-container class="fill-height" fluid>
-        <v-row align="center" justify="center">
-          <v-col cols="12" sm="8" md="4">
+      <v-container
+        class="fill-height"
+        fluid
+      >
+        <v-row
+          align="center"
+          justify="center"
+        >
+          <v-col
+            cols="12"
+            sm="8"
+            md="4"
+          >
             <v-card class="elevation-12">
-              <v-list-item id="cardHeader" size="150">
+              <v-list-item
+                id="cardHeader"
+                size="150"
+              >
                 <v-list-item-content>
-                  <v-list-item-title
-                    class="d-flex align-center justify-center pa-6 mx-auto headline"
-                  >L O G I N</v-list-item-title>
+                  <v-list-item-title class="d-flex align-center justify-center pa-6 mx-auto headline">L O G I N</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item class="d-flex align-center justify-center pa-6 mx-auto">
-                <img alt="wawen's ube halaya" src="../assets/wawens.png" height="154">
+                <img
+                  alt="wawen's ube halaya"
+                  src="../assets/wawens.png"
+                  height="154"
+                >
               </v-list-item>
 
               <v-spacer></v-spacer>
@@ -44,7 +59,14 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn id="btnLogin" class="mb-5" block outlined rounded>Log In</v-btn>
+                <v-btn
+                  id="btnLogin"
+                  class="mb-5"
+                  block
+                  outlined
+                  rounded
+                  @click="login"
+                >Log In</v-btn>
               </v-card-actions>
             </v-card>
           </v-col>
@@ -72,9 +94,21 @@
 
 
 <script>
+import axios from "axios";
 export default {
   props: {
-    source: String
-  }
+    source: String,
+  },
+  data() {
+    return {};
+  },
+  mounted() {},
+  methods: {
+    login() {
+      axios.post("http://localhost:8000/api/auth/login").then((response) => {
+        console.log("AMBOT");
+      });
+    },
+  },
 };
 </script>
