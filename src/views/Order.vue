@@ -1,8 +1,8 @@
 <template>
   <v-app>
-    <!-- <v-card  class="ma-5 mb-12 pa-5">
+    <v-card  class="ma-5 mb-12 pa-5">
       <default-location/>
-    </v-card>-->
+    </v-card>
     <v-card id="cardtable" class="ma-5 mb-12 pa-5">
       <v-card-title>
         Order
@@ -281,8 +281,8 @@ export default {
   },
   data() {
     return {
-      accessToken:
-        "pk.eyJ1IjoiamllbnhpeWEiLCJhIjoiY2tlaTM3d2VrMWcxczJybjc0cmZkamk3eiJ9.JzrYlG2kZ08Pkk24hvKDJw",
+      // accessToken:
+      //   "pk.eyJ1IjoiamllbnhpeWEiLCJhIjoiY2tlaTM3d2VrMWcxczJybjc0cmZkamk3eiJ9.JzrYlG2kZ08Pkk24hvKDJw",
       deliveryDate: new Date().toISOString().substr(0, 10),
       addDateMenu: false,
       updateDateMenu: false,

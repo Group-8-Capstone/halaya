@@ -1,13 +1,30 @@
 <template>
  <div class="container">
-    <div class="post">
+     <form @submit="formSubmit" enctype="multipart/form-data" action>
+                    <span class="errorColor" v-if="errorMessage !== null">{{errorMessage}}</span>
+                    <div class="form-group">
+                        <label >Profile Account</label>
+                        <br>
+                        <input type="text" class="form-control" v-model="productType" required>
+                    </div>
+                    <div class="form-group">
+                        <center>
+                            <img class="addOnsImage" :src="imageURL"><br>
+                            <input type="file" class="fileStyle" v-on:change="onImageChange" required><br>
+                        </center>
+                    </div>
+                    <div style="text-align: right">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+    <!-- <div class="post">
     <div class="postinfotop">
        <h2>Create New Account</h2>
         <p id="text" style="color:green; margin-left:100px;"></p>
-    </div>
-    <form action="#" class="form newtopic" @submit.prevent="register">
+    </div> -->
+    <!-- <form action="#" class="form newtopic" @submit.prevent="register"> -->
         
-        <div class="accsection">
+        <!-- <div class="accsection">
             <div class="topwrap">
                 <div class="userinfo pull-left">
                 </div>
@@ -15,33 +32,34 @@
                     <div class="row">
                         
                         <div class="col-lg-6 col-md-6">
-                         <input type="file" @change='upload_avatar' :class="{ 'is-invalid': form.errors.has('avatar') }" name="avatar">
-                        <has-error :form="form" field="avatar"></has-error> 
+                         <input type="file" @change='upload_avatar' :class="{ 'is-invalid': form.errors.has('image') }" name="image">
+                        <has-error :form="form" field="image"></has-error> 
                         <div class="avatar img-fluid img-circle" style="margin-top:10px">
                            <img :src="get_avatar()" v-bind:style="form.styleObject"/>
                         </div>
+                         <button class="btn btn-success" @click="uploadImage">Upload Image</button>
                         </div>
-                    </div>
-                    <div>
+                         
+                    </div> -->
+                    <!-- <div>
                         <input v-model="form.username" type="text" placeholder="Username" class="form-control" :class="{ 'is-invalid': form.errors.has('username') }" name="username">
                         <has-error :form="form" field="username"></has-error>
-                    </div>
-                </div>
+                    </div> -->
+                <!-- </div>
                 
             </div>  
-        </div>
+        </div> -->
 
-        <div class="postinfobot">
+        <!-- <div class="postinfobot">
             <div class="pull-right postreply">
                 <div class="pull-left smile"><a href="#"><i class="fa fa-smile-o"></i></a></div>
                 <div class="pull-left"><button type="submit" class="btn btn-primary">Submit</button></div>
 
             </div>
-        </div>
-    </form>
-    </div>
+        </div> -->
+    <!-- </form> -->
+    <!-- </div> -->
 </div>
-
         <!-- <v-card
     class="mx-auto ma-15 "
     max-width="500"
@@ -101,19 +119,9 @@ import axios from "axios";
         'center',
         'end',
       ],
-      form: new Form({
-               
-              
-                avatar: '',
-            
-                styleObject: {
-                   width: '100px',
-                   height: '100px'
-                }
-
-              }),
-     
-      text: "",
+    
+      imageURL:null,
+      errorMessage:null,
       disabled: true,
       btnDisabled:false,
       isHidden: true
@@ -138,37 +146,47 @@ import axios from "axios";
         this.isHidden = true
 
       },
-                  register () {
-                this.form.post('/register')
-                    .then(( response ) => { 
+        // register () {
+        //         this.form.post('/register')
+        //             .then(( response ) => { 
 
-                        var attr = document.getElementById("text");
-                        attr.innerHTML = response.data.message;  
+        //                 var attr = document.getElementById("text");
+        //                 attr.innerHTML = response.data.message;  
                         
-                        this.form.reset();
+        //                 this.form.reset();
 
-                     })
-            },
-       upload_avatar(e){
-              let file = e.target.files[0];
-                let reader = new FileReader();  
+        //              })
+        
+            // },
+        // uploadImage(){
+        // axios.post('/image/store',{image: this.image}).then(response => {
+        //            console.log(response);
+        //         });
+        //     },
+    //    upload_avatar(e){
+    //           let file = e.target.files[0];
+    //             let reader = new FileReader();  
 
-                if(file['size'] < 2111775)
-                {
-                    reader.onloadend = (file) => {
-                    //console.log('RESULT', reader.result)
-                     this.form.avatar = reader.result;
-                    }              
-                     reader.readAsDataURL(file);
-                }else{
-                    alert('File size can not be bigger than 2 MB')
-                }
-            },
-             //For getting Instant Uploaded Photo
-            get_avatar(){
-               let photo = (this.form.avatar.length > 100) ? this.form.avatar : "img/profile/"+ this.form.avatar;
-               return photo;
-            },
+    //             if(file['size'] < 2111775)
+    //             {
+    //                 reader.onloadend = (file) => {
+    //                  this.form.image = reader.result;
+    //                 }              
+    //                  reader.readAsDataURL(file);
+    //             }else{
+    //                 alert('File size can not be bigger than 2 MB')
+    //             }
+    //         },
+    //         get_avatar(){
+    //            let photo = (this.form.image.length > 100)
+    //             ? this.form.image : "img/profile/"+ this.form.image;
+    //            return photo;
+    //         },
+    onImageChange(e){
+            this.image = e.target.files[0]
+            console.log(this.image);
+            this.imageURL = URL.createObjectURL(e.target.files[0])
+        },
 
     
     }
