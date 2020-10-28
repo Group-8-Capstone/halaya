@@ -1,17 +1,21 @@
 <template>
   <div>
-    <!-- <v-card class="ma-5 mb-12 pa-5">
+    <v-card class="ma-5 mb-12 pa-5">
       <v-card-title>
         Deliveries for Today
+        <v-spacer></v-spacer>
+        <v-text-field
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Search"
+          single-line
+          hide-details
+        ></v-text-field>
       </v-card-title>
-      <v-data-table
-      :headers="headers"
-      :items="delivery"
-      :search="search"
-    ></v-data-table>
-    </v-card>-->
-    <v-row class="py-0 my-0">
-      <v-col sm="3" v-for="(item, index) in delivery" :key="index" class="py-0 my-1">
+      <v-data-table :headers="headers" :items="deliveries" :search="search"></v-data-table>
+    </v-card>
+    <!-- <v-row class="py-0 my-0">
+      <v-col sm="3" v-for="(item, index) in distance" :key="index" class="py-0 my-1">
         <v-card class="mx-2 my-1 pa-1" max-width="275">
           <v-img height="100%" width="100%" src="../assets/ubeCard.jpg"></v-img>
           <v-container>
@@ -29,17 +33,17 @@
             </v-row>
             <v-card-text class="pa-0 ml-2">
               <v-chip-group column>
-                <v-chip small>{{distance}}</v-chip>
-                <!-- <v-chip small>{{item.distance2}}</v-chip>
-                <v-chip small>{{item.distance3}}</v-chip>
-                <v-chip small>{{item.distance4}}</v-chip>
-                <v-chip small>{{item.distance5}}</v-chip>-->
+                <v-chip small>{{item}}</v-chip>
+                <v-chip small>{{distance[1]}}</v-chip>
+                <v-chip small>{{distance[2]}}</v-chip>
+                <v-chip small>{{distance[3]}}</v-chip>
+                <v-chip small>{{distance[4]}}</v-chip>
               </v-chip-group>
             </v-card-text>
           </v-container>
         </v-card>
       </v-col>
-    </v-row>
+    </v-row>-->
   </div>
 </template>
 
@@ -55,11 +59,31 @@ export default {
       accessToken:
         "pk.eyJ1IjoiamllbnhpeWEiLCJhIjoiY2tlaTM3d2VrMWcxczJybjc0cmZkamk3eiJ9.JzrYlG2kZ08Pkk24hvKDJw",
       delivery: [],
-      search: "",
+      deliveries: [],
       address: "",
       coordinates: [],
       distance: [],
       addresses: [],
+      search: "",
+      headers: [
+        {
+          text: "Customer",
+          align: "start",
+          sortable: false,
+          value: "receiver_name"
+        },
+        { text: "Contact Number", value: "active_contact" },
+        { text: "Order/s", value: "products[0].product_name" },
+        { text: "Qty", value: "products[0].pivot.sub_quantity" },
+        { text: "Address", value: "delivery_address", sortable: false },
+        {
+          text: "Delivery Date",
+          value: "confirmed_delivery_date",
+          sortable: false
+        }
+        // { text: "Actions", value: "action", sortable: false },
+        // { text: "Status", value: "order_status" }
+      ]
     };
   },
   mounted() {
@@ -77,46 +101,106 @@ export default {
         .get("https://wawens-backend.herokuapp.com/api/orders/confirmed")
         .then(response => {
           this.delivery = response.data;
-          console.log("-------testing--------", this.delivery);
-          console.log("!!!!!", this.delivery.delivery_address);
-          for (var i = 0; i < this.delivery.length; i++) {
-            let deliveryAddress = this.delivery_address;
-            this.addresses.push(deliveryAddress);
-            console.log("ADDRESSES", deliveryAddress);
+
+          function formatDate() {
+            var d = new Date(),
+              month = "" + (d.getMonth() + 1),
+              day = "" + d.getDate(),
+              year = d.getFullYear();
+
+            if (month.length < 2) month = "0" + month;
+            if (day.length < 2) day = "0" + day;
+
+            return [year, month, day].join("-");
           }
-          
-          for (var i = 0; i < this.addresses.length; i++) {
-            let addressIndex = 0;
-            let delAddress = this.addresses[addressIndex];
-            axios
-              .get(
-                `https://api.mapbox.com/geocoding/v5/mapbox.places/${
-                  this.delAddress
-                }
-          .json?limit=2&access_token=${this.accessToken}`
-              )
-              .then(response => {
-                let res = JSON.stringify(response.data);
-                let result = JSON.parse(res);
-                console.log("/////////test////////", result);
-                //index 0 is the most relevant based on the mapbox geocoding documentation
-                this.coordinates = result.features[0].geometry.coordinates;
-                //turf.js
-                var from_place = turf.point([123.921969, 10.329892]);
-                var to_place = turf.point(this.coordinates);
-                console.log("ADDRESS:", to_place);
-                var options = { units: "kilometers" };
-                let initDistance = turf.distance(from_place, to_place, options);
-                this.distance.push(initDistance);
-                console.log("*******DISTANCE*******", this.distance);
-                return this.distance;
-                addressIndex++;
-                console.log("INDEX", addressIndex);
-              });
-          }
+
+          // var date = new Date() + "";
+          // var formatted = date
+          //   .split(" ")
+          //   .slice(1, 4)
+          //   .join("-");
+          // console.log("DATE", formatted);
+          this.delivery.forEach(element => {
+            var now = element.confirmed_delivery_date === "2020-10-27";
+            //formatDate dapat na diha pero walay delivery for today so "2020-10-27" sa
+            // console.log(now);
+            // console.log(formatDate());
+            if (now == true) {
+              console.log("NISUUUUUUUD");
+              console.log("DATEDATE", element.confirmed_delivery_date);
+              this.deliveries.push(element);
+              console.log("DELIVERIES", this.deliveries);
+            }
+          });
+          // for (var i in this.delivery){
+          //   if (i.confirmed_delivery_date = now){
+          //     this.deliveries.push(i);
+          //   }
+          // }
+          console.log("DATA:", this.delivery);
+          console.log(
+            "CATEGORY",
+            this.delivery[0].products[0].pivot.sub_quantity
+          );
+          // var jars = 0;
+          // this.delivery.forEach(element => {
+          //   console.log("NISUD", element);
+          //   let a = this.delivery.findIndex(element);
+          //   console.log("INDEX", a);
+          // });
+
+          //   for (var x = 0; x < this.delivery[i].products.length; x++){
+          //     if (this.delivery[i].prodects[i].category.name == "Ubechi"){
+          //       jars = 5;
+          //       var totaljars = this.sub_quantity * jars;
+          //       console.log("JARS", this.totaljars);
+          //     } else {
+          //       jars = 1;
+          //       totaljars = this.sub_quantity * jars;
+          //       console.log("JARS", this.totaljars);
+          //     }
+          //   }
+          // }
+
+          // for (var i = 0; i < this.delivery.length; i++) {
+          //   let deliveryAddress = this.delivery_address;
+          //   this.addresses.push(this.deliveryAddress);
+          //   console.log("ADDRESSES", this.addresses);
+          // }
+
+          // for (var i = 0; i < this.delivery.length; i++) {
+          //   let addressIndex = 0;
+          //   let delAddress = this.addresses[addressIndex];
+          //   console.log("_____INDEX", this.delAddress);
+          //   axios
+          //     .get(
+          //       `https://api.mapbox.com/geocoding/v5/mapbox.places/${
+          //         this.delAddress
+          //       }
+          // .json?limit=2&access_token=${this.accessToken}`
+          //     )
+          //     .then(response => {
+          //       let res = JSON.stringify(response.data);
+          //       let result = JSON.parse(res);
+          //       console.log("/////////test////////", result);
+          //       //index 0 is the most relevant based on the mapbox geocoding documentation
+          //       this.coordinates = result.features[0].geometry.coordinates;
+          //       //turf.js
+          //       var from_place = turf.point([123.921969, 10.329892]);
+          //       var to_place = turf.point(this.coordinates);
+          //       console.log("ADDRESS:", to_place);
+          //       var options = { units: "kilometers" };
+          //       let initDistance = turf.distance(from_place, to_place, options);
+          //       this.distance.push(initDistance);
+          //       console.log("*******DISTANCE*******", this.distance);
+          //       return this.distance;
+          //       addressIndex++;
+          //       console.log("????????INDEX", this.addressIndex);
+          //     });
+          // }
         })
         .catch(error => console.log(error));
-    },
+    }
     // getCoordinates(address) {
     //   axios
     //     .get(
@@ -144,55 +228,6 @@ export default {
     // }
   }
 };
-// import axios from "axios";
-// export default {
-//   data() {
-//     return {
-//       delivery: [
-//         {
-//           title: "Delivery 1",
-//           distance1: "0.5 km",
-//           distance2: "0.8 km",
-//           distance3: "1.0 km",
-//           distance4: "1.0 km",
-//           distance5: "1.1 km"
-//         },
-//         {
-//           title: "Delivery 2",
-//           distance1: "1.1 km",
-//           distance2: "1.2 km",
-//           distance3: "1.3 km",
-//           distance4: "1.5 km",
-//           distance5: "1.5 km"
-//         },
-//         {
-//           title: "Delivery 3",
-//           distance1: "1.5 km",
-//           distance2: "1.5 km",
-//           distance3: "1.5 km",
-//           distance4: "1.6 km",
-//           distance5: "1.6 km"
-//         },
-//         {
-//           title: "Delivery 4",
-//           distance1: "1.6 km",
-//           distance2: "1.7 km",
-//           distance3: "1.7 km",
-//           distance4: "1.8 km",
-//           distance5: "1.8 km"
-//         },
-//         {
-//           title: "Delivery 5",
-//           distance1: "1.8 km",
-//           distance2: "1.8 km",
-//           distance3: "1.9 km",
-//           distance4: "1.9 km",
-//           distance5: "1.2 km"
-//         }
-//       ]
-//     };
-//   }
-// };
 </script>
 
 <style>
