@@ -31,7 +31,7 @@
           </v-btn>
         </v-list>
       </v-card-title>    
-            <v-data-table :headers="headers" :items="orders" :search="search">
+            <!-- <v-data-table :headers="headers" :items="orders" :search="search">
         <template v-slot:item.order_status="{ item }">
           <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
         </template>
@@ -49,8 +49,8 @@
             title="Edit"
           >mdi-table-edit</v-icon>
           <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
-        </template>
-      </v-data-table>  
+        </template> -->
+      <!-- </v-data-table>   -->
         </v-tab-item>
           <v-tab-item>
         <v-card flat>
@@ -69,7 +69,7 @@
       <v-row>
       <v-flex d-flex>
         <v-layout wrap>
-          <v-data-table :headers="headers" :items="orders" :search="search">
+          <!-- <v-data-table :headers="headers" :items="orders" :search="search">
         <template v-slot:item.order_status="{ item }">
           <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
         </template>
@@ -88,7 +88,7 @@
           >mdi-table-edit</v-icon>
           <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
         </template>
-      </v-data-table>  
+      </v-data-table>   -->
    </v-layout>
 </v-flex>
     </v-row>

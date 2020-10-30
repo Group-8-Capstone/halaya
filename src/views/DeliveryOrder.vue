@@ -2,7 +2,7 @@
   <div>
     <v-card class="ma-5 mb-12 pa-5">
       <v-card-title>
-        Deliveries for Today
+        Deliveries for TODAY
         <v-spacer></v-spacer>
         <v-text-field
           v-model="search"
@@ -12,8 +12,26 @@
           hide-details
         ></v-text-field>
       </v-card-title>
-      <v-simple-table>
-        <template v-slot:default>
+      <template>
+          <v-dialog v-model="orderDetails" persistent max-width="500px">
+            <v-card>
+              <v-card-title>
+                <span>Order Details</span>
+              </v-card-title>
+              <hr>
+                <v-spacer></v-spacer>
+                  <v-list id="list" v-for="i in orderedProducts" :key="i.id">
+                      <v-list-item-title>Product Name: {{i.product_name}}</v-list-item-title>
+                      <v-list-item-subtitle>Order Qty: {{ i.pivot.sub_quantity }}</v-list-item-subtitle>
+                  </v-list>
+              <v-card-actions>
+                <v-btn id="closeBtn" color="primary" text @click="closeDialog()">Close</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </template>
+      <v-simple-table :search="search">
+        <template v-slot:default :search="search">
           <thead>
             <tr>
               <th class="text-left">Receiver Name</th>
@@ -34,7 +52,7 @@
               <td>
                 <v-icon
                   class="mr-2"
-                  @click="orderDetail(item)"
+                  @click="orderedProduct(item.id)"
                   normal
                   title="Order Details"
                 >mdi-information</v-icon>
@@ -62,36 +80,6 @@
         </template>
       </v-simple-table>
     </v-card>
-    <!-- <v-row class="py-0 my-0">
-      <v-col sm="3" v-for="(item, index) in distance" :key="index" class="py-0 my-1">
-        <v-card class="mx-2 my-1 pa-1" max-width="275">
-          <v-img height="100%" width="100%" src="../assets/ubeCard.jpg"></v-img>
-          <v-container>
-            <v-card-title id="cardTitle">Wawen's Ube Halaya</v-card-title>
-            <v-divider class="mx-4"></v-divider>
-            <v-row>
-              <v-card-actions class="pa-0">
-                <router-link to="/delivery-details" id="deliveryDetailsBtn">
-                  <v-btn id="deliveryDetailsBtn" text>
-                    <v-icon>mdi-format-list-bulleted-square</v-icon>
-                  </v-btn>
-                </router-link>
-              </v-card-actions>
-              <v-card-title class="pa-0 ml-2">Delivery</v-card-title>
-            </v-row>
-            <v-card-text class="pa-0 ml-2">
-              <v-chip-group column>
-                <v-chip small>{{item}}</v-chip>
-                <v-chip small>{{distance[1]}}</v-chip>
-                <v-chip small>{{distance[2]}}</v-chip>
-                <v-chip small>{{distance[3]}}</v-chip>
-                <v-chip small>{{distance[4]}}</v-chip>
-              </v-chip-group>
-            </v-card-text>
-          </v-container>
-        </v-card>
-      </v-col>
-    </v-row>-->
   </div>
 </template>
 
@@ -113,6 +101,9 @@ export default {
       distance: [],
       // dist: 0,
       addresses: [],
+      orderedProducts: [],
+      editDialog: false,
+      orderDetails:false,
       search: "",
       headers: [
         {
@@ -138,6 +129,63 @@ export default {
   },
 
   methods: {
+    closeDialog(){
+      this.orderDetails = false;
+      this.orderedProducts = [];
+    },
+    alertDelivered(item) {
+      Swal.fire({
+        title: "Are you sure item is being delivered?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#CFD8D",
+        cancelButtonText: "No",
+        confirmButtonText: "Yes",
+        reverseButtons: true
+      }).then(result => {
+        if (result.value) {
+          // this.deliveredItem(item);
+          this.saveDeliveredOrder(item);
+        }
+      });
+    },
+    alertCancel(item) {
+      Swal.fire({
+        title: "Are you sure?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#CFD8D",
+        cancelButtonText: "No",
+        confirmButtonText: "Yes",
+        reverseButtons: true
+      }).then(result => {
+        if (result.value) {
+          this.deleteItem(item);
+          Swal.fire({
+            title: "Canceled!",
+            text: "Order is being canceled",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500
+          });
+        }
+      });
+    },
+    orderedProduct(id){
+      this.orderDetails = true;
+      for (var i = 0; i < this.deliveries.length; i++){
+        if(id == this.deliveries[i].id) {
+          for (var j = 0; j < this.deliveries[i].products.length; j++){
+            this.orderedProducts.push(this.deliveries[i].products[j])
+            // this.orderedProducts.push(this.orders[i].products[j].product_name)
+            // this.orderedProducts.push(this.orders[i].products[j].pivot.sub_quantity)
+          }
+        }
+      }
+      console.log('orderedProducts: ', this.orderedProducts)
+    },
     loadDelivery() {
       axios
         .get("https://wawens-backend.herokuapp.com/api/orders/confirmed")
