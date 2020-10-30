@@ -4,6 +4,15 @@
       <default-location/>
     </v-card>-->
     <v-card id="cardtable" class="ma-5 mb-12 pa-5">
+      <v-tabs
+        v-model="tabs"
+        right
+        color="deep-purple accent-4">
+        <v-tab>Walk in</v-tab>
+         <v-tab>Received Orders</v-tab>
+      </v-tabs>
+      <v-tabs-items v-model="tabs">
+      <v-tab-item>
       <v-card-title>
         Order
         <v-spacer></v-spacer>
@@ -21,6 +30,71 @@
             <v-toolbar-title>Add Order</v-toolbar-title>
           </v-btn>
         </v-list>
+      </v-card-title>    
+            <v-data-table :headers="headers" :items="orders" :search="search">
+        <template v-slot:item.order_status="{ item }">
+          <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
+        </template>
+        <template v-slot:item.action="{ item }">
+          <v-icon
+            normal
+            class="mr-2"
+            title="Delivered"
+            @click="alertDelivered(item)"
+          >mdi-truck-check-outline</v-icon>
+          <v-icon
+            @click="editDialog = !editDialog, editItem(item) "
+            class="mr-2"
+            normal
+            title="Edit"
+          >mdi-table-edit</v-icon>
+          <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+        </template>
+      </v-data-table>  
+        </v-tab-item>
+          <v-tab-item>
+        <v-card flat>
+        <v-card-title >
+          Recieved Orders
+        <v-spacer></v-spacer>
+        <v-text-field
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Search"
+          single-line
+          hide-details
+        ></v-text-field>
+        <v-spacer></v-spacer>
+      </v-card-title>
+      <v-row>
+      <v-flex d-flex>
+        <v-layout wrap>
+          <v-data-table :headers="headers" :items="orders" :search="search">
+        <template v-slot:item.order_status="{ item }">
+          <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
+        </template>
+        <template v-slot:item.action="{ item }">
+          <v-icon
+            normal
+            class="mr-2"
+            title="Delivered"
+            @click="alertDelivered(item)"
+          >mdi-truck-check-outline</v-icon>
+          <v-icon
+            @click="editDialog = !editDialog, editItem(item) "
+            class="mr-2"
+            normal
+            title="Edit"
+          >mdi-table-edit</v-icon>
+          <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+        </template>
+      </v-data-table>  
+   </v-layout>
+</v-flex>
+    </v-row>
+      </v-card>
+      </v-tab-item>
+    </v-tabs-items>
         <v-dialog v-model="dialog" width="400px">
           <v-card>
             <v-spacer></v-spacer>
@@ -93,25 +167,20 @@
                       no-title
                       scrollable
                     ></v-date-picker>
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-text-field
-                        v-model="deliveryDate"
-                        label="delivery date"
-                        prepend-icon="mdi-calendar"
-                        readonly
-                        v-bind="attrs"
-                        v-on="on"
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker
-                      v-model="deliveryDate"
-                      :min="deliveryDate"
-                      :max="getEndDate"
-                      color="deep-purple lighten-1"
-                      no-title
-                      scrollable
-                    ></v-date-picker>
-                  </v-menu>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                          v-model="deliveryDate"
+                          label="delivery date"
+                          prepend-icon="mdi-calendar"
+                          readonly
+                          v-bind="attrs"
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker v-model="deliveryDate" :min="deliveryDate"  :max="getEndDate" color="deep-purple lighten-1" no-title scrollable>
+                      </v-date-picker>
+                 </v-menu>
+
                 </v-col>
                 <v-col cols="12">
                   <v-text-field
@@ -235,7 +304,6 @@
             </v-card>
           </v-dialog>
         </template>
-      </v-card-title>
       <v-simple-table>
         <template v-slot:default>
           <thead>
@@ -351,6 +419,7 @@ export default {
       deliveryDate: new Date().toISOString().substr(0, 10),
       addDateMenu: false,
       updateDateMenu: false,
+        tabs: null,
       message: "",
       post: {},
       orders: [],

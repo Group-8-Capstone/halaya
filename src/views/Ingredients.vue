@@ -390,7 +390,7 @@ export default {
       axios
         .get("http://127.0.0.1:8000/api/getHalayaIngredients/")
         .then(response => {
-          // console.log('halaya res: ', response.data);
+          console.log(response)
           let results = [];
           for (var i = 0; i < response.data.length; i++) {
             if (this.containsObject(results, response.data[i].id)) {
@@ -470,8 +470,7 @@ export default {
       this.$v.$reset();
     },
     editIngredients(item) {
-      axios
-        .get("http://127.0.0.1:8000/api/post/editStock/" + item.id)
+      axios.get("http://127.0.0.1:8000/api/post/editStock/" + item.id)
         .then(response => {
           this.editStockItem = response.data;
           console.log("edit stock item", JSON.stringify(this.editStockItem));
