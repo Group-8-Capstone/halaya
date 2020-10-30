@@ -4,11 +4,11 @@
       <v-card-title>
         Deliveries for Today
       </v-card-title>
-      <v-data-table
+      <!-- <v-data-table
       :headers="headers"
       :items="delivery"
       :search="search"
-    ></v-data-table>
+    ></v-data-table> -->
     </v-card>
   </div>
 </template>
@@ -29,9 +29,7 @@ import { connect } from 'tls';
             value: 'customer_name',
           },
           { text: 'Quantity', value: '' },
-          { text: 'Date', value: 'customer_address' },
-         
-          
+          { text: 'Date', value: 'customer_address' },  
         ],
       }
     },

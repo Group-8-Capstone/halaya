@@ -10,36 +10,49 @@
         <v-card flat>
           <v-card-title>Ube Halaya List of Ingredients</v-card-title>
           <v-row>
-            <v-flex d-flex>
+            <v-flex>
               <v-layout wrap>
                 <v-flex md4 v-for="item in halayaIngredients" :key="item.id">
-                  <v-card class="card-container ma-5">
-                    <v-row>
-                      <v-list-item>Ingredients Name: {{item.ingredients_name}}</v-list-item>
-                      <v-list-item>Available Quantity: {{item.ingredients_remaining}}</v-list-item>
-                      <v-list-item>Used Quantity: {{item.total}}</v-list-item>
-                      <v-list-item>Status: {{item.ingredients_status}}</v-list-item>
+                  <v-card id="cards" class="card-container ma-5">
+                    <v-card-title class="deep-purple lighten-5">{{item.ingredients_name}}</v-card-title>
+                    <hr>
+                    <v-row class="mx-auto text-center">
+                      <v-list-item>Available Qty : <b>{{item.ingredients_remaining + ' kg/cans'}}</b></v-list-item>
+                      <v-list-item>Used Qty : <b>{{item.total  + ' kg/cans'}}</b></v-list-item>
+                      <v-list-item>
+                        <v-chip
+                          outlined
+                          :color="getColor(item.ingredients_status)"
+                        >{{item.ingredients_status}}</v-chip>
+                      </v-list-item>
                     </v-row>
                     <v-row class="d-flex justify-end mb-6">
                       <template>
-                        <!-- <v-icon
-                          normal
-                          class="mr-2"
-                          title="Add Quantity"
-                          @click="stockDialog=!stockDialog"
-                        >mdi-plus</v-icon>-->
-                        <v-icon
-                          @click=" addUsedStockDialog=!addUsedStockDialog "
-                          class="mr-2"
-                          normal
-                          title="Used Quantity"
-                        >mdi-minus</v-icon>
-                        <v-icon
-                          @click="editDialog = !editDialog, editIngredients(item)"
-                          normal
-                          class="mr-2"
-                          title="Edit Quantity"
-                        >mdi-table-edit</v-icon>
+                        <!-- <v-button icon>
+                          <v-icon
+                            normal
+                            class="mr-2"
+                            title="Add Quantity"
+                            @click="editDialog = !editDialog, editIngredients(item)"
+                          >mdi-plus</v-icon>
+                        </v-button>-->
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+
+                          <v-btn icon>
+                            <v-icon
+                              title="Add Quantity"
+                              @click="editDialog = !editDialog, editIngredients(item)"
+                            >mdi-plus</v-icon>
+                          </v-btn>
+
+                          <v-btn icon>
+                            <v-icon
+                              @click=" addUsedStockDialog=!addUsedStockDialog "
+                              title="Used Quantity"
+                            >mdi-minus</v-icon>
+                          </v-btn>
+                        </v-card-actions>
                       </template>
                     </v-row>
                   </v-card>
@@ -56,12 +69,18 @@
             <v-flex d-flex>
               <v-layout wrap>
                 <v-flex md4 v-for="item in butchiIngredients" :key="item.id">
-                  <v-card class="card-container ma-5">
-                    <v-row>
-                      <v-list-item>Ingredients Name: {{item.ingredients_name}}</v-list-item>
-                      <v-list-item>Available Quantity: {{item.ingredients_remaining}}</v-list-item>
-                      <v-list-item>Used Quantity: {{item.total}}</v-list-item>
-                      <v-list-item>Status: {{item.ingredients_status}}</v-list-item>
+                  <v-card id="cards" class="card-container ma-5">
+                    <v-card-title class="deep-purple lighten-5">{{item.ingredients_name}}</v-card-title>
+                    <hr>
+                    <v-row class="mx-auto text-center">
+                      <v-list-item>Available Qty : <b>{{item.ingredients_remaining + ' kg/cans'}}</b></v-list-item>
+                      <v-list-item>Used Qty : <b>{{item.total  + ' kg/cans'}}</b></v-list-item>
+                      <v-list-item>
+                        <v-chip
+                          outlined
+                          :color="getColor(item.ingredients_status)"
+                        >{{item.ingredients_status}}</v-chip>
+                      </v-list-item>
                     </v-row>
                     <v-row class="d-flex justify-end mb-6">
                       <template>
@@ -71,18 +90,23 @@
                           title="Add Quantity"
                           @click="stockDialog=!stockDialog"
                         >mdi-plus</v-icon>-->
-                        <v-icon
-                          @click=" addUsedStockDialog=!addUsedStockDialog "
-                          class="mr-2"
-                          normal
-                          title="Used Quantity"
-                        >mdi-minus</v-icon>
-                        <v-icon
-                          @click="editDialog = !editDialog,  editIngredients(item)"
-                          normal
-                          class="mr-2"
-                          title="Edit Quantity"
-                        >mdi-table-edit</v-icon>
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+
+                          <v-btn icon>
+                            <v-icon
+                              title="Add Quantity"
+                              @click="editDialog = !editDialog, editIngredients(item)"
+                            >mdi-plus</v-icon>
+                          </v-btn>
+
+                          <v-btn icon>
+                            <v-icon
+                              @click=" addUsedStockDialog=!addUsedStockDialog "
+                              title="Used Quantity"
+                            >mdi-minus</v-icon>
+                          </v-btn>
+                        </v-card-actions>
                       </template>
                     </v-row>
                   </v-card>
@@ -99,12 +123,18 @@
             <v-flex d-flex>
               <v-layout wrap>
                 <v-flex md4 v-for="item in icecreamIngredients" :key="item.id">
-                  <v-card class="card-container ma-5">
-                    <v-row>
-                      <v-list-item>Ingredients Name: {{item.ingredients_name}}</v-list-item>
-                      <v-list-item>Available Quantity: {{item.ingredients_remaining}}</v-list-item>
-                      <v-list-item>Used Quantity: {{item.total}}</v-list-item>
-                      <v-list-item>Status: {{item.ingredients_status}}</v-list-item>
+                  <v-card id="cards" class="card-container ma-5">
+                    <v-card-title class="deep-purple lighten-5">{{item.ingredients_name}}</v-card-title>
+                    <hr>
+                    <v-row class="mx-auto text-center">
+                      <v-list-item>Available Qty : <b>{{item.ingredients_remaining + ' kg/cans'}}</b></v-list-item>
+                      <v-list-item>Used Qty : <b>{{item.total  + ' kg/cans'}}</b></v-list-item>
+                      <v-list-item>
+                        <v-chip
+                          outlined
+                          :color="getColor(item.ingredients_status)"
+                        >{{item.ingredients_status}}</v-chip>
+                      </v-list-item>
                     </v-row>
                     <v-row class="d-flex justify-end mb-6">
                       <template>
@@ -113,19 +143,24 @@
                           class="mr-2"
                           title="Add Quantity"
                           @click="stockDialog=!stockDialog "
-                        >mdi-plus</v-icon> -->
-                        <v-icon
-                          @click="addUsedStockDialog=!addUsedStockDialog"
-                          class="mr-2"
-                          normal
-                          title="Used Quantity"
-                        >mdi-minus</v-icon>
-                        <v-icon
-                          @click="editDialog = !editDialog,editIngredients(item) "
-                          normal
-                          class="mr-2"
-                          title="Edit Quantity"
-                        >mdi-table-edit</v-icon>
+                        >mdi-plus</v-icon>-->
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+
+                          <v-btn icon>
+                            <v-icon
+                              title="Add Quantity"
+                              @click="editDialog = !editDialog, editIngredients(item)"
+                            >mdi-plus</v-icon>
+                          </v-btn>
+
+                          <v-btn icon>
+                            <v-icon
+                              @click=" addUsedStockDialog=!addUsedStockDialog "
+                              title="Used Quantity"
+                            >mdi-minus</v-icon>
+                          </v-btn>
+                        </v-card-actions>
                       </template>
                     </v-row>
                   </v-card>
@@ -345,6 +380,12 @@ export default {
     }
   },
   methods: {
+    getColor (status) {
+        if (status ==='Alert! Very Low') return 'red'
+        else if (status ==='Warning! Running Low') return 'orange'
+        else if (status ==='Calculating...') return 'blue'
+        else return 'green'
+    }, 
     getHalayaIngredients() {
       axios
         .get("http://127.0.0.1:8000/api/getHalayaIngredients/")
@@ -396,12 +437,11 @@ export default {
           // console.log("ice cream: ", response.data);
         });
     },
-    getAllIngredientsName(){
+    getAllIngredientsName() {
       let nameArray = [];
-        axios
+      axios
         .get("http://127.0.0.1:8000/api/fetch/ingredientsName")
         .then(response => {
-          
           for (var i = 0; i < response.data.length; i++) {
             if (nameArray.includes(response.data[i].ingredients_name)) {
               console.log("good");
@@ -417,17 +457,17 @@ export default {
       (this.ingredientsName = ""),
         (this.ingredientsUnit = ""),
         this.getHalayaIngredients();
-        this.getButchiIngredients();
-        this.getIceCreamIngredients();
-        this.$v.$reset();
+      this.getButchiIngredients();
+      this.getIceCreamIngredients();
+      this.$v.$reset();
     },
     reloadDataAddUsedAmount() {
       (this.availableIngredients = ""),
         (this.usedIngredientsAmount = ""),
         this.getHalayaIngredients();
-        this.getButchiIngredients();
-        this.getIceCreamIngredients();
-        this.$v.$reset();
+      this.getButchiIngredients();
+      this.getIceCreamIngredients();
+      this.$v.$reset();
     },
     editIngredients(item) {
       axios
@@ -468,7 +508,10 @@ export default {
         };
         console.log("used_amount", newAddedAmount);
         axios
-          .post("http://127.0.0.1:8000/api/post/usedIngredients",newAddedAmount)
+          .post(
+            "http://127.0.0.1:8000/api/post/usedIngredients",
+            newAddedAmount
+          )
           .then(response => {
             console.log(response);
             this.reloadDataAddUsedAmount();
@@ -479,3 +522,19 @@ export default {
   }
 };
 </script>
+<style>
+#cards {
+  padding: 10px !important;
+  justify-content: center !important;
+}
+.v-application .mb-6 {
+  margin-bottom: 0px !important;
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1 1 auto;
+  margin-right: 0px !important;
+  margin-left: 0px !important;
+}
+</style>

@@ -1,8 +1,8 @@
 <template>
   <v-app>
-    <v-card  class="ma-5 mb-12 pa-5">
+    <!-- <v-card  class="ma-5 mb-12 pa-5">
       <default-location/>
-    </v-card>
+    </v-card>-->
     <v-card id="cardtable" class="ma-5 mb-12 pa-5">
       <v-card-title>
         Order
@@ -92,22 +92,26 @@
                       color="deep-purple lighten-1"
                       no-title
                       scrollable
-                    >
-                    </v-date-picker>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                          v-model="deliveryDate"
-                          label="delivery date"
-                          prepend-icon="mdi-calendar"
-                          readonly
-                          v-bind="attrs"
-                          v-on="on"
-                        ></v-text-field>
-                      </template>
-                      <v-date-picker v-model="deliveryDate" :min="deliveryDate"  :max="getEndDate" color="deep-purple lighten-1" no-title scrollable>
-                      </v-date-picker>
-                 </v-menu>
-
+                    ></v-date-picker>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="deliveryDate"
+                        label="delivery date"
+                        prepend-icon="mdi-calendar"
+                        readonly
+                        v-bind="attrs"
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
+                      v-model="deliveryDate"
+                      :min="deliveryDate"
+                      :max="getEndDate"
+                      color="deep-purple lighten-1"
+                      no-title
+                      scrollable
+                    ></v-date-picker>
+                  </v-menu>
                 </v-col>
                 <v-col cols="12">
                   <v-text-field
@@ -213,27 +217,78 @@
             </v-card>
           </v-dialog>
         </template>
+        <template>
+          <v-dialog v-model="orderDetails" persistent max-width="500px">
+            <v-card>
+              <v-card-title>
+                <span>Order Details</span>
+              </v-card-title>
+              <hr>
+                <v-spacer></v-spacer>
+                  <v-list id="list" v-for="i in orderedProducts" :key="i.id">
+                      <v-list-item-title>Product Name: {{i.product_name}}</v-list-item-title>
+                      <v-list-item-subtitle>Order Qty: {{ i.pivot.sub_quantity }}</v-list-item-subtitle>
+                  </v-list>
+              <v-card-actions>
+                <v-btn id="closeBtn" color="primary" text @click="closeDialog()">Close</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </template>
       </v-card-title>
-      <v-data-table :headers="headers" :items="orders" :search="search">
-        <template v-slot:item.order_status="{ item }">
-          <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
+      <v-simple-table>
+        <template v-slot:default>
+          <thead>
+            <tr>
+              <th class="text-left">Receiver Name</th>
+              <th class="text-left">Address</th>
+              <th class="text-left">Distance</th>
+              <th class="text-left">Delivery Date</th>
+              <th class="text-left">Order Details</th>
+              <th class="text-left">Action</th>
+              <th class="text-left">Order Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in orders" :key="item.id">
+              <td>{{ item.receiver_name }}</td>
+              <td>{{ item.delivery_address }}</td>
+              <td>{{ distance }}</td>
+              <td>{{ item.confirmed_delivery_date + ' ' + item.confirmed_delivery_time}}</td>
+              <td>
+                <!-- <template v-slot:activator="{ on, attrs }">
+                  <v-btn v-bind="attrs" v-on="on"> -->
+                    <v-icon class="mr-2" @click="orderedProduct(item.id)" title="Order Details">mdi-information</v-icon>
+                  <!-- </v-btn>
+                </template> -->
+              </td>
+              <td>
+                <template>
+                  <v-icon
+                    normal
+                    class="mr-2"
+                    title="Delivered"
+                    @click="alertDelivered(item)"
+                  >mdi-truck-check-outline</v-icon>
+                  <v-icon
+                    @click="editDialog = !editDialog, editItem(item) "
+                    class="mr-2"
+                    normal
+                    title="Edit"
+                  >mdi-table-edit</v-icon>
+                  <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+                </template>
+              </td>
+              <td>
+                <v-chip
+                  outlined
+                  color="green">{{status}}
+                </v-chip>
+              </td>
+            </tr>
+          </tbody>
         </template>
-        <template v-slot:item.action="{ item }">
-          <v-icon
-            normal
-            class="mr-2"
-            title="Delivered"
-            @click="alertDelivered(item)"
-          >mdi-truck-check-outline</v-icon>
-          <v-icon
-            @click="editDialog = !editDialog, editItem(item) "
-            class="mr-2"
-            normal
-            title="Edit"
-          >mdi-table-edit</v-icon>
-          <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
-        </template>
-      </v-data-table>
+      </v-simple-table>
     </v-card>
   </v-app>
 </template>
@@ -260,6 +315,12 @@
 .order {
   color: #00b300;
 }
+#list{
+  padding:20px;
+}
+#closeBtn{
+  float: right !important;
+}
 </style>
 
 <script>
@@ -272,24 +333,30 @@ import {
   maxLength,
   between
 } from "vuelidate/lib/validators";
-import * as turf from '@turf/turf';
+import * as turf from "@turf/turf";
+import { connect } from "tls";
+// import Order from "../components/Orders.vue";
 // import DefaultLocation from "../components/DefaultLocation.vue"
 
 export default {
   name: "Order",
   components: {
-    // DefaultLocation
+    // DefaultLocation,
+    // Order
   },
   data() {
     return {
-      // accessToken:
-      //   "pk.eyJ1IjoiamllbnhpeWEiLCJhIjoiY2tlaTM3d2VrMWcxczJybjc0cmZkamk3eiJ9.JzrYlG2kZ08Pkk24hvKDJw",
+      accessToken:
+        "pk.eyJ1IjoiamllbnhpeWEiLCJhIjoiY2tlaTM3d2VrMWcxczJybjc0cmZkamk3eiJ9.JzrYlG2kZ08Pkk24hvKDJw",
       deliveryDate: new Date().toISOString().substr(0, 10),
       addDateMenu: false,
       updateDateMenu: false,
       message: "",
       post: {},
       orders: [],
+      distance: 0,
+      status: "On order",
+      orderedProducts: [],
       msg: [],
       date2: new Date(),
       hover: false,
@@ -297,11 +364,10 @@ export default {
       modal: false,
       dialog: false,
       editDialog: false,
+      orderDetails:false,
       customerName: "",
-      address: "San Alberto Carmelite Formation Center, Rosillos Rd, Nasipit, Talamban, Cebu City",
+      address: "",
       coordinates: [],
-      distance: 0,
-      // country: 'Philippines',
       contactNumber: "",
       orderQuantity: "",
       orderStatus: "On order",
@@ -383,7 +449,7 @@ export default {
   },
   created() {
     this.loadOrder();
-    this.getCoordinates();
+    // this.orderedProduct();
     setInterval(this.loadOrder(), 3000);
   },
   methods: {
@@ -396,7 +462,24 @@ export default {
       this.reloadData();
       this.dialog = !this.dialog;
     },
-
+    
+    orderedProduct(id){
+      this.orderDetails = true;
+      for (var i = 0; i < this.orders.length; i++){
+        if(id == this.orders[i].id) {
+          for (var j = 0; j < this.orders[i].products.length; j++){
+            this.orderedProducts.push(this.orders[i].products[j])
+            // this.orderedProducts.push(this.orders[i].products[j].product_name)
+            // this.orderedProducts.push(this.orders[i].products[j].pivot.sub_quantity)
+          }
+        }
+      }
+      console.log('orderedProducts: ', this.orderedProducts)
+    },
+    closeDialog(){
+      this.orderDetails = false;
+      this.orderedProducts = [];
+    },
     updateItem() {
       if (
         this.post.customer_name === "" ||
@@ -441,12 +524,6 @@ export default {
           this.loadOrder();
         });
     },
-
-    loadOrder() {
-      axios.get("http://127.0.0.1:8000/api/posts/order").then(response => {
-        this.orders = response.data.data;
-      });
-    },
     deleteItem(item) {
       axios
         .put("http://127.0.0.1:8000/api/post/updateCanceledStat/" + item.id)
@@ -460,6 +537,9 @@ export default {
         .then(response => {
           this.post = response.data;
         });
+    },
+    orderDetail(){
+      this.orderDetails = true;
     },
     alertCancel(item) {
       Swal.fire({
@@ -496,7 +576,8 @@ export default {
         reverseButtons: true
       }).then(result => {
         if (result.value) {
-          this.deliveredItem(item);
+          // this.deliveredItem(item);
+          this.saveDeliveredOrder(item);
         }
       });
     },
@@ -527,11 +608,71 @@ export default {
         .catch(response => {
           console.log(response);
         });
-        // this.getCoordinates(this.address);
+      // this.getCoordinates(this.address);
     },
-    deliveredItem(item) {
+    getHalayaJarQty(item){
+      let halayaJarQty = 0;
+      for(var i = 0; i < item.products.length; i++){
+        let name = item.products[i].product_name;
+        if(name.includes("Jar")){
+          halayaJarQty += item.products[i].pivot.sub_quantity;
+        }
+      }
+      return halayaJarQty;
+    },
+    getUbechiQty(item){
+      let ubechiQty = 0;
+      for(var i = 0; i < item.products.length; i++){
+        let name = item.products[i].product_name;
+        if(name.includes("Ubechi")){
+          ubechiQty += item.products[i].pivot.sub_quantity;
+        }
+      }
+      return ubechiQty;
+    },
+    loadOrder() {
       axios
-        .put("http://127.0.0.1:8000/api/post/updateStat/" + item.id)
+        .get("https://wawens-backend.herokuapp.com/api/orders/confirmed")
+        .then(response => {
+          this.orders = response.data;
+        });
+    },
+    // loadOrder() {
+    //   axios
+    //     .get("https://wawens-backend.herokuapp.com/api/orders/confirmed")
+    //     .then(response => {
+    //       this.orders = response.data;
+    //       let order = response.data;
+    //       for(var i = 0; i < order.length; i++){
+    //         let param = {
+    //           order_id: order[i].id,
+    //           name: order[i].receiver_name,
+    //           address: order[i].delivery_address,
+    //           halaya_qty: this.getHalayaJarQty(order[i]),
+    //           ubechi_qty: this.getUbechiQty(order[i]),
+    //           deliveryDate: order[i].confirmed_delivery_date,
+    //           orderStatus: this.status,
+    //           distance: this.distance
+    //         };
+    //         axios.post("http://127.0.0.1:8000/api/post/deliveredOrder/"+ order[i].id, param)
+    //           .then(response => {
+    //             console.log('response: ',response.data)
+    //           })
+    //       }
+    //     });
+    // },
+    saveDeliveredOrder(item){
+      let param = {
+        name: item.receiver_name,
+        address: item.delivery_address,
+        halaya_qty: this.getHalayaJarQty(item),
+        ubechi_qty: this.getUbechiQty(item),
+        deliveryDate: item.confirmed_delivery_date,
+        orderStatus: this.status,
+        distance: this.distance
+      };
+      axios
+        .post("http://127.0.0.1:8000/api/post/deliveredOrder/"+ item.id, param)
         .then(response => {
           Swal.fire({
             title: "Order is being delivered",
@@ -540,24 +681,39 @@ export default {
             timer: 1500
           }),
             this.loadOrder();
-        });
+        })
     },
-    getCoordinates() {
-      axios
-        .get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${this.address}.json?limit=2&access_token=${this.accessToken}`)
-        .then(response => {
-          let res = JSON.stringify(response.data);
-          let result = JSON.parse(res);
-          //index 0 is the most relevant based on the mapbox geocoding documentatio
-          this.coordinates = result.features[0].geometry.coordinates; 
-         
-          //turf.js
-          var from_place = turf.point([123.921969, 10.329892]); 
-          var to_place = turf.point(this.coordinates);
-          var options = { units: "kilometers" };
-          this.distance = turf.distance(from_place, to_place, options);
-        });
-    }
+    // deliveredItem(item) {
+    //   axios
+    //     .put("http://127.0.0.1:8000/api/post/updateStat/" + item.id)
+    //     .then(response => {
+    //       Swal.fire({
+    //         title: "Order is being delivered",
+    //         icon: "success",
+    //         showConfirmButton: false,
+    //         timer: 1500
+    //       }),
+    //         this.loadOrder();
+    //     });
+    // },
+
+    // getCoordinates(address) {
+    //     axios
+    //     .get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${address}.json?limit=2&access_token=${this.accessToken}`)
+    //     .then(response => {
+    //       let res = JSON.stringify(response.data);
+    //       let result = JSON.parse(res);
+    //       //index 0 is the most relevant based on the mapbox geocoding documentatio
+    //       var coordinates = result.features[0].geometry.coordinates;
+    //       //turf.js
+    //       var from_place = turf.point([123.921969, 10.329892]);
+    //       var to_place = turf.point(coordinates);
+    //       var options = { units: "kilometers" };
+    //       var dist = turf.distance(from_place, to_place, options);
+    //       // console.log('address: ',address, 'coordinates: ',coordinates, 'distance: ', dist)
+    //       return dist;
+    //     });
+    // },
   }
 };
 </script>
