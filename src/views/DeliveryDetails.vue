@@ -1,4 +1,5 @@
 <template>
+<v-card>
   <div>
     <v-row class="py-0 my-0">
       <v-col sm="3" v-for="(item, index) in distance" :key="index" class="py-0 my-1">
@@ -54,8 +55,8 @@
   >-->
   <!-- <div>
         <locations></locations>
-      </div>
-    </v-card>
+      </div> -->
+    <!-- </v-card> -->
     <v-container>
       <v-row>
         <div class="ml-2 headline blue--text">Today</div>
@@ -127,7 +128,7 @@
         </v-timeline-item>
       </v-timeline>
     </v-card-text>
-  </v-card>-->
+  </v-card>
 </template>
 
 <script>
@@ -135,12 +136,12 @@ var pdfMake = require("pdfmake/build/pdfmake.js");
 var pdfFonts = require("pdfmake/build/vfs_fonts.js");
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-import locations from "../components/SortLocation.vue";
+// import locations from "../components/SortLocation.vue";
 // import axios from "axios";
 
 export default {
   name: "OrderDetails",
-  components: { locations },
+  // components: { locations },
 
   //   data() {
   //     return {

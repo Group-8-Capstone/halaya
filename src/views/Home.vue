@@ -11,15 +11,16 @@
               id="cards"
               class="mx-auto text-center"
               min-height="220"
-              min-width="140"
               max-height="240"
+              min-width="200"
+              max-width="2000"
               
             >
               <v-card-title class="deep-purple lighten-5" id="title">{{element.ingredients_name}}</v-card-title>
               <hr>
               <v-spacer/>
               <v-card-text id="qty">{{element.ingredients_remaining + ' kg/cans'}}</v-card-text>
-              <v-chip :color="getColor(element.ingredients_status)">{{element.ingredients_status}}</v-chip>
+              <v-chip outlined :color="getColor(element.ingredients_status)">{{element.ingredients_status}}</v-chip>
             </v-card>
           </v-col>
         </v-row>

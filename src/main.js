@@ -8,6 +8,8 @@ import mapboxgl from "mapbox-gl";
 import turf from "@turf/turf";
 import { Form, HasError, AlertError } from 'vform'
 import '@turf/helpers';
+import Print from 'vue-printjs'
+Vue.use(Print)
 
 Vue.use(Vuelidate)
 window.Form = Form;
