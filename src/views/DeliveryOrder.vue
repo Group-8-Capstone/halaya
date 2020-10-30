@@ -12,7 +12,55 @@
           hide-details
         ></v-text-field>
       </v-card-title>
-      <v-data-table :headers="headers" :items="deliveries" :search="search"></v-data-table>
+      <v-simple-table>
+        <template v-slot:default>
+          <thead>
+            <tr>
+              <th class="text-left">Receiver Name</th>
+              <th class="text-left">Address</th>
+              <th class="text-left">Distance</th>
+              <th class="text-left">Delivery Date</th>
+              <th class="text-left">Order Details</th>
+              <th class="text-left">Action</th>
+              <th class="text-left">Order Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in deliveries" :key="item">
+              <td>{{ item.receiver_name }}</td>
+              <td>{{ item.delivery_address }}</td>
+              <td>{{ distance }}</td>
+              <td>{{ item.confirmed_delivery_date + ' ' + item.confirmed_delivery_time}}</td>
+              <td>
+                <v-icon
+                  class="mr-2"
+                  @click="orderDetail(item)"
+                  normal
+                  title="Order Details"
+                >mdi-information</v-icon>
+              </td>
+              <td>
+                <template>
+                  <v-icon
+                    normal
+                    class="mr-2"
+                    title="Delivered"
+                    @click="alertDelivered(item)"
+                  >mdi-truck-check-outline</v-icon>
+                  <v-icon
+                    @click="editDialog = !editDialog, editItem(item) "
+                    class="mr-2"
+                    normal
+                    title="Edit"
+                  >mdi-table-edit</v-icon>
+                  <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+                </template>
+              </td>
+              <td>{{item.status}}</td>
+            </tr>
+          </tbody>
+        </template>
+      </v-simple-table>
     </v-card>
     <!-- <v-row class="py-0 my-0">
       <v-col sm="3" v-for="(item, index) in distance" :key="index" class="py-0 my-1">
@@ -63,24 +111,18 @@ export default {
       address: "",
       coordinates: [],
       distance: [],
+      // dist: 0,
       addresses: [],
       search: "",
       headers: [
         {
-          text: "Customer",
-          align: "start",
-          sortable: false,
-          value: "receiver_name"
-        },
-        { text: "Contact Number", value: "active_contact" },
-        { text: "Order/s", value: "products[0].product_name" },
-        { text: "Qty", value: "products[0].pivot.sub_quantity" },
-        { text: "Address", value: "delivery_address", sortable: false },
-        {
-          text: "Delivery Date",
-          value: "confirmed_delivery_date",
-          sortable: false
-        }
+          text: "Receiver Name", align: "start", value: "", sortable: false },
+        { text: "Address", value: "", sortable: false },
+        { text: "Distance", value: "", sortable: false },
+        { text: "Delivery Date", value: "", sortable: false },
+        { text: "Order Details", value: "", sortable: false },
+        { text: "Action", value: "", sortable: false },
+        { text: "Order Status", value: "", sortable: false }
         // { text: "Actions", value: "action", sortable: false },
         // { text: "Status", value: "order_status" }
       ]
@@ -114,29 +156,63 @@ export default {
             return [year, month, day].join("-");
           }
 
-          // var date = new Date() + "";
-          // var formatted = date
-          //   .split(" ")
-          //   .slice(1, 4)
-          //   .join("-");
-          // console.log("DATE", formatted);
           this.delivery.forEach(element => {
             var now = element.confirmed_delivery_date === "2020-10-27";
             //formatDate dapat na diha pero walay delivery for today so "2020-10-27" sa
             // console.log(now);
             // console.log(formatDate());
             if (now == true) {
-              console.log("NISUUUUUUUD");
               console.log("DATEDATE", element.confirmed_delivery_date);
               this.deliveries.push(element);
+              this.deliveries.sort(function(a, b) {
+                return a - b;
+              });
               console.log("DELIVERIES", this.deliveries);
             }
           });
-          // for (var i in this.delivery){
-          //   if (i.confirmed_delivery_date = now){
-          //     this.deliveries.push(i);
-          //   }
-          // }
+          this.deliveries.forEach(element => {
+            console.log(element.delivery_address);
+            this.addresses.push(element.delivery_address);
+            console.log("ADDRESSES", this.addresses);
+          });
+          this.addresses.forEach(element => {
+            console.log("ELEMENT", element);
+            var addressIndex = this.addresses.indexOf(element);
+            console.log("INDEX", addressIndex);
+            var delAddress = this.addresses[addressIndex];
+            console.log("_____INDEX", delAddress);
+            axios
+              .get(
+                `https://api.mapbox.com/geocoding/v5/mapbox.places/${delAddress}
+        .json?limit=2&access_token=${this.accessToken}`
+              )
+              .then(response => {
+                var res = JSON.stringify(response.data);
+                var result = JSON.parse(res);
+                console.log("/////////test////////", result);
+                //index 0 is the most relevant based on the mapbox geocoding documentation
+                this.newCoordinates = result.features[0].geometry.coordinates;
+                //turf.js
+                var from_place = turf.point([123.921969, 10.329892]);
+                var to_place = turf.point(this.newCoordinates);
+                console.log("ADDRESS:", to_place);
+                var options = { units: "kilometers" };
+                var initDistance = turf.distance(from_place, to_place, options);
+                this.distance = initDistance;
+                // this.distance.push(initDistance);
+                // this.deliveries.forEach(element => {
+                //   var distIndex = this.deliveries.indexOf(element);
+                //   console.log("INDEX NI SIYA", distIndex);
+                //   this.dist = this.distance[distIndex];
+                //   console.log("MAO NI SIYA", this.dist);
+                // });
+                console.log("*******DISTANCE*******", this.distance);
+                return this.distance;
+                addressIndex++;
+                console.log("????????INDEX", this.addressIndex);
+              });
+          });
+
           console.log("DATA:", this.delivery);
           console.log(
             "CATEGORY",
@@ -161,71 +237,9 @@ export default {
           //     }
           //   }
           // }
-
-          // for (var i = 0; i < this.delivery.length; i++) {
-          //   let deliveryAddress = this.delivery_address;
-          //   this.addresses.push(this.deliveryAddress);
-          //   console.log("ADDRESSES", this.addresses);
-          // }
-
-          // for (var i = 0; i < this.delivery.length; i++) {
-          //   let addressIndex = 0;
-          //   let delAddress = this.addresses[addressIndex];
-          //   console.log("_____INDEX", this.delAddress);
-          //   axios
-          //     .get(
-          //       `https://api.mapbox.com/geocoding/v5/mapbox.places/${
-          //         this.delAddress
-          //       }
-          // .json?limit=2&access_token=${this.accessToken}`
-          //     )
-          //     .then(response => {
-          //       let res = JSON.stringify(response.data);
-          //       let result = JSON.parse(res);
-          //       console.log("/////////test////////", result);
-          //       //index 0 is the most relevant based on the mapbox geocoding documentation
-          //       this.coordinates = result.features[0].geometry.coordinates;
-          //       //turf.js
-          //       var from_place = turf.point([123.921969, 10.329892]);
-          //       var to_place = turf.point(this.coordinates);
-          //       console.log("ADDRESS:", to_place);
-          //       var options = { units: "kilometers" };
-          //       let initDistance = turf.distance(from_place, to_place, options);
-          //       this.distance.push(initDistance);
-          //       console.log("*******DISTANCE*******", this.distance);
-          //       return this.distance;
-          //       addressIndex++;
-          //       console.log("????????INDEX", this.addressIndex);
-          //     });
-          // }
         })
         .catch(error => console.log(error));
     }
-    // getCoordinates(address) {
-    //   axios
-    //     .get(
-    //       `https://api.mapbox.com/geocoding/v5/mapbox.places/
-    //         Shambala%20Veterinary%20Clinic%20Hernan%20Cortes%20St%20Mandaue%20City%20Cebu
-    //       .json?limit=2&access_token=${this.accessToken}`
-    //     )
-    //     .then(response => {
-    //       let res = JSON.stringify(response.data);
-    //       let result = JSON.parse(res);
-    //       console.log("/////////test////////", result);
-
-    //       //index 0 is the most relevant based on the mapbox geocoding documentation
-    //       this.coordinates = result.features[0].geometry.coordinates;
-
-    //       //turf.js
-    //       var from_place = turf.point([123.921969, 10.329892]);
-    //       var to_place = turf.point(this.coordinates);
-    //       console.log("ADDRESS:", to_place);
-    //       var options = { units: "kilometers" };
-    //       this.distance = turf.distance(from_place, to_place, options);
-    //       console.log("*******DISTANCE*******", this.distance);
-    //       return this.distance;
-    //     });
-    // }
   }
 };
 </script>
