@@ -21,7 +21,7 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: "/logout",
+      path: "/login",
       name: "Login",
       component: Login
     },
