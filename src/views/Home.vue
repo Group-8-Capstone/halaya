@@ -87,17 +87,24 @@ export default {
       chartOptions: {},
       filterBy: "Daily",
       filterByDate: new Date().getFullYear(),
+      // config:{}
     };
-  },
-  mounted() {
-    this.filterByYear();
-    this.daily();
   },
   components: {
     Graph,
   },
+  beforeCreate() {
+    let config = {}
+    config.headers = {
+      Authorization: 'Bearer ' + localStorage.getItem('token')
+    }
+    this.config = config
+    console.log(this.config)
+  },
   created(){
-    this.fetchIngredients();
+    this.filterByYear();
+    this.daily();
+    // this.fetchIngredients();
   },
   methods: {
     getColor (status) {
@@ -107,19 +114,27 @@ export default {
         else return 'green'
     }, 
     fetchIngredients(){
-      axios.get("http://127.0.0.1:8000/api/fetch/stock").then(response => {
-        let results = [];
-        for (var i = 0; i < response.data.length; i++) {
-          if (this.containsObject(results,response.data[i].id)) {
-            console.log("good");
-          } else {
-            results.push(response.data[i]);
-            this.IngredientsArray = results;
-          }
-          continue;
-        }
-        console.log("ingredients array: ", this.IngredientsArray);
-      });
+      console.log('test', this.config)
+      // axios({
+      //   method: "get",
+      //   url: "http://localhost:8000/api/fetch/stock",
+      //   headers: this.config.headers
+      // }).then(response => {
+      //   console.log(response.data)
+      // })
+      // axios.get("http://localhost:8000/api/v1/auth/fetch/stock", this.config).then(response => {
+      //   let results = [];
+      //   for (var i = 0; i < response.data.length; i++) {
+      //     if (this.containsObject(results,response.data[i].id)) {
+      //       console.log("good");
+      //     } else {
+      //       results.push(response.data[i]);
+      //       this.IngredientsArray = results;
+      //     }
+      //     continue;
+      //   }
+      //   console.log("ingredients array: ", this.IngredientsArray);
+      // });
     },
     containsObject(arr,id) {
       return arr.some(function(el) {
@@ -184,7 +199,7 @@ export default {
         month: this.page,
       };
       axios
-        .post("http://localhost:8000/api/sales/daily", parameter)
+        .post("http://localhost:8000/api/sales/daily", parameter, this.config)
         .then((response) => {
           let category = [];
           let series = [];
@@ -245,7 +260,7 @@ export default {
         year: this.filterByDate,
       };
       axios
-        .post("http://localhost:8000/api/sales/weekly", parameter)
+        .post("http://localhost:8000/api/sales/weekly", parameter, this.config)
         .then((response) => {
           let weeklyCategory = [];
           let weeklySeries = [];
@@ -269,7 +284,7 @@ export default {
         year: this.filterByDate,
       };
       axios
-        .post("http://localhost:8000/api/sales/monthly", parameter)
+        .post("http://localhost:8000/api/sales/monthly", parameter, this.config)
         .then((response) => {
           let monthlyCategory = [];
           let monthlySeries = [];
@@ -299,7 +314,7 @@ export default {
         });
     },
     yearly() {
-      axios.get("http://localhost:8000/api/sales/yearly").then((response) => {
+      axios.get("http://localhost:8000/api/sales/yearly", this.config).then((response) => {
         let yearlyCategory = [];
         let yearlySeries = [];
         let data = response.data;
@@ -315,7 +330,7 @@ export default {
     },
     filterByYear() {
       axios
-        .get("http://localhost:8000/api/sales/filterYear")
+        .get("http://localhost:8000/api/sales/filterYear", this.config)
         .then((response) => {
           let tempYears = [];
           response.data.forEach((element) => {

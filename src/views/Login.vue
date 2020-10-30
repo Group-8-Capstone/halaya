@@ -35,14 +35,17 @@
 
               <v-card-text>
                 <v-form>
+                  <p v-if="error" class="notif"> Invalid Username </p>
                   <v-text-field
-                    label="Login"
-                    name="login"
+                    label="Username"
+                    name="Username"
                     prepend-icon="mdi-account"
                     type="text"
+                    v-model="user"
                     class="border-design"
                     outlined
                     dense
+                    :error="error"
                   ></v-text-field>
 
                   <v-text-field
@@ -51,9 +54,11 @@
                     name="password"
                     prepend-icon="mdi-lock"
                     type="password"
+                    v-model="pass"
                     class="border-design"
                     outlined
                     dense
+                    :error="error"
                   ></v-text-field>
                 </v-form>
               </v-card-text>
@@ -90,6 +95,10 @@
   background-color: purple;
   color: white !important;
 }
+.notif{
+  text-align: center;
+  color: red;
+}
 </style>
 
 
@@ -100,15 +109,47 @@ export default {
     source: String,
   },
   data() {
-    return {};
+    return {
+      user : '',
+      pass : '',
+      error : false
+    };
   },
   mounted() {},
+  watch: {
+    error: function(ol, ne){
+      return this.error
+    }
+  },
   methods: {
     login() {
-      axios.post("http://localhost:8000/api/auth/login").then((response) => {
-        console.log("AMBOT");
+      let userAccount = {
+        username: this.user,
+        password: this.pass,
+      }
+      axios.post("http://localhost:8000/api/login",userAccount).then((response) => {
+        if(response.data.message === 'successfully_login'){
+          console.log('success');
+          localStorage.setItem("token", response.data.token);
+          this.$router.push('/dashboard');
+        }else{
+          console.log('invalid');
+          this.error = true;
+        }
+        // console.log('test ', response);
       });
     },
+    register(){
+       let userRegister = {
+        username: "@",
+        password: "@",
+      }
+      axios.post("http://localhost:8000/api/v1/auth/login",userRegister).then((response) => {
+        if (this.username !== "" && this.password !== ""){
+           console.log(userRegister);
+        }
+      });
+    }
   },
 };
 </script>
