@@ -313,7 +313,7 @@ import Swal from "sweetalert2";
           sortable: false,
           value: 'ingredients_name'
         },
-     { text: "Needed Value", value: "ingredients_need_amount" },
+     { text: "Needed Quantity", value: "ingredients_need_amount" },
          { text: "Category", value: "ingredients_category" },
         { text: "Actions", value: "action", sortable: false },
       ],

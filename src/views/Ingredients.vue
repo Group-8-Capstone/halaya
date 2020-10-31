@@ -16,8 +16,8 @@
                   <v-card class="card-container ma-5">
                     <v-row>
                       <v-list-item>Ingredients Name: {{item.ingredients_name}}</v-list-item>
-                      <v-list-item>Available Quantity: {{item.ingredients_remaining}}</v-list-item>
-                      <v-list-item>Used Quantity: {{item.total}}</v-list-item>
+                      <v-list-item>Available Quantity: {{item.ingredients_remaining}} kg/g</v-list-item>
+                      <v-list-item>Used Quantity: {{item.total}} kg/g</v-list-item>
                       <v-list-item>Status: {{item.ingredients_status}}</v-list-item>
                     </v-row>
                     <v-row class="d-flex justify-end mb-6">
