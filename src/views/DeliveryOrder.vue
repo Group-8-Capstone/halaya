@@ -13,25 +13,25 @@
         ></v-text-field>
       </v-card-title>
       <template>
-          <v-dialog v-model="orderDetails" persistent max-width="500px">
-            <v-card>
-              <v-card-title>
-                <span>Order Details</span>
-              </v-card-title>
-              <hr>
-                <v-spacer></v-spacer>
-                  <v-list id="list" v-for="i in orderedProducts" :key="i.id">
-                      <v-list-item-title>Product Name: {{i.product_name}}</v-list-item-title>
-                      <v-list-item-subtitle>Order Qty: {{ i.pivot.sub_quantity }}</v-list-item-subtitle>
-                  </v-list>
-              <v-card-actions>
-                <v-btn id="closeBtn" color="primary" text @click="closeDialog()">Close</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-        </template>
-      <v-simple-table :search="search">
-        <template v-slot:default :search="search">
+        <v-dialog v-model="orderDetails" persistent max-width="500px">
+          <v-card>
+            <v-card-title>
+              <span>Order Details</span>
+            </v-card-title>
+            <hr>
+            <v-spacer></v-spacer>
+            <v-list id="list" v-for="i in orderedProducts">
+              <v-list-item-title>Product Name: {{i.product_name}}</v-list-item-title>
+              <v-list-item-subtitle>Order Qty: {{ i.pivot.sub_quantity }}</v-list-item-subtitle>
+            </v-list>
+            <v-card-actions>
+              <v-btn id="closeBtn" color="primary" text @click="closeDialog()">Close</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </template>
+      <v-simple-table>
+        <template v-slot:default>
           <thead>
             <tr>
               <th class="text-left">Receiver Name</th>
@@ -44,7 +44,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in deliveries" :key="item">
+            <tr v-for="item in deliveries">
               <td>{{ item.receiver_name }}</td>
               <td>{{ item.delivery_address }}</td>
               <td>{{ distance }}</td>
@@ -103,11 +103,16 @@ export default {
       addresses: [],
       orderedProducts: [],
       editDialog: false,
-      orderDetails:false,
+      orderDetails: false,
+      searchQuery: null,
       search: "",
       headers: [
         {
-          text: "Receiver Name", align: "start", value: "", sortable: false },
+          text: "Receiver Name",
+          align: "start",
+          value: "",
+          sortable: false
+        },
         { text: "Address", value: "", sortable: false },
         { text: "Distance", value: "", sortable: false },
         { text: "Delivery Date", value: "", sortable: false },
@@ -127,9 +132,23 @@ export default {
     // this.getCoordinates();
     // setInterval(this.loadDelivery(), 3000);
   },
+  // computed: {
+  //   resultQuery() {
+  //     if (this.searchQuery) {
+  //       return this.deliveries.filter(item => {
+  //         return this.searchQuery
+  //           .toLowerCase()
+  //           .split(" ")
+  //           .every(v => item.title.toLowerCase().includes(v));
+  //       });
+  //     } else {
+  //       return this.deliveries;
+  //     }
+  //   }
+  // },
 
   methods: {
-    closeDialog(){
+    closeDialog() {
       this.orderDetails = false;
       this.orderedProducts = [];
     },
@@ -173,18 +192,18 @@ export default {
         }
       });
     },
-    orderedProduct(id){
+    orderedProduct(id) {
       this.orderDetails = true;
-      for (var i = 0; i < this.deliveries.length; i++){
-        if(id == this.deliveries[i].id) {
-          for (var j = 0; j < this.deliveries[i].products.length; j++){
-            this.orderedProducts.push(this.deliveries[i].products[j])
+      for (var i = 0; i < this.deliveries.length; i++) {
+        if (id == this.deliveries[i].id) {
+          for (var j = 0; j < this.deliveries[i].products.length; j++) {
+            this.orderedProducts.push(this.deliveries[i].products[j]);
             // this.orderedProducts.push(this.orders[i].products[j].product_name)
             // this.orderedProducts.push(this.orders[i].products[j].pivot.sub_quantity)
           }
         }
       }
-      console.log('orderedProducts: ', this.orderedProducts)
+      console.log("orderedProducts: ", this.orderedProducts);
     },
     loadDelivery() {
       axios
