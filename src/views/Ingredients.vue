@@ -21,7 +21,6 @@
                       <v-list-item>Used Qty : <b>{{item.total  + ' kg/cans'}}</b></v-list-item>
                       <v-list-item>
                         <v-chip
-                          outlined
                           :color="getColor(item.ingredients_status)"
                         >{{item.ingredients_status}}</v-chip>
                       </v-list-item>
@@ -77,7 +76,6 @@
                       <v-list-item>Used Qty : <b>{{item.total  + ' kg/cans'}}</b></v-list-item>
                       <v-list-item>
                         <v-chip
-                          outlined
                           :color="getColor(item.ingredients_status)"
                         >{{item.ingredients_status}}</v-chip>
                       </v-list-item>
@@ -131,7 +129,6 @@
                       <v-list-item>Used Qty : <b>{{item.total  + ' kg/cans'}}</b></v-list-item>
                       <v-list-item>
                         <v-chip
-                          outlined
                           :color="getColor(item.ingredients_status)"
                         >{{item.ingredients_status}}</v-chip>
                       </v-list-item>

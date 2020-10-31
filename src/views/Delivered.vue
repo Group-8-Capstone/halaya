@@ -15,7 +15,11 @@
       :headers="headers"
       :items="deliveredOrder"
       :search="search"
-    ></v-data-table>
+    >
+    <template v-slot:item.order_status="{ item }">
+          <v-chip color="green">{{ item.order_status }}</v-chip>
+    </template>
+    </v-data-table>
   </v-card>
  
 </template>
@@ -35,8 +39,11 @@ import axios from "axios";
             sortable: false,
             value: 'customer_name',
           },
-          { text: 'Contact Number', value: 'contact_number' },
-          { text: 'Quantity Order', value: 'order_quantity' },
+          { text: 'Address', value: 'delivery_address' },
+          { text: 'Ube Halaya Qty', value: 'halayaJar_qty' },
+          { text: 'Ubechi Qty', value: 'ubechi_qty' },
+          { text: 'Delivery Date', value: 'delivery_date' },
+          { text: 'Order Status', value: 'order_status' },
           
         ],
       }

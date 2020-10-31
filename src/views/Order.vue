@@ -8,8 +8,8 @@
         v-model="tabs"
         right
         color="deep-purple accent-4">
-        <v-tab>Walk in</v-tab>
          <v-tab>Received Orders</v-tab>
+        <v-tab>Walk in</v-tab>
       </v-tabs>
       <v-tabs-items v-model="tabs">
       <v-tab-item>
@@ -31,7 +31,7 @@
           </v-btn>
         </v-list>
       </v-card-title>    
-            <v-data-table :headers="headers" :items="orders" :search="search">
+            <!-- <v-data-table :headers="headers" :items="orders" :search="search">
         <template v-slot:item.order_status="{ item }">
           <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
         </template>
@@ -50,7 +50,7 @@
           >mdi-table-edit</v-icon>
           <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
         </template>
-      </v-data-table>  
+      </v-data-table>   -->
         </v-tab-item>
           <v-tab-item>
         <v-card flat>
@@ -69,7 +69,7 @@
       <v-row>
       <v-flex d-flex>
         <v-layout wrap>
-          <v-data-table :headers="headers" :items="orders" :search="search">
+          <!-- <v-data-table :headers="headers" :items="orders" :search="search">
         <template v-slot:item.order_status="{ item }">
           <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
         </template>
@@ -88,7 +88,7 @@
           >mdi-table-edit</v-icon>
           <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
         </template>
-      </v-data-table>  
+      </v-data-table>   -->
    </v-layout>
 </v-flex>
     </v-row>
@@ -312,24 +312,24 @@
               <th class="text-left">Address</th>
               <th class="text-left">Distance</th>
               <th class="text-left">Delivery Date</th>
-              <th class="text-left">Order Details</th>
+              <th class="text-left">Ube Halaya Jar Qty</th>
+              <th class="text-left">Ubechi Qty</th>
+              <!-- <th class="text-left">Order Details</th> -->
               <th class="text-left">Action</th>
               <th class="text-left">Order Status</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in orders" :key="item.id">
-              <td>{{ item.receiver_name }}</td>
+            <tr v-for="item in orders.data" :key="item.id">
+              <td>{{ item.customer_name }}</td>
               <td>{{ item.delivery_address }}</td>
-              <td>{{ distance }}</td>
-              <td>{{ item.confirmed_delivery_date + ' ' + item.confirmed_delivery_time}}</td>
-              <td>
-                <!-- <template v-slot:activator="{ on, attrs }">
-                  <v-btn v-bind="attrs" v-on="on"> -->
-                    <v-icon class="mr-2" @click="orderedProduct(item.id)" title="Order Details">mdi-information</v-icon>
-                  <!-- </v-btn>
-                </template> -->
-              </td>
+              <td>{{ item.distance }}</td>
+              <td>{{ item.delivery_date}}</td>
+              <td>{{item.halayaJar_qty}}</td>
+              <td>{{item.ubechi_qty}}</td>
+              <!-- <td>
+                <v-icon class="mr-2" @click="orderedProduct(item.id)" title="Order Details">mdi-information</v-icon>
+              </td> -->
               <td>
                 <template>
                   <v-icon
@@ -338,19 +338,18 @@
                     title="Delivered"
                     @click="alertDelivered(item)"
                   >mdi-truck-check-outline</v-icon>
-                  <v-icon
+                  <!-- <v-icon
                     @click="editDialog = !editDialog, editItem(item) "
                     class="mr-2"
                     normal
                     title="Edit"
-                  >mdi-table-edit</v-icon>
+                  >mdi-table-edit</v-icon> -->
                   <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
                 </template>
               </td>
               <td>
                 <v-chip
-                  outlined
-                  color="green">{{status}}
+                  :color="getColor(item.order_status)">{{item.order_status}}
                 </v-chip>
               </td>
             </tr>
@@ -442,20 +441,20 @@ export default {
       orderStatus: "On order",
       search: "",
       dialog: false,
-      headers: [
-        {
-          text: "Customer's Name",
-          align: "start",
-          sortable: false,
-          value: "customer_name"
-        },
-        { text: "Contact Number", value: "contact_number" },
-        { text: "Order Quantity", value: "order_quantity" },
-        { text: "Address", value: "customer_address", sortable: false },
-        { text: "Delivery Date", value: "delivery_date", sortable: false },
-        { text: "Actions", value: "action", sortable: false },
-        { text: "Status", value: "order_status" }
-      ]
+      // headers: [
+      //   {
+      //     text: "Customer's Name",
+      //     align: "start",
+      //     sortable: false,
+      //     value: "customer_name"
+      //   },
+      //   { text: "Contact Number", value: "contact_number" },
+      //   { text: "Order Quantity", value: "order_quantity" },
+      //   { text: "Address", value: "customer_address", sortable: false },
+      //   { text: "Delivery Date", value: "delivery_date", sortable: false },
+      //   { text: "Actions", value: "action", sortable: false },
+      //   { text: "Status", value: "order_status" }
+      // ]
     };
   },
   validations: {
@@ -518,13 +517,14 @@ export default {
   },
   created() {
     this.loadOrder();
+    this.fetchOrders();
     // this.orderedProduct();
-    setInterval(this.loadOrder(), 3000);
+    setInterval(this.fetchOrders(), 3000);
   },
   methods: {
     getColor(status) {
       if (status === "Canceled") return "orange";
-      else if (status === "On order") return "green";
+      else if (status === "On order") return "blue";
       else return "green";
     },
     showDialog() {
@@ -572,7 +572,7 @@ export default {
               icon: "success",
               timer: 3000
             }),
-              this.loadOrder();
+              this.fetchOrders();
           });
       }
     },
@@ -582,7 +582,7 @@ export default {
         (this.contactNumber = ""),
         (this.orderQuantity = ""),
         (this.deliveryDate = new Date().toISOString().substr(0, 10)),
-        this.loadOrder();
+        this.fetchOrders();
       this.getColor();
       this.$v.$reset();
     },
@@ -590,14 +590,14 @@ export default {
       axios
         .post("http://127.0.0.1:8000/api/post/update", this.post)
         .then(response => {
-          this.loadOrder();
+          this.fetchOrders();
         });
     },
     deleteItem(item) {
       axios
         .put("http://127.0.0.1:8000/api/post/updateCanceledStat/" + item.id)
         .then(response => {
-          this.loadOrder();
+          this.fetchOrders();
         });
     },
     editItem(item) {
@@ -645,8 +645,8 @@ export default {
         reverseButtons: true
       }).then(result => {
         if (result.value) {
-          // this.deliveredItem(item);
-          this.saveDeliveredOrder(item);
+          this.deliveredItem(item);
+          // this.saveDeliveredOrder(item);
         }
       });
     },
@@ -699,62 +699,49 @@ export default {
       }
       return ubechiQty;
     },
-    loadOrder() {
-      axios
-        .get("https://wawens-backend.herokuapp.com/api/orders/confirmed")
-        .then(response => {
-          this.orders = response.data;
-        });
-    },
     // loadOrder() {
     //   axios
     //     .get("https://wawens-backend.herokuapp.com/api/orders/confirmed")
     //     .then(response => {
     //       this.orders = response.data;
-    //       let order = response.data;
-    //       for(var i = 0; i < order.length; i++){
-    //         let param = {
-    //           order_id: order[i].id,
-    //           name: order[i].receiver_name,
-    //           address: order[i].delivery_address,
-    //           halaya_qty: this.getHalayaJarQty(order[i]),
-    //           ubechi_qty: this.getUbechiQty(order[i]),
-    //           deliveryDate: order[i].confirmed_delivery_date,
-    //           orderStatus: this.status,
-    //           distance: this.distance
-    //         };
-    //         axios.post("http://127.0.0.1:8000/api/post/deliveredOrder/"+ order[i].id, param)
-    //           .then(response => {
-    //             console.log('response: ',response.data)
-    //           })
-    //       }
     //     });
     // },
-    saveDeliveredOrder(item){
-      let param = {
-        name: item.receiver_name,
-        address: item.delivery_address,
-        halaya_qty: this.getHalayaJarQty(item),
-        ubechi_qty: this.getUbechiQty(item),
-        deliveryDate: item.confirmed_delivery_date,
-        orderStatus: this.status,
-        distance: this.distance
-      };
+    loadOrder() {
       axios
-        .post("http://127.0.0.1:8000/api/post/deliveredOrder/"+ item.id, param)
+        .get("https://wawens-backend.herokuapp.com/api/orders/confirmed")
         .then(response => {
-          Swal.fire({
-            title: "Order is being delivered",
-            icon: "success",
-            showConfirmButton: false,
-            timer: 1500
-          }),
-            this.loadOrder();
-        })
+          // this.orders = response.data;
+          let order = response.data;
+          for(var i = 0; i < order.length; i++){
+            let param = {
+              order_id: order[i].id,
+              name: order[i].receiver_name,
+              address: order[i].delivery_address,
+              halaya_qty: this.getHalayaJarQty(order[i]),
+              ubechi_qty: this.getUbechiQty(order[i]),
+              deliveryDate: order[i].confirmed_delivery_date,
+              orderStatus: this.status,
+              distance: this.distance
+            };
+            axios.post("http://127.0.0.1:8000/api/post/deliveredOrder/"+ order[i].id, param)
+              .then(response => {
+                console.log('response: ',response.data)
+              })
+          }
+        });
     },
-    // deliveredItem(item) {
+    // saveDeliveredOrder(item){
+    //   let param = {
+    //     name: item.receiver_name,
+    //     address: item.delivery_address,
+    //     halaya_qty: this.getHalayaJarQty(item),
+    //     ubechi_qty: this.getUbechiQty(item),
+    //     deliveryDate: item.confirmed_delivery_date,
+    //     orderStatus: this.status,
+    //     distance: this.distance
+    //   };
     //   axios
-    //     .put("http://127.0.0.1:8000/api/post/updateStat/" + item.id)
+    //     .post("http://127.0.0.1:8000/api/post/deliveredOrder/"+ item.id, param)
     //     .then(response => {
     //       Swal.fire({
     //         title: "Order is being delivered",
@@ -763,8 +750,27 @@ export default {
     //         timer: 1500
     //       }),
     //         this.loadOrder();
-    //     });
+    //     })
     // },
+    deliveredItem(item) {
+      axios
+        .put("http://127.0.0.1:8000/api/post/updateStat/" + item.order_id)
+        .then(response => {
+          Swal.fire({
+            title: "Order is being delivered",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500
+          }),
+            this.fetchOrders();
+        });
+    },
+    fetchOrders(){
+      axios.get('http://127.0.0.1:8000/api/posts/order').then(response => {
+        this.orders = response.data;
+        console.log('order_status: ', this.orders.data[0].order_status)
+      })
+    }
 
     // getCoordinates(address) {
     //     axios
