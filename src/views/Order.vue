@@ -438,7 +438,8 @@ export default {
       orderQuantity: "",
       orderStatus: "On order",
       search: "",
-      dialog: false
+      dialog: false,
+      config: {},
       // headers: [
       //   {
       //     text: "Customer's Name",
@@ -513,6 +514,14 @@ export default {
       return endDate.toISOString().slice(0, 10);
     }
   },
+  beforeCreate() {
+    let config = {}
+    config.headers = {
+      Authorization: 'Bearer ' + localStorage.getItem('token')
+    }
+    this.config = config
+    console.log(this.config)
+  },
   created() {
     this.loadOrder();
     this.fetchOrders();
@@ -562,7 +571,7 @@ export default {
           (this.editDialog = this.editDialog);
       } else {
         axios
-          .post("http://127.0.0.1:8000/api/post/update", this.post)
+          .post("http://127.0.0.1:8000/api/post/update", this.post, this.config)
           .then(response => {
             this.editDialog = false;
             Swal.fire({
@@ -586,21 +595,21 @@ export default {
     },
     updateDeliveredStatus() {
       axios
-        .post("http://127.0.0.1:8000/api/post/update", this.post)
+        .post("http://127.0.0.1:8000/api/post/update", this.post, this.config)
         .then(response => {
           this.fetchOrders();
         });
     },
     deleteItem(item) {
       axios
-        .put("http://127.0.0.1:8000/api/post/updateCanceledStat/" + item.id)
+        .put("http://127.0.0.1:8000/api/post/updateCanceledStat/" + item.id, this.config)
         .then(response => {
           this.fetchOrders();
         });
     },
     editItem(item) {
       axios
-        .get("http://127.0.0.1:8000/api/post/edit/" + item.id)
+        .get("http://127.0.0.1:8000/api/post/edit/" + item.id, this.config)
         .then(response => {
           this.post = response.data;
         });
@@ -662,7 +671,7 @@ export default {
         distance: this.distance
       };
       axios
-        .post("http://127.0.0.1:8000/api/post", param)
+        .post("http://127.0.0.1:8000/api/post", param, this.config)
         .then(response => {
           Swal.fire({
             title: "Successfully Added",
@@ -724,7 +733,7 @@ export default {
             axios
               .post(
                 "http://127.0.0.1:8000/api/post/deliveredOrder/" + order[i].id,
-                param
+                param, this.config
               )
               .then(response => {
                 console.log("response: ", response.data);
@@ -756,7 +765,7 @@ export default {
     // },
     deliveredItem(item) {
       axios
-        .put("http://127.0.0.1:8000/api/post/updateStat/" + item.order_id)
+        .put("http://127.0.0.1:8000/api/post/updateStat/" + item.order_id , this.config)
         .then(response => {
           Swal.fire({
             title: "Order is being delivered",
@@ -768,9 +777,9 @@ export default {
         });
     },
     fetchOrders() {
-      axios.get("http://127.0.0.1:8000/api/posts/order").then(response => {
+      axios.get("http://127.0.0.1:8000/api/posts/order", this.config).then(response => {
         this.orders = response.data;
-        console.log("order_status: ", this.orders.data[0].order_status);
+        // console.log("order_status: ", this.orders.data[0].order_status);
       });
     }
 
