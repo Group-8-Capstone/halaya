@@ -1,6 +1,12 @@
 <template>
   <v-app id="inspire">
     <v-app-bar app fixed light lights-in height="70" color="white" dense dark elevation="40">
+   
+
+        <v-btn color="grey" icon @click.stop="mini = !mini">
+          <v-icon>mdi-menu</v-icon>
+        </v-btn>
+       
       <v-list-item-avatar size="60">
         <img src="../assets/wawens.png">
       </v-list-item-avatar>
@@ -8,18 +14,15 @@
       <v-spacer></v-spacer>
       <v-menu bottom >
         <template v-slot:activator="{ on, attrs }">
-          <!-- <v-list-item v-for="item in displayInfo" :key="item.id"> -->
              <v-btn dark icon v-bind="attrs" v-on="on">
             <v-icon class="mr-12 pt-5" size="30" color="grey">mdi-menu-down</v-icon>
           </v-btn>
-           
            <v-list-item-avatar class="mr-5">
           <v-img :src="'http://localhost:8000/'+ avatarSrc"></v-img>
         </v-list-item-avatar>
-        <v-chip color="deep-purple">
-          <v-toolbar-title class="white--text mr-2">{{name}}</v-toolbar-title> 
-          </v-chip> 
-      
+ 
+          <v-toolbar-title class="grey--text mr-1 sub_title pt-5">{{name}}</v-toolbar-title> 
+       
         </template>
         <v-list>
           <v-list-item v-for="item in items2" :key="item.title" :to="item.link" link>
@@ -43,19 +46,7 @@
       dark
       id="drawer"
     >
-      <v-list-item class="px-2">
-        <!-- <v-list-item-avatar>
-          <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
-        </v-list-item-avatar> -->
-
-        <v-btn icon @click.stop="mini = !mini">
-          <v-icon>mdi-dots-vertical</v-icon>
-        </v-btn>
-        <v-list-item>
-          <v-list-item-title>Admin Login</v-list-item-title>
-        </v-list-item>
-         
-      </v-list-item>
+  
       <v-divider></v-divider>
      
       <v-list >
@@ -98,6 +89,9 @@
   </v-app>
 </template>
 <style scoped>
+.sub_title{
+  font-size: 15px;
+}
 </style>
 <script>
 import axios from "axios";
@@ -123,6 +117,7 @@ export default {
           { icon:"mdi-stocking", title: "Ingredients", link: "/ingredients"},
           { icon:"mdi-package-variant",title: "Products", link: "/product"
         },
+         { icon:"mdi-table",title: "Logs", link: "/logs"},
         ]
       },
       {icon: "mdi-clipboard-outline", text: "view Orders",
