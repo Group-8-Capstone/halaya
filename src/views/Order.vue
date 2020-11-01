@@ -287,22 +287,22 @@
         </v-dialog>
       </template>
       <template>
-        <v-dialog v-model="orderDetails" persistent max-width="500px">
+        <!-- <v-dialog v-model="orderDetails" persistent max-width="500px">
           <v-card>
             <v-card-title>
               <span>Order Details</span>
             </v-card-title>
             <hr>
             <v-spacer></v-spacer>
-            <v-list id="list" v-for="i in orderedProducts" :key="i.id">
+            <v-list id="list" v-for="i in orderedProducts" v-bind:key="i.id">
               <v-list-item-title>Product Name: {{i.product_name}}</v-list-item-title>
               <v-list-item-subtitle>Order Qty: {{ i.pivot.sub_quantity }}</v-list-item-subtitle>
             </v-list>
             <v-card-actions>
               <v-btn id="closeBtn" color="primary" text @click="closeDialog()">Close</v-btn>
             </v-card-actions>
-          </v-card>
-        </v-dialog>
+          </v-card> 
+        </v-dialog> -->
       </template>
       <v-simple-table>
         <template v-slot:default>
@@ -430,7 +430,7 @@ export default {
       modal: false,
       dialog: false,
       editDialog: false,
-      orderDetails: false,
+      // orderDetails: false,
       customerName: "",
       address: "",
       coordinates: [],
@@ -514,14 +514,14 @@ export default {
       return endDate.toISOString().slice(0, 10);
     }
   },
-  beforeCreate() {
-    let config = {}
-    config.headers = {
-      Authorization: 'Bearer ' + localStorage.getItem('token')
-    }
-    this.config = config
-    console.log("this.config",this.config)
-  },
+  // beforeCreate() {
+  //   let config = {}
+  //   config.headers = {
+  //     Authorization: 'Bearer ' + localStorage.getItem('token')
+  //   }
+  //   this.config = config
+  //   console.log("this.config",this.config)
+  // },
   created() {
     this.loadOrder();
     this.fetchOrders();
@@ -571,7 +571,7 @@ export default {
           (this.editDialog = this.editDialog);
       } else {
         axios
-          .post("http://127.0.0.1:8000/api/post/update", this.post, this.config)
+          .post("http://127.0.0.1:8000/api/post/update", this.post)
           .then(response => {
             this.editDialog = false;
             Swal.fire({
@@ -595,21 +595,21 @@ export default {
     },
     updateDeliveredStatus() {
       axios
-        .post("http://127.0.0.1:8000/api/post/update", this.post, this.config)
+        .post("http://127.0.0.1:8000/api/post/update", this.post)
         .then(response => {
           this.fetchOrders();
         });
     },
     deleteItem(item) {
       axios
-        .put("http://127.0.0.1:8000/api/post/updateCanceledStat/" + item.id, this.config)
+        .put("http://127.0.0.1:8000/api/post/updateCanceledStat/" + item.id)
         .then(response => {
           this.fetchOrders();
         });
     },
     editItem(item) {
       axios
-        .get("http://127.0.0.1:8000/api/post/edit/" + item.id, this.config)
+        .get("http://127.0.0.1:8000/api/post/edit/" + item.id)
         .then(response => {
           this.post = response.data;
         });
@@ -671,7 +671,7 @@ export default {
         distance: this.distance
       };
       axios
-        .post("http://127.0.0.1:8000/api/post", param, this.config)
+        .post("http://127.0.0.1:8000/api/post", param)
         .then(response => {
           Swal.fire({
             title: "Successfully Added",
@@ -732,7 +732,7 @@ export default {
             };
             axios
               .post(
-                "http://127.0.0.1:8000/api/post/deliveredOrder/" + order[i].id, param, this.config)
+                "http://127.0.0.1:8000/api/post/deliveredOrder/" + order[i].id, param)
               .then(response => {
                 console.log("response: ", response.data);
               });
@@ -763,7 +763,7 @@ export default {
     // },
     deliveredItem(item) {
       axios
-        .put("http://127.0.0.1:8000/api/post/updateStat/" + item.order_id , this.config)
+        .put("http://127.0.0.1:8000/api/post/updateStat/" + item.order_id)
         .then(response => {
           Swal.fire({
             title: "Order is being delivered",
@@ -775,7 +775,7 @@ export default {
         });
     },
     fetchOrders() {
-      axios.get("http://127.0.0.1:8000/api/posts/order", this.config).then(response => {
+      axios.get("http://127.0.0.1:8000/api/posts/order").then(response => {
         this.orders = response.data;
         // console.log("order_status: ", this.orders.data[0].order_status);
       });
