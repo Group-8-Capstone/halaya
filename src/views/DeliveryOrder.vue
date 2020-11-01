@@ -4,6 +4,7 @@
       <v-card-title>
         Deliveries for TODAY
         <v-spacer></v-spacer>
+        <!-- <input type="text" class="form-control" v-model="searchQuery" placeholder="Search"> -->
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
@@ -20,17 +21,30 @@
             </v-card-title>
             <hr>
             <v-spacer></v-spacer>
-            <v-list id="list" v-for="i in orderedProducts">
-              <v-list-item-title>Product Name: {{i.product_name}}</v-list-item-title>
-              <v-list-item-subtitle>Order Qty: {{ i.pivot.sub_quantity }}</v-list-item-subtitle>
-            </v-list>
-            <v-card-actions>
-              <v-btn id="closeBtn" color="primary" text @click="closeDialog()">Close</v-btn>
-            </v-card-actions>
           </v-card>
         </v-dialog>
       </template>
-      <v-simple-table>
+      <v-data-table :headers="headers" :items="deliveries" :search="search">
+        <template v-slot:item.order_status="{ item }">
+          <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
+        </template>
+        <template v-slot:item.action="{ item }">
+          <v-icon
+            normal
+            class="mr-2"
+            title="Delivered"
+            @click="alertDelivered(item)"
+          >mdi-truck-check-outline</v-icon>
+          <v-icon
+            @click="editDialog = !editDialog, editItem(item) "
+            class="mr-2"
+            normal
+            title="Edit"
+          >mdi-table-edit</v-icon>
+          <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+        </template>
+      </v-data-table>
+      <!-- <v-simple-table>
         <template v-slot:default>
           <thead>
             <tr>
@@ -38,24 +52,23 @@
               <th class="text-left">Address</th>
               <th class="text-left">Distance</th>
               <th class="text-left">Delivery Date</th>
+              <th class="text-left">Ube Halaya Jar Qty</th>
+              <th class="text-left">Ubechi Qty</th>
               <th class="text-left">Order Details</th>
               <th class="text-left">Action</th>
               <th class="text-left">Order Status</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in deliveries">
-              <td>{{ item.receiver_name }}</td>
+            <tr v-for="item in deliveries.data" :key="item.id">
+              <td>{{ item.customer_name }}</td>
               <td>{{ item.delivery_address }}</td>
-              <td>{{ distance }}</td>
-              <td>{{ item.confirmed_delivery_date + ' ' + item.confirmed_delivery_time}}</td>
+              <td>{{ item.distance }}</td>
+              <td>{{ item.delivery_date}}</td>
+              <td>{{item.halayaJar_qty}}</td>
+              <td>{{item.ubechi_qty}}</td>
               <td>
-                <v-icon
-                  class="mr-2"
-                  @click="orderedProduct(item.id)"
-                  normal
-                  title="Order Details"
-                >mdi-information</v-icon>
+                <v-icon class="mr-2" @click="orderedProduct(item.id)" title="Order Details">mdi-information</v-icon>
               </td>
               <td>
                 <template>
@@ -74,11 +87,13 @@
                   <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
                 </template>
               </td>
-              <td>{{item.status}}</td>
+              <td>
+                <v-chip :color="getColor(item.order_status)">{{item.order_status}}</v-chip>
+              </td>
             </tr>
           </tbody>
         </template>
-      </v-simple-table>
+      </v-simple-table>-->
     </v-card>
   </div>
 </template>
@@ -96,6 +111,7 @@ export default {
         "pk.eyJ1IjoiamllbnhpeWEiLCJhIjoiY2tlaTM3d2VrMWcxczJybjc0cmZkamk3eiJ9.JzrYlG2kZ08Pkk24hvKDJw",
       delivery: [],
       deliveries: [],
+      orders: [],
       address: "",
       coordinates: [],
       distance: [],
@@ -110,24 +126,25 @@ export default {
         {
           text: "Receiver Name",
           align: "start",
-          value: "",
+          value: "customer_name",
           sortable: false
         },
-        { text: "Address", value: "", sortable: false },
-        { text: "Distance", value: "", sortable: false },
-        { text: "Delivery Date", value: "", sortable: false },
-        { text: "Order Details", value: "", sortable: false },
-        { text: "Action", value: "", sortable: false },
-        { text: "Order Status", value: "", sortable: false }
+        { text: "Address", value: "delivery_address", sortable: false },
+        { text: "Distance", value: "distance", sortable: false },
+        { text: "Delivery Date", value: "delivery_date", sortable: false },
+        { text: "Ube Halaya Jar Qty", value: "halayaJar_qty", sortable: false },
+        { text: "Ubechi Qty", value: "ubechi_qty", sortable: false },
+        { text: "Action", value: "action", sortable: false },
+        { text: "Order Status", value: "order_status", sortable: false }
         // { text: "Actions", value: "action", sortable: false },
         // { text: "Status", value: "order_status" }
       ]
     };
   },
-  mounted() {
-    this.loadDelivery();
-  },
   created() {
+    this.fetchDelivery();
+    // this.loadOrder();
+    // this.fetchOrders();
     // this.loadDelivery();
     // this.getCoordinates();
     // setInterval(this.loadDelivery(), 3000);
@@ -136,10 +153,8 @@ export default {
   //   resultQuery() {
   //     if (this.searchQuery) {
   //       return this.deliveries.filter(item => {
-  //         return this.searchQuery
-  //           .toLowerCase()
-  //           .split(" ")
-  //           .every(v => item.title.toLowerCase().includes(v));
+  //         console.log("NISSSSUUUUUUUUD");
+  //         return this.searchQuery.toLowerCase().split(' ').forEach(v => item.delivery_address.toLowerCase().includes(v));
   //       });
   //     } else {
   //       return this.deliveries;
@@ -148,6 +163,26 @@ export default {
   // },
 
   methods: {
+    getColor(status) {
+      if (status === "Canceled") return "orange";
+      else if (status === "On order") return "blue";
+      else return "green";
+    },
+    searchDelivery() {
+      console.log("NISUUUUUUUUUUUUUUUUUUUUUUUD");
+      if (this.searchQuery) {
+        console.log("HEEEEEEEEEEEEEERRRRRRRRREEEEEEEEE");
+        this.deliveries.filter(item => {
+          this.searchQuery
+            .toLowerCase()
+            .split(" ")
+            .every(v => item.delivery_address.toLowerCase().includes(v));
+        });
+        return this.deliveries;
+      } else {
+        return this.deliveries;
+      }
+    },
     closeDialog() {
       this.orderDetails = false;
       this.orderedProducts = [];
@@ -204,6 +239,35 @@ export default {
         }
       }
       console.log("orderedProducts: ", this.orderedProducts);
+    },
+    containsObject(arr, id) {
+      return arr.some(function(el) {
+        return el.id === id;
+      });
+    },
+    fetchDelivery() {
+      axios.get("http://127.0.0.1:8000/api/posts/delivery").then(response => {
+        // let results = [];
+        this.deliveries = response.data.data;
+        console.log("data: ", this.deliveries);
+        // for (var i = 0; i < data.length; i++) {
+        //   // console.log("DATA", data[i].id);
+        //   if (this.containsObject(results, data[i].id)) {
+        //     console.log("good");
+        //   } else {
+        //     results.push(data[i]);
+        //     // console.log("RESULTS", results);
+        //     this.deliveries = results;
+        //     // console.log("deliveries: ", this.deliveries);
+        //   }
+          // continue;
+        // }
+      });
+      // .then(response => {
+      //   this.deliveries = response.data;
+      //   console.log("ORDERS", response.data);
+      //   // console.log("order_status: ", this.orders.data[0].order_status);
+      // });
     },
     loadDelivery() {
       axios
