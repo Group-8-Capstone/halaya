@@ -520,7 +520,7 @@ export default {
       Authorization: 'Bearer ' + localStorage.getItem('token')
     }
     this.config = config
-    console.log(this.config)
+    console.log("this.config",this.config)
   },
   created() {
     this.loadOrder();
@@ -732,9 +732,7 @@ export default {
             };
             axios
               .post(
-                "http://127.0.0.1:8000/api/post/deliveredOrder/" + order[i].id,
-                param, this.config
-              )
+                "http://127.0.0.1:8000/api/post/deliveredOrder/" + order[i].id, param, this.config)
               .then(response => {
                 console.log("response: ", response.data);
               });
