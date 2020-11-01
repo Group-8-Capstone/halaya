@@ -20,7 +20,7 @@
               <hr>
               <v-spacer/>
               <v-card-text id="qty">{{element.ingredients_remaining + ' kg/cans'}}</v-card-text>
-              <v-chip outlined :color="getColor(element.ingredients_status)">{{element.ingredients_status}}</v-chip>
+              <v-chip :color="getColor(element.ingredients_status)">{{element.ingredients_status}}</v-chip>
             </v-card>
           </v-col>
         </v-row>
