@@ -4,13 +4,14 @@
       <v-card-title>
         Deliveries for TODAY
         <v-spacer></v-spacer>
-        <v-text-field
+        <input type="text" class="form-control" v-model="searchQuery" placeholder="Search">
+        <!-- <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
           label="Search"
           single-line
           hide-details
-        ></v-text-field>
+        ></v-text-field>-->
       </v-card-title>
       <template>
         <v-dialog v-model="orderDetails" persistent max-width="500px">
@@ -96,6 +97,7 @@ export default {
         "pk.eyJ1IjoiamllbnhpeWEiLCJhIjoiY2tlaTM3d2VrMWcxczJybjc0cmZkamk3eiJ9.JzrYlG2kZ08Pkk24hvKDJw",
       delivery: [],
       deliveries: [],
+      orders: [],
       address: "",
       coordinates: [],
       distance: [],
@@ -124,10 +126,9 @@ export default {
       ]
     };
   },
-  mounted() {
-    this.loadDelivery();
-  },
   created() {
+    // this.loadOrder();
+    // this.fetchOrders();
     // this.loadDelivery();
     // this.getCoordinates();
     // setInterval(this.loadDelivery(), 3000);
@@ -136,10 +137,8 @@ export default {
   //   resultQuery() {
   //     if (this.searchQuery) {
   //       return this.deliveries.filter(item => {
-  //         return this.searchQuery
-  //           .toLowerCase()
-  //           .split(" ")
-  //           .every(v => item.title.toLowerCase().includes(v));
+  //         console.log("NISSSSUUUUUUUUD");
+  //         return this.searchQuery.toLowerCase().split(' ').forEach(v => item.delivery_address.toLowerCase().includes(v));
   //       });
   //     } else {
   //       return this.deliveries;
@@ -148,6 +147,21 @@ export default {
   // },
 
   methods: {
+    searchDelivery() {
+      console.log("NISUUUUUUUUUUUUUUUUUUUUUUUD");
+      if (this.searchQuery) {
+        console.log("HEEEEEEEEEEEEEERRRRRRRRREEEEEEEEE");
+        this.deliveries.filter(item => {
+          this.searchQuery
+            .toLowerCase()
+            .split(" ")
+            .every(v => item.delivery_address.toLowerCase().includes(v));
+        });
+        return this.deliveries;
+      } else {
+        return this.deliveries;
+      }
+    },
     closeDialog() {
       this.orderDetails = false;
       this.orderedProducts = [];

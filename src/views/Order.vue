@@ -518,6 +518,7 @@ export default {
   },
   created() {
     this.loadOrder();
+    this.fetchOrders();
     // this.orderedProduct();
     setInterval(this.loadOrder(), 3000);
   },
@@ -679,33 +680,87 @@ export default {
         });
       // this.getCoordinates(this.address);
     },
-    getHalayaJarQty(item){
+    getHalayaJarQty(item) {
       let halayaJarQty = 0;
-      for(var i = 0; i < item.products.length; i++){
+      for (var i = 0; i < item.products.length; i++) {
         let name = item.products[i].product_name;
-        if(name.includes("Jar")){
+        if (name.includes("Jar")) {
           halayaJarQty += item.products[i].pivot.sub_quantity;
         }
       }
       return halayaJarQty;
     },
-    getUbechiQty(item){
+    getUbechiQty(item) {
       let ubechiQty = 0;
-      for(var i = 0; i < item.products.length; i++){
+      for (var i = 0; i < item.products.length; i++) {
         let name = item.products[i].product_name;
-        if(name.includes("Ubechi")){
+        if (name.includes("Ubechi")) {
           ubechiQty += item.products[i].pivot.sub_quantity;
         }
       }
       return ubechiQty;
     },
+    fetchOrders() {
+      axios.get("http://127.0.0.1:8000/api/posts/order").then(response => {
+        this.orders = response.data;
+        // console.log("order_status: ", this.orders.data[0].order_status);
+      });
+    },
     loadOrder() {
       axios
         .get("https://wawens-backend.herokuapp.com/api/orders/confirmed")
         .then(response => {
-          this.orders = response.data;
+          // this.orders = response.data;
+          let order = response.data;
+          for (var i = 0; i < order.length; i++) {
+            let param = {
+              order_id: order[i].id,
+              name: order[i].receiver_name,
+              address: order[i].delivery_address,
+              halaya_qty: this.getHalayaJarQty(order[i]),
+              ubechi_qty: this.getUbechiQty(order[i]),
+              deliveryDate: order[i].confirmed_delivery_date,
+              orderStatus: this.status,
+              distance: this.distance
+            };
+            axios
+              .post(
+                "http://127.0.0.1:8000/api/post/deliveredOrder/" + order[i].id,
+                param
+              )
+              .then(response => {
+                console.log("response: ", response.data);
+              });
+          }
         });
     },
+    // getHalayaJarQty(item){
+    //   let halayaJarQty = 0;
+    //   for(var i = 0; i < item.products.length; i++){
+    //     let name = item.products[i].product_name;
+    //     if(name.includes("Jar")){
+    //       halayaJarQty += item.products[i].pivot.sub_quantity;
+    //     }
+    //   }
+    //   return halayaJarQty;
+    // },
+    // getUbechiQty(item){
+    //   let ubechiQty = 0;
+    //   for(var i = 0; i < item.products.length; i++){
+    //     let name = item.products[i].product_name;
+    //     if(name.includes("Ubechi")){
+    //       ubechiQty += item.products[i].pivot.sub_quantity;
+    //     }
+    //   }
+    //   return ubechiQty;
+    // },
+    // loadOrder() {
+    //   axios
+    //     .get("https://wawens-backend.herokuapp.com/api/orders/confirmed")
+    //     .then(response => {
+    //       this.orders = response.data;
+    //     });
+    // },
     // loadOrder() {
     //   axios
     //     .get("https://wawens-backend.herokuapp.com/api/orders/confirmed")
