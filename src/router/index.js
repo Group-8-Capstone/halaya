@@ -11,6 +11,7 @@ import Setting from "../views/Setting.vue";
 import Ingredients from "../views/Ingredients.vue";
 import Product from "../views/Product.vue";
 import AccountSetting from "../components/ProfileAccount.vue";
+import Logs from "../views/Logs.vue";
 
 
 
@@ -54,6 +55,11 @@ const router = new VueRouter({
       path: "/product",
       name: "Product",
       component: Product
+    },
+    {
+      path: "/logs",
+      name: "Logs",
+      component: Logs
     },
     {
       path: "/delivery-details",

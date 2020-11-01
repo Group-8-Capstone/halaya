@@ -13,6 +13,7 @@
             <v-flex>
               <v-layout wrap>
                 <v-flex md4 v-for="item in halayaIngredients" :key="item.id">
+
                   <v-card id="cards" class="card-container ma-5">
                     <v-card-title class="deep-purple lighten-5">{{item.ingredients_name}}</v-card-title>
                     <hr>
@@ -24,6 +25,7 @@
                           :color="getColor(item.ingredients_status)"
                         >{{item.ingredients_status}}</v-chip>
                       </v-list-item>
+
                     </v-row>
                     <v-row class="d-flex justify-end mb-6">
                       <template>
