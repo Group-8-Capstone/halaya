@@ -12,7 +12,7 @@
           hide-details
         ></v-text-field>
       </v-card-title>
-      <template>
+      <!-- <template>
         <v-dialog v-model="orderDetails" persistent max-width="500px">
           <v-card>
             <v-card-title>
@@ -29,7 +29,7 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-      </template>
+      </template> -->
       <v-simple-table>
         <template v-slot:default>
           <thead>
@@ -44,7 +44,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in deliveries">
+            <tr v-for="item in deliveries" :key="item.id">
               <td>{{ item.receiver_name }}</td>
               <td>{{ item.delivery_address }}</td>
               <td>{{ distance }}</td>
