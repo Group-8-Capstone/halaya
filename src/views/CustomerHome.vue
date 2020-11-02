@@ -42,8 +42,8 @@
                 </v-col>
 
                 </v-row>
-          <v-icon>mdi-map-marker</v-icon> 
-              <label > Address</label>
+          <v-icon class="pl-5">mdi-map-marker</v-icon> 
+              <label> Address</label>
          
                 <v-row class="pl-5">
                     <v-col cols="4">
@@ -159,25 +159,57 @@
         <template>
             <v-row>
             <v-col>
-            <v-card>
-                <v-card-title class="d-flex justify-center " >Ube Halaya in Jar</v-card-title>
-                <center>
-                <img height="200px" src="../assets/halayaJar.jpg">
-                </center>
+            <v-hover v-slot:default="{ hover }">
+            <v-card class="mx-auto" color="grey lighten-4">
+                <v-img :aspect-ratio="16/9" src="../assets/halayaTab.jpg">
+                    <v-expand-transition>
+                        <div v-if="hover" class="d-flex transition-fast-in-fast-out purple darken-2 v-card--reveal display-3 white--text" style="height: 100%;">Take a try</div>
+                    </v-expand-transition>
+                </v-img>
+                <v-card-text class="pt-6" style="position: relative;">
+                    
+                    <div class="font-weight-light grey--text title mb-2">For the perfect snack</div>
+                    <h3 class="display-1 font-weight-light orange--text mb-2">Ube halaya in tab</h3>
+  
+                </v-card-text>
             </v-card>
+        </v-hover>
             </v-col>
         <v-col>
-             <v-card>
-                   <v-card-title  class="d-flex justify-center " >Ube Halaya in Tab</v-card-title>
-                   <center>
-                     <img height="200px" src="../assets/halayaTab.jpg">
-                     </center>
+               <v-hover v-slot:default="{ hover }">
+            <v-card class="mx-auto" color="grey lighten-4">
+                <v-img :aspect-ratio="16/9" src="../assets/halayaJar.jpg">
+                    <v-expand-transition>
+                        <div v-if="hover" class="d-flex transition-fast-in-fast-out purple darken-2 v-card--reveal display-3 white--text" style="height: 100%;">Take a bite</div>
+                    </v-expand-transition>
+                </v-img>
+                <v-card-text class="pt-6" style="position: relative;">
+                    <div class="font-weight-light grey--text title mb-2">For the perfect bonding</div>
+                    <h3 class="display-1 font-weight-light orange--text mb-2">Ube halaya in Jar</h3>
+                </v-card-text>
             </v-card>
+        </v-hover>
             </v-col>
             </v-row>
         </template>
 </div>
 </template>
+<style>
+.v-card--reveal {
+    align-items: center;
+    bottom: 0;
+    justify-content: center;
+    opacity: .5;
+    position: absolute;
+    width: 100%;
+}
+
+.v-application--wrap {
+    min-height: 100vh;
+    justify-content: center;
+}
+</style>
+
 <script>
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -191,7 +223,6 @@ import {
 export default {
     data(){
         return {
-        // date: new Date().toISOString().substr(0, 10),
       menu: false,
       btnDisable: true,
       addOrderDialog:false,
