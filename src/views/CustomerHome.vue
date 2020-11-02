@@ -84,7 +84,7 @@
                     <v-img class="ml-5" width="250px" height="200px" src="../assets/halayaTab.jpg"></v-img>
                 </v-col>
                     <v-col>
-                        <v-img width="250px" 
+                        <v-img width="250px" height="200px"
                          src="../assets/halayaJar.jpg"></v-img>
                     </v-col>
                 </v-row>
