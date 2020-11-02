@@ -1,7 +1,6 @@
 <template>
   <v-app>
     <v-card  class="ma-5 mb-12 pa-5">
-       
       <default-location/>
     </v-card>
     <v-card id="cardtable" class="ma-5 mb-12 pa-5">
@@ -341,7 +340,7 @@ export default {
       deliveryDate: new Date().toISOString().substr(0, 10),
       addDateMenu: false,
       updateDateMenu: false,
-        tabs: null,
+      tabs: null,
       message: "",
       post: {},
       orders: [],

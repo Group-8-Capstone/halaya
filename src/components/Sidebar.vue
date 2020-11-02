@@ -109,6 +109,7 @@ export default {
     model: 1,
     mini: true,
     items: [
+      { icon: "mdi-home-variant", text: "Home", link: "/customerHome" },
       { icon: "mdi-view-dashboard", text: "Dashboard", link: "/dashboard" },
       {
         icon: "mdi-history",
@@ -125,7 +126,6 @@ export default {
       { icon: "mdi mdi-cart-plus", title: "Order", link: "/order" },
       { icon: "mdi-clipboard-outline", title: "To Deliver", link: "/delivery" },
       { icon: "mdi-content-copy", title: "Delivered Orders", link: "/delivered" },
-      
       ]
 
       },
