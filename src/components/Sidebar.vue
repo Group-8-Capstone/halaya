@@ -130,7 +130,8 @@ export default {
 
       },
     
-      { icon: "mdi-cogs", text: "Business Settings", link: "/setting" }
+      { icon: "mdi-cogs", text: "Business Settings", link: "/setting" },
+      { icon: "mdi-package-variant-closed", text: "My Order", link: "/myorder" }
     ],
     items2: [
       {
