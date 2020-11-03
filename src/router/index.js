@@ -11,6 +11,7 @@ import Setting from "../views/Setting.vue";
 import Ingredients from "../views/Ingredients.vue";
 import Product from "../views/Product.vue";
 import AccountSetting from "../components/ProfileAccount.vue";
+import Register from "../components/RegisterComponent.vue";
 import Logs from "../views/Logs.vue";
 import CustomerHome from "../views/CustomerHome.vue";
 import MyOrder from "../views/MyOrder.vue";
@@ -29,9 +30,15 @@ const router = new VueRouter({
       component: Login
     },
     {
+      path: "/Register",
+      name: "Register",
+      component: Register
+    },
+    {
       path: "/",
-      name: "home",
-      component: Home
+      redirect: "/login"
+      // name: "home",
+      // component: Home
     },
     {
       path: "/order",
