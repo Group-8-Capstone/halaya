@@ -442,7 +442,7 @@ export default {
       orderStatus: "On order",
       search: "",
       dialog: false,
-      config: {},
+      // config: {},
       // headers: [
       //   {
       //     text: "Customer's Name",
@@ -518,14 +518,14 @@ export default {
       return endDate.toISOString().slice(0, 10);
     }
   },
-  // beforeCreate() {
-  //   let config = {}
-  //   config.headers = {
-  //     Authorization: 'Bearer ' + localStorage.getItem('token')
-  //   }
-  //   this.config = config
-  //   console.log("this.config",this.config)
-  // },
+  beforeCreate() {
+    let config = {}
+    config.headers = {
+      Authorization: 'Bearer ' + localStorage.getItem('token')
+    }
+    this.config = config
+    console.log("this.config",this.config)
+  },
   created() {
     this.loadOrder();
     this.fetchOrders();
@@ -736,7 +736,7 @@ export default {
             };
             axios
               .post(
-                "http://127.0.0.1:8000/api/post/deliveredOrder/" + order[i].id, param)
+                "http://127.0.0.1:8000/api/post/deliveredOrder/" + order[i].id, param, this.config)
               .then(response => {
                 console.log("response: ", response.data);
               });
