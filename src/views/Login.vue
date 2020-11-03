@@ -131,6 +131,7 @@ export default {
         if(response.data.message === 'successfully_login'){
           console.log('success');
           localStorage.setItem("token", response.data.token);
+          localStorage.setItem("username", response.data.username)
           this.$router.push('/dashboard');
         }else{
           console.log('invalid');
