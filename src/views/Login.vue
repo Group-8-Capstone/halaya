@@ -132,6 +132,7 @@ export default {
           console.log('success');
           console.log(response.data);
           localStorage.setItem("token", response.data.token);
+          localStorage.setItem("username", response.data.username)
           this.$router.push('/dashboard');
         }else{
           console.log('invalid');
