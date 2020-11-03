@@ -12,6 +12,9 @@ import Ingredients from "../views/Ingredients.vue";
 import Product from "../views/Product.vue";
 import AccountSetting from "../components/ProfileAccount.vue";
 import Register from "../components/RegisterComponent.vue";
+import Logs from "../views/Logs.vue";
+import CustomerHome from "../views/CustomerHome.vue";
+import MyOrder from "../views/MyOrder.vue";
 
 
 
@@ -53,6 +56,16 @@ const router = new VueRouter({
       component: Delivered
     },
     {
+      path: "/customerHome",
+      name: "CustomerHome",
+      component: CustomerHome
+    },
+    {
+      path: "/myorder",
+      name: "MyOrder",
+      component: MyOrder
+    },
+    {
       path: "/delivery",
       name: "Delivery",
       component: Delivery
@@ -61,6 +74,11 @@ const router = new VueRouter({
       path: "/product",
       name: "Product",
       component: Product
+    },
+    {
+      path: "/logs",
+      name: "Logs",
+      component: Logs
     },
     {
       path: "/delivery-details",

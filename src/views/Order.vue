@@ -1,220 +1,72 @@
 <template>
   <v-app>
-    <v-card  class="ma-5 mb-12 pa-5">
+    <!-- <v-card  class="ma-5 mb-12 pa-5">
       <default-location/>
-    </v-card>
+    </v-card>-->
     <v-card id="cardtable" class="ma-5 mb-12 pa-5">
-      <v-card-title>
-        Order
-        <v-spacer></v-spacer>
-        <v-text-field
-          v-model="search"
-          append-icon="mdi-magnify"
-          label="Search"
-          single-line
-          hide-details
-        ></v-text-field>
-        <v-spacer></v-spacer>
-        <v-list>
-          <v-btn class="ma-5" color="purple darken-2" rounded outlined dark @click="showDialog">
-            <v-icon>mdi-plus</v-icon>
-            <v-toolbar-title>Add Order</v-toolbar-title>
-          </v-btn>
-        </v-list>
-        <v-dialog v-model="dialog" width="400px">
-          <v-card>
+      <v-tabs v-model="tabs" right color="deep-purple accent-4">
+        <v-tab>Received Orders</v-tab>
+        <v-tab>Walk in</v-tab>
+      </v-tabs>
+      <v-tabs-items v-model="tabs">
+        <v-tab-item>
+          <v-card-title>
+            Order
             <v-spacer></v-spacer>
-            <v-card-title class="deep-purple lighten-1 align-center">
-              <v-list-item-title
-                class="d-flex align-center justify-center mx-auto headline"
-              >ADD ORDER</v-list-item-title>
-            </v-card-title>
-            <v-container>
-              <v-row class="mx-2">
-                <v-col cols="12">
-                  <v-text-field
-                    prepend-icon="mdi-account-outline"
-                    placeholder="Customer Name"
-                    v-model="customerName"
-                    :error-messages="customerErrors"
-                    @input="$v.customerName.$touch()"
-                    @blur="$v.customerName.$touch()"
-                    required
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field
-                    prepend-icon="mdi-map-marker"
-                    placeholder="Address"
-                    v-model="address"
-                    :error-messages="addressErrors"
-                    @input="$v.address.$touch()"
-                    @blur="$v.address.$touch()"
-                    required
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field
-                    type="number"
-                    prepend-icon="mdi-phone"
-                    placeholder="+63 900 000 0000"
-                    v-model="contactNumber"
-                    :error-messages="contactNumberErrors"
-                    @input="$v.contactNumber.$touch()"
-                    @blur="$v.contactNumber.$touch()"
-                    required
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <v-menu
-                    ref="addDateMenu"
-                    v-model="addDateMenu"
-                    :close-on-content-click="false"
-                    :return-value.sync="date"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="290px"
-                  >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-text-field
-                        v-model="deliveryDate"
-                        label="delivery date"
-                        prepend-icon="mdi-calendar"
-                        readonly
-                        v-bind="attrs"
-                        v-on="on"
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker
-                      v-model="deliveryDate"
-                      :min="deliveryDate"
-                      :max="getEndDate"
-                      color="deep-purple lighten-1"
-                      no-title
-                      scrollable
-                    >
-                    </v-date-picker>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                          v-model="deliveryDate"
-                          label="delivery date"
-                          prepend-icon="mdi-calendar"
-                          readonly
-                          v-bind="attrs"
-                          v-on="on"
-                        ></v-text-field>
-                      </template>
-                      <v-date-picker v-model="deliveryDate" :min="deliveryDate"  :max="getEndDate" color="deep-purple lighten-1" no-title scrollable>
-                      </v-date-picker>
-                 </v-menu>
-
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field
-                    prepend-icon="mdi-plus"
-                    min="1"
-                    type="number"
-                    placeholder="Quantity"
-                    v-model="orderQuantity"
-                    :error-messages="orderQuantityErrors"
-                    @input="$v.orderQuantity.$touch()"
-                    @blur="$v.orderQuantity.$touch()"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-            </v-container>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="dialog = false, reloadData()">Cancel</v-btn>
-              <v-btn text @click="addOrder()">Save</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-        <template>
-          <v-dialog v-model="editDialog" width="400px">
-            <v-card>
-              <v-spacer></v-spacer>
-              <v-card-title class="deep-purple lighten-1 align-center">
-                <v-list-item-title
-                  class="d-flex align-center justify-center mx-auto headline"
-                >UPDATE ORDER</v-list-item-title>
-              </v-card-title>
-              <v-container>
-                <v-row class="mx-2">
-                  <v-col class="align-center justify-space-between" cols="12">
-                    <v-row align="center" class="mr-0">
-                      <v-avatar size="40px" class="mx-3">
-                        <img src="//ssl.gstatic.com/s2/oz/images/sge/grey_silhouette.png" alt>
-                      </v-avatar>
-                      <v-text-field placeholder="Name" v-model="post.customer_name"></v-text-field>
-                    </v-row>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-text-field
-                      v-model="post.customer_address"
-                      prepend-icon="mdi-map-marker"
-                      placeholder="address"
-                    >{{post.address}}</v-text-field>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-text-field
-                      v-model="post.contact_number"
-                      type="tel"
-                      prepend-icon="mdi-phone"
-                      placeholder="+63 900 000 0000"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-menu
-                      ref="updateDateMenu"
-                      v-model="updateDateMenu"
-                      :close-on-content-click="false"
-                      :return-value.sync="date"
-                      transition="scale-transition"
-                      offset-y
-                      min-width="290px"
-                    >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                          v-model="post.delivery_date"
-                          label="Picker in menu"
-                          prepend-icon="mdi-calendar"
-                          readonly
-                          v-bind="attrs"
-                          v-on="on"
-                        ></v-text-field>
-                      </template>
-                      <v-date-picker
-                        v-model="post.delivery_date"
-                        color="deep-purple lighten-1"
-                        no-title
-                        scrollable
-                      >
-                        <v-spacer></v-spacer>
-                      </v-date-picker>
-                    </v-menu>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-text-field
-                      v-model="post.order_quantity"
-                      prepend-icon="mdi-plus"
-                      min="1"
-                      type="number"
-                      placeholder="Quantity"
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-              </v-container>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn text color="primary" @click="editDialog = false">Cancel</v-btn>
-                <v-btn text @click=" updateItem()">Save</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
+            <v-text-field
+              v-model="search"
+              append-icon="mdi-magnify"
+              label="Search"
+              single-line
+              hide-details
+            ></v-text-field>
+            <v-spacer></v-spacer>
+            <v-list>
+              <v-btn class="ma-5" color="purple darken-2" rounded outlined dark @click="showDialog">
+                <v-icon>mdi-plus</v-icon>
+                <v-toolbar-title>Add Order</v-toolbar-title>
+              </v-btn>
+            </v-list>
+          </v-card-title>
+          <!-- <v-data-table :headers="headers" :items="orders" :search="search">
+        <template v-slot:item.order_status="{ item }">
+          <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
         </template>
-      </v-card-title>
-      <v-data-table :headers="headers" :items="orders" :search="search">
+        <template v-slot:item.action="{ item }">
+          <v-icon
+            normal
+            class="mr-2"
+            title="Delivered"
+            @click="alertDelivered(item)"
+          >mdi-truck-check-outline</v-icon>
+          <v-icon
+            @click="editDialog = !editDialog, editItem(item) "
+            class="mr-2"
+            normal
+            title="Edit"
+          >mdi-table-edit</v-icon>
+          <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+          </template>-->
+          <!-- </v-data-table>   -->
+        </v-tab-item>
+        <v-tab-item>
+          <v-card flat>
+            <v-card-title>
+              Recieved Orders
+              <v-spacer></v-spacer>
+              <v-text-field
+                v-model="search"
+                append-icon="mdi-magnify"
+                label="Search"
+                single-line
+                hide-details
+              ></v-text-field>
+              <v-spacer></v-spacer>
+            </v-card-title>
+            <v-row>
+              <v-flex d-flex>
+                <v-layout wrap>
+                  <!-- <v-data-table :headers="headers" :items="orders" :search="search">
         <template v-slot:item.order_status="{ item }">
           <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
         </template>
@@ -233,7 +85,275 @@
           >mdi-table-edit</v-icon>
           <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
         </template>
-      </v-data-table>
+                  </v-data-table>-->
+                </v-layout>
+              </v-flex>
+            </v-row>
+          </v-card>
+        </v-tab-item>
+      </v-tabs-items>
+      <v-dialog v-model="dialog" width="400px">
+        <v-card>
+          <v-spacer></v-spacer>
+          <v-card-title class="deep-purple lighten-1 align-center">
+            <v-list-item-title class="d-flex align-center justify-center mx-auto headline">ADD ORDER</v-list-item-title>
+          </v-card-title>
+          <v-container>
+            <v-row class="mx-2">
+              <v-col cols="12">
+                <v-text-field
+                  prepend-icon="mdi-account-outline"
+                  placeholder="Customer Name"
+                  v-model="customerName"
+                  :error-messages="customerErrors"
+                  @input="$v.customerName.$touch()"
+                  @blur="$v.customerName.$touch()"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  prepend-icon="mdi-map-marker"
+                  placeholder="Address"
+                  v-model="address"
+                  :error-messages="addressErrors"
+                  @input="$v.address.$touch()"
+                  @blur="$v.address.$touch()"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  type="number"
+                  prepend-icon="mdi-phone"
+                  placeholder="+63 900 000 0000"
+                  v-model="contactNumber"
+                  :error-messages="contactNumberErrors"
+                  @input="$v.contactNumber.$touch()"
+                  @blur="$v.contactNumber.$touch()"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-menu
+                  ref="addDateMenu"
+                  v-model="addDateMenu"
+                  :close-on-content-click="false"
+                  :return-value.sync="date"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="290px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="deliveryDate"
+                      label="delivery date"
+                      prepend-icon="mdi-calendar"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="deliveryDate"
+                    :min="deliveryDate"
+                    :max="getEndDate"
+                    color="deep-purple lighten-1"
+                    no-title
+                    scrollable
+                  ></v-date-picker>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="deliveryDate"
+                      label="delivery date"
+                      prepend-icon="mdi-calendar"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="deliveryDate"
+                    :min="deliveryDate"
+                    :max="getEndDate"
+                    color="deep-purple lighten-1"
+                    no-title
+                    scrollable
+                  ></v-date-picker>
+                </v-menu>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  prepend-icon="mdi-plus"
+                  min="1"
+                  type="number"
+                  placeholder="Quantity"
+                  v-model="orderQuantity"
+                  :error-messages="orderQuantityErrors"
+                  @input="$v.orderQuantity.$touch()"
+                  @blur="$v.orderQuantity.$touch()"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </v-container>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn text color="primary" @click="dialog = false, reloadData()">Cancel</v-btn>
+            <v-btn text @click="addOrder()">Save</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <template>
+        <v-dialog v-model="editDialog" width="400px">
+          <v-card>
+            <v-spacer></v-spacer>
+            <v-card-title class="deep-purple lighten-1 align-center">
+              <v-list-item-title
+                class="d-flex align-center justify-center mx-auto headline"
+              >UPDATE ORDER</v-list-item-title>
+            </v-card-title>
+            <v-container>
+              <v-row class="mx-2">
+                <v-col class="align-center justify-space-between" cols="12">
+                  <v-row align="center" class="mr-0">
+                    <v-avatar size="40px" class="mx-3">
+                      <img src="//ssl.gstatic.com/s2/oz/images/sge/grey_silhouette.png" alt>
+                    </v-avatar>
+                    <v-text-field placeholder="Name" v-model="post.customer_name"></v-text-field>
+                  </v-row>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="post.customer_address"
+                    prepend-icon="mdi-map-marker"
+                    placeholder="address"
+                  >{{post.address}}</v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="post.contact_number"
+                    type="tel"
+                    prepend-icon="mdi-phone"
+                    placeholder="+63 900 000 0000"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-menu
+                    ref="updateDateMenu"
+                    v-model="updateDateMenu"
+                    :close-on-content-click="false"
+                    :return-value.sync="date"
+                    transition="scale-transition"
+                    offset-y
+                    min-width="290px"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="post.delivery_date"
+                        label="Picker in menu"
+                        prepend-icon="mdi-calendar"
+                        readonly
+                        v-bind="attrs"
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
+                      v-model="post.delivery_date"
+                      color="deep-purple lighten-1"
+                      no-title
+                      scrollable
+                    >
+                      <v-spacer></v-spacer>
+                    </v-date-picker>
+                  </v-menu>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="post.order_quantity"
+                    prepend-icon="mdi-plus"
+                    min="1"
+                    type="number"
+                    placeholder="Quantity"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </v-container>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn text color="primary" @click="editDialog = false">Cancel</v-btn>
+              <v-btn text @click=" updateItem()">Save</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </template>
+      <template>
+        <!-- <v-dialog v-model="orderDetails" persistent max-width="500px">
+          <v-card>
+            <v-card-title>
+              <span>Order Details</span>
+            </v-card-title>
+            <hr>
+            <v-spacer></v-spacer>
+            <v-list id="list" v-for="i in orderedProducts" v-bind:key="i.id">
+              <v-list-item-title>Product Name: {{i.product_name}}</v-list-item-title>
+              <v-list-item-subtitle>Order Qty: {{ i.pivot.sub_quantity }}</v-list-item-subtitle>
+            </v-list>
+            <v-card-actions>
+              <v-btn id="closeBtn" color="primary" text @click="closeDialog()">Close</v-btn>
+            </v-card-actions>
+          </v-card> 
+        </v-dialog> -->
+      </template>
+      <v-simple-table>
+        <template v-slot:default>
+          <thead>
+            <tr>
+              <th class="text-left">Receiver Name</th>
+              <th class="text-left">Address</th>
+              <th class="text-left">Distance</th>
+              <th class="text-left">Delivery Date</th>
+              <th class="text-left">Ube Halaya Jar Qty</th>
+              <th class="text-left">Ubechi Qty</th>
+              <!-- <th class="text-left">Order Details</th> -->
+              <th class="text-left">Action</th>
+              <th class="text-left">Order Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in orders.data" :key="item.id">
+              <td>{{ item.customer_name }}</td>
+              <td>{{ item.delivery_address }}</td>
+              <td>{{ item.distance }}</td>
+              <td>{{ item.delivery_date}}</td>
+              <td>{{item.halayaJar_qty}}</td>
+              <td>{{item.ubechi_qty}}</td>
+              <!-- <td>
+                <v-icon class="mr-2" @click="orderedProduct(item.id)" title="Order Details">mdi-information</v-icon>
+              </td>-->
+              <td>
+                <template>
+                  <v-icon
+                    normal
+                    class="mr-2"
+                    title="Delivered"
+                    @click="alertDelivered(item)"
+                  >mdi-truck-check-outline</v-icon>
+                  <!-- <v-icon
+                    @click="editDialog = !editDialog, editItem(item) "
+                    class="mr-2"
+                    normal
+                    title="Edit"
+                  >mdi-table-edit</v-icon>-->
+                  <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+                </template>
+              </td>
+              <td>
+                <v-chip :color="getColor(item.order_status)">{{item.order_status}}</v-chip>
+              </td>
+            </tr>
+          </tbody>
+        </template>
+      </v-simple-table>
     </v-card>
   </v-app>
 </template>
@@ -260,6 +380,12 @@
 .order {
   color: #00b300;
 }
+#list {
+  padding: 20px;
+}
+#closeBtn {
+  float: right !important;
+}
 </style>
 
 <script>
@@ -272,24 +398,31 @@ import {
   maxLength,
   between
 } from "vuelidate/lib/validators";
-import * as turf from '@turf/turf';
+import * as turf from "@turf/turf";
+import { connect } from "tls";
+// import Order from "../components/Orders.vue";
 // import DefaultLocation from "../components/DefaultLocation.vue"
 
 export default {
   name: "Order",
   components: {
-    // DefaultLocation
+    // DefaultLocation,
+    // Order
   },
   data() {
     return {
-      // accessToken:
-      //   "pk.eyJ1IjoiamllbnhpeWEiLCJhIjoiY2tlaTM3d2VrMWcxczJybjc0cmZkamk3eiJ9.JzrYlG2kZ08Pkk24hvKDJw",
+      accessToken:
+        "pk.eyJ1IjoiamllbnhpeWEiLCJhIjoiY2tlaTM3d2VrMWcxczJybjc0cmZkamk3eiJ9.JzrYlG2kZ08Pkk24hvKDJw",
       deliveryDate: new Date().toISOString().substr(0, 10),
       addDateMenu: false,
       updateDateMenu: false,
+      tabs: null,
       message: "",
       post: {},
       orders: [],
+      distance: 0,
+      status: "On order",
+      orderedProducts: [],
       msg: [],
       date2: new Date(),
       hover: false,
@@ -297,30 +430,30 @@ export default {
       modal: false,
       dialog: false,
       editDialog: false,
+      // orderDetails: false,
       customerName: "",
-      address: "San Alberto Carmelite Formation Center, Rosillos Rd, Nasipit, Talamban, Cebu City",
+      address: "",
       coordinates: [],
-      distance: 0,
-      // country: 'Philippines',
       contactNumber: "",
       orderQuantity: "",
       orderStatus: "On order",
       search: "",
       dialog: false,
-      headers: [
-        {
-          text: "Customer's Name",
-          align: "start",
-          sortable: false,
-          value: "customer_name"
-        },
-        { text: "Contact Number", value: "contact_number" },
-        { text: "Order Quantity", value: "order_quantity" },
-        { text: "Address", value: "customer_address", sortable: false },
-        { text: "Delivery Date", value: "delivery_date", sortable: false },
-        { text: "Actions", value: "action", sortable: false },
-        { text: "Status", value: "order_status" }
-      ]
+      config: {},
+      // headers: [
+      //   {
+      //     text: "Customer's Name",
+      //     align: "start",
+      //     sortable: false,
+      //     value: "customer_name"
+      //   },
+      //   { text: "Contact Number", value: "contact_number" },
+      //   { text: "Order Quantity", value: "order_quantity" },
+      //   { text: "Address", value: "customer_address", sortable: false },
+      //   { text: "Delivery Date", value: "delivery_date", sortable: false },
+      //   { text: "Actions", value: "action", sortable: false },
+      //   { text: "Status", value: "order_status" }
+      // ]
     };
   },
   validations: {
@@ -381,15 +514,24 @@ export default {
       return endDate.toISOString().slice(0, 10);
     }
   },
+  // beforeCreate() {
+  //   let config = {}
+  //   config.headers = {
+  //     Authorization: 'Bearer ' + localStorage.getItem('token')
+  //   }
+  //   this.config = config
+  //   console.log("this.config",this.config)
+  // },
   created() {
     this.loadOrder();
-    this.getCoordinates();
-    setInterval(this.loadOrder(), 3000);
+    this.fetchOrders();
+    // this.orderedProduct();
+    setInterval(this.fetchOrders(), 3000);
   },
   methods: {
     getColor(status) {
       if (status === "Canceled") return "orange";
-      else if (status === "On order") return "green";
+      else if (status === "On order") return "blue";
       else return "green";
     },
     showDialog() {
@@ -397,6 +539,23 @@ export default {
       this.dialog = !this.dialog;
     },
 
+    orderedProduct(id) {
+      this.orderDetails = true;
+      for (var i = 0; i < this.orders.length; i++) {
+        if (id == this.orders[i].id) {
+          for (var j = 0; j < this.orders[i].products.length; j++) {
+            this.orderedProducts.push(this.orders[i].products[j]);
+            // this.orderedProducts.push(this.orders[i].products[j].product_name)
+            // this.orderedProducts.push(this.orders[i].products[j].pivot.sub_quantity)
+          }
+        }
+      }
+      console.log("orderedProducts: ", this.orderedProducts);
+    },
+    closeDialog() {
+      this.orderDetails = false;
+      this.orderedProducts = [];
+    },
     updateItem() {
       if (
         this.post.customer_name === "" ||
@@ -420,7 +579,7 @@ export default {
               icon: "success",
               timer: 3000
             }),
-              this.loadOrder();
+              this.fetchOrders();
           });
       }
     },
@@ -430,7 +589,7 @@ export default {
         (this.contactNumber = ""),
         (this.orderQuantity = ""),
         (this.deliveryDate = new Date().toISOString().substr(0, 10)),
-        this.loadOrder();
+        this.fetchOrders();
       this.getColor();
       this.$v.$reset();
     },
@@ -438,20 +597,14 @@ export default {
       axios
         .post("http://127.0.0.1:8000/api/post/update", this.post)
         .then(response => {
-          this.loadOrder();
+          this.fetchOrders();
         });
-    },
-
-    loadOrder() {
-      axios.get("http://127.0.0.1:8000/api/posts/order").then(response => {
-        this.orders = response.data.data;
-      });
     },
     deleteItem(item) {
       axios
         .put("http://127.0.0.1:8000/api/post/updateCanceledStat/" + item.id)
         .then(response => {
-          this.loadOrder();
+          this.fetchOrders();
         });
     },
     editItem(item) {
@@ -460,6 +613,9 @@ export default {
         .then(response => {
           this.post = response.data;
         });
+    },
+    orderDetail() {
+      this.orderDetails = true;
     },
     alertCancel(item) {
       Swal.fire({
@@ -497,6 +653,7 @@ export default {
       }).then(result => {
         if (result.value) {
           this.deliveredItem(item);
+          // this.saveDeliveredOrder(item);
         }
       });
     },
@@ -527,11 +684,86 @@ export default {
         .catch(response => {
           console.log(response);
         });
-        // this.getCoordinates(this.address);
+      // this.getCoordinates(this.address);
     },
+    getHalayaJarQty(item) {
+      let halayaJarQty = 0;
+      for (var i = 0; i < item.products.length; i++) {
+        let name = item.products[i].product_name;
+        if (name.includes("Jar")) {
+          halayaJarQty += item.products[i].pivot.sub_quantity;
+        }
+      }
+      return halayaJarQty;
+    },
+    getUbechiQty(item) {
+      let ubechiQty = 0;
+      for (var i = 0; i < item.products.length; i++) {
+        let name = item.products[i].product_name;
+        if (name.includes("Ubechi")) {
+          ubechiQty += item.products[i].pivot.sub_quantity;
+        }
+      }
+      return ubechiQty;
+    },
+    // loadOrder() {
+    //   axios
+    //     .get("https://wawens-backend.herokuapp.com/api/orders/confirmed")
+    //     .then(response => {
+    //       this.orders = response.data;
+    //     });
+    // },
+    loadOrder() {
+      axios
+        .get("https://wawens-backend.herokuapp.com/api/orders/confirmed")
+        .then(response => {
+          // this.orders = response.data;
+          let order = response.data;
+          for (var i = 0; i < order.length; i++) {
+            let param = {
+              order_id: order[i].id,
+              name: order[i].receiver_name,
+              address: order[i].delivery_address,
+              halaya_qty: this.getHalayaJarQty(order[i]),
+              ubechi_qty: this.getUbechiQty(order[i]),
+              deliveryDate: order[i].confirmed_delivery_date,
+              orderStatus: this.status,
+              distance: this.distance
+            };
+            axios
+              .post(
+                "http://127.0.0.1:8000/api/post/deliveredOrder/" + order[i].id, param)
+              .then(response => {
+                console.log("response: ", response.data);
+              });
+          }
+        });
+    },
+    // saveDeliveredOrder(item){
+    //   let param = {
+    //     name: item.receiver_name,
+    //     address: item.delivery_address,
+    //     halaya_qty: this.getHalayaJarQty(item),
+    //     ubechi_qty: this.getUbechiQty(item),
+    //     deliveryDate: item.confirmed_delivery_date,
+    //     orderStatus: this.status,
+    //     distance: this.distance
+    //   };
+    //   axios
+    //     .post("http://127.0.0.1:8000/api/post/deliveredOrder/"+ item.id, param)
+    //     .then(response => {
+    //       Swal.fire({
+    //         title: "Order is being delivered",
+    //         icon: "success",
+    //         showConfirmButton: false,
+    //         timer: 1500
+    //       }),
+    //         this.loadOrder();
+    //     })
+    // },
     deliveredItem(item) {
       axios
-        .put("http://127.0.0.1:8000/api/post/updateStat/" + item.id)
+        .put("http://127.0.0.1:8000/api/post/updateStat/" + item.order_id)
         .then(response => {
           Swal.fire({
             title: "Order is being delivered",
@@ -539,25 +771,33 @@ export default {
             showConfirmButton: false,
             timer: 1500
           }),
-            this.loadOrder();
+            this.fetchOrders();
         });
     },
-    getCoordinates() {
-      axios
-        .get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${this.address}.json?limit=2&access_token=${this.accessToken}`)
-        .then(response => {
-          let res = JSON.stringify(response.data);
-          let result = JSON.parse(res);
-          //index 0 is the most relevant based on the mapbox geocoding documentatio
-          this.coordinates = result.features[0].geometry.coordinates; 
-         
-          //turf.js
-          var from_place = turf.point([123.921969, 10.329892]); 
-          var to_place = turf.point(this.coordinates);
-          var options = { units: "kilometers" };
-          this.distance = turf.distance(from_place, to_place, options);
-        });
+    fetchOrders() {
+      axios.get("http://127.0.0.1:8000/api/posts/order").then(response => {
+        this.orders = response.data;
+        // console.log("order_status: ", this.orders.data[0].order_status);
+      });
     }
+
+    // getCoordinates(address) {
+    //     axios
+    //     .get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${address}.json?limit=2&access_token=${this.accessToken}`)
+    //     .then(response => {
+    //       let res = JSON.stringify(response.data);
+    //       let result = JSON.parse(res);
+    //       //index 0 is the most relevant based on the mapbox geocoding documentatio
+    //       var coordinates = result.features[0].geometry.coordinates;
+    //       //turf.js
+    //       var from_place = turf.point([123.921969, 10.329892]);
+    //       var to_place = turf.point(coordinates);
+    //       var options = { units: "kilometers" };
+    //       var dist = turf.distance(from_place, to_place, options);
+    //       // console.log('address: ',address, 'coordinates: ',coordinates, 'distance: ', dist)
+    //       return dist;
+    //     });
+    // },
   }
 };
 </script>

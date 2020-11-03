@@ -1,16 +1,28 @@
 <template>
   <v-app id="inspire">
     <v-app-bar app fixed light lights-in height="70" color="white" dense dark elevation="40">
+   
+
+        <v-btn color="grey" icon @click.stop="mini = !mini">
+          <v-icon>mdi-menu</v-icon>
+        </v-btn>
+       
       <v-list-item-avatar size="60">
         <img src="../assets/wawens.png">
       </v-list-item-avatar>
       <v-toolbar-title class="deep-purple--text">WAWEN'S UBE HALAYA MANAGEMENT</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-menu bottom left>
+      <v-menu bottom >
         <template v-slot:activator="{ on, attrs }">
-          <v-btn dark icon v-bind="attrs" v-on="on">
-            <v-icon class="mr-5" size="30" color="grey">mdi-account-cog-outline</v-icon>
+             <v-btn dark icon v-bind="attrs" v-on="on">
+            <v-icon class="mr-12 pt-5" size="30" color="grey">mdi-menu-down</v-icon>
           </v-btn>
+           <v-list-item-avatar class="mr-5">
+          <v-img :src="'http://localhost:8000/'+ avatarSrc"></v-img>
+        </v-list-item-avatar>
+ 
+          <v-toolbar-title class="grey--text mr-1 sub_title pt-5">{{name}}</v-toolbar-title> 
+       
         </template>
         <v-list>
           <v-list-item v-for="item in items2" :key="item.title" :to="item.link" link>
@@ -34,16 +46,7 @@
       dark
       id="drawer"
     >
-      <v-list-item class="px-2">
-        <v-list-item-avatar>
-          <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
-        </v-list-item-avatar>
-
-        <v-list-item-title>Admin Login</v-list-item-title>
-        <v-btn icon @click.stop="mini = !mini">
-          <v-icon>mdi-chevron-left</v-icon>
-        </v-btn>
-      </v-list-item>
+  
       <v-divider></v-divider>
      
       <v-list >
@@ -86,18 +89,27 @@
   </v-app>
 </template>
 <style scoped>
+.sub_title{
+  font-size: 15px;
+}
 </style>
 <script>
+import axios from "axios";
+import { forestgreen } from 'color-name';
 export default {
   name: "Sidebar",
   props: {},
   data: () => ({
+    // displayInfo:[],
+    avatarSrc:null,
+    name:null,
     dialog: false,
     switch2: true,
     drawer: true,
     model: 1,
     mini: true,
     items: [
+      { icon: "mdi-home-variant", text: "Home", link: "/customerHome" },
       { icon: "mdi-view-dashboard", text: "Dashboard", link: "/dashboard" },
       {
         icon: "mdi-history",
@@ -106,6 +118,7 @@ export default {
           { icon:"mdi-stocking", title: "Ingredients", link: "/ingredients"},
           { icon:"mdi-package-variant",title: "Products", link: "/product"
         },
+         { icon:"mdi-table",title: "Logs", link: "/logs"},
         ]
       },
       {icon: "mdi-clipboard-outline", text: "view Orders",
@@ -113,12 +126,12 @@ export default {
       { icon: "mdi mdi-cart-plus", title: "Order", link: "/order" },
       { icon: "mdi-clipboard-outline", title: "To Deliver", link: "/delivery" },
       { icon: "mdi-content-copy", title: "Delivered Orders", link: "/delivered" },
-      
       ]
 
       },
     
-      { icon: "mdi-cogs", text: "Business Settings", link: "/setting" }
+      { icon: "mdi-cogs", text: "Business Settings", link: "/setting" },
+      { icon: "mdi-package-variant-closed", text: "My Order", link: "/myorder" }
     ],
     items2: [
       {
@@ -129,10 +142,26 @@ export default {
       { icon: "mdi-logout", title: "logout", link: "/logout" }
     ]
   }),
+  created(){
+    this.avatarRetrieve()
+
+  },
   methods: {
     goTo(route) {
       alert(route);
       this.$router.push(route);
+    },
+    avatarRetrieve(){
+            axios.get('http://127.0.0.1:8000/api/retrieveAccount').then(response => {
+                this.displayInfo = response.data.data
+                // console.log(response.data.data.avatar)
+                response.data.data.forEach(element => {
+                  console.log(element.avatar)
+                  this.avatarSrc=element.avatar
+                  this.name=element.owners_name
+                  
+                });
+            });
     }
   }
 };
