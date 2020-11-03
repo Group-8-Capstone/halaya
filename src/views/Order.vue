@@ -2,13 +2,105 @@
   <v-app>
     <!-- <v-card  class="ma-5 mb-12 pa-5">
       <default-location/>
-    </v-card>-->
+    </v-card> -->
     <v-card id="cardtable" class="ma-5 mb-12 pa-5">
       <v-tabs v-model="tabs" right color="deep-purple accent-4">
         <v-tab>Received Orders</v-tab>
         <v-tab>Walk in</v-tab>
       </v-tabs>
       <v-tabs-items v-model="tabs">
+        <v-tab-item>
+          <!-- <v-card flat> -->
+            <v-card-title>
+              Recieved Orders
+              <v-spacer></v-spacer>
+              <v-text-field
+                v-model="search"
+                append-icon="mdi-magnify"
+                label="Search"
+                single-line
+                hide-details
+              ></v-text-field>
+              <v-spacer></v-spacer>
+            </v-card-title>
+            <v-simple-table>
+        <template v-slot:default>
+          <thead>
+            <tr>
+              <th class="text-left">Receiver Name</th>
+              <th class="text-left">Address</th>
+              <th class="text-left">Distance</th>
+              <th class="text-left">Delivery Date</th>
+              <th class="text-left">Ube Halaya Jar Qty</th>
+              <th class="text-left">Ubechi Qty</th>
+              <!-- <th class="text-left">Order Details</th> -->
+              <th class="text-left">Action</th>
+              <th class="text-left">Order Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in orders.data" :key="item.id">
+              <td>{{ item.customer_name }}</td>
+              <td>{{ item.delivery_address }}</td>
+              <td>{{ item.distance }}</td>
+              <td>{{ item.delivery_date}}</td>
+              <td>{{item.halayaJar_qty}}</td>
+              <td>{{item.ubechi_qty}}</td>
+              <!-- <td>
+                <v-icon class="mr-2" @click="orderedProduct(item.id)" title="Order Details">mdi-information</v-icon>
+              </td>-->
+              <td>
+                <template>
+                  <v-icon
+                    normal
+                    class="mr-2"
+                    title="Delivered"
+                    @click="alertDelivered(item)"
+                  >mdi-truck-check-outline</v-icon>
+                  <!-- <v-icon
+                    @click="editDialog = !editDialog, editItem(item) "
+                    class="mr-2"
+                    normal
+                    title="Edit"
+                  >mdi-table-edit</v-icon>-->
+                  <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+                </template>
+              </td>
+              <td>
+                <v-chip :color="getColor(item.order_status)">{{item.order_status}}</v-chip>
+              </td>
+            </tr>
+          </tbody>
+        </template>
+      </v-simple-table>
+            <!-- <v-row>
+              <v-flex d-flex>
+                <v-layout wrap> -->
+                  <!-- <v-data-table :headers="headers" :items="orders" :search="search">
+                    <template v-slot:item.order_status="{ item }">
+                      <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
+                    </template>
+                    <template v-slot:item.action="{ item }">
+                      <v-icon
+                        normal
+                        class="mr-2"
+                        title="Delivered"
+                        @click="alertDelivered(item)"
+                      >mdi-truck-check-outline</v-icon>
+                      <v-icon
+                        @click="editDialog = !editDialog, editItem(item) "
+                        class="mr-2"
+                        normal
+                        title="Edit"
+                      >mdi-table-edit</v-icon>
+                      <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+                      </template>
+                  </v-data-table>  -->
+                <!-- </v-layout>
+              </v-flex>
+            </v-row> -->
+          
+        </v-tab-item>
         <v-tab-item>
           <v-card-title>
             Order
@@ -29,69 +121,29 @@
             </v-list>
           </v-card-title>
           <!-- <v-data-table :headers="headers" :items="orders" :search="search">
-        <template v-slot:item.order_status="{ item }">
-          <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
-        </template>
-        <template v-slot:item.action="{ item }">
-          <v-icon
-            normal
-            class="mr-2"
-            title="Delivered"
-            @click="alertDelivered(item)"
-          >mdi-truck-check-outline</v-icon>
-          <v-icon
-            @click="editDialog = !editDialog, editItem(item) "
-            class="mr-2"
-            normal
-            title="Edit"
-          >mdi-table-edit</v-icon>
-          <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
-          </template>-->
-          <!-- </v-data-table>   -->
+            <template v-slot:item.order_status="{ item }">
+              <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
+            </template>
+            <template v-slot:item.action="{ item }">
+              <v-icon
+                normal
+                class="mr-2"
+                title="Delivered"
+                @click="alertDelivered(item)"
+              >mdi-truck-check-outline</v-icon>
+              <v-icon
+                @click="editDialog = !editDialog, editItem(item) "
+                class="mr-2"
+                normal
+                title="Edit"
+              >mdi-table-edit</v-icon>
+              <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+              </template>
+           </v-data-table>   -->
         </v-tab-item>
-        <v-tab-item>
-          <v-card flat>
-            <v-card-title>
-              Recieved Orders
-              <v-spacer></v-spacer>
-              <v-text-field
-                v-model="search"
-                append-icon="mdi-magnify"
-                label="Search"
-                single-line
-                hide-details
-              ></v-text-field>
-              <v-spacer></v-spacer>
-            </v-card-title>
-            <v-row>
-              <v-flex d-flex>
-                <v-layout wrap>
-                  <!-- <v-data-table :headers="headers" :items="orders" :search="search">
-        <template v-slot:item.order_status="{ item }">
-          <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
-        </template>
-        <template v-slot:item.action="{ item }">
-          <v-icon
-            normal
-            class="mr-2"
-            title="Delivered"
-            @click="alertDelivered(item)"
-          >mdi-truck-check-outline</v-icon>
-          <v-icon
-            @click="editDialog = !editDialog, editItem(item) "
-            class="mr-2"
-            normal
-            title="Edit"
-          >mdi-table-edit</v-icon>
-          <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
-        </template>
-                  </v-data-table>-->
-                </v-layout>
-              </v-flex>
-            </v-row>
-          </v-card>
-        </v-tab-item>
+        
       </v-tabs-items>
+      <!-- </v-card> -->
       <v-dialog v-model="dialog" width="400px">
         <v-card>
           <v-spacer></v-spacer>
@@ -304,56 +356,7 @@
           </v-card> 
         </v-dialog> -->
       </template>
-      <v-simple-table>
-        <template v-slot:default>
-          <thead>
-            <tr>
-              <th class="text-left">Receiver Name</th>
-              <th class="text-left">Address</th>
-              <th class="text-left">Distance</th>
-              <th class="text-left">Delivery Date</th>
-              <th class="text-left">Ube Halaya Jar Qty</th>
-              <th class="text-left">Ubechi Qty</th>
-              <!-- <th class="text-left">Order Details</th> -->
-              <th class="text-left">Action</th>
-              <th class="text-left">Order Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in orders.data" :key="item.id">
-              <td>{{ item.customer_name }}</td>
-              <td>{{ item.delivery_address }}</td>
-              <td>{{ item.distance }}</td>
-              <td>{{ item.delivery_date}}</td>
-              <td>{{item.halayaJar_qty}}</td>
-              <td>{{item.ubechi_qty}}</td>
-              <!-- <td>
-                <v-icon class="mr-2" @click="orderedProduct(item.id)" title="Order Details">mdi-information</v-icon>
-              </td>-->
-              <td>
-                <template>
-                  <v-icon
-                    normal
-                    class="mr-2"
-                    title="Delivered"
-                    @click="alertDelivered(item)"
-                  >mdi-truck-check-outline</v-icon>
-                  <!-- <v-icon
-                    @click="editDialog = !editDialog, editItem(item) "
-                    class="mr-2"
-                    normal
-                    title="Edit"
-                  >mdi-table-edit</v-icon>-->
-                  <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
-                </template>
-              </td>
-              <td>
-                <v-chip :color="getColor(item.order_status)">{{item.order_status}}</v-chip>
-              </td>
-            </tr>
-          </tbody>
-        </template>
-      </v-simple-table>
+      
     </v-card>
   </v-app>
 </template>
@@ -439,7 +442,7 @@ export default {
       orderStatus: "On order",
       search: "",
       dialog: false,
-      config: {},
+      // config: {},
       // headers: [
       //   {
       //     text: "Customer's Name",
@@ -447,10 +450,11 @@ export default {
       //     sortable: false,
       //     value: "customer_name"
       //   },
-      //   { text: "Contact Number", value: "contact_number" },
-      //   { text: "Order Quantity", value: "order_quantity" },
-      //   { text: "Address", value: "customer_address", sortable: false },
+      //   { text: "Address", value: "delivery_address", sortable: false },
+      //   { text: "Distance", value: "distance" },
       //   { text: "Delivery Date", value: "delivery_date", sortable: false },
+      //   { text: "Ube Halaya Qty", value: "halayaJar_qty", sortable: false},
+      //   { text: "Ubechi Qty", value: "ubechi_qty", sortable: false},
       //   { text: "Actions", value: "action", sortable: false },
       //   { text: "Status", value: "order_status" }
       // ]
@@ -514,14 +518,14 @@ export default {
       return endDate.toISOString().slice(0, 10);
     }
   },
-  // beforeCreate() {
-  //   let config = {}
-  //   config.headers = {
-  //     Authorization: 'Bearer ' + localStorage.getItem('token')
-  //   }
-  //   this.config = config
-  //   console.log("this.config",this.config)
-  // },
+  beforeCreate() {
+    let config = {}
+    config.headers = {
+      Authorization: 'Bearer ' + localStorage.getItem('token')
+    }
+    this.config = config
+    console.log("this.config",this.config)
+  },
   created() {
     this.loadOrder();
     this.fetchOrders();
@@ -732,7 +736,7 @@ export default {
             };
             axios
               .post(
-                "http://127.0.0.1:8000/api/post/deliveredOrder/" + order[i].id, param)
+                "http://127.0.0.1:8000/api/post/deliveredOrder/" + order[i].id, param, this.config)
               .then(response => {
                 console.log("response: ", response.data);
               });
@@ -777,7 +781,7 @@ export default {
     fetchOrders() {
       axios.get("http://127.0.0.1:8000/api/posts/order").then(response => {
         this.orders = response.data;
-        // console.log("order_status: ", this.orders.data[0].order_status);
+        console.log("ordersssssss: ", this.orders);
       });
     }
 
