@@ -130,6 +130,7 @@ export default {
       axios.post("http://localhost:8000/api/login",userAccount).then((response) => {
         if(response.data.message === 'successfully_login'){
           console.log('success');
+          console.log(response.data);
           localStorage.setItem("token", response.data.token);
           this.$router.push('/dashboard');
         }else{
@@ -139,17 +140,6 @@ export default {
         // console.log('test ', response);
       });
     },
-    register(){
-       let userRegister = {
-        username: "@",
-        password: "@",
-      }
-      axios.post("http://localhost:8000/api/v1/auth/login",userRegister).then((response) => {
-        if (this.username !== "" && this.password !== ""){
-           console.log(userRegister);
-        }
-      });
-    }
   },
 };
 </script>
