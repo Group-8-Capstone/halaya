@@ -1,14 +1,34 @@
 <template>
 <div class="ma-5 mb-12 pa-5">
-      <v-spacer></v-spacer>
+        <v-card class="ma-5 mb-12 pa-5">
+        <v-card-title> THE BEST OF ORIGINAL WAWEN'S UBE HALAYA
+           <v-spacer></v-spacer>
         <v-list class="">
-          <v-btn class="ma-5" color="purple darken-2" rounded outlined dark @click="showDialog">
+          <v-btn  color="purple darken-2" rounded dark @click="showDialog">
             <v-icon>mdi-plus</v-icon>
             <v-toolbar-title>Create Order</v-toolbar-title>
           </v-btn>
         </v-list>
+    </v-card-title>
+    <p>Wawen's ube Halaya is made from pure ube</p>
+          <v-flex>
+              <v-layout wrap>
+                <v-flex md4 v-for="item in listPhoto" :key="item.id">
+
+                  <v-card id="cards" class="card-container ma-5">
+                    <v-card-title class="deep-purple lighten-5"></v-card-title>
+                    <hr>
+
+                   <img :src="item.url" />
+                  </v-card>
+                </v-flex>
+              </v-layout>
+            </v-flex>
+    
+    
+        </v-card>
         <v-dialog v-model="addOrderDialog" width="800px">
-        <v-card>
+        <v-card> 
             <v-spacer></v-spacer>
             <v-card-title class="align-center">
               <v-list-item-title
@@ -235,7 +255,10 @@ export default {
       orderStatus: "On order",
         date:null,
       jarQuantity:"0",
-      tabQuantity:"0"
+      tabQuantity:"0",
+      images:[{url:"../assets/halayaJar.jpg"},
+      {url:"../assets/halayaJar.jpg"},
+      {url:"../assets/halayaJar.jpg"}]
         }
     },
     validations: {
