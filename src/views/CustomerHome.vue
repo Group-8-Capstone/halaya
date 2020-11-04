@@ -217,7 +217,7 @@ export default {
       customerName: null,
       contactNumber: null,
       orderQuantity: null,
-      orderStatus: "On order",
+      orderStatus: "",
       date: null,
       jarQuantity: "0",
       tabQuantity: "0",
@@ -325,6 +325,13 @@ export default {
         (this.orderQuantity = null),
         (this.date = null);
     },
+    getOrderStatus(qty) {
+      if (qty <= 9) {
+        return "On order";
+      } else if (qty >= 10) {
+        return "Pending";
+      }
+    },
     placeOrder() {
       this.$v.$touch();
       let res = this.customerStreet.concat(
@@ -332,19 +339,30 @@ export default {
         this.customerProvince
       );
       let param = {
-        customer_name: localStorage.getItem("username"),
+        customer_id: localStorage.getItem("id"),
         address: res,
         contactNumber: this.contactNumber,
         jar_qty: this.jarQuantity,
         tub_qty: this.tabQuantity,
         deliveryDate: this.date,
-        orderStatus: this.orderStatus,
+        orderStatus: this.getOrderStatus(this.jarQuantity),
         distance: this.distance
-      }
-      axios.post("http://127.0.0.1:8000/api/post/createOrder", param).then(response => {
-        console.log('response.data: ', response.data);
-      })
-      ;
+      };
+      // console.log("param: ", param)
+      axios
+        .post("http://127.0.0.1:8000/api/post/createOrder", param)
+        .then(response => {
+          console.log("response.data: ", response.data);
+          if (response.data == "success") {
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Your order has been sent",
+              showConfirmButton: false,
+              timer: 1500
+            });
+          }
+        });
     },
     isDisabled: function() {
       return !this.tabQuantity;
