@@ -13,7 +13,7 @@
           hide-details
         ></v-text-field>
       </v-card-title>
-      <template>
+       <template>
         <v-dialog v-model="orderDetails" persistent max-width="500px">
           <v-card>
             <v-card-title>

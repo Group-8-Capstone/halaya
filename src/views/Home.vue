@@ -123,8 +123,9 @@ export default {
       // }).then(response => {
       //   console.log(response.data)
       // })
+
       // http://localhost:8000/api/v1/auth/fetch/stock
-      axios.get("http://localhost:8000/api/fetch/stock").then(response => {
+      axios.get("http://localhost:8000/api/fetch/stock",).then(response => {
         let results = [];
         for (var i = 0; i < response.data.length; i++) {
           if (this.containsObject(results,response.data[i].id)) {
