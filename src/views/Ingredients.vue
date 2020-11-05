@@ -46,7 +46,6 @@
                               @click="editDialog = !editDialog, editIngredients(item)"
                             >mdi-plus</v-icon>
                           </v-btn>
-
                           <v-btn icon>
                             <v-icon
                               @click=" addUsedStockDialog=!addUsedStockDialog "

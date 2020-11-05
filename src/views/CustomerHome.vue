@@ -1,15 +1,19 @@
 <template>
-  <div class="ma-5 mb-12 pa-5">
-    <v-spacer></v-spacer>
-    <v-list class>
-      <v-btn class="ma-5" color="purple darken-2" rounded outlined dark @click="showDialog">
+  <div >
+    <v-card class="ma-5 mb-12 pa-5">
+      <v-card-title>THE BEST OF WAWEN'S UBE HALAYA
+          <v-spacer></v-spacer>
+          <v-list class>
+      <v-btn class="ma-5" color="purple darken-2" rounded dark @click="showDialog">
         <v-icon>mdi-plus</v-icon>
         <v-toolbar-title>Create Order</v-toolbar-title>
       </v-btn>
     </v-list>
+      </v-card-title>
+       <OrderingInfo></OrderingInfo>
+    </v-card>
     <v-dialog v-model="addOrderDialog" width="800px">
       <v-card>
-        <v-spacer></v-spacer>
         <v-card-title class="align-center">
           <v-list-item-title
             class="d-flex align-center justify-center mx-auto headline black--text"
@@ -88,16 +92,16 @@
             <v-col cols="5" class="pl-5">
               <v-text-field min="0" type="number" placeholder="Quantity" v-model="tabQuantity">
                 <template slot="prepend">
-                  <v-icon v-bind:disabled="isDisabled">mdi-minus</v-icon>
-                  <v-icon>mdi-plus</v-icon>
+                  <!-- <v-icon >mdi-minus</v-icon>
+                  <v-icon>mdi-plus</v-icon> -->
                 </template>
               </v-text-field>
             </v-col>
             <v-col cols="5" class="pl-12">
               <v-text-field min="0" type="number" placeholder="Quantity" v-model="jarQuantity">
                 <template slot="prepend">
-                  <v-icon>mdi-minus</v-icon>
-                  <v-icon>mdi-plus</v-icon>
+                  <!-- <v-icon>mdi-minus</v-icon>
+                  <v-icon>mdi-plus</v-icon> -->
                 </template>
               </v-text-field>
             </v-col>
@@ -130,7 +134,7 @@
         </v-container>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn text color="primary" @click="addOrderDialog = false, reloadData()">Cancel</v-btn>
+          <v-btn text color="primary" @click="addOrderDialog = false">Cancel</v-btn>
           <v-btn text @click="placeOrder()">Save</v-btn>
         </v-card-actions>
       </v-card>
@@ -139,8 +143,8 @@
       <v-row>
         <v-col>
           <v-hover v-slot:default="{ hover }">
-            <v-card class="mx-auto" color="grey lighten-4">
-              <v-img :aspect-ratio="16/9" src="../assets/halayaTab.jpg">
+            <v-card class="mx-auto" color="grey lighten-4" width="80%">
+              <v-img :aspect-ratio="16/8" src="../assets/halayaTab.jpg">
                 <v-expand-transition>
                   <div
                     v-if="hover"
@@ -158,8 +162,8 @@
         </v-col>
         <v-col>
           <v-hover v-slot:default="{ hover }">
-            <v-card class="mx-auto" color="grey lighten-4">
-              <v-img :aspect-ratio="16/9" src="../assets/halayaJar.jpg">
+            <v-card class="mx-auto" color="grey lighten-4" width="80%">
+              <v-img :aspect-ratio="16/8" src="../assets/halayaJar.jpg">
                 <v-expand-transition>
                   <div
                     v-if="hover"
@@ -196,6 +200,7 @@
 </style>
 
 <script>
+import OrderingInfo from "../components/OrderingInfo";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { setInterval } from "timers";
@@ -221,8 +226,15 @@ export default {
       date: null,
       jarQuantity: "0",
       tabQuantity: "0",
-      distance: 0
+      distance: 0,
+      products:[{title:'Made for what?',description: 'Placing your order online'},
+      {title:'What does it mean?',description: 'No hasstle of going to physical store'},
+         {title:'How to Pay?',description: 'Paid upon delivery'}
+      ]
     };
+  },
+  components: {
+    OrderingInfo,
   },
   validations: {
     customerName: {
@@ -252,6 +264,7 @@ export default {
       required
     }
   },
+  
 
   computed: {
     addressErrors() {
@@ -312,6 +325,9 @@ export default {
       return errors;
     }
   },
+  created() {
+  
+  },
 
   methods: {
     showDialog() {
@@ -348,7 +364,6 @@ export default {
         orderStatus: this.getOrderStatus(this.jarQuantity),
         distance: this.distance
       };
-      // console.log("param: ", param)
       axios
         .post("http://127.0.0.1:8000/api/post/createOrder", param)
         .then(response => {
@@ -364,9 +379,8 @@ export default {
           }
         });
     },
-    isDisabled: function() {
-      return !this.tabQuantity;
-    },
+
+   
 
     notLessDate(deliveredDate) {
       return deliveredDate >= new Date().toISOString().substr(0, 10);
