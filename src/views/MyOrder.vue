@@ -26,10 +26,9 @@
             <v-icon small @click="details(item)" v-on="on">mdi-information</v-icon>
           </template>
           <v-card class="pa-4">
-       
               <v-card-title class=" deep-purple--text">ORDER DETAILS</v-card-title>
                   <v-card-subtitle>
-                    Below is your list of orders
+                    Below is your list of place orders
                   </v-card-subtitle>
             <v-divider color="light-purple lighten-2"></v-divider>
             <v-list-item two-line>
@@ -43,6 +42,10 @@
               </v-list-item-content>
             </v-list-item>
                <v-divider color="light-purple lighten-2"></v-divider>
+                <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn type="button" color="orange" class="mt-3" text @click="dialogOnOrder=false">Close</v-btn>
+                      </v-card-actions>
           </v-card>
         </v-dialog>
       </template>
@@ -65,9 +68,10 @@
             <v-icon small @click="details(item)" v-on="on">mdi-information</v-icon>
           </template>
           <v-card class="pa-4">
-              <v-card-title class=" deep-purple--text">ORDER DETAILS</v-card-title>
+       
+              <v-card-title class=" deep-purple--text title">ORDER DETAILS</v-card-title>
                   <v-card-subtitle>
-                    Below is your list of orders
+                    Below is your list of delivered orders
                   </v-card-subtitle>
             <v-divider color="light-purple lighten-2"></v-divider>
             <v-list-item two-line>
@@ -81,6 +85,11 @@
               </v-list-item-content>
             </v-list-item>
                 <v-divider color="light-purple lighten-2"></v-divider>
+                <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn type="button" color="orange" class="mt-3" text @click="dialogDelivered=false">Close</v-btn>
+                   
+                      </v-card-actions>
           </v-card>
         </v-dialog>
       </template>
@@ -111,12 +120,12 @@ import Swal from "sweetalert2";
           ubeJar:null,
           ubeTab:null,
           headers: [
-        { text: "Receivers Name", value: "receivers_name" },
+        { text: "Receivers Name", value: "receiver_name" },
         { text: "Prefered Delivery Date", value: "preferred_delivery_date" },
          { text: "Order Details", value: "details" },
       ],
        headers2: [
-        { text: "Receivers Name", value: "receivers_name" },
+        { text: "Receivers Name", value: "receiver_name" },
         { text: "Prefered Delivery Date", value: "preferred_delivery_date" },
         { text: "Order Details", value: "details" },
       ],
