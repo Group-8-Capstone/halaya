@@ -208,6 +208,8 @@ import {
 export default {
   data() {
     return {
+      accessToken:
+        "pk.eyJ1IjoiamllbnhpeWEiLCJhIjoiY2tlaTM3d2VrMWcxczJybjc0cmZkamk3eiJ9.JzrYlG2kZ08Pkk24hvKDJw",
       menu: false,
       btnDisable: true,
       addOrderDialog: false,
@@ -334,34 +336,52 @@ export default {
     },
     placeOrder() {
       this.$v.$touch();
-      let res = this.customerStreet.concat(
+      var place = this.customerStreet.concat(
+        " ",
         this.customerBarangay,
+        " ",
         this.customerProvince
       );
-      let param = {
-        customer_id: localStorage.getItem("id"),
-        address: res,
-        contactNumber: this.contactNumber,
-        jar_qty: this.jarQuantity,
-        tub_qty: this.tabQuantity,
-        deliveryDate: this.date,
-        orderStatus: this.getOrderStatus(this.jarQuantity),
-        distance: this.distance
-      };
-      // console.log("param: ", param)
       axios
-        .post("http://127.0.0.1:8000/api/post/createOrder", param)
+        .get(
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${place}.json?limit=2&access_token=${
+            this.accessToken
+          }`
+        )
         .then(response => {
-          console.log("response.data: ", response.data);
-          if (response.data == "success") {
-            Swal.fire({
-              position: "center",
-              icon: "success",
-              title: "Your order has been sent",
-              showConfirmButton: false,
-              timer: 1500
+          let res = JSON.stringify(response.data);
+          let result = JSON.parse(res); 
+
+          var from_place = turf.point([123.921969, 10.329892]);
+          var to_place = turf.point(result.features[0].geometry.coordinates);
+          var options = { units: "kilometers" };
+          var dist = turf.distance(from_place, to_place, options);
+
+          let param = {
+            customer_id: localStorage.getItem("id"),
+            receiver_name: this.customerName,
+            address: place,
+            contactNumber: this.contactNumber,
+            jar_qty: this.jarQuantity,
+            tub_qty: this.tabQuantity,
+            deliveryDate: this.date,
+            orderStatus: this.getOrderStatus(this.jarQuantity),
+            distance: dist
+          };
+          axios
+            .post("http://127.0.0.1:8000/api/post/createOrder", param)
+            .then(response => {
+              console.log("response.data: ", response.data);
+              if (response.data == "success") {
+                Swal.fire({
+                  position: "center",
+                  icon: "success",
+                  title: "Your order has been sent",
+                  showConfirmButton: false,
+                  timer: 1500
+                });
+              }
             });
-          }
         });
     },
     isDisabled: function() {
