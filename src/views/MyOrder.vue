@@ -19,22 +19,36 @@
           hide-details
         ></v-text-field>
            </v-card-title>
-              <v-data-table :headers="headers" :items="onOrder" :search="search">
-              <template v-slot:item.action="{ item }" >
-                <v-icon
-                  @click="editDialog = !editDialog, editEstimatedValue(item) "
-                  normal
-                  title="Edit"
-                >mdi-table-edit</v-icon>
-                <v-icon
-                class="mr-3"
-                color="red"
-                @click="alertDeleteIngredients(item)"
-                normal
-                title="Delete Product"
-                >mdi-delete
-                </v-icon>
-              </template>
+            <v-data-table :headers="headers" :items="onOrder" :search="search">
+          <template v-slot:item.details="{ item }">
+        <v-dialog v-model="dialogOnOrder" max-width="300px">
+          <template v-slot:activator="{ on }">
+            <v-icon small @click="details(item)" v-on="on">mdi-information</v-icon>
+          </template>
+          <v-card class="pa-4">
+              <v-card-title class=" deep-purple--text">ORDER DETAILS</v-card-title>
+                  <v-card-subtitle>
+                    Below is your list of place orders
+                  </v-card-subtitle>
+            <v-divider color="light-purple lighten-2"></v-divider>
+            <v-list-item two-line>
+              <v-list-item-content class="justify-center">
+                <v-list-item-title>Ube Halaya Jar Quantity: {{ubeJar}}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+               <v-list-item two-line>
+              <v-list-item-content class="justify-center">
+                <v-list-item-title>Ube Halaya Tab Quantity: {{ubeTab}}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+               <v-divider color="light-purple lighten-2"></v-divider>
+                <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn type="button" color="orange" class="mt-3" text @click="dialogOnOrder=false">Close</v-btn>
+                      </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </template>
             </v-data-table>
             </v-tab-item>
             <v-tab-item>
@@ -46,29 +60,42 @@
           single-line
           hide-details
         ></v-text-field>
-            
           </v-card-title>
-            <v-data-table :headers="headers" :items="deliveredOrder" :search="search">
-              <template v-slot:item.action="{ item }" >
-                <v-icon
-                @click="editProduct(item)"
-                  normal
-                  title="Edit"
-                >mdi-table-edit
-                </v-icon>
-                <v-icon
-                class="mr-3"
-                color="red"
-                @click="AlertDelete(item)"
-                  normal
-                  title="Delete Product"
-                >mdi-delete
-                </v-icon>
-              </template>
+            <v-data-table :headers="headers2" :items="deliveredOrder" :search="search">
+               <template v-slot:item.details="{ item }">
+        <v-dialog v-model="dialogDelivered" max-width="300px">
+          <template v-slot:activator="{ on }">
+            <v-icon small @click="details(item)" v-on="on">mdi-information</v-icon>
+          </template>
+          <v-card class="pa-4">
+       
+              <v-card-title class=" deep-purple--text title">ORDER DETAILS</v-card-title>
+                  <v-card-subtitle>
+                    Below is your list of delivered orders
+                  </v-card-subtitle>
+            <v-divider color="light-purple lighten-2"></v-divider>
+            <v-list-item two-line>
+              <v-list-item-content class="justify-center">
+                <v-list-item-title>Ube Halaya Jar Quantity: {{ubeJar}}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+               <v-list-item two-line>
+              <v-list-item-content class="justify-center">
+                <v-list-item-title>Ube Halaya Tab Quantity: {{ubeTab}}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+                <v-divider color="light-purple lighten-2"></v-divider>
+                <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn type="button" color="orange" class="mt-3" text @click="dialogDelivered=false">Close</v-btn>
+                   
+                      </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </template>
             </v-data-table>
             </v-tab-item>
         </v-tabs-items>
-         
      </v-card>
 </div>
 </template>
@@ -84,17 +111,55 @@ import Swal from "sweetalert2";
   export default {
     name: "MyOrder",
     data: () => ({
+      search:"",
         deliveredOrder:[],
+         dialogOnOrder: false,
+        dialogDelivered: false,
         onOrder:[],
           tabs:null,
+          ubeJar:null,
+          ubeTab:null,
           headers: [
-        
-        
-     { text: "Product Name", value: "" },
-         { text: "Order Details", value: "" },
-        { text: "Actions", value: "action", sortable: false },
+        { text: "Receivers Name", value: "receiver_name" },
+        { text: "Prefered Delivery Date", value: "preferred_delivery_date" },
+         { text: "Order Details", value: "details" },
+      ],
+       headers2: [
+        { text: "Receivers Name", value: "receiver_name" },
+        { text: "Prefered Delivery Date", value: "preferred_delivery_date" },
+        { text: "Order Details", value: "details" },
       ],
         
-    })
+    }),
+    created(){
+      this.retrieveOnOrder();
+      this.retrieveDeliveredOrder();
+      
+    },
+    methods: {
+         retrieveOnOrder(){
+      let id=localStorage.getItem('id')
+      axios.get("http://127.0.0.1:8000/api/fetchOnOrder/"+ id) .then(response => {
+          this.onOrder=response.data.post
+          console.log(response.data.post)
+          
+          })
+          
+    },
+      retrieveDeliveredOrder(){
+      let id=localStorage.getItem('id')
+      axios.get("http://127.0.0.1:8000/api/fetchDeliveredOrder/"+ id) .then(response => {
+          this.deliveredOrder=response.data.post
+          console.log(response.data.post)
+          
+          })
+          
+    },
+    details(item) {
+      console.log(item)
+      this.ubeJar = item.ubeHalayaJar_qty;
+      this.ubeTab = item.ubeHalayaTub_qty;
+    },
+    },
   }
 </script>

@@ -1,15 +1,19 @@
 <template>
-  <div class="ma-5 mb-12 pa-5">
-    <v-spacer></v-spacer>
-    <v-list class>
-      <v-btn class="ma-5" color="purple darken-2" rounded outlined dark @click="showDialog">
+  <div >
+    <v-card class="ma-5 mb-12 pa-5">
+      <v-card-title>THE BEST OF WAWEN'S UBE HALAYA
+          <v-spacer></v-spacer>
+          <v-list class>
+      <v-btn class="ma-5" color="purple darken-2" rounded dark @click="showDialog">
         <v-icon>mdi-plus</v-icon>
         <v-toolbar-title>Create Order</v-toolbar-title>
       </v-btn>
     </v-list>
+      </v-card-title>
+       <OrderingInfo></OrderingInfo>
+    </v-card>
     <v-dialog v-model="addOrderDialog" width="800px">
       <v-card>
-        <v-spacer></v-spacer>
         <v-card-title class="align-center">
           <v-list-item-title
             class="d-flex align-center justify-center mx-auto headline black--text"
@@ -45,17 +49,17 @@
           <label>Address</label>
 
           <v-row class="pl-5">
-            <v-col cols="4">
+            <v-col cols="6">
               <v-text-field
                 v-model="customerStreet"
-                placeholder="Street"
+                placeholder="Building Name/Street"
                 :error-messages="customerStreetErrors"
                 @input="$v.customerStreet.$touch()"
                 @blur="$v.customerStreet.$touch()"
                 required
               ></v-text-field>
             </v-col>
-            <v-col cols="4">
+            <v-col cols="6">
               <v-text-field
                 v-model="customerBarangay"
                 placeholder="Barangay"
@@ -65,7 +69,19 @@
                 required
               ></v-text-field>
             </v-col>
-            <v-col cols="4">
+          </v-row>
+          <v-row class="pl-5">
+             <v-col cols="6">
+              <v-text-field
+                v-model="customerMunicipality"
+                placeholder="Municipality/City"
+                :error-messages="customerMunicipalityErrors"
+                @input="$v.customerMunicipality.$touch()"
+                @blur="$v.customerMunicipality.$touch()"
+                required
+              ></v-text-field>
+            </v-col>
+            <v-col cols="6">
               <v-text-field
                 v-model="customerProvince"
                 placeholder="Province"
@@ -84,25 +100,26 @@
               <v-img width="250px" height="200px" src="../assets/halayaJar.jpg"></v-img>
             </v-col>
           </v-row>
-          <v-row>
+          <v-row class="pl-5">
             <v-col cols="5" class="pl-5">
               <v-text-field min="0" type="number" placeholder="Quantity" v-model="tabQuantity">
                 <template slot="prepend">
-                  <v-icon v-bind:disabled="isDisabled">mdi-minus</v-icon>
-                  <v-icon>mdi-plus</v-icon>
+                  <!-- <v-icon >mdi-minus</v-icon>
+                  <v-icon>mdi-plus</v-icon> -->
                 </template>
               </v-text-field>
             </v-col>
             <v-col cols="5" class="pl-12">
               <v-text-field min="0" type="number" placeholder="Quantity" v-model="jarQuantity">
                 <template slot="prepend">
-                  <v-icon>mdi-minus</v-icon>
-                  <v-icon>mdi-plus</v-icon>
+                  <!-- <v-icon>mdi-minus</v-icon>
+                  <v-icon>mdi-plus</v-icon> -->
                 </template>
               </v-text-field>
             </v-col>
           </v-row>
-          <v-col cols="12" sm="6" md="4">
+        <v-row class="pl-5">
+          <v-col cols="12" sm="6" md="4"   >
             <v-menu
               v-model="menu"
               :close-on-content-click="true"
@@ -127,11 +144,12 @@
               <v-date-picker v-model="date" no-title scrollable :allowed-dates="notLessDate"></v-date-picker>
             </v-menu>
           </v-col>
+          </v-row>
         </v-container>
-        <v-card-actions>
+        <v-card-actions >
           <v-spacer></v-spacer>
-          <v-btn text color="primary" @click="addOrderDialog = false, reloadData()">Cancel</v-btn>
-          <v-btn text @click="placeOrder()">Save</v-btn>
+          <v-btn text color="orange" @click="addOrderDialog = false" class="mb-5" >Cancel</v-btn>
+          <v-btn text color="primary" @click="placeOrder()" class="mb-5">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -139,8 +157,8 @@
       <v-row>
         <v-col>
           <v-hover v-slot:default="{ hover }">
-            <v-card class="mx-auto" color="grey lighten-4">
-              <v-img :aspect-ratio="16/9" src="../assets/halayaTab.jpg">
+            <v-card class="mx-auto mr-5" color="grey lighten-4" width="80%">
+              <v-img :aspect-ratio="16/8" src="../assets/halayaTab.jpg">
                 <v-expand-transition>
                   <div
                     v-if="hover"
@@ -158,8 +176,8 @@
         </v-col>
         <v-col>
           <v-hover v-slot:default="{ hover }">
-            <v-card class="mx-auto" color="grey lighten-4">
-              <v-img :aspect-ratio="16/9" src="../assets/halayaJar.jpg">
+            <v-card class="mx-auto ml-5" color="grey lighten-4" width="80%">
+              <v-img :aspect-ratio="16/8" src="../assets/halayaJar.jpg">
                 <v-expand-transition>
                   <div
                     v-if="hover"
@@ -196,6 +214,7 @@
 </style>
 
 <script>
+import OrderingInfo from "../components/OrderingInfo";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { setInterval } from "timers";
@@ -219,12 +238,16 @@ export default {
       customerName: null,
       contactNumber: null,
       orderQuantity: null,
+      customerMunicipality:null,
       orderStatus: "",
       date: null,
       jarQuantity: "0",
       tabQuantity: "0",
-      distance: 0
+      distance: 0,
     };
+  },
+  components: {
+    OrderingInfo,
   },
   validations: {
     customerName: {
@@ -247,6 +270,9 @@ export default {
     customerBarangay: {
       required
     },
+    customerMunicipality:{
+      required
+    },
     customerProvince: {
       required
     },
@@ -254,6 +280,7 @@ export default {
       required
     }
   },
+  
 
   computed: {
     addressErrors() {
@@ -300,6 +327,14 @@ export default {
         errors.push("Barangay is required.");
       return errors;
     },
+    customerMunicipalityErrors(){
+       const errors = [];
+      if (!this.$v.customerMunicipality.$dirty) return errors;
+      !this.$v.customerMunicipality.required &&
+        errors.push("Municipality is required.");
+      return errors;
+
+    },
     customerProvinceErrors() {
       const errors = [];
       if (!this.$v.customerProvince.$dirty) return errors;
@@ -314,6 +349,9 @@ export default {
       return errors;
     }
   },
+  created() {
+  
+  },
 
   methods: {
     showDialog() {
@@ -321,9 +359,12 @@ export default {
       this.addOrderDialog = true;
       (this.customerStreet = null),
         (this.customerBarangay = null),
+        (this.customerMunicipality = null),
         (this.customerProvince = null),
         (this.customerName = null),
         (this.contactNumber = null),
+        (this.jarQuantity="0")
+        (this.ubeQuantity="0")
         (this.orderQuantity = null),
         (this.date = null);
     },
@@ -336,11 +377,22 @@ export default {
     },
     placeOrder() {
       this.$v.$touch();
-      var place = this.customerStreet.concat(
+      var street=this.customerStreet.charAt(0).toUpperCase() +
+          this.customerStreet.slice(1).toLowerCase();
+      var barangay=this.customerBarangay.charAt(0).toUpperCase() +
+          this.customerBarangay.slice(1).toLowerCase();
+      var municipality=this.customerMunicipality.charAt(0).toUpperCase() +
+          this.customerMunicipality.slice(1).toLowerCase();
+      var province=this.customerProvince.charAt(0).toUpperCase() +
+          this.customerProvince.slice(1).toLowerCase();
+
+      var place = street.concat(
         " ",
-        this.customerBarangay,
+        barangay,
         " ",
-        this.customerProvince
+       municipality,
+        " ",
+        province
       );
       axios
         .get(
@@ -351,9 +403,9 @@ export default {
         .then(response => {
           let res = JSON.stringify(response.data);
           let result = JSON.parse(res); 
-
+          var coordinates = result.features[0].geometry.coordinates
           var from_place = turf.point([123.921969, 10.329892]);
-          var to_place = turf.point(result.features[0].geometry.coordinates);
+          var to_place = turf.point(coordinates);
           var options = { units: "kilometers" };
           var dist = turf.distance(from_place, to_place, options);
 
@@ -380,14 +432,12 @@ export default {
                   showConfirmButton: false,
                   timer: 1500
                 });
+                this.addOrderDialog=false;
               }
             });
         });
+        
     },
-    isDisabled: function() {
-      return !this.tabQuantity;
-    },
-
     notLessDate(deliveredDate) {
       return deliveredDate >= new Date().toISOString().substr(0, 10);
     }
