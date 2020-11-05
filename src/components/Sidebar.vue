@@ -25,11 +25,11 @@
        
         </template>
         <v-list>
-          <v-list-item v-for="item in items2" :key="item.title" :to="item.link" link>
-            <v-list-item-icon>
-              <v-icon v-text="item.icon"></v-icon>
+          <v-list-item v-for="item in items2" :key="item.title" :to="item.link" link >
+            <v-list-item-icon @click="logout(item)">
+              <v-icon  v-text="item.icon"></v-icon>
             </v-list-item-icon>
-            <v-list-item-content>
+            <v-list-item-content  @click="logout(item)">
               <v-list-item-title v-text="item.title"></v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -139,7 +139,7 @@ export default {
         title: "Profile Setting",
         link: "/profileSetting"
       },
-      { icon: "mdi-logout", title: "logout", link: "/logout" }
+      { icon: "mdi-logout", title: "logout", link: "/login" }
     ]
   }),
   created(){
@@ -162,6 +162,12 @@ export default {
                   
                 });
             });
+    },
+    logout(item){
+      if(item.title == "logout"){
+        console.log("sdsd");
+      localStorage.clear();
+      }
     }
   }
 };

@@ -73,6 +73,12 @@
                   @click="login"
                 >Log In</v-btn>
               </v-card-actions>
+              <div align="center" justify="center">
+                  <span>
+                    Don't have an account?
+                    <a href="/register">Sign up</a>
+                  </span>
+                </div>
             </v-card>
           </v-col>
         </v-row>
