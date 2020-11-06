@@ -168,8 +168,8 @@ router.beforeEach(async(to, from, next) => {
   const authenticated = await verify_auth().then(res=> {
     return res
   });
-  const requiresAuth = await to.matched.some(record => record.meta.requiresAuth);
   console.log('variable ' + authenticated)
+  const requiresAuth = await to.matched.some(record => record.meta.requiresAuth);
   // if (requiresAuth && authenticated){
   //   console.log("authenticated")
   //   next();
@@ -190,6 +190,7 @@ router.beforeEach(async(to, from, next) => {
 const verify_auth = () => {
   return new Promise((resolve, reject) => {
     if(localStorage.getItem("token") === null){
+      console.log("no token")
       resolve(false);
     }else{
       let config = {
