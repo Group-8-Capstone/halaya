@@ -146,7 +146,7 @@ export default {
       cPassword: "",
       valuePass: true,
     }),
-    computed: {
+    computed: { 
         passwordConfirmationRule() {
         return () => (this.userPassword === this.cPassword) || 'Password does not match'
         }

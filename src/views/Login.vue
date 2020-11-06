@@ -1,0 +1,194 @@
+<template>
+  <v-app id="inspire">
+    <v-main>
+      <v-container
+        class="fill-height"
+        fluid
+      >
+        <v-row
+          align="center"
+          justify="center"
+        >
+          <v-col
+            cols="12"
+            sm="8"
+            md="4"
+          >
+            <v-card class="elevation-12">
+              <v-list-item
+                id="cardHeader"
+                size="150"
+              >
+                <v-list-item-content>
+                  <v-list-item-title class="d-flex align-center justify-center pa-6 mx-auto headline">L O G I N</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item class="d-flex align-center justify-center pa-6 mx-auto">
+                <img
+                  alt="wawen's ube halaya"
+                  src="../assets/wawens.png"
+                  height="154"
+                >
+              </v-list-item>
+
+              <v-spacer></v-spacer>
+
+              <v-card-text>
+                <v-form>
+                  <p v-if="error" class="notif"> Incorrect Username and Password </p>
+                  <v-text-field
+                    label="Username"
+                    name="Username"
+                    prepend-icon="mdi-account"
+                    type="text"
+                    v-model="user"
+                    class="border-design"
+                    outlined
+                    dense
+                    :error="error"
+                  ></v-text-field>
+
+                  <v-text-field
+                    id="password"
+                    label="Password"
+                    name="password"
+                    prepend-icon="mdi-lock"
+                    type="password"
+                    v-model="pass"
+                    class="border-design"
+                    outlined
+                    dense
+                    :error="error"
+                  ></v-text-field>
+                </v-form>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  id="btnLogin"
+                  class="mb-5"
+                  block
+                  outlined
+                  rounded
+                  @click="login"
+                >Log In</v-btn>
+              </v-card-actions>
+              <div align="center" justify="center">
+                  <span>
+                    Don't have an account?
+                    <a href="/register">Sign up</a>
+                  </span>
+                </div>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-main>
+  </v-app>
+</template>
+<style scoped>
+#inspire {
+  background-color: #a4508b;
+  background-image: linear-gradient(360deg, white 20%, #5f0a87 74%);
+}
+#btnLogin,
+.border-design {
+  border-color: purple !important;
+  border-width: 2px !important;
+  color: purple !important;
+}
+#cardHeader {
+  background-color: purple;
+  color: white !important;
+}
+.notif{
+  text-align: center;
+  color: red;
+}
+.available{
+  color: green;
+}
+.notavailable{
+  color: red;
+}
+</style>
+
+
+<script>
+import axios from "axios";
+export default {
+  props: {
+    source: String,
+  },
+  data() {
+    return {
+      user : '',
+      pass : '',
+      isAvailable: 0,
+      responseMessage: '',
+      error : false
+
+    };
+  },
+  mounted() {},
+  watch: {
+    error: function(ol, ne){
+      return this.error
+    }
+  },
+  methods: {
+    login() {
+      let userAccount = {
+        username: this.user,
+        password: this.pass,
+      }
+      axios.post("http://localhost:8000/api/login",userAccount).then((response) => {
+        if(response.data.message === 'successfully_login'){
+          console.log('success');
+          console.log(response.data.UserAccount[0].username);
+          localStorage.setItem("token", response.data.token);
+          // localStorage.setItem("username", response.data.UserAccount[0].username);
+          localStorage.setItem("role", response.data.UserAccount[0].role);
+          localStorage.setItem("id", response.data.UserAccount[0].id);
+          if(response.data.UserAccount[0].role == 'admin'){
+            this.$router.push('/dashboard');
+          } else if (response.data.UserAccount[0].role == 'customer') {
+            this.$router.push('/customerHome');
+          } else {
+            this.$router.push('/delivery');
+          }
+        }else{
+          console.log('invalid');
+          this.error = true;
+        }
+        // console.log('test ', response);
+      });
+    },
+  //   checkUsername: function(){
+  //     var username = this.username.trim();
+  //     if(username != ''){
+ 
+  //      axios.get('http://localhost:8000/api/login', {
+  //        params: {
+  //          username: username
+  //        }
+  //      })
+  //      .then(function (response) {
+  //        app.isAvailable = response.data;
+  //        if(response.data == 0){
+  //          app.responseMessage = "Username is Available.";
+  //        }else{
+  //          app.responseMessage = "Username is not Available.";
+  //        }
+  //      })
+  //      .catch(function (error) {
+  //        console.log(error);
+  //      });
+
+  //    }else{
+  //      this.responseMessage = "";
+  //    }
+  //  }
+  },
+};
+</script>

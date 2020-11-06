@@ -6,11 +6,95 @@
     <v-card id="cardtable" class="ma-5 mb-12 pa-5">
       <v-tabs v-model="tabs" right color="deep-purple accent-4">
         <v-tab>Received Orders</v-tab>
+        <v-tab>Pending Orders</v-tab>
         <v-tab>Walk in</v-tab>
       </v-tabs>
       <v-tabs-items v-model="tabs">
         <v-tab-item>
           <v-card-title>
+            Recieved Orders
+            <v-spacer></v-spacer>
+            <v-text-field
+              v-model="search"
+              append-icon="mdi-magnify"
+              label="Search"
+              single-line
+              hide-details
+            ></v-text-field>
+            <v-spacer></v-spacer>
+          </v-card-title>
+          <v-row>
+            <v-flex d-flex>
+              <v-layout wrap>
+                <v-data-table :headers="headers" :items="orders" :search="search">
+                  <template v-slot:item.order_status="{ item }">
+                    <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
+                  </template>
+                  <template v-slot:item.action="{ item }">
+                    <v-icon
+                      normal
+                      class="mr-2"
+                      title="Delivered"
+                      @click="alertDelivered(item)"
+                    >mdi-truck-check-outline</v-icon>
+                    <v-icon
+                      @click="editDialog = !editDialog, editItem(item) "
+                      class="mr-2"
+                      normal
+                      title="Edit"
+                    >mdi-table-edit</v-icon>
+                    <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+                  </template>
+                </v-data-table>
+              </v-layout>
+            </v-flex>
+          </v-row>
+        </v-tab-item>
+
+        <v-tab-item>
+          <v-card-title>
+            Pending Orders
+            <v-spacer></v-spacer>
+            <v-text-field
+              v-model="search"
+              append-icon="mdi-magnify"
+              label="Search"
+              single-line
+              hide-details
+            ></v-text-field>
+            <v-spacer></v-spacer>
+          </v-card-title>
+          <v-row>
+            <v-flex d-flex>
+              <v-layout wrap>
+                <v-data-table :headers="headers" :items="pendingOrders" :search="search">
+                  <template v-slot:item.order_status="{ item }">
+                    <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
+                  </template>
+                  <template v-slot:item.action="{ item }">
+                    <v-icon
+                      normal
+                      class="mr-2"
+                      title="Confirm Order"
+                      @click="confirmOrder(item)"
+                    >mdi mdi-checkbox-marked-outline</v-icon>
+                    <!-- <v-icon
+                      @click="editDialog = !editDialog, editItem(item) "
+                      class="mr-2"
+                      normal
+                      title="Edit"
+                    >mdi-table-edit</v-icon>-->
+                    <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+                  </template>
+                </v-data-table>
+              </v-layout>
+            </v-flex>
+          </v-row>
+        </v-tab-item>
+
+        <v-tab-item>
+          <Walkin/>
+          <!-- <v-card-title>
             Order
             <v-spacer></v-spacer>
             <v-text-field
@@ -27,69 +111,7 @@
                 <v-toolbar-title>Add Order</v-toolbar-title>
               </v-btn>
             </v-list>
-          </v-card-title>
-          <!-- <v-data-table :headers="headers" :items="orders" :search="search">
-        <template v-slot:item.order_status="{ item }">
-          <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
-        </template>
-        <template v-slot:item.action="{ item }">
-          <v-icon
-            normal
-            class="mr-2"
-            title="Delivered"
-            @click="alertDelivered(item)"
-          >mdi-truck-check-outline</v-icon>
-          <v-icon
-            @click="editDialog = !editDialog, editItem(item) "
-            class="mr-2"
-            normal
-            title="Edit"
-          >mdi-table-edit</v-icon>
-          <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
-          </template>-->
-          <!-- </v-data-table>   -->
-        </v-tab-item>
-        <v-tab-item>
-          <v-card flat>
-            <v-card-title>
-              Recieved Orders
-              <v-spacer></v-spacer>
-              <v-text-field
-                v-model="search"
-                append-icon="mdi-magnify"
-                label="Search"
-                single-line
-                hide-details
-              ></v-text-field>
-              <v-spacer></v-spacer>
-            </v-card-title>
-            <v-row>
-              <v-flex d-flex>
-                <v-layout wrap>
-                  <!-- <v-data-table :headers="headers" :items="orders" :search="search">
-        <template v-slot:item.order_status="{ item }">
-          <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
-        </template>
-        <template v-slot:item.action="{ item }">
-          <v-icon
-            normal
-            class="mr-2"
-            title="Delivered"
-            @click="alertDelivered(item)"
-          >mdi-truck-check-outline</v-icon>
-          <v-icon
-            @click="editDialog = !editDialog, editItem(item) "
-            class="mr-2"
-            normal
-            title="Edit"
-          >mdi-table-edit</v-icon>
-          <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
-        </template>
-                  </v-data-table>-->
-                </v-layout>
-              </v-flex>
-            </v-row>
-          </v-card>
+          </v-card-title> -->
         </v-tab-item>
       </v-tabs-items>
       <v-dialog v-model="dialog" width="400px">
@@ -302,58 +324,8 @@
               <v-btn id="closeBtn" color="primary" text @click="closeDialog()">Close</v-btn>
             </v-card-actions>
           </v-card> 
-        </v-dialog> -->
+        </v-dialog>-->
       </template>
-      <v-simple-table>
-        <template v-slot:default>
-          <thead>
-            <tr>
-              <th class="text-left">Receiver Name</th>
-              <th class="text-left">Address</th>
-              <th class="text-left">Distance</th>
-              <th class="text-left">Delivery Date</th>
-              <th class="text-left">Ube Halaya Jar Qty</th>
-              <th class="text-left">Ubechi Qty</th>
-              <!-- <th class="text-left">Order Details</th> -->
-              <th class="text-left">Action</th>
-              <th class="text-left">Order Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in orders.data" :key="item.id">
-              <td>{{ item.customer_name }}</td>
-              <td>{{ item.delivery_address }}</td>
-              <td>{{ item.distance }}</td>
-              <td>{{ item.delivery_date}}</td>
-              <td>{{item.halayaJar_qty}}</td>
-              <td>{{item.ubechi_qty}}</td>
-              <!-- <td>
-                <v-icon class="mr-2" @click="orderedProduct(item.id)" title="Order Details">mdi-information</v-icon>
-              </td>-->
-              <td>
-                <template>
-                  <v-icon
-                    normal
-                    class="mr-2"
-                    title="Delivered"
-                    @click="alertDelivered(item)"
-                  >mdi-truck-check-outline</v-icon>
-                  <!-- <v-icon
-                    @click="editDialog = !editDialog, editItem(item) "
-                    class="mr-2"
-                    normal
-                    title="Edit"
-                  >mdi-table-edit</v-icon>-->
-                  <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
-                </template>
-              </td>
-              <td>
-                <v-chip :color="getColor(item.order_status)">{{item.order_status}}</v-chip>
-              </td>
-            </tr>
-          </tbody>
-        </template>
-      </v-simple-table>
     </v-card>
   </v-app>
 </template>
@@ -400,19 +372,19 @@ import {
 } from "vuelidate/lib/validators";
 import * as turf from "@turf/turf";
 import { connect } from "tls";
+import Walkin from "../components/Walkin.vue"
 // import Order from "../components/Orders.vue";
 // import DefaultLocation from "../components/DefaultLocation.vue"
 
 export default {
   name: "Order",
   components: {
+    Walkin,
     // DefaultLocation,
     // Order
   },
   data() {
     return {
-      accessToken:
-        "pk.eyJ1IjoiamllbnhpeWEiLCJhIjoiY2tlaTM3d2VrMWcxczJybjc0cmZkamk3eiJ9.JzrYlG2kZ08Pkk24hvKDJw",
       deliveryDate: new Date().toISOString().substr(0, 10),
       addDateMenu: false,
       updateDateMenu: false,
@@ -420,6 +392,7 @@ export default {
       message: "",
       post: {},
       orders: [],
+      pendingOrders: [],
       distance: 0,
       status: "On order",
       orderedProducts: [],
@@ -439,21 +412,25 @@ export default {
       orderStatus: "On order",
       search: "",
       dialog: false,
-      config: {},
-      // headers: [
-      //   {
-      //     text: "Customer's Name",
-      //     align: "start",
-      //     sortable: false,
-      //     value: "customer_name"
-      //   },
-      //   { text: "Contact Number", value: "contact_number" },
-      //   { text: "Order Quantity", value: "order_quantity" },
-      //   { text: "Address", value: "customer_address", sortable: false },
-      //   { text: "Delivery Date", value: "delivery_date", sortable: false },
-      //   { text: "Actions", value: "action", sortable: false },
-      //   { text: "Status", value: "order_status" }
-      // ]
+      headers: [
+        {
+          text: "Customer's Name",
+          align: "start",
+          sortable: false,
+          value: "receiver_name"
+        },
+        { text: "Address", value: "customer_address", sortable: false },
+        { text: "Distance", value: "distance" },
+        {
+          text: "Delivery Date",
+          value: "preferred_delivery_date",
+          sortable: false
+        },
+        { text: "Ube Halaya Qty", value: "ubeHalayaJar_qty", sortable: false },
+        { text: "Ubechi Qty", value: "ubeHalayaTub_qty", sortable: false },
+        { text: "Actions", value: "action", sortable: false },
+        { text: "Status", value: "order_status" }
+      ]
     };
   },
   validations: {
@@ -514,18 +491,18 @@ export default {
       return endDate.toISOString().slice(0, 10);
     }
   },
-  // beforeCreate() {
-  //   let config = {}
-  //   config.headers = {
-  //     Authorization: 'Bearer ' + localStorage.getItem('token')
-  //   }
-  //   this.config = config
-  //   console.log("this.config",this.config)
-  // },
+  beforeCreate() {
+    let config = {};
+    config.headers = {
+      Authorization: "Bearer " + localStorage.getItem("token")
+    };
+    this.config = config;
+    console.log("this.config", this.config);
+  },
   created() {
-    this.loadOrder();
-    this.fetchOrders();
     // this.orderedProduct();
+    this.fetchPendingOrders();
+    this.fetchOrders();
     setInterval(this.fetchOrders(), 3000);
   },
   methods: {
@@ -706,64 +683,9 @@ export default {
       }
       return ubechiQty;
     },
-    // loadOrder() {
-    //   axios
-    //     .get("https://wawens-backend.herokuapp.com/api/orders/confirmed")
-    //     .then(response => {
-    //       this.orders = response.data;
-    //     });
-    // },
-    loadOrder() {
-      axios
-        .get("https://wawens-backend.herokuapp.com/api/orders/confirmed")
-        .then(response => {
-          // this.orders = response.data;
-          let order = response.data;
-          for (var i = 0; i < order.length; i++) {
-            let param = {
-              order_id: order[i].id,
-              name: order[i].receiver_name,
-              address: order[i].delivery_address,
-              halaya_qty: this.getHalayaJarQty(order[i]),
-              ubechi_qty: this.getUbechiQty(order[i]),
-              deliveryDate: order[i].confirmed_delivery_date,
-              orderStatus: this.status,
-              distance: this.distance
-            };
-            axios
-              .post(
-                "http://127.0.0.1:8000/api/post/deliveredOrder/" + order[i].id, param)
-              .then(response => {
-                console.log("response: ", response.data);
-              });
-          }
-        });
-    },
-    // saveDeliveredOrder(item){
-    //   let param = {
-    //     name: item.receiver_name,
-    //     address: item.delivery_address,
-    //     halaya_qty: this.getHalayaJarQty(item),
-    //     ubechi_qty: this.getUbechiQty(item),
-    //     deliveryDate: item.confirmed_delivery_date,
-    //     orderStatus: this.status,
-    //     distance: this.distance
-    //   };
-    //   axios
-    //     .post("http://127.0.0.1:8000/api/post/deliveredOrder/"+ item.id, param)
-    //     .then(response => {
-    //       Swal.fire({
-    //         title: "Order is being delivered",
-    //         icon: "success",
-    //         showConfirmButton: false,
-    //         timer: 1500
-    //       }),
-    //         this.loadOrder();
-    //     })
-    // },
     deliveredItem(item) {
       axios
-        .put("http://127.0.0.1:8000/api/post/updateStat/" + item.order_id)
+        .put("http://127.0.0.1:8000/api/post/updateStat/" + item.id)
         .then(response => {
           Swal.fire({
             title: "Order is being delivered",
@@ -776,28 +698,32 @@ export default {
     },
     fetchOrders() {
       axios.get("http://127.0.0.1:8000/api/posts/order").then(response => {
-        this.orders = response.data;
-        // console.log("order_status: ", this.orders.data[0].order_status);
+        this.orders = response.data.data;
+        console.log("ordersssssss: ", this.orders);
       });
+    },
+    fetchPendingOrders() {
+      axios
+        .get("http://127.0.0.1:8000/api/fetch/pending-orders")
+        .then(response => {
+          this.pendingOrders = response.data.data;
+          console.log("ordersssssss: ", this.orders);
+        });
+    },
+    confirmOrder(item) {
+      axios
+        .put("http://127.0.0.1:8000/api/post/confirm/" + item.id)
+        .then(response => {
+          Swal.fire({
+            title: "Order is being confirmed",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500
+          }),
+            this.fetchPendingOrders();
+            this.fetchOrders();
+        });
     }
-
-    // getCoordinates(address) {
-    //     axios
-    //     .get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${address}.json?limit=2&access_token=${this.accessToken}`)
-    //     .then(response => {
-    //       let res = JSON.stringify(response.data);
-    //       let result = JSON.parse(res);
-    //       //index 0 is the most relevant based on the mapbox geocoding documentatio
-    //       var coordinates = result.features[0].geometry.coordinates;
-    //       //turf.js
-    //       var from_place = turf.point([123.921969, 10.329892]);
-    //       var to_place = turf.point(coordinates);
-    //       var options = { units: "kilometers" };
-    //       var dist = turf.distance(from_place, to_place, options);
-    //       // console.log('address: ',address, 'coordinates: ',coordinates, 'distance: ', dist)
-    //       return dist;
-    //     });
-    // },
   }
 };
 </script>

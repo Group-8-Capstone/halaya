@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <Sidebar v-if="$route.name!= 'Login'" id="Sidebar"/>
+      <Sidebar v-if="$route.name!= 'Login' && $route.name!= 'Landing' && $route.name!= 'Register'" id="Sidebar"/>
       <content>
         <router-view/>
       </content>
