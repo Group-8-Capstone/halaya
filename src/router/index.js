@@ -41,12 +41,6 @@ const router = new VueRouter({
       component: Register
     },
     {
-      path: "/",
-      redirect: "/login"
-      // name: "home",
-      // component: Home
-    },
-    {
       path: "/order",
       name: "Order",
       component: Order

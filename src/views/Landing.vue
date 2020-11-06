@@ -13,48 +13,53 @@
         <v-btn id="signIn" color="purple darken-2" text>Login</v-btn>
       </router-link>
     </v-app-bar>
+    <div>
+      <v-row>
+        <v-spacer></v-spacer>
+        <v-card id="btnCard" flat> 
+          <router-link to="/register" id="createBtn" justify="end">
+            <v-btn color="purple darken-2" rounded outlined dark >
+              <v-icon>mdi-plus</v-icon>
+              <v-toolbar-title>Create Order</v-toolbar-title>
+            </v-btn>
+          </router-link>
+        </v-card>
+      </v-row>
+    </div>
     <div class="ma-5 mb-12 pa-5">
       <v-row>
-        <v-card
-    class="mx-auto"
-    color="rgb(217, 167, 252)"
-    light
-    max-width="400"
-  >
-    <v-card-title>
-      <v-icon
-        large
-        left
-      >
-        mdi-information
-      </v-icon>
-      <!-- <span class="title font-weight-light">Twitter</span> -->
-    </v-card-title>
-
-    <v-card-text class="textfont-weight-thin">
-      Ube Halaya na lami, apan dili bidli. Basta matilwan, dili na gyud mabinlan.
-Matud pa nila, maablihan na gani ang botelya sa Wawen's Ube Halaya - dili na gyud katugpa sa lamesa. Suwayi na!
-    </v-card-text>
-
-  </v-card>
-        <!-- <v-textarea
-          id="about"
-          background-color="rgb(217, 167, 252)"
-          outlined
-          prepend-inner-icon="mdi-information"
-          name="input-7-1"
-          auto-grow
-          value="Ube Halaya na lami, apan dili bidli. Basta matilwan, dili na gyud mabinlan.
-Matud pa nila, maablihan na gani ang botelya sa Wawen's Ube Halaya - dili na gyud katugpa sa lamesa. Suwayi na!"
-        ></v-textarea> -->
-        <v-spacer></v-spacer>
-        <router-link to="/register" id="createBtn">
-          <v-btn color="purple darken-2" rounded outlined dark>
-            <v-icon>mdi-plus</v-icon>
-            <v-toolbar-title>Create Order</v-toolbar-title>
-          </v-btn>
-        </router-link>
+        <v-card id="infoCards" class="mx-auto" light max-width="400">
+          <v-card-title>
+            <v-icon large left>mdi-bullhorn</v-icon>Suwayi na!
+            <v-card-text class="textfont-weight-thin">
+              Ube Halaya na lami, apan dili bidli. Basta matilwan, dili na gyud mabinlan.
+              Matud pa nila, maablihan na gani ang botelya sa Wawen's Ube Halaya - dili na gyud katugpa sa lamesa.
+            </v-card-text>
+          </v-card-title>
+        </v-card>
+        <v-card id="infoCards" class="mx-auto" color="rgb(217, 167, 252)" light max-width="400">
+          <v-card-title>
+            <v-icon large left>mdi-truck</v-icon>Delivery Time
+            <v-card-text class="textfont-weight-thin">
+              <v-icon>mdi-clock</v-icon> Starts at 3:00 PM until orders for today
+              <br>are all delivered
+            </v-card-text>
+            <v-card-text class="textfont-weight-thin">
+              <v-icon>mdi-calendar</v-icon> Monday - Saturday
+            </v-card-text>
+          </v-card-title>
+        </v-card>
+        <v-card id="infoCards" class="mx-auto" color="rgb(217, 167, 252)" light max-width="400">
+          <v-card-title>
+            <v-icon large left>mdi-bill</v-icon>Delivery Time
+            <v-card-text class="textfont-weight-thin">
+              Ube Halaya na lami, apan dili bidli. Basta matilwan, dili na gyud mabinlan.
+              Matud pa nila, maablihan na gani ang botelya sa Wawen's Ube Halaya - dili na gyud katugpa sa lamesa.
+            </v-card-text>
+          </v-card-title>
+        </v-card>
       </v-row>
+      <br>
       <template>
         <v-row>
           <v-col>
@@ -127,7 +132,10 @@ export default {
   min-height: 100vh;
   justify-content: center;
 }
-
+#btnCard {
+  margin-top: 12px;
+  margin-right: 20px;
+}
 #createBtn {
   text-decoration: none;
 }
@@ -142,5 +150,8 @@ export default {
   padding-top: 0;
   justify-content: center;
   align-content: center;
+}
+#infoCards {
+  background-color: rgb(217, 167, 252);
 }
 </style>
