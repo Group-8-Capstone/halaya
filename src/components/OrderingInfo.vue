@@ -26,7 +26,7 @@ export default {
     data() {
     return {
      products:[{title:'Made for what?',description: 'Placing your order online',image: require("@/assets/order.png")},
-      {title:'What does it mean?',description: 'No hasstle of going to physical store', image: require("@/assets/store.png")},
+      {title:'What does it mean?',description: 'No more physical store', image: require("@/assets/store.png")},
          {title:'How to Pay?',description: 'Cash On Delivery',   image: require("@/assets/Pay_on_Delivery.png")}
       ]
     }
