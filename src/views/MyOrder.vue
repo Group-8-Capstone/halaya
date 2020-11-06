@@ -49,6 +49,9 @@
           </v-card>
         </v-dialog>
       </template>
+         <template v-slot:item.order_status="{ item }">
+          <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
+        </template>
             </v-data-table>
             </v-tab-item>
             <v-tab-item>
@@ -122,7 +125,8 @@ import Swal from "sweetalert2";
           headers: [
         { text: "Receivers Name", value: "receiver_name" },
         { text: "Prefered Delivery Date", value: "preferred_delivery_date" },
-         { text: "Order Details", value: "details" },
+        { text: "Order Details", value: "details" },
+        { text: "Status", value: "order_status" },
       ],
        headers2: [
         { text: "Receivers Name", value: "receiver_name" },
@@ -146,6 +150,12 @@ import Swal from "sweetalert2";
           })
           
     },
+    getColor(status) {
+      if (status === "On Order") return "green";
+      else if (status === "Pending") return "orange";
+      else return "green";
+    },
+    
       retrieveDeliveredOrder(){
       let id=localStorage.getItem('id')
       axios.get("http://127.0.0.1:8000/api/fetchDeliveredOrder/"+ id) .then(response => {
