@@ -118,7 +118,7 @@ export default {
           { icon:"mdi-stocking", title: "Ingredients", link: "/ingredients"},
           { icon:"mdi-package-variant",title: "Products", link: "/product"
         },
-         { icon:"mdi-table",title: "Logs", link: "/logs"},
+        //  { icon:"mdi-table",title: "Logs", link: "/logs"},
         ]
       },
       {icon: "mdi-clipboard-outline", text: "view Orders",

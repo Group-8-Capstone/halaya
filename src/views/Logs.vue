@@ -23,14 +23,12 @@
               <v-data-table :headers="headersIngredients" :items="displayIngredientsRecords" :search="search">
               <template v-slot:item.action="{ item }" >
                 <v-icon
-                
                   normal
                   title="Edit"
                 >mdi-table-edit</v-icon>
                 <v-icon
                 class="mr-3"
                 color="red"
-               
                 normal
                 title="Delete Product"
                 >mdi-delete

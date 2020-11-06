@@ -1,12 +1,12 @@
 <template>
   <div class="ma-5 mb-12 pa-5">
-    <v-tabs v-model="tabs" right color="deep-purple accent-4">
+    <!-- <v-tabs v-model="tabs" right color="deep-purple accent-4">
       <v-tab>Ube Halaya</v-tab>
       <v-tab>Butchi</v-tab>
       <v-tab>Ube Ice Cream</v-tab>
-    </v-tabs>
-    <v-tabs-items v-model="tabs">
-      <v-tab-item>
+    </v-tabs> -->
+    <!-- <v-tabs-items v-model="tabs">
+      <v-tab-item> -->
         <v-card flat>
           <v-card-title>Ube Halaya List of Ingredients</v-card-title>
           <v-row>
@@ -61,9 +61,9 @@
             </v-flex>
           </v-row>
         </v-card>
-      </v-tab-item>
-      <v-tab-item>
-        <v-card flat>
+      <!-- </v-tab-item>
+      <v-tab-item> -->
+        <!-- <v-card flat>
           <v-card-title>Butchi List of Ingredients</v-card-title>
           <v-row>
             <v-flex d-flex>
@@ -82,14 +82,14 @@
                       </v-list-item>
                     </v-row>
                     <v-row class="d-flex justify-end mb-6">
-                      <template>
+                      <template> -->
                         <!-- <v-icon
                           normal
                           class="mr-2"
                           title="Add Quantity"
                           @click="stockDialog=!stockDialog"
                         >mdi-plus</v-icon>-->
-                        <v-card-actions>
+                        <!-- <v-card-actions>
                           <v-spacer></v-spacer>
 
                           <v-btn icon>
@@ -113,10 +113,10 @@
               </v-layout>
             </v-flex>
           </v-row>
-        </v-card>
-      </v-tab-item>
-      <v-tab-item>
-        <v-card flat>
+        </v-card> -->
+      <!-- </v-tab-item>
+      <v-tab-item> -->
+        <!-- <v-card flat>
           <v-card-title>Ice Cream List of Ingredients</v-card-title>
           <v-row>
             <v-flex d-flex>
@@ -135,14 +135,14 @@
                       </v-list-item>
                     </v-row>
                     <v-row class="d-flex justify-end mb-6">
-                      <template>
+                      <template> -->
                         <!-- <v-icon
                           normal
                           class="mr-2"
                           title="Add Quantity"
                           @click="stockDialog=!stockDialog "
                         >mdi-plus</v-icon>-->
-                        <v-card-actions>
+                        <!-- <v-card-actions>
                           <v-spacer></v-spacer>
 
                           <v-btn icon>
@@ -159,8 +159,8 @@
                             >mdi-minus</v-icon>
                           </v-btn>
                         </v-card-actions>
-                      </template>
-                    </v-row>
+                      </template> -->
+                    <!-- </v-row>
                   </v-card>
                 </v-flex>
               </v-layout>
@@ -168,50 +168,38 @@
           </v-row>
         </v-card>
       </v-tab-item>
-    </v-tabs-items>
-    <!-- <template>
-      <v-dialog v-model="stockDialog" width="400px">
-        <v-card>
-          <v-spacer></v-spacer>
-          <v-card-title class="deep-purple lighten-1 align-center">
-            <v-list-item-title class="d-flex align-center justify-center mx-auto headline">ADD STOCK</v-list-item-title>
-          </v-card-title>
-          <v-container>
-            <v-row class="mx-2">
-              <v-col cols="12">
-                <v-text-field
-                  outlined
-                  label="ingredients name"
-                  color="purple"
-                  v-model="ingredientsName"
-                  :error-messages="ingredientsNameErrors"
-                  @input="$v.ingredientsName.$touch()"
-                  @blur="$v.ingredientsName.$touch()"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  outlined
-                  color="purple"
-                  min="1"
-                  type="number"
-                  label="Amount (kg/number of cans)"
-                  v-model="ingredientsUnit"
-                  :error-messages="ingredientsUnitErrors"
-                  @input="$v.ingredientsUnit.$touch()"
-                  @blur="$v.ingredientsUnit.$touch()"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-          </v-container>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="stockDialog = false">Cancel</v-btn>
-            <v-btn text @click="addStock()">Save</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </template>-->
+    </v-tabs-items> -->
+     <v-card id="cardtable" class="ma-5 mb-12 pa-5">
+        <v-card-title>
+        Recorded Used Ingredients
+    <v-spacer></v-spacer>
+        <v-text-field
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Search"
+          single-line
+          hide-details
+        ></v-text-field>
+           </v-card-title>
+        <v-spacer></v-spacer>
+       
+         
+              <v-data-table :headers="headersIngredients" :items="displayIngredientsRecords" :search="search">
+              <template v-slot:item.action="{ item }" >
+                <v-icon
+                  normal
+                  title="Edit"
+                >mdi-table-edit</v-icon>
+                <v-icon
+                class="mr-3"
+                color="red"
+                normal
+                title="Delete Product"
+                >mdi-delete
+                </v-icon>
+              </template>
+            </v-data-table>
+           </v-card>
 
     <template>
       <v-dialog v-model="addUsedStockDialog" width="400px">
@@ -310,6 +298,7 @@ export default {
 
   data() {
     return {
+      displayIngredientsRecords:[],
       stockDialog: false,
       editDialog: false,
       addUsedStockDialog: false,
@@ -326,7 +315,19 @@ export default {
       icecreamIngredients: [],
       editStockItem: {},
       itemSelect: [],
-      tabs: null
+      tabs: null,
+        headersIngredients: [
+        {
+          text: "Ingredient's Name",
+          align: "start",
+          sortable: false,
+          value: 'ingredients_name'
+        },
+     { text: "Needed Value", value: "ingredients_need_amount" },
+         { text: "Category", value: "ingredients_category" },
+         { text: "Recorded Date", value: "recorded_date" },
+        { text: "Actions", value: "action", sortable: false },
+      ],
     };
   },
   validations: {
