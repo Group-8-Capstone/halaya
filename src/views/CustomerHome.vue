@@ -169,7 +169,7 @@
               </v-img>
               <v-card-text class="pt-6" style="position: relative;">
                 <div class="font-weight-light grey--text title mb-2">For the perfect snack</div>
-                <h3 class="display-1 font-weight-light orange--text mb-2">Ube halaya in tab</h3>
+                <h3 class="display-1 font-weight-light orange--text mb-2">Ube halaya in tub</h3>
               </v-card-text>
             </v-card>
           </v-hover>
