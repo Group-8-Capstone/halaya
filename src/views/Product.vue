@@ -1,6 +1,6 @@
 <template>
   <div class="ma-5 mb-12 pa-5">
-              <v-flex d-flex>
+              <!-- <v-flex d-flex>
               <v-layout wrap class="justify-center">
                 <v-flex md4 v-for="item in products" :key="item.id" >
                   <v-card class="card-container ma-5 productCard" outlined >
@@ -10,11 +10,12 @@
                           <img :src="item.image" alt="" width="100" height="100">
                       </v-list-item>
                       <v-list-item class="justify-center">Remaining Quantity: 0pcs</v-list-item>
-                      <v-list-item class="justify-center">Ordered Quantity: 0 pcs</v-list-item>
+                      <v-list-item v-if="getTotalJar(item)" class="justify-center">Ordered Quantity: {{totalJar}} pcs</v-list-item>
+                      <v-list-item  class="justify-center">Ordered Quantity: {{totalJar}} pcs</v-list-item> -->
                       <!-- <v-list-item class="justify-center">
                            <v-chip  :color="getColor(item.product_status)" dark>{{ item.product_status }}</v-chip>
                       </v-list-item> -->
-                           <v-card-actions class="justify-center">
+                           <!-- <v-card-actions class="justify-center">
                    <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn text color="primary" @click="addRemaining=true, editAvailableQuantity(item)">Edit</v-btn>
@@ -24,7 +25,51 @@
                   </v-card>
                 </v-flex>
               </v-layout>
-            </v-flex>
+            </v-flex> -->
+            <v-row>
+                <v-layout wrap class="justify-center">
+                    <v-card class="card-container ma-5 productCard" outlined >
+                    <v-card-title class="justify-center productName" >
+                  Ube Halaya Jar</v-card-title>
+                      <v-list-item class="justify-center mt-5">
+                          <img src="../assets/ubeJar.jpg" alt="" width="100" height="100">
+                      </v-list-item>
+                      <v-list-item class="justify-center">Remaining Quantity: 0pcs</v-list-item>
+                      <v-list-item  class="justify-center">Ordered Quantity: {{totalJar}} pcs</v-list-item>
+                       <!-- <v-list-item class="justify-center">
+                           <v-chip  :color="getColor(item.product_status)" dark>{{ item.product_status }}</v-chip>
+                      </v-list-item> -->
+                            <v-card-actions class="justify-center">
+                   <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn text color="primary" @click="addRemaining=true, editAvailableQuantity(item)">Edit</v-btn>
+            <v-btn text color="grey">Record</v-btn>
+          </v-card-actions>
+                </v-card-actions>
+                  </v-card>
+                  <v-card class="card-container ma-5 productCard" outlined >
+                    <v-card-title class="justify-center productName" >
+                  Ube Halaya Tab</v-card-title>
+                      <v-list-item class="justify-center mt-5">
+                          <img src="../assets/ubeTab.jpg" alt="" width="100" height="100">
+                      </v-list-item>
+                      <v-list-item class="justify-center">Remaining Quantity: 0pcs</v-list-item>
+                      <v-list-item  class="justify-center">Ordered Quantity: {{totalTab}} pcs</v-list-item>
+                       <!-- <v-list-item class="justify-center">
+                           <v-chip  :color="getColor(item.product_status)" dark>{{ item.product_status }}</v-chip>
+                      </v-list-item> -->
+                            <v-card-actions class="justify-center">
+                   <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn text color="primary" @click="addRemaining=true, editAvailableQuantity(item)">Edit</v-btn>
+            <v-btn text color="grey">Record</v-btn>
+          </v-card-actions>
+                </v-card-actions>
+                  </v-card>
+                      </v-layout>
+                  </v-row>
+            
+
             <template>
       <v-card>
   <v-card-title>
@@ -123,6 +168,8 @@ import axios from "axios";
         search: '',
         newRemainingProduct:null,
         productId:null,
+        totalJar:null,
+        totalTab:null,
         headers: [
           {
             text: 'Product Name',
@@ -140,7 +187,9 @@ import axios from "axios";
       ]
       }
     },
-    mounted() {
+    created() {
+      this.getTotalJar();
+      this.getTotalTab();
       // this.getProduct();
       // setInterval(this.getProduct(), 1000);
     },
@@ -164,6 +213,25 @@ import axios from "axios";
       else if (status === "good") return "green";
       else return "green";
     },
+    getTotalJar(item){
+        axios.post("http://127.0.0.1:8000/api/totalJar")
+        .then(response => {
+          console.log(response.data)
+           this.totalJar = response.data;
+        });
+        
+    },
+     getTotalTab(item){
+        axios.post("http://127.0.0.1:8000/api/totalTab")
+        .then(response => {
+          console.log(response.data)
+      
+           this.totalTab = response.data;
+        });
+        
+    },
+
+
   // getProduct() {
   // axios.get("http://127.0.0.1:8000/api/fetch/postProduct")
   //       .then(response => {
