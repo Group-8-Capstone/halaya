@@ -27,5 +27,11 @@ export default {
   data: () => ({
     //
   }),
+
+  // mounted(){
+  //   if(localStorage.getItem('token') === null && this.$route.path !== '/login'){
+  //     this.$router.push("/login")
+  //   }
+  // }
 };
 </script>

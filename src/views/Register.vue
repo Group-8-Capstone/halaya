@@ -65,7 +65,7 @@
                         :value="userPassword"
                         prepend-icon="mdi-lock"
                         label="Enter password"
-                        :append-icon="value ? 'mdi-eye-off' : 'mdi-eye'"
+                        :append-icon="value ? 'mdi-eye' : 'mdi-eye-off'"
                         @click:append="() => (value = !value)"
                         :type="value ? 'password' : 'text'"
                         :rules="[rules.password]"
@@ -76,7 +76,7 @@
                     <v-text-field
                         id="password"
                         label="Confirm Password"
-                        :append-icon="valuePass ? 'mdi-eye-off' : 'mdi-eye'"
+                        :append-icon="valuePass ? 'mdi-eye' : 'mdi-eye-off'"
                          @click:append="() => (valuePass = !valuePass)"
                         :type="valuePass ? 'password' : 'text'"
                         name="password"
