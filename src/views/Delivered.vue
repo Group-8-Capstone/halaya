@@ -52,10 +52,19 @@ import axios from "axios";
     mounted() {
       this.loadDelivered();
     },
+    beforeCreate() {
+    let config = {};
+    config.headers = {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+      'Access-Control-Allow-Origin':'*'
+    };
+    this.config = config;
+    console.log("this.config", this.config);
+  },
 
     methods: {
       loadDelivered(){
-      axios.get('http://127.0.0.1:8000/api/posts/delivered').then(response => {
+      axios.get('http://127.0.0.1:8000/api/posts/delivered', this.config).then(response => {
         this.deliveredOrder = response.data.data
       })
     },

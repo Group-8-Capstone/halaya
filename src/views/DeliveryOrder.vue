@@ -102,7 +102,7 @@
 import axios from "axios";
 import { connect } from "tls";
 import * as turf from "@turf/turf";
-
+import Swal from "sweetalert2";
 export default {
   name: "Delivery",
   data() {
@@ -140,6 +140,15 @@ export default {
         // { text: "Status", value: "order_status" }
       ]
     };
+  },
+  beforeCreate() {
+    let config = {};
+    config.headers = {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+      'Access-Control-Allow-Origin':'*'
+    };
+    this.config = config;
+    console.log("this.config", this.config);
   },
   created() {
     this.fetchDelivery();
@@ -246,7 +255,7 @@ export default {
       });
     },
     fetchDelivery() {
-      axios.get("http://127.0.0.1:8000/api/posts/delivery").then(response => {
+      axios.get("http://127.0.0.1:8000/api/posts/delivery",this.config).then(response => {
         // let results = [];
         this.deliveries = response.data.data;
         console.log("data: ", this.deliveries);
@@ -271,7 +280,7 @@ export default {
     },
     loadDelivery() {
       axios
-        .get("https://wawens-backend.herokuapp.com/api/orders/confirmed")
+        .get("https://wawens-backend.herokuapp.com/api/orders/confirmed",this.config)
         .then(response => {
           this.delivery = response.data;
 

@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <div>
     <!-- <v-card  class="ma-5 mb-12 pa-5">
       <default-location/>
     </v-card>-->
@@ -24,8 +24,7 @@
             <v-spacer></v-spacer>
           </v-card-title>
           <v-row>
-            <v-flex d-flex>
-              <v-layout wrap>
+            
                 <v-data-table :headers="headers" :items="orders" :search="search">
                   <template v-slot:item.order_status="{ item }">
                     <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
@@ -46,8 +45,7 @@
                     <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
                   </template>
                 </v-data-table>
-              </v-layout>
-            </v-flex>
+              
           </v-row>
         </v-tab-item>
 
@@ -114,6 +112,7 @@
           </v-card-title> -->
         </v-tab-item>
       </v-tabs-items>
+      <template>
       <v-dialog v-model="dialog" width="400px">
         <v-card>
           <v-spacer></v-spacer>
@@ -225,6 +224,7 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      </template>
       <template>
         <v-dialog v-model="editDialog" width="400px">
           <v-card>
@@ -327,7 +327,7 @@
         </v-dialog>-->
       </template>
     </v-card>
-  </v-app>
+  </div>
 </template>
 <style>
 .mr-2:hover {
@@ -352,9 +352,9 @@
 .order {
   color: #00b300;
 }
-#list {
+/* #list {
   padding: 20px;
-}
+} */
 #closeBtn {
   float: right !important;
 }
@@ -494,7 +494,8 @@ export default {
   beforeCreate() {
     let config = {};
     config.headers = {
-      Authorization: "Bearer " + localStorage.getItem("token")
+      Authorization: "Bearer " + localStorage.getItem("token"),
+      'Access-Control-Allow-Origin':'*'
     };
     this.config = config;
     console.log("this.config", this.config);
@@ -548,7 +549,7 @@ export default {
           (this.editDialog = this.editDialog);
       } else {
         axios
-          .post("http://127.0.0.1:8000/api/post/update", this.post)
+          .post("http://127.0.0.1:8000/api/post/update", this.post, this.config)
           .then(response => {
             this.editDialog = false;
             Swal.fire({
@@ -572,21 +573,21 @@ export default {
     },
     updateDeliveredStatus() {
       axios
-        .post("http://127.0.0.1:8000/api/post/update", this.post)
+        .post("http://127.0.0.1:8000/api/post/update", this.post, this.config)
         .then(response => {
           this.fetchOrders();
         });
     },
     deleteItem(item) {
       axios
-        .put("http://127.0.0.1:8000/api/post/updateCanceledStat/" + item.id)
+        .put("http://127.0.0.1:8000/api/post/updateCanceledStat/" + item.id, this.config)
         .then(response => {
           this.fetchOrders();
         });
     },
     editItem(item) {
       axios
-        .get("http://127.0.0.1:8000/api/post/edit/" + item.id)
+        .get("http://127.0.0.1:8000/api/post/edit/" + item.id, this.config)
         .then(response => {
           this.post = response.data;
         });
@@ -648,7 +649,7 @@ export default {
         distance: this.distance
       };
       axios
-        .post("http://127.0.0.1:8000/api/post", param)
+        .post("http://127.0.0.1:8000/api/post", param, this.config)
         .then(response => {
           Swal.fire({
             title: "Successfully Added",
@@ -685,7 +686,7 @@ export default {
     },
     deliveredItem(item) {
       axios
-        .put("http://127.0.0.1:8000/api/post/updateStat/" + item.id)
+        .put("http://127.0.0.1:8000/api/post/updateStat/" + item.id, this.config)
         .then(response => {
           Swal.fire({
             title: "Order is being delivered",
@@ -697,14 +698,14 @@ export default {
         });
     },
     fetchOrders() {
-      axios.get("http://127.0.0.1:8000/api/posts/order").then(response => {
+      axios.get("http://127.0.0.1:8000/api/posts/order",this.config).then(response => {
         this.orders = response.data.data;
         console.log("ordersssssss: ", this.orders);
       });
     },
     fetchPendingOrders() {
       axios
-        .get("http://127.0.0.1:8000/api/fetch/pending-orders")
+        .get("http://127.0.0.1:8000/api/fetch/pending-orders", this.config)
         .then(response => {
           this.pendingOrders = response.data.data;
           console.log("ordersssssss: ", this.orders);
@@ -712,7 +713,7 @@ export default {
     },
     confirmOrder(item) {
       axios
-        .put("http://127.0.0.1:8000/api/post/confirm/" + item.id)
+        .put("http://127.0.0.1:8000/api/post/confirm/" + item.id, this.config)
         .then(response => {
           Swal.fire({
             title: "Order is being confirmed",

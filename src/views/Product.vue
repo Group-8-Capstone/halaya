@@ -187,6 +187,15 @@ import axios from "axios";
       ]
       }
     },
+    beforeCreate() {
+    let config = {};
+    config.headers = {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+      'Access-Control-Allow-Origin':'*'
+    };
+    this.config = config;
+    console.log("this.config", this.config);
+  },
     created() {
       this.getTotalJar();
       this.getTotalTab();
@@ -214,7 +223,7 @@ import axios from "axios";
       else return "green";
     },
     getTotalJar(item){
-        axios.post("http://127.0.0.1:8000/api/totalJar")
+        axios.get("http://127.0.0.1:8000/api/totalJar", this.config)
         .then(response => {
           console.log(response.data)
            this.totalJar = response.data;
@@ -222,7 +231,7 @@ import axios from "axios";
         
     },
      getTotalTab(item){
-        axios.post("http://127.0.0.1:8000/api/totalTab")
+        axios.get("http://127.0.0.1:8000/api/totalTab", this.config)
         .then(response => {
           console.log(response.data)
       
