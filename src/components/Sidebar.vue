@@ -8,7 +8,7 @@
       <v-list-item-avatar size="60">
         <img src="../assets/wawens.png">
       </v-list-item-avatar>
-      <v-toolbar-title class="deep-purple--text">WAWEN'S UBE HALAYA MANAGEMENT</v-toolbar-title>
+      <v-toolbar-title class="deep-purple--text">WAWEN'S UBE HALAYA</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-menu bottom>
         <template v-slot:activator="{ on, attrs }">
@@ -218,7 +218,7 @@ export default {
             title: "Products",
             link: "/product"
           },
-          { icon: "mdi-table", title: "Logs", link: "/logs" }
+          // { icon: "mdi-table", title: "Logs", link: "/logs" }
         ]
       },
       {
