@@ -126,14 +126,14 @@ export default {
         {
           text: "Receiver Name",
           align: "start",
-          value: "customer_name",
+          value: "receiver_name",
           sortable: false
         },
-        { text: "Address", value: "delivery_address", sortable: false },
+        { text: "Address", value: "customer_address", sortable: false },
         { text: "Distance", value: "distance", sortable: false },
-        { text: "Delivery Date", value: "delivery_date", sortable: false },
-        { text: "Ube Halaya Jar Qty", value: "halayaJar_qty", sortable: false },
-        { text: "Ubechi Qty", value: "ubechi_qty", sortable: false },
+        { text: "Delivery Date", value: "preferred_delivery_date", sortable: false },
+        { text: "Ube Halaya Jar Qty", value: "ubeHalayaJar_qty", sortable: false },
+        { text: "Ubechi Qty", value: "ubeHalayaTub_qty", sortable: false },
         { text: "Action", value: "action", sortable: false },
         { text: "Order Status", value: "order_status", sortable: false }
         // { text: "Actions", value: "action", sortable: false },
