@@ -24,7 +24,7 @@
             <v-col cols="6">
               <v-text-field
                 prepend-icon="mdi-account-outline"
-                placeholder="Customer Name"
+                placeholder="Receiver Name"
                 v-model="customerName"
                 :error-messages="customerErrors"
                 @input="$v.customerName.$touch()"
@@ -46,7 +46,7 @@
             </v-col>
           </v-row>
           <v-icon class="pl-5">mdi-map-marker</v-icon>
-          <label>Address</label>
+          <label>Receiver Address</label>
 
           <v-row class="pl-5">
             <v-col cols="6">
@@ -130,7 +130,7 @@
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
                   v-model="date"
-                  label="Delivery Date"
+                  label="Preferred Delivery Date"
                   prepend-icon="mdi-calendar"
                   readonly
                   v-bind="attrs"
@@ -188,7 +188,7 @@
               </v-img>
               <v-card-text class="pt-6" style="position: relative;">
                 <div class="font-weight-light grey--text title mb-2">For the perfect bonding</div>
-                <h3 class="display-1 font-weight-light orange--text mb-2">Ube halaya in Jar</h3>
+                <h3 class="display-1 font-weight-light orange--text mb-2">Ube halaya in jar</h3>
               </v-card-text>
             </v-card>
           </v-hover>
