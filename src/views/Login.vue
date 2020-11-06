@@ -141,7 +141,13 @@ export default {
           // localStorage.setItem("username", response.data.UserAccount[0].username);
           localStorage.setItem("role", response.data.UserAccount[0].role);
           localStorage.setItem("id", response.data.UserAccount[0].id);
-          this.$router.push('/dashboard');
+          if(response.data.UserAccount[0].role == 'admin'){
+            this.$router.push('/dashboard');
+          } else if (response.data.UserAccount[0].role == 'customer') {
+            this.$router.push('/customerHome');
+          } else {
+            this.$router.push('/delivery');
+          }
         }else{
           console.log('invalid');
           this.error = true;

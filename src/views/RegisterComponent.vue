@@ -147,7 +147,13 @@ export default {
         role: "customer"
       };
       axios.post("http://localhost:8000/api/register", Reg).then(response => {
-        console.log(Reg);
+        // console.log("Successfully Registered: ", response.data.message.message);
+        if (response.data.message.message == 'success'){
+          localStorage.setItem('token', response.data.token);
+          localStorage.setItem('id', response.data.user.id);
+          localStorage.setItem('role', response.data.user.role);
+          this.$router.push('/customerHome');
+        }
       });
     }
   }
