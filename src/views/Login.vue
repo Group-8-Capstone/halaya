@@ -52,8 +52,10 @@
                     id="password"
                     label="Password"
                     name="password"
+                    :append-icon="value ? 'mdi-eye-off' : 'mdi-eye'"
+                    @click:append="() => (value = !value)"
+                    :type="value ? 'password' : 'text'"
                     prepend-icon="mdi-lock"
-                    type="password"
                     v-model="pass"
                     class="border-design"
                     outlined
@@ -62,8 +64,7 @@
                   ></v-text-field>
                 </v-form>
               </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
+              <center>
                 <v-btn
                   id="btnLogin"
                   class="mb-5"
@@ -72,11 +73,13 @@
                   rounded
                   @click="login"
                 >Log In</v-btn>
-              </v-card-actions>
+              </center>
               <div align="center" justify="center">
                   <span>
                     Don't have an account?
                     <a href="/register">Sign up</a>
+                    <br>
+                    <br>
                   </span>
                 </div>
             </v-card>
@@ -87,15 +90,17 @@
   </v-app>
 </template>
 <style scoped>
-#inspire {
-  background-color: #a4508b;
-  background-image: linear-gradient(360deg, white 20%, #5f0a87 74%);
-}
+
 #btnLogin,
 .border-design {
   border-color: purple !important;
   border-width: 2px !important;
   color: purple !important;
+}
+.v-btn {
+  width: 85%  !important;
+  min-width: 85% !important;
+  margin-left: 5%;
 }
 #cardHeader {
   background-color: purple;
@@ -103,12 +108,6 @@
 }
 .notif{
   text-align: center;
-  color: red;
-}
-.available{
-  color: green;
-}
-.notavailable{
   color: red;
 }
 </style>
@@ -126,7 +125,8 @@ export default {
       pass : '',
       isAvailable: 0,
       responseMessage: '',
-      error : false
+      error : false,
+      value: true,
 
     };
   },

@@ -166,6 +166,7 @@ export default {
             }
             axios.post("http://localhost:8000/api/register", Reg).then((response) =>{
                 console.log(Reg);
+                 this.$router.push('/customerHome');
 
             })
         }
