@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <div>
     <!-- <v-card  class="ma-5 mb-12 pa-5">
       <default-location/>
     </v-card>-->
@@ -62,11 +62,8 @@
               single-line
               hide-details
             ></v-text-field>
-            <v-spacer></v-spacer>
+            <!-- <v-spacer></v-spacer> -->
           </v-card-title>
-          <v-row>
-            <v-flex d-flex>
-              <v-layout wrap>
                 <v-data-table :headers="headers" :items="pendingOrders" :search="search">
                   <template v-slot:item.order_status="{ item }">
                     <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
@@ -87,33 +84,15 @@
                     <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
                   </template>
                 </v-data-table>
-              </v-layout>
-            </v-flex>
-          </v-row>
+       
         </v-tab-item>
 
         <v-tab-item>
           <Walkin/>
-          <!-- <v-card-title>
-            Order
-            <v-spacer></v-spacer>
-            <v-text-field
-              v-model="search"
-              append-icon="mdi-magnify"
-              label="Search"
-              single-line
-              hide-details
-            ></v-text-field>
-            <v-spacer></v-spacer>
-            <v-list>
-              <v-btn class="ma-5" color="purple darken-2" rounded outlined dark @click="showDialog">
-                <v-icon>mdi-plus</v-icon>
-                <v-toolbar-title>Add Order</v-toolbar-title>
-              </v-btn>
-            </v-list>
-          </v-card-title> -->
         </v-tab-item>
       </v-tabs-items>
+
+      <template>
       <v-dialog v-model="dialog" width="400px">
         <v-card>
           <v-spacer></v-spacer>
@@ -225,6 +204,7 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      </template>
       <template>
         <v-dialog v-model="editDialog" width="400px">
           <v-card>
@@ -327,7 +307,7 @@
         </v-dialog>-->
       </template>
     </v-card>
-  </v-app>
+  </div>
 </template>
 <style>
 .mr-2:hover {
@@ -352,9 +332,9 @@
 .order {
   color: #00b300;
 }
-#list {
+/* #list {
   padding: 20px;
-}
+} */
 #closeBtn {
   float: right !important;
 }

@@ -11,7 +11,7 @@
             <v-col cols="6">
               <v-text-field
                 prepend-icon="mdi-account-outline"
-                placeholder="Customer Name"
+                label="Customer Name"
                 v-model="customerName"
                 :error-messages="customerErrors"
                 @input="$v.customerName.$touch()"
@@ -23,7 +23,7 @@
               <v-text-field
                 type="number"
                 prepend-icon="mdi-phone"
-                placeholder="+63 900 000 0000"
+                label="Mobile Number"
                 v-model="contactNumber"
                 :error-messages="contactNumberErrors"
                 @input="$v.contactNumber.$touch()"
@@ -32,8 +32,8 @@
               ></v-text-field>
             </v-col>
           </v-row>
-          <v-icon class="pl-5">mdi-map-marker</v-icon>
-          <label>Address</label>
+          <!-- <v-icon class="pl-5">mdi-map-marker</v-icon> -->
+          <!-- <label>Address</label>
 
           <v-row class="pl-5">
             <v-col cols="4">
@@ -66,7 +66,7 @@
                 required
               ></v-text-field>
             </v-col>
-          </v-row>
+          </v-row> -->
           <v-row>
             <v-col>
               <v-img class="ml-5" width="250px" height="200px" src="../assets/halayaTab.jpg"></v-img>
@@ -77,23 +77,23 @@
           </v-row>
           <v-row>
             <v-col cols="5" class="pl-5">
-              <v-text-field min="0" type="number" placeholder="Quantity" v-model="tabQuantity">
-                <template slot="prepend">
+              <v-text-field min="0" type="number" label="Quantity" v-model="tabQuantity">
+                <!-- <template slot="prepend">
                   <v-icon v-bind:disabled="isDisabled">mdi-minus</v-icon>
                   <v-icon>mdi-plus</v-icon>
-                </template>
+                </template> -->
               </v-text-field>
             </v-col>
             <v-col cols="5" class="pl-12">
-              <v-text-field min="0" type="number" placeholder="Quantity" v-model="jarQuantity">
-                <template slot="prepend">
+              <v-text-field min="0" type="number" label="Quantity" v-model="jarQuantity">
+                <!-- <template slot="prepend">
                   <v-icon>mdi-minus</v-icon>
                   <v-icon>mdi-plus</v-icon>
-                </template>
+                </template> -->
               </v-text-field>
             </v-col>
           </v-row>
-          <v-col cols="12" sm="6" md="4">
+          <!-- <v-col cols="12" sm="6" md="4">
             <v-menu
               v-model="menu"
               :close-on-content-click="true"
@@ -117,7 +117,7 @@
               </template>
               <v-date-picker v-model="date" no-title scrollable :allowed-dates="notLessDate"></v-date-picker>
             </v-menu>
-          </v-col>
+          </v-col> -->
         </v-container>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -145,14 +145,14 @@ export default {
       menu: false,
       btnDisable: true,
       addOrderDialog: false,
-      customerStreet: null,
-      customerBarangay: null,
-      customerProvince: null,
+      customerStreet: "Shambala Veterinary Clinic Hernan Cortes Street",
+      customerBarangay: "Mandaue City",
+      customerProvince: "Cebu",
       customerName: null,
       contactNumber: null,
       orderQuantity: null,
       orderStatus: "",
-      date: null,
+      date:  new Date().toISOString().substr(0, 10),
       jarQuantity: "0",
       tabQuantity: "0",
       distance: 0
@@ -185,6 +185,14 @@ export default {
     date: {
       required
     }
+  },
+   beforeCreate() {
+    let config = {}
+    config.headers = {
+      Authorization: 'Bearer ' + localStorage.getItem('token')
+    }
+    this.config = config
+    console.log(this.config)
   },
 
   computed: {
@@ -250,22 +258,24 @@ export default {
   methods: {
     showDialog() {
       this.$v.$reset();
-      this.addOrderDialog = true;
-      (this.customerStreet = null),
-        (this.customerBarangay = null),
-        (this.customerProvince = null),
-        (this.customerName = null),
-        (this.contactNumber = null),
-        (this.orderQuantity = null),
-        (this.date = null);
+      // this.addOrderDialog = true
+      this.customerStreet = null
+      this.customerBarangay = null
+      this.customerProvince = null
+      this.customerName = null
+      this.contactNumber = null
+      this.orderQuantity = null
+      this.jarQuantity="0"
+      this.tabQuantity="0"
+      this.date = null
     },
-    getOrderStatus(qty) {
-      if (qty <= 9) {
-        return "On order";
-      } else if (qty >= 10) {
-        return "Pending";
-      }
-    },
+    // getOrderStatus(qty) {
+    //   if (qty <= 9) {
+    //     return "On order";
+    //   } else if (qty >= 10) {
+    //     return "Pending";
+    //   }
+    // },
     placeOrder() {
       this.$v.$touch();
       var place = this.customerStreet.concat(
@@ -297,11 +307,12 @@ export default {
             jar_qty: this.jarQuantity,
             tub_qty: this.tabQuantity,
             deliveryDate: this.date,
-            orderStatus: this.getOrderStatus(this.jarQuantity),
+            orderStatus: 'Delivered',
             distance: dist
           };
+          console.log(this.date)
           axios
-            .post("http://127.0.0.1:8000/api/post/createOrder", param)
+            .post("http://127.0.0.1:8000/api/post/createOrder", param,this.config)
             .then(response => {
               console.log("response.data: ", response.data);
               if (response.data == "success") {
@@ -312,6 +323,7 @@ export default {
                   showConfirmButton: false,
                   timer: 1500
                 });
+                this.showDialog()
               }
             });
         });
