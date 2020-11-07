@@ -74,14 +74,22 @@
                     ></v-text-field>
                   </v-form>
                 </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn id="btnSignup" class="mb-5" block outlined rounded @click="signUp">Sign Up</v-btn>
-                </v-card-actions>
+                  <center>
+                <v-btn
+                id="btnLogin"
+                  class="mb-5"
+                  block
+                  outlined
+                  rounded
+                  @click="signUp"
+                >Log In</v-btn>
+              </center>
                 <div align="center" justify="center">
                   <span>
                     Already have an account?
                     <a href="/login">Sign in</a>
+                    <br>
+                    <br>
                   </span>
                 </div>
               </v-card>
@@ -93,8 +101,20 @@
   </v-form>
 </template>
 <style scoped>
-#btnSignup {
-  width: 5px;
+#btnLogin,
+.border-design {
+  border-color: purple !important;
+  border-width: 2px !important;
+  color: purple !important;
+}
+.v-btn {
+  width: 85%  !important;
+  min-width: 85% !important;
+  margin-left: 6%;
+}
+#cardHeader {
+  background-color: purple;
+  color: white !important;
 }
 </style>
 <script>
@@ -147,7 +167,13 @@ export default {
         role: "customer"
       };
       axios.post("http://localhost:8000/api/register", Reg).then(response => {
-        console.log(Reg);
+        // console.log("Successfully Registered: ", response.data.message.message);
+        if (response.data.message.message == 'success'){
+          localStorage.setItem('token', response.data.token);
+          localStorage.setItem('id', response.data.user.id);
+          localStorage.setItem('role', response.data.user.role);
+          this.$router.push('/customerHome');
+        }
       });
     }
   }

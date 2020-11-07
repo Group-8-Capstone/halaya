@@ -1,30 +1,75 @@
 <template>
   <div class="ma-5 mb-12 pa-5">
-              <v-flex d-flex>
-              <v-layout wrap>
-                <v-flex md4 v-for="item in product" :key="item.id" >
+              <!-- <v-flex d-flex>
+              <v-layout wrap class="justify-center">
+                <v-flex md4 v-for="item in products" :key="item.id" >
                   <v-card class="card-container ma-5 productCard" outlined >
                     <v-card-title class="justify-center productName" >
-                      {{item.product_name}}</v-card-title>
+                      {{item.title}}</v-card-title>
                       <v-list-item class="justify-center mt-5">
-                          <img :src="'http://localhost:8000/' + item.image" alt="" width="100" height="100">
+                          <img :src="item.image" alt="" width="100" height="100">
                       </v-list-item>
-                      <v-list-item class="justify-center">{{item.product_remaining}}</v-list-item>
-                      <v-list-item class="justify-center">Total Ordered Quantity</v-list-item>
-                      <v-list-item class="justify-center">
+                      <v-list-item class="justify-center">Remaining Quantity: 0pcs</v-list-item>
+                      <v-list-item v-if="getTotalJar(item)" class="justify-center">Ordered Quantity: {{totalJar}} pcs</v-list-item>
+                      <v-list-item  class="justify-center">Ordered Quantity: {{totalJar}} pcs</v-list-item> -->
+                      <!-- <v-list-item class="justify-center">
                            <v-chip  :color="getColor(item.product_status)" dark>{{ item.product_status }}</v-chip>
-                      </v-list-item>
-                           <v-card-actions class="justify-center">
+                      </v-list-item> -->
+                           <!-- <v-card-actions class="justify-center">
                    <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn text color="primary" @click="addRemaining=true, editAvailableQuantity(item)">Edit</v-btn>
-            <v-btn text color="primary">Record</v-btn>
+            <v-btn text color="grey">Record</v-btn>
           </v-card-actions>
                 </v-card-actions>
                   </v-card>
                 </v-flex>
               </v-layout>
-            </v-flex>
+            </v-flex> -->
+            <v-row>
+                <v-layout wrap class="justify-center">
+                    <v-card class="card-container ma-5 productCard" outlined >
+                    <v-card-title class="justify-center productName" >
+                  Ube Halaya Jar</v-card-title>
+                      <v-list-item class="justify-center mt-5">
+                          <img src="../assets/ubeJar.jpg" alt="" width="100" height="100">
+                      </v-list-item>
+                      <v-list-item class="justify-center">Remaining Quantity: 0pcs</v-list-item>
+                      <v-list-item  class="justify-center">Ordered Quantity: {{totalJar}} pcs</v-list-item>
+                       <!-- <v-list-item class="justify-center">
+                           <v-chip  :color="getColor(item.product_status)" dark>{{ item.product_status }}</v-chip>
+                      </v-list-item> -->
+                            <v-card-actions class="justify-center">
+                   <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn text color="primary" @click="addRemaining=true, editAvailableQuantity(item)">Edit</v-btn>
+            <v-btn text color="grey">Record</v-btn>
+          </v-card-actions>
+                </v-card-actions>
+                  </v-card>
+                  <v-card class="card-container ma-5 productCard" outlined >
+                    <v-card-title class="justify-center productName" >
+                  Ube Halaya Tab</v-card-title>
+                      <v-list-item class="justify-center mt-5">
+                          <img src="../assets/ubeTab.jpg" alt="" width="100" height="100">
+                      </v-list-item>
+                      <v-list-item class="justify-center">Remaining Quantity: 0pcs</v-list-item>
+                      <v-list-item  class="justify-center">Ordered Quantity: {{totalTab}} pcs</v-list-item>
+                       <!-- <v-list-item class="justify-center">
+                           <v-chip  :color="getColor(item.product_status)" dark>{{ item.product_status }}</v-chip>
+                      </v-list-item> -->
+                            <v-card-actions class="justify-center">
+                   <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn text color="primary" @click="addRemaining=true, editAvailableQuantity(item)">Edit</v-btn>
+            <v-btn text color="grey">Record</v-btn>
+          </v-card-actions>
+                </v-card-actions>
+                  </v-card>
+                      </v-layout>
+                  </v-row>
+            
+
             <template>
       <v-card>
   <v-card-title>
@@ -85,7 +130,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn text color="primary" @click="addRemaining=false">Cancel</v-btn>
-            <v-btn text @click="updateAvailableQuantity">Save</v-btn>
+            <v-btn text >Save</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -98,7 +143,7 @@
     border: 2px solid #7B1FA2 !important
 }
 .productName{
-  background-color: #9575CD !important;
+  background-color: rgb(79, 53, 122) !important;
   color:white
 }
 
@@ -123,6 +168,8 @@ import axios from "axios";
         search: '',
         newRemainingProduct:null,
         productId:null,
+        totalJar:null,
+        totalTab:null,
         headers: [
           {
             text: 'Product Name',
@@ -135,11 +182,25 @@ import axios from "axios";
           { text: 'Date', value: 'record_date' },
           
         ],
+        products:[{title:'Ube Halaya in Jar',image: require("@/assets/ubeJar.jpg")},
+      {title:'Ube Halaya in Tab', image: require("@/assets/ubeTab.jpg")},
+      ]
       }
     },
-    mounted() {
-      this.getProduct();
-      setInterval(this.getProduct(), 1000);
+    beforeCreate() {
+    let config = {};
+    config.headers = {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+      'Access-Control-Allow-Origin':'*'
+    };
+    this.config = config;
+    console.log("this.config", this.config);
+  },
+    created() {
+      this.getTotalJar();
+      this.getTotalTab();
+      // this.getProduct();
+      // setInterval(this.getProduct(), 1000);
     },
     validations: {
     newRemainingProduct: {
@@ -161,39 +222,58 @@ import axios from "axios";
       else if (status === "good") return "green";
       else return "green";
     },
-  getProduct() {
-  axios.get("http://127.0.0.1:8000/api/fetch/postProduct")
+    getTotalJar(item){
+        axios.get("http://127.0.0.1:8000/api/totalJar", this.config)
         .then(response => {
-           this.product = response.data;
+          console.log(response.data)
+           this.totalJar = response.data;
         });
+        
     },
-  editAvailableQuantity(item){
-        this.newRemainingProduct=item.product_remaining,
-        this.productId=item.id
-        console.log(item)
-      },
-  updateAvailableQuantity(item){
-      let param = {
-        productRemaining: this.newRemainingProduct,
-        id: this.productId,
-      };
-      let currentObj = this;
-      axios.post('http://127.0.0.1:8000/api/post/updateStockProduct', param)
-          .then(function (response) {
-                    currentObj.success = response.data.success
-                    Swal.fire({
-                      title: "Successfully Updated",
-                      icon: "success",
-                      timer: 5000
-                    })
-                })
-                .catch(function (error) {
-                  currentObj.output = error;
+     getTotalTab(item){
+        axios.get("http://127.0.0.1:8000/api/totalTab", this.config)
+        .then(response => {
+          console.log(response.data)
+      
+           this.totalTab = response.data;
         });
-         this.getProduct()
-        this.addRemaining=false
+        
+    },
 
-      }
+
+  // getProduct() {
+  // axios.get("http://127.0.0.1:8000/api/fetch/postProduct")
+  //       .then(response => {
+  //          this.product = response.data;
+  //       });
+  //   },
+  // editAvailableQuantity(item){
+  //       this.newRemainingProduct=item.product_remaining,
+  //       this.productId=item.id
+  //       console.log(item)
+  //     },
+  // updateAvailableQuantity(item){
+  //     let param = {
+  //       productRemaining: this.newRemainingProduct,
+  //       id: this.productId,
+  //     };
+  //     let currentObj = this;
+  //     axios.post('http://127.0.0.1:8000/api/post/updateStockProduct', param)
+  //         .then(function (response) {
+  //                   currentObj.success = response.data.success
+  //                   Swal.fire({
+  //                     title: "Successfully Updated",
+  //                     icon: "success",
+  //                     timer: 5000
+  //                   })
+  //               })
+  //               .catch(function (error) {
+  //                 currentObj.output = error;
+  //       });
+  //        this.getProduct()
+  //       this.addRemaining=false
+
+  //     }
     },
   
   }

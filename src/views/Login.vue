@@ -35,7 +35,7 @@
 
               <v-card-text>
                 <v-form>
-                  <p v-if="error" class="notif"> Invalid Username </p>
+                  <p v-if="error" class="notif"> Incorrect Username and Password </p>
                   <v-text-field
                     label="Username"
                     name="Username"
@@ -52,8 +52,10 @@
                     id="password"
                     label="Password"
                     name="password"
+                    :append-icon="value ? 'mdi-eye-off' : 'mdi-eye'"
+                    @click:append="() => (value = !value)"
+                    :type="value ? 'password' : 'text'"
                     prepend-icon="mdi-lock"
-                    type="password"
                     v-model="pass"
                     class="border-design"
                     outlined
@@ -62,8 +64,7 @@
                   ></v-text-field>
                 </v-form>
               </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
+              <center>
                 <v-btn
                   id="btnLogin"
                   class="mb-5"
@@ -72,11 +73,13 @@
                   rounded
                   @click="login"
                 >Log In</v-btn>
-              </v-card-actions>
+              </center>
               <div align="center" justify="center">
                   <span>
                     Don't have an account?
                     <a href="/register">Sign up</a>
+                    <br>
+                    <br>
                   </span>
                 </div>
             </v-card>
@@ -87,15 +90,17 @@
   </v-app>
 </template>
 <style scoped>
-#inspire {
-  background-color: #a4508b;
-  background-image: linear-gradient(360deg, white 20%, #5f0a87 74%);
-}
+
 #btnLogin,
 .border-design {
   border-color: purple !important;
   border-width: 2px !important;
   color: purple !important;
+}
+.v-btn {
+  width: 85%  !important;
+  min-width: 85% !important;
+  margin-left: 5%;
 }
 #cardHeader {
   background-color: purple;
@@ -118,7 +123,11 @@ export default {
     return {
       user : '',
       pass : '',
-      error : false
+      isAvailable: 0,
+      responseMessage: '',
+      error : false,
+      value: true,
+
     };
   },
   mounted() {},
@@ -141,7 +150,13 @@ export default {
           // localStorage.setItem("username", response.data.UserAccount[0].username);
           localStorage.setItem("role", response.data.UserAccount[0].role);
           localStorage.setItem("id", response.data.UserAccount[0].id);
-          this.$router.push('/dashboard');
+          if(response.data.UserAccount[0].role == 'admin'){
+            this.$router.push('/dashboard');
+          } else if (response.data.UserAccount[0].role == 'customer') {
+            this.$router.push('/customerHome');
+          } else {
+            this.$router.push('/delivery');
+          }
         }else{
           console.log('invalid');
           this.error = true;
@@ -149,6 +164,31 @@ export default {
         // console.log('test ', response);
       });
     },
+  //   checkUsername: function(){
+  //     var username = this.username.trim();
+  //     if(username != ''){
+ 
+  //      axios.get('http://localhost:8000/api/login', {
+  //        params: {
+  //          username: username
+  //        }
+  //      })
+  //      .then(function (response) {
+  //        app.isAvailable = response.data;
+  //        if(response.data == 0){
+  //          app.responseMessage = "Username is Available.";
+  //        }else{
+  //          app.responseMessage = "Username is not Available.";
+  //        }
+  //      })
+  //      .catch(function (error) {
+  //        console.log(error);
+  //      });
+
+  //    }else{
+  //      this.responseMessage = "";
+  //    }
+  //  }
   },
 };
 </script>

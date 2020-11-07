@@ -1,15 +1,15 @@
 <template>
 <div>
     <v-card id="cardtable" class="ma-5 mb-12 pa-5">
-      <v-tabs
+      <!-- <v-tabs
         v-model="tabs"
         right
         color="deep-purple accent-4">
-        <v-tab>Ingredients Value</v-tab>
-         <v-tab>New Products</v-tab>
-      </v-tabs>
-      <v-tabs-items v-model="tabs">
-      <v-tab-item>
+        <v-tab>Ingredients Value</v-tab> -->
+         <!-- <v-tab>New Products</v-tab>
+      </v-tabs> -->
+      <!-- <v-tabs-items v-model="tabs">
+      <v-tab-item> -->
       <v-card-title>
          <v-text-field
           v-model="search"
@@ -63,7 +63,7 @@
       v-model="addedEstimatedAmount"
       outlined></v-text-field>
    </v-col>
-    <v-col cols="12">
+    <!-- <v-col cols="12">
     <v-select
           color="purple"
           :items="items"
@@ -74,7 +74,7 @@
           @blur="$v.addedCategory.$touch()"
           outlined
         ></v-select>
-   </v-col>
+   </v-col> -->
       <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn text color="orange" @click="addDialog = false">Cancel</v-btn>
@@ -100,9 +100,9 @@
                 </v-icon>
               </template>
             </v-data-table>
-            </v-tab-item>
-            <v-tab-item>
-               <v-card-title>
+            <!-- </v-tab-item>
+            <v-tab-item> -->
+               <!-- <v-card-title>
          <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
@@ -120,9 +120,9 @@
             <v-icon>mdi-plus</v-icon>
             <v-toolbar-title>Add Product</v-toolbar-title>
           </v-btn>
-          </v-card-title>
+          </v-card-title> -->
             <!-- <v-btn @click="addProductDialog=true, reloadProduct">Add Product</v-btn> -->
-            <v-data-table :headers="headersProduct" :items="displayProduct" :search="search">
+            <!-- <v-data-table :headers="headersProduct" :items="displayProduct" :search="search">
                           <template  v-slot:item.image="{ item }" class="mt-2" >
                   <img :src="'http://localhost:8000/' + item.image" alt="" width="100" height="50">
               </template>
@@ -210,9 +210,9 @@
                         </form>
                     </div>
               </v-card>
-                </v-dialog>
-            </v-tab-item>
-        </v-tabs-items>
+                </v-dialog> -->
+            <!-- </v-tab-item>
+        </v-tabs-items> -->
           <v-dialog v-model="editDialog" width="400px">
             <v-card>
       <v-card-title class="deep-purple--text">
@@ -240,7 +240,7 @@
                     outlined
                    ></v-text-field>
                   </v-col>
-                  <v-col cols="12">
+                  <!-- <v-col cols="12">
                   <v-select
                         :items="items"
                         label="Product Category"
@@ -248,7 +248,7 @@
                         v-model="editValue.ingredients_category"
                         outlined
                   ></v-select>
-                </v-col>
+                </v-col> -->
                 </v-row>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -299,7 +299,7 @@ import Swal from "sweetalert2";
       tabs:null,
       img:null,
       prodId:null,
-      addedCategory:'',
+      addedCategory:'Ube Halaya',
       estimatedValue:[],
       displayProduct:[],
       search:'',
@@ -317,10 +317,10 @@ import Swal from "sweetalert2";
          { text: "Category", value: "ingredients_category" },
         { text: "Actions", value: "action", sortable: false },
       ],
-        items: ['Ube Halaya', 'Butchi', 'Ice Cream'],
-      rules: [
-        value => !!value || 'Required.',
-      ],
+      //   items: ['Ube Halaya', 'Butchi', 'Ice Cream'],
+      // rules: [
+      //   value => !!value || 'Required.',
+      // ],
        headersProduct: [
         {
           text: "Product Name",
@@ -331,10 +331,10 @@ import Swal from "sweetalert2";
         { text: "Image", value: "image" },
         { text: "Actions", value: "action", sortable: false },
       ],
-        items: ['Ube Halaya', 'Butchi', 'Ice Cream'],
-      rules: [
-        value => !!value || 'Required.',
-      ],
+      //   items: ['Ube Halaya', 'Butchi', 'Ice Cream'],
+      // rules: [
+      //   value => !!value || 'Required.',
+      // ],
       alignments: [
         'start',
         'center',
@@ -385,6 +385,15 @@ import Swal from "sweetalert2";
       setInterval(this.retrieveProduct(),3000)
     
     },
+    beforeCreate() {
+    let config = {};
+    config.headers = {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+      'Access-Control-Allow-Origin':'*'
+    };
+    this.config = config;
+    console.log("this.config", this.config);
+  },
     created(){ 
     },
     methods: {
@@ -415,7 +424,7 @@ import Swal from "sweetalert2";
           ingredientsEstimatedAmount:this.addedEstimatedAmount,
           ingredientsCategory:this.addedCategory
         }
-        axios.post("http://127.0.0.1:8000/api/post/neededValue",param).then(response=>{
+        axios.post("http://127.0.0.1:8000/api/post/neededValue",param, this.config).then(response=>{
         console.log(param)
         this.addDialog=false,
          Swal.fire({
@@ -433,14 +442,14 @@ import Swal from "sweetalert2";
       },
 
       fetchEstimatedValue(){
-        axios.get("http://127.0.0.1:8000/api/fetch/estimatedValue").then(response=>{
+        axios.get("http://127.0.0.1:8000/api/fetch/estimatedValue", this.config).then(response=>{
           this.estimatedValue=response.data;
           console.log(response.data);
         })
       },
 
       editEstimatedValue(item){
-        axios.get("http://127.0.0.1:8000/api/post/updateEstimatedValue/"+item.id).then(response=>{
+        axios.get("http://127.0.0.1:8000/api/post/updateEstimatedValue/"+item.id, this.config).then(response=>{
           this.editValue = response.data
           console.log(this.editValue)
         })
@@ -456,7 +465,7 @@ import Swal from "sweetalert2";
         this.editDialog=this.editDialog;
        }
        else{
-        axios.post('http://127.0.0.1:8000/api/post/updateNewEstimatedValue', this.editValue).then(response => {
+        axios.post('http://127.0.0.1:8000/api/post/updateNewEstimatedValue', this.editValue, this.config).then(response => {
         console.log(this.editValue)
         this.editDialog=false;
         Swal.fire({
@@ -489,7 +498,7 @@ import Swal from "sweetalert2";
                 let formData = new FormData();
                 formData.append('image', this.image)
                 formData.append('productName', this.productName)
-                axios.post('http://127.0.0.1:8000/api/post/product', formData, config).then(function (response) {
+                axios.post('http://127.0.0.1:8000/api/post/product', formData, config,this.config).then(function (response) {
                     currentObj.success = response.data.success
 
                 })
@@ -504,7 +513,7 @@ import Swal from "sweetalert2";
            
         },
     retrieveProduct() {
-            axios.get('http://127.0.0.1:8000/api/fetch/product').then(response => {
+            axios.get('http://127.0.0.1:8000/api/fetch/product',this.config).then(response => {
                 this.displayProduct = response.data.addProduct;
                 console.log(response.data.addProduct)
             });
@@ -529,7 +538,7 @@ import Swal from "sweetalert2";
                 formData.append('id', this.prodId)
                 formData.append('image', this.imageEdit)
                 formData.append('productName', this.editProductName)
-                axios.post('http://127.0.0.1:8000/api/post/updateProduct', formData, config)
+                axios.post('http://127.0.0.1:8000/api/post/updateProduct', formData, config, this.config)
                 .then(function (response) {
                     currentObj.success = response.data.success
                 })
@@ -543,25 +552,25 @@ import Swal from "sweetalert2";
         },
 
       deleteProduct(item){
-          axios.delete('http://127.0.0.1:8000/api/softDeleteProduct/'+item.id).then(response => {
+          axios.delete('http://127.0.0.1:8000/api/softDeleteProduct/'+item.id, this.config).then(response => {
           this.retrieveProduct();
         });
 
         },
 
         deleteStockProduct(item){
-          axios.delete('http://127.0.0.1:8000/api/softDeleteStockProduct/'+item.id).then(response => {
+          axios.delete('http://127.0.0.1:8000/api/softDeleteStockProduct/'+item.id, this.config).then(response => {
           this.retrieveProduct();
         });
 
         },
         deleteStockIngredients(item){
-          axios.delete('http://127.0.0.1:8000/api/softDeleteStockIngredients/'+item.id).then(response => {
+          axios.delete('http://127.0.0.1:8000/api/softDeleteStockIngredients/'+item.id, this.config).then(response => {
         });
 
         },
          deleteIngredients(item){
-          axios.delete('http://127.0.0.1:8000/api/softDeleteIngredients/'+item.id).then(response => {
+          axios.delete('http://127.0.0.1:8000/api/softDeleteIngredients/'+item.id, this.config).then(response => {
           this.fetchEstimatedValue();
         });
         },

@@ -24,7 +24,7 @@
             <v-col cols="6">
               <v-text-field
                 prepend-icon="mdi-account-outline"
-                placeholder="Receiver Name"
+                label="Receiver Name"
                 v-model="customerName"
                 :error-messages="customerErrors"
                 @input="$v.customerName.$touch()"
@@ -36,7 +36,7 @@
               <v-text-field
                 type="number"
                 prepend-icon="mdi-phone"
-                placeholder="+63 900 000 0000"
+                label="Mobile Number"
                 v-model="contactNumber"
                 :error-messages="contactNumberErrors"
                 @input="$v.contactNumber.$touch()"
@@ -47,12 +47,11 @@
           </v-row>
           <v-icon class="pl-5">mdi-map-marker</v-icon>
           <label>Receiver Address</label>
-
           <v-row class="pl-5">
             <v-col cols="6">
               <v-text-field
                 v-model="customerStreet"
-                placeholder="Building Name/Street"
+                label="Building Name/Street"
                 :error-messages="customerStreetErrors"
                 @input="$v.customerStreet.$touch()"
                 @blur="$v.customerStreet.$touch()"
@@ -62,7 +61,7 @@
             <v-col cols="6">
               <v-text-field
                 v-model="customerBarangay"
-                placeholder="Barangay"
+                label="Barangay"
                 :error-messages="customerBarangayErrors"
                 @input="$v.customerBarangay.$touch()"
                 @blur="$v.customerBarangay.$touch()"
@@ -74,7 +73,7 @@
              <v-col cols="6">
               <v-text-field
                 v-model="customerMunicipality"
-                placeholder="Municipality/City"
+                label="Municipality/City"
                 :error-messages="customerMunicipalityErrors"
                 @input="$v.customerMunicipality.$touch()"
                 @blur="$v.customerMunicipality.$touch()"
@@ -84,7 +83,7 @@
             <v-col cols="6">
               <v-text-field
                 v-model="customerProvince"
-                placeholder="Province"
+                label="Province"
                 :error-messages="customerProvinceErrors"
                 @input="$v.customerProvince.$touch()"
                 @blur="$v.customerProvince.$touch()"
@@ -102,7 +101,7 @@
           </v-row>
           <v-row class="pl-5">
             <v-col cols="5" class="pl-5">
-              <v-text-field min="0" type="number" placeholder="Quantity" v-model="tabQuantity">
+              <v-text-field min="0" type="number" label="Quantity" v-model="tabQuantity">
                 <template slot="prepend">
                   <!-- <v-icon >mdi-minus</v-icon>
                   <v-icon>mdi-plus</v-icon> -->
@@ -110,7 +109,7 @@
               </v-text-field>
             </v-col>
             <v-col cols="5" class="pl-12">
-              <v-text-field min="0" type="number" placeholder="Quantity" v-model="jarQuantity">
+              <v-text-field min="0" type="number" label="Quantity" v-model="jarQuantity">
                 <template slot="prepend">
                   <!-- <v-icon>mdi-minus</v-icon>
                   <v-icon>mdi-plus</v-icon> -->
@@ -177,7 +176,7 @@
         <v-col>
           <v-hover v-slot:default="{ hover }">
             <v-card class="mx-auto ml-5" color="grey lighten-4" width="80%">
-              <v-img :aspect-ratio="16/8" src="../assets/halayaJar.jpg">
+              <v-img class="justify-center" :aspect-ratio="16/8" src="../assets/halayaJar.jpg">
                 <v-expand-transition>
                   <div
                     v-if="hover"
@@ -349,6 +348,15 @@ export default {
       return errors;
     }
   },
+  beforeCreate() {
+    let config = {};
+    config.headers = {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+      'Access-Control-Allow-Origin':'*'
+    };
+    this.config = config;
+    console.log("this.config", this.config);
+  },
   created() {
   
   },
@@ -356,17 +364,17 @@ export default {
   methods: {
     showDialog() {
       this.$v.$reset();
-      this.addOrderDialog = true;
-      (this.customerStreet = null),
-        (this.customerBarangay = null),
-        (this.customerMunicipality = null),
-        (this.customerProvince = null),
-        (this.customerName = null),
-        (this.contactNumber = null),
-        (this.jarQuantity="0")
-        (this.ubeQuantity="0")
-        (this.orderQuantity = null),
-        (this.date = null);
+      this.addOrderDialog = true
+      this.customerStreet = null
+      this.customerBarangay = null
+      this.customerMunicipality = null
+      this.customerProvince = null
+      this.customerName = null
+      this.contactNumber = null
+      this.jarQuantity="0"
+      this.ubeQuantity="0"
+      this.orderQuantity = null
+      this.date = null
     },
     getOrderStatus(qty) {
       if (qty <= 9) {
@@ -421,7 +429,7 @@ export default {
             distance: dist
           };
           axios
-            .post("http://127.0.0.1:8000/api/post/createOrder", param)
+            .post("http://127.0.0.1:8000/api/post/createOrder", param, this.config)
             .then(response => {
               console.log("response.data: ", response.data);
               if (response.data == "success") {
