@@ -348,6 +348,15 @@ export default {
       return errors;
     }
   },
+  beforeCreate() {
+    let config = {};
+    config.headers = {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+      'Access-Control-Allow-Origin':'*'
+    };
+    this.config = config;
+    console.log("this.config", this.config);
+  },
   created() {
   
   },
@@ -420,7 +429,7 @@ export default {
             distance: dist
           };
           axios
-            .post("http://127.0.0.1:8000/api/post/createOrder", param)
+            .post("http://127.0.0.1:8000/api/post/createOrder", param, this.config)
             .then(response => {
               console.log("response.data: ", response.data);
               if (response.data == "success") {

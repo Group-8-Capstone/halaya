@@ -24,8 +24,7 @@
             <v-spacer></v-spacer>
           </v-card-title>
           <v-row>
-            <v-flex d-flex>
-              <v-layout wrap>
+            
                 <v-data-table :headers="headers" :items="orders" :search="search">
                   <template v-slot:item.order_status="{ item }">
                     <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
@@ -46,8 +45,7 @@
                     <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
                   </template>
                 </v-data-table>
-              </v-layout>
-            </v-flex>
+              
           </v-row>
         </v-tab-item>
 
@@ -221,7 +219,7 @@
                     <v-avatar size="40px" class="mx-3">
                       <img src="//ssl.gstatic.com/s2/oz/images/sge/grey_silhouette.png" alt>
                     </v-avatar>
-                    <v-text-field placeholder="Name" v-model="post.customer_name"></v-text-field>
+                    <v-text-field placeholder="Name" v-model="post.receiver_name"></v-text-field>
                   </v-row>
                 </v-col>
                 <v-col cols="12">
@@ -229,16 +227,16 @@
                     v-model="post.customer_address"
                     prepend-icon="mdi-map-marker"
                     placeholder="address"
-                  >{{post.address}}</v-text-field>
+                  ></v-text-field>
                 </v-col>
-                <v-col cols="12">
+                <!-- <v-col cols="12">
                   <v-text-field
                     v-model="post.contact_number"
                     type="tel"
                     prepend-icon="mdi-phone"
                     placeholder="+63 900 000 0000"
                   ></v-text-field>
-                </v-col>
+                </v-col> -->
                 <v-col cols="12">
                   <v-menu
                     ref="updateDateMenu"
@@ -251,7 +249,7 @@
                   >
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
-                        v-model="post.delivery_date"
+                        v-model="post.preferred_delivery_date"
                         label="Picker in menu"
                         prepend-icon="mdi-calendar"
                         readonly
@@ -260,7 +258,7 @@
                       ></v-text-field>
                     </template>
                     <v-date-picker
-                      v-model="post.delivery_date"
+                      v-model="post.preferred_delivery_date"
                       color="deep-purple lighten-1"
                       no-title
                       scrollable
@@ -271,7 +269,16 @@
                 </v-col>
                 <v-col cols="12">
                   <v-text-field
-                    v-model="post.order_quantity"
+                    v-model="post.ubeHalayaJar_qty"
+                    prepend-icon="mdi-plus"
+                    min="1"
+                    type="number"
+                    placeholder="Quantity"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="post.ubeHalayaTub_qty"
                     prepend-icon="mdi-plus"
                     min="1"
                     type="number"
@@ -353,6 +360,7 @@ import {
 import * as turf from "@turf/turf";
 import { connect } from "tls";
 import Walkin from "../components/Walkin.vue"
+import { constants } from 'zlib';
 // import Order from "../components/Orders.vue";
 // import DefaultLocation from "../components/DefaultLocation.vue"
 
@@ -474,7 +482,8 @@ export default {
   beforeCreate() {
     let config = {};
     config.headers = {
-      Authorization: "Bearer " + localStorage.getItem("token")
+      Authorization: "Bearer " + localStorage.getItem("token"),
+      'Access-Control-Allow-Origin':'*'
     };
     this.config = config;
     console.log("this.config", this.config);
@@ -515,10 +524,11 @@ export default {
     },
     updateItem() {
       if (
-        this.post.customer_name === "" ||
+        this.post.receiver_name === "" ||
         this.post.customer_address === "" ||
-        this.post.order_quantity === "" ||
-        this.post.contact_number == ""
+        this.post.ubeHalayaJar_qty === "" ||
+        this.post.preferred_delivery_date === "" ||
+        this.post.ubehalayaTub_qty == ""
       ) {
         Swal.fire({
           title: "Please fill in all required field",
@@ -527,8 +537,9 @@ export default {
         }),
           (this.editDialog = this.editDialog);
       } else {
+        // console.log('###########', this.post)
         axios
-          .post("http://127.0.0.1:8000/api/post/update", this.post)
+          .post("http://127.0.0.1:8000/api/post/update", this.post, this.config)
           .then(response => {
             this.editDialog = false;
             Swal.fire({
@@ -552,21 +563,22 @@ export default {
     },
     updateDeliveredStatus() {
       axios
-        .post("http://127.0.0.1:8000/api/post/update", this.post)
+        .post("http://127.0.0.1:8000/api/post/update", this.post, this.config)
         .then(response => {
           this.fetchOrders();
         });
     },
     deleteItem(item) {
       axios
-        .post("http://127.0.0.1:8000/api/post/updateCanceledStat/" + item.id)
+        .post("http://127.0.0.1:8000/api/post/updateCanceledStat/" + item.id,{}, this.config)
         .then(response => {
           this.fetchOrders();
+          this.fetchPendingOrders();
         });
     },
     editItem(item) {
       axios
-        .get("http://127.0.0.1:8000/api/post/edit/" + item.id)
+        .get("http://127.0.0.1:8000/api/post/edit/" + item.id, this.config)
         .then(response => {
           this.post = response.data;
         });
@@ -609,8 +621,8 @@ export default {
         reverseButtons: true
       }).then(result => {
         if (result.value) {
+          // console.log("lllllllllllll========== ", this.config)
           this.deliveredItem(item);
-          // this.saveDeliveredOrder(item);
         }
       });
     },
@@ -628,7 +640,7 @@ export default {
         distance: this.distance
       };
       axios
-        .post("http://127.0.0.1:8000/api/post", param)
+        .post("http://127.0.0.1:8000/api/post", param, this.config)
         .then(response => {
           Swal.fire({
             title: "Successfully Added",
@@ -664,9 +676,11 @@ export default {
       return ubechiQty;
     },
     deliveredItem(item) {
+      // console.log("================ ", this.config)
       axios
-        .put("http://127.0.0.1:8000/api/post/updateStat/" + item.id)
+        .post("http://127.0.0.1:8000/api/post/updateStat/" + item.id,{}, this.config)
         .then(response => {
+          console.log('-----------', response.data);
           Swal.fire({
             title: "Order is being delivered",
             icon: "success",
@@ -677,23 +691,25 @@ export default {
         });
     },
     fetchOrders() {
-      axios.get("http://127.0.0.1:8000/api/posts/order").then(response => {
+      axios.get("http://127.0.0.1:8000/api/posts/order",this.config).then(response => {
         this.orders = response.data.data;
-        console.log("ordersssssss: ", this.orders);
+        // console.log("ordersssssss: ", this.orders);
       });
     },
     fetchPendingOrders() {
       axios
-        .get("http://127.0.0.1:8000/api/fetch/pending-orders")
+        .get("http://127.0.0.1:8000/api/fetch/pending-orders", this.config)
         .then(response => {
           this.pendingOrders = response.data.data;
-          console.log("ordersssssss: ", this.orders);
+          // console.log("ordersssssss: ", this.orders);
         });
     },
     confirmOrder(item) {
+      console.log('****hsdfnaiuerh*******', this.config)
       axios
-        .put("http://127.0.0.1:8000/api/post/confirm/" + item.id)
+        .post("http://127.0.0.1:8000/api/post/confirm/" + item.id, {}, this.config)
         .then(response => {
+          console.log('***********', response.data)
           Swal.fire({
             title: "Order is being confirmed",
             icon: "success",

@@ -27,5 +27,22 @@ export default {
   data: () => ({
     //
   }),
+
+  mounted(){
+    this.setUser()
+  },
+  methods:{
+
+    setUser(){
+      console.log('sxczfvxdfgdxfg', localStorage.getItem("id"))
+    }
+
+  }
+
+  // mounted(){
+  //   if(localStorage.getItem('token') === null && this.$route.path !== '/login'){
+  //     this.$router.push("/login")
+  //   }
+  // }
 };
 </script>
