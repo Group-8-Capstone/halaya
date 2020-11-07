@@ -66,6 +66,21 @@ import axios from "axios";
       loadDelivered(){
       axios.get('http://127.0.0.1:8000/api/posts/delivered', this.config).then(response => {
         this.deliveredOrder = response.data.data
+        for(var i = 0; i < this.deliveredOrder.length; i++ ){
+            var street = response.data.data[i].building_or_street;
+            var barangay = response.data.data[i].barangay;
+            var city = response.data.data[i].city_or_municipality;
+            var province = response.data.data[i].province;
+            var place = street.toString().concat(
+              " ",
+              barangay.toString(),
+              " ",
+              city.toString(),
+              " ",
+              province.toString()
+            );  
+            this.deliveredOrder[i]['customer_address'] = place;
+          }
       })
     },
     }

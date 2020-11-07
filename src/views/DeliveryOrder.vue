@@ -13,7 +13,7 @@
           hide-details
         ></v-text-field>
       </v-card-title>
-       <template>
+      <template>
         <v-dialog v-model="orderDetails" persistent max-width="500px">
           <v-card>
             <v-card-title>
@@ -131,8 +131,16 @@ export default {
         },
         { text: "Address", value: "customer_address", sortable: false },
         { text: "Distance", value: "distance", sortable: false },
-        { text: "Delivery Date", value: "preferred_delivery_date", sortable: false },
-        { text: "Ube Halaya Jar Qty", value: "ubeHalayaJar_qty", sortable: false },
+        {
+          text: "Delivery Date",
+          value: "preferred_delivery_date",
+          sortable: false
+        },
+        {
+          text: "Ube Halaya Jar Qty",
+          value: "ubeHalayaJar_qty",
+          sortable: false
+        },
         { text: "Ubechi Qty", value: "ubeHalayaTub_qty", sortable: false },
         { text: "Action", value: "action", sortable: false },
         { text: "Order Status", value: "order_status", sortable: false }
@@ -145,13 +153,14 @@ export default {
     let config = {};
     config.headers = {
       Authorization: "Bearer " + localStorage.getItem("token"),
-      'Access-Control-Allow-Origin':'*'
+      "Access-Control-Allow-Origin": "*"
     };
     this.config = config;
     console.log("this.config", this.config);
   },
   created() {
     this.fetchDelivery();
+    this.dataGrouping();
     // this.loadOrder();
     // this.fetchOrders();
     // this.loadDelivery();
@@ -255,23 +264,42 @@ export default {
       });
     },
     fetchDelivery() {
-      axios.get("http://127.0.0.1:8000/api/posts/delivery",this.config).then(response => {
-        // let results = [];
-        this.deliveries = response.data.data;
-        console.log("data: ", this.deliveries);
-        // for (var i = 0; i < data.length; i++) {
-        //   // console.log("DATA", data[i].id);
-        //   if (this.containsObject(results, data[i].id)) {
-        //     console.log("good");
-        //   } else {
-        //     results.push(data[i]);
-        //     // console.log("RESULTS", results);
-        //     this.deliveries = results;
-        //     // console.log("deliveries: ", this.deliveries);
-        //   }
+      axios
+        .get("http://127.0.0.1:8000/api/posts/delivery", this.config)
+        .then(response => {
+          // let results = [];
+          this.deliveries = response.data.data;
+          for (var i = 0; i < this.deliveries.length; i++) {
+            var street = response.data.data[i].building_or_street;
+            var barangay = response.data.data[i].barangay;
+            var city = response.data.data[i].city_or_municipality;
+            var province = response.data.data[i].province;
+            var place = street
+              .toString()
+              .concat(
+                " ",
+                barangay.toString(),
+                " ",
+                city.toString(),
+                " ",
+                province.toString()
+              );
+            this.deliveries[i]["customer_address"] = place;
+          }
+          // console.log("data: ", this.deliveries);
+          // for (var i = 0; i < data.length; i++) {
+          //   // console.log("DATA", data[i].id);
+          //   if (this.containsObject(results, data[i].id)) {
+          //     console.log("good");
+          //   } else {
+          //     results.push(data[i]);
+          //     // console.log("RESULTS", results);
+          //     this.deliveries = results;
+          //     // console.log("deliveries: ", this.deliveries);
+          //   }
           // continue;
-        // }
-      });
+          // }
+        });
       // .then(response => {
       //   this.deliveries = response.data;
       //   console.log("ORDERS", response.data);
@@ -280,7 +308,10 @@ export default {
     },
     loadDelivery() {
       axios
-        .get("https://wawens-backend.herokuapp.com/api/orders/confirmed",this.config)
+        .get(
+          "https://wawens-backend.herokuapp.com/api/orders/confirmed",
+          this.config
+        )
         .then(response => {
           this.delivery = response.data;
 
@@ -379,8 +410,32 @@ export default {
           // }
         })
         .catch(error => console.log(error));
-    }
+    },
+    dataGrouping() {
+    var barangay_array = [];
+    axios
+      .get("http://127.0.0.1:8000/api/posts/delivery", this.config)
+      .then(response => {
+        var result = response.data.data;
+        // console.log('result: ', result);
+        for (var i = 0; i < result.length; i++) {
+          var list = [];
+          list.push(result[i]);
+          for(var j = 0; j < list.length; j++){
+            // console.log('sulod sa list: ', list[j].barangay)
+            // console.log('sulod sa result: ', result[i].barangay)
+            if(result[i].barangay == list[j].barangay){
+              list.push(result[i]);
+              // console.log('nasuloddddddd')
+            }
+          }
+          barangay_array.push(list);
+        }
+      });
+      console.log('barangay array: ', barangay_array);
   }
+  },
+  
 };
 </script>
 

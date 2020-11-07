@@ -420,7 +420,11 @@ export default {
           let param = {
             customer_id: localStorage.getItem("id"),
             receiver_name: this.customerName,
-            address: place,
+            // address: place,
+            building_street: street,
+            barangay: barangay,
+            city_municipality: municipality,
+            province: province,
             contactNumber: this.contactNumber,
             jar_qty: this.jarQuantity,
             tub_qty: this.tabQuantity,

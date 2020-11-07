@@ -219,14 +219,14 @@ export default {
     drawer: true,
     model: 1,
     mini: true,
-    items2: [
-      {
-        icon: "mdi-account-settings",
-        title: "Profile Setting",
-        link: "/profileSetting"
-      },
-      { icon: "mdi-logout", title: "logout", link: "/login" }
-    ],
+    // items2: [
+    //   {
+    //     icon: "mdi-account-settings",
+    //     title: "Profile Setting",
+    //     link: "/profileSetting"
+    //   },
+    //   { icon: "mdi-logout", title: "logout", link: "/login" }
+    // ],
     admin: [
       { icon: "mdi-view-dashboard", text: "Dashboard", link: "/dashboard" },
       {
@@ -258,6 +258,8 @@ export default {
             link: "/delivered"
           }
         ]
+        
+        
       },
 
       { icon: "mdi-cogs", text: "Business Settings", link: "/setting" },
@@ -266,7 +268,7 @@ export default {
         text: "Profile Setting",
         link: "/profileSetting"
       },
-      { icon: "mdi-logout", text: "logout", link: "/login" }
+      { icon: "mdi-logout", text: "logout", link: "/login" },
     ],
     customer: [
       { icon: "mdi-home-variant", text: "Home", link: "/customerHome" },
