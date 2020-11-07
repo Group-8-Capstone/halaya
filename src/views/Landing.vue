@@ -60,33 +60,78 @@
     </v-row>
     <v-row id="photos">
       <v-card flat>
+        <v-row align="center" justify="center">
+          <div id="planHeader" class="text-center">
+            <h1 id="productsHeader">Ways To Enjoy Wawen's Ube Halaya</h1>
+          </div>
+        </v-row>
         <v-row>
           <v-col sm="3">
             <div>
-              <v-card flat :elevation="8">
-                <v-img id="photo" max-height="315" src="../assets/photos/tub.png"></v-img>
-              </v-card>
+              <v-hover v-slot:default="{ hover }">
+                <v-card flat :elevation="8">
+                  <v-img id="photo" max-height="auto" src="../assets/photos/jar.png">
+                    <v-expand-transition>
+                      <div
+                        v-if="hover"
+                        class="d-flex transition-fast-in-fast-out purple darken-2 v-card--reveal display-1 white--text"
+                        style="height: 100%;"
+                      >Enjoyable snack</div>
+                    </v-expand-transition>
+                  </v-img>
+                </v-card>
+              </v-hover>
             </div>
           </v-col>
           <v-col sm="3">
             <div>
-              <v-card flat :elevation="8">
-                <v-img id="photo" height="315" src="../assets/ubeIngredients.jpg"></v-img>
-              </v-card>
+              <v-hover v-slot:default="{ hover }">
+                <v-card flat :elevation="8">
+                  <v-img id="photo" height="315" src="../assets/ube.jpg">
+                    <v-expand-transition>
+                      <div
+                        v-if="hover"
+                        class="d-flex transition-fast-in-fast-out purple darken-2 v-card--reveal display-1 white--text"
+                        style="height: 100%;"
+                      >Ubelicious spread</div>
+                    </v-expand-transition>
+                  </v-img>
+                </v-card>
+              </v-hover>
             </div>
           </v-col>
           <v-col sm="3">
             <div>
-              <v-card flat :elevation="8">
-                <v-img id="photo" max-height="315" src="../assets/photos/ubechi.png"></v-img>
-              </v-card>
+              <v-hover v-slot:default="{ hover }">
+                <v-card flat :elevation="8">
+                  <v-img id="photo" max-height="315" src="../assets/photos/ubechi.png">
+                    <v-expand-transition>
+                      <div
+                        v-if="hover"
+                        class="d-flex transition-fast-in-fast-out purple darken-2 v-card--reveal display-1 white--text"
+                        style="height: 100%;"
+                      >Ube-filled butchi</div>
+                    </v-expand-transition>
+                  </v-img>
+                </v-card>
+              </v-hover>
             </div>
           </v-col>
           <v-col sm="3">
             <div>
-              <v-card flat :elevation="8">
-                <v-img id="photo" max-height="315" src="../assets/photos/ubecake.png"></v-img>
-              </v-card>
+              <v-hover v-slot:default="{ hover }">
+                <v-card flat :elevation="8">
+                  <v-img id="photo" max-height="315" src="../assets/photos/ubecake.png">
+                    <v-expand-transition>
+                      <div
+                        v-if="hover"
+                        class="d-flex transition-fast-in-fast-out purple darken-2 v-card--reveal display-1 white--text"
+                        style="height: 100%;"
+                      >Ubelicious cake</div>
+                    </v-expand-transition>
+                  </v-img>
+                </v-card>
+              </v-hover>
             </div>
           </v-col>
         </v-row>
@@ -97,7 +142,7 @@
         <v-row id="infos">
           <v-col sm="4">
             <v-row>
-              <v-card id="infoCards" light max-width="400" height="190" :elevation="8">
+              <v-card id="infoCards" light max-width="400" height="auto" :elevation="8">
                 <v-card-title>
                   <v-icon large left>mdi-bullhorn</v-icon>Suwayi na!
                   <v-card-text class="text">
@@ -111,7 +156,7 @@
             </v-row>
             <br>
             <v-row>
-              <v-card id="infoCards" light max-width="400" height="190" :elevation="8">
+              <v-card id="infoCards" light max-width="400" height="auto" :elevation="8">
                 <v-card-title>
                   <v-icon large left>mdi-truck</v-icon>Delivery Time
                   <v-card-text class="text">
@@ -126,34 +171,25 @@
             </v-row>
             <br>
             <v-row>
-              <v-card id="infoCards" light max-width="400" height="490" :elevation="8">
-                <v-card-title>
-                  <v-icon large left></v-icon>Prices And Delivery Fee/Distance
-                  <v-card-text class="text">
-                    <h3>
-                      <b>1 - 9 jar/s:</b> ₱150.00 each
-                    </h3>
-                    <br>( No free delivery for 1 jar order )
-                    <br>0 - 2 km free delivery
-                    <br>2.1 - 5 km = ₱50.00
-                    <br>5.1 - 6 km = ₱70.00
-                    <br>6.1 - 8 km = ₱80.00
-                    <br>8.1 - 10 km = ₱100.00
-                    <br>
-                    <br>
-                    <h3>
-                      <b>10 - 23 jars:</b> ₱140.00 each
-                    </h3>
-                    <br>Free Delivery on less than 8 km
-                    <br>
-                    <br>
-                    <h3>
-                      <b>24 jars above:</b> ₱130.00 each
-                    </h3>
-                    <br>Free Delivery
-                  </v-card-text>
-                </v-card-title>
-              </v-card>
+                <v-layout wrap>
+                  <v-flex>
+                    <v-col sm="12">
+                      <v-card flat id="infoCrd" max-width="400" height="auto" :elevation="8">
+                        <v-card-title class="purple darken-2 white--text"><v-icon color="white" large light>mdi-information</v-icon></v-card-title>
+                        <center>
+                          <v-img src="../assets/order.png" height="100px" width="100px"></v-img>
+                        </center>
+                        <v-list-item class="justify-center"><h2>You can now place  your order online!</h2></v-list-item>
+                        <v-divider></v-divider>
+                        <v-list-item><h2>How to pay?</h2></v-list-item>
+                        <center>
+                          <v-img src="../assets/Pay_on_Delivery.png" height="100px" width="100px"></v-img>
+                        </center>
+                        <v-list-item class="justify-center"><h2>Cash On Delivery</h2></v-list-item>
+                      </v-card>
+                    </v-col>
+                  </v-flex>
+                </v-layout>
             </v-row>
           </v-col>
           <v-col align="left" justify="left">
@@ -205,7 +241,7 @@
                               class="font-weight-light grey--text title mb-2"
                             >Perfect Ubelicious snack</div>
                             <h1 class="font-weight-light orange--text mb-2">Ube halaya in a jar</h1>
-                            <div id="price" class="font-weight-light grey--text title mb-2">₱499.00</div>
+                            <div id="price" class="font-weight-light grey--text title mb-2">₱150.00</div>
                           </v-card-text>
                         </v-card>
                       </v-hover>
@@ -251,12 +287,24 @@
           <v-row id="footerContent" no-gutters>
             <v-col cols="4">
               <p>
-                <v-icon>mdi-copyright</v-icon>2020 Wawen's Ube Halaya. All Rights Reserved
+                <v-icon small>mdi-copyright</v-icon>2020 Wawen's Ube Halaya. All Rights Reserved
               </p>
             </v-col>
             <v-col cols="6">
               <v-row>
                 <v-spacer></v-spacer>
+                <h4 id="contactUs">Check us out here:</h4>
+                <div id="phone">
+                  <v-icon id="callIcon">mdi-facebook</v-icon>
+                </div>
+                <div id="fbPage">
+                  <p>
+                    <a
+                      href="https://www.facebook.com/ubehalayacebu/reviews/"
+                      target="_blank"
+                    >Wawen's Ube Halaya</a>
+                  </p>
+                </div>
                 <h4 id="contactUs">Contact us:</h4>
                 <div id="phone">
                   <v-icon id="callIcon">mdi-phone</v-icon>
@@ -270,7 +318,7 @@
                     <a
                       href="https://www.messenger.com/t/ubehalayacebu"
                       target="_blank"
-                    >m.me/ubehalayacebu</a>
+                    >Wawen's Ube Halaya</a>
                   </p>
                 </div>
               </v-row>
@@ -290,8 +338,8 @@ export default {
   name: "Home",
   data: () => ({
     menu: false,
-    model: null
-  })
+    model: null,
+  }),
 };
 </script>
 
@@ -329,10 +377,19 @@ export default {
 }
 #infoCards {
   background-color: rgb(217, 167, 252);
-  margin-top: 5px;
+  margin-top: 3px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+#infoCrd {
+  justify-content: center;
+  align-content: center;
+  justify-items: center;
+  align-items: center;
 }
 .homeContainer {
-  height: 400px;
+  height: 20%;
+  width: 100%;
   position: relative;
   text-align: center;
   background-color: black;
@@ -366,14 +423,11 @@ export default {
   justify-items: center;
   align-items: center;
 }
-#infoImg {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  float: left;
-}
 #photo {
+  width: 100%;
+  height: auto;
   object-fit: cover;
+  display: flex;
 }
 #adPro {
   justify-content: center;
@@ -440,8 +494,11 @@ export default {
   align-items: center;
   justify-items: center;
 }
+#fbPage {
+  margin-right: 40px;
+}
 #contactUs {
-  margin-right: 30px;
+  margin-right: 20px;
 }
 .v-btn {
   padding-left: 1px;
