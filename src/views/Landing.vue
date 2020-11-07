@@ -388,7 +388,7 @@ export default {
   align-items: center;
 }
 .homeContainer {
-  height: 20%;
+  height: 400px;
   width: 100%;
   position: relative;
   text-align: center;
