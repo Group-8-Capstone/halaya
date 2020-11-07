@@ -24,28 +24,26 @@
             <v-spacer></v-spacer>
           </v-card-title>
           <v-row>
-            
-                <v-data-table :headers="headers" :items="orders" :search="search">
-                  <template v-slot:item.order_status="{ item }">
-                    <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
-                  </template>
-                  <template v-slot:item.action="{ item }">
-                    <v-icon
-                      normal
-                      class="mr-2"
-                      title="Delivered"
-                      @click="alertDelivered(item)"
-                    >mdi-truck-check-outline</v-icon>
-                    <v-icon
-                      @click="editDialog = !editDialog, editItem(item) "
-                      class="mr-2"
-                      normal
-                      title="Edit"
-                    >mdi-table-edit</v-icon>
-                    <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
-                  </template>
-                </v-data-table>
-              
+            <v-data-table :headers="headers" :items="orders" :search="search">
+              <template v-slot:item.order_status="{ item }">
+                <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
+              </template>
+              <template v-slot:item.action="{ item }">
+                <v-icon
+                  normal
+                  class="mr-2"
+                  title="Delivered"
+                  @click="alertDelivered(item)"
+                >mdi-truck-check-outline</v-icon>
+                <v-icon
+                  @click="editDialog = !editDialog, editItem(item) "
+                  class="mr-2"
+                  normal
+                  title="Edit"
+                >mdi-table-edit</v-icon>
+                <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+              </template>
+            </v-data-table>
           </v-row>
         </v-tab-item>
 
@@ -62,27 +60,26 @@
             ></v-text-field>
             <!-- <v-spacer></v-spacer> -->
           </v-card-title>
-                <v-data-table :headers="headers" :items="pendingOrders" :search="search">
-                  <template v-slot:item.order_status="{ item }">
-                    <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
-                  </template>
-                  <template v-slot:item.action="{ item }">
-                    <v-icon
-                      normal
-                      class="mr-2"
-                      title="Confirm Order"
-                      @click="confirmOrder(item)"
-                    >mdi mdi-checkbox-marked-outline</v-icon>
-                    <!-- <v-icon
+          <v-data-table :headers="headers" :items="pendingOrders" :search="search">
+            <template v-slot:item.order_status="{ item }">
+              <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
+            </template>
+            <template v-slot:item.action="{ item }">
+              <v-icon
+                normal
+                class="mr-2"
+                title="Confirm Order"
+                @click="confirmOrder(item)"
+              >mdi mdi-checkbox-marked-outline</v-icon>
+              <!-- <v-icon
                       @click="editDialog = !editDialog, editItem(item) "
                       class="mr-2"
                       normal
                       title="Edit"
-                    >mdi-table-edit</v-icon>-->
-                    <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
-                  </template>
-                </v-data-table>
-       
+              >mdi-table-edit</v-icon>-->
+              <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+            </template>
+          </v-data-table>
         </v-tab-item>
 
         <v-tab-item>
@@ -91,117 +88,119 @@
       </v-tabs-items>
 
       <template>
-      <v-dialog v-model="dialog" width="400px">
-        <v-card>
-          <v-spacer></v-spacer>
-          <v-card-title class="deep-purple lighten-1 align-center">
-            <v-list-item-title class="d-flex align-center justify-center mx-auto headline">ADD ORDER</v-list-item-title>
-          </v-card-title>
-          <v-container>
-            <v-row class="mx-2">
-              <v-col cols="12">
-                <v-text-field
-                  prepend-icon="mdi-account-outline"
-                  placeholder="Customer Name"
-                  v-model="customerName"
-                  :error-messages="customerErrors"
-                  @input="$v.customerName.$touch()"
-                  @blur="$v.customerName.$touch()"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  prepend-icon="mdi-map-marker"
-                  placeholder="Address"
-                  v-model="address"
-                  :error-messages="addressErrors"
-                  @input="$v.address.$touch()"
-                  @blur="$v.address.$touch()"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  type="number"
-                  prepend-icon="mdi-phone"
-                  placeholder="+63 900 000 0000"
-                  v-model="contactNumber"
-                  :error-messages="contactNumberErrors"
-                  @input="$v.contactNumber.$touch()"
-                  @blur="$v.contactNumber.$touch()"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-menu
-                  ref="addDateMenu"
-                  v-model="addDateMenu"
-                  :close-on-content-click="false"
-                  :return-value.sync="date"
-                  transition="scale-transition"
-                  offset-y
-                  min-width="290px"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                      v-model="deliveryDate"
-                      label="delivery date"
-                      prepend-icon="mdi-calendar"
-                      readonly
-                      v-bind="attrs"
-                      v-on="on"
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker
-                    v-model="deliveryDate"
-                    :min="deliveryDate"
-                    :max="getEndDate"
-                    color="deep-purple lighten-1"
-                    no-title
-                    scrollable
-                  ></v-date-picker>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                      v-model="deliveryDate"
-                      label="delivery date"
-                      prepend-icon="mdi-calendar"
-                      readonly
-                      v-bind="attrs"
-                      v-on="on"
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker
-                    v-model="deliveryDate"
-                    :min="deliveryDate"
-                    :max="getEndDate"
-                    color="deep-purple lighten-1"
-                    no-title
-                    scrollable
-                  ></v-date-picker>
-                </v-menu>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  prepend-icon="mdi-plus"
-                  min="1"
-                  type="number"
-                  placeholder="Quantity"
-                  v-model="orderQuantity"
-                  :error-messages="orderQuantityErrors"
-                  @input="$v.orderQuantity.$touch()"
-                  @blur="$v.orderQuantity.$touch()"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-          </v-container>
-          <v-card-actions>
+        <v-dialog v-model="dialog" width="400px">
+          <v-card>
             <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="dialog = false, reloadData()">Cancel</v-btn>
-            <v-btn text @click="addOrder()">Save</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+            <v-card-title class="deep-purple lighten-1 align-center">
+              <v-list-item-title
+                class="d-flex align-center justify-center mx-auto headline"
+              >ADD ORDER</v-list-item-title>
+            </v-card-title>
+            <v-container>
+              <v-row class="mx-2">
+                <v-col cols="12">
+                  <v-text-field
+                    prepend-icon="mdi-account-outline"
+                    placeholder="Customer Name"
+                    v-model="customerName"
+                    :error-messages="customerErrors"
+                    @input="$v.customerName.$touch()"
+                    @blur="$v.customerName.$touch()"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    prepend-icon="mdi-map-marker"
+                    placeholder="Address"
+                    v-model="address"
+                    :error-messages="addressErrors"
+                    @input="$v.address.$touch()"
+                    @blur="$v.address.$touch()"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    type="number"
+                    prepend-icon="mdi-phone"
+                    placeholder="+63 900 000 0000"
+                    v-model="contactNumber"
+                    :error-messages="contactNumberErrors"
+                    @input="$v.contactNumber.$touch()"
+                    @blur="$v.contactNumber.$touch()"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-menu
+                    ref="addDateMenu"
+                    v-model="addDateMenu"
+                    :close-on-content-click="false"
+                    :return-value.sync="date"
+                    transition="scale-transition"
+                    offset-y
+                    min-width="290px"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="deliveryDate"
+                        label="delivery date"
+                        prepend-icon="mdi-calendar"
+                        readonly
+                        v-bind="attrs"
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
+                      v-model="deliveryDate"
+                      :min="deliveryDate"
+                      :max="getEndDate"
+                      color="deep-purple lighten-1"
+                      no-title
+                      scrollable
+                    ></v-date-picker>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="deliveryDate"
+                        label="delivery date"
+                        prepend-icon="mdi-calendar"
+                        readonly
+                        v-bind="attrs"
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
+                      v-model="deliveryDate"
+                      :min="deliveryDate"
+                      :max="getEndDate"
+                      color="deep-purple lighten-1"
+                      no-title
+                      scrollable
+                    ></v-date-picker>
+                  </v-menu>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    prepend-icon="mdi-plus"
+                    min="1"
+                    type="number"
+                    placeholder="Quantity"
+                    v-model="orderQuantity"
+                    :error-messages="orderQuantityErrors"
+                    @input="$v.orderQuantity.$touch()"
+                    @blur="$v.orderQuantity.$touch()"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </v-container>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn text color="primary" @click="dialog = false, reloadData()">Cancel</v-btn>
+              <v-btn text @click="addOrder()">Save</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </template>
       <template>
         <v-dialog v-model="editDialog" width="400px">
@@ -236,7 +235,7 @@
                     prepend-icon="mdi-phone"
                     placeholder="+63 900 000 0000"
                   ></v-text-field>
-                </v-col> -->
+                </v-col>-->
                 <v-col cols="12">
                   <v-menu
                     ref="updateDateMenu"
@@ -359,15 +358,15 @@ import {
 } from "vuelidate/lib/validators";
 import * as turf from "@turf/turf";
 import { connect } from "tls";
-import Walkin from "../components/Walkin.vue"
-import { constants } from 'zlib';
+import Walkin from "../components/Walkin.vue";
+import { constants } from "zlib";
 // import Order from "../components/Orders.vue";
 // import DefaultLocation from "../components/DefaultLocation.vue"
 
 export default {
   name: "Order",
   components: {
-    Walkin,
+    Walkin
     // DefaultLocation,
     // Order
   },
@@ -393,6 +392,7 @@ export default {
       editDialog: false,
       // orderDetails: false,
       customerName: "",
+      complete_address: "",
       address: "",
       coordinates: [],
       contactNumber: "",
@@ -483,7 +483,7 @@ export default {
     let config = {};
     config.headers = {
       Authorization: "Bearer " + localStorage.getItem("token"),
-      'Access-Control-Allow-Origin':'*'
+      "Access-Control-Allow-Origin": "*"
     };
     this.config = config;
     console.log("this.config", this.config);
@@ -570,9 +570,13 @@ export default {
     },
     deleteItem(item) {
       axios
-        .post("http://127.0.0.1:8000/api/post/updateCanceledStat/" + item.id,{}, this.config)
+        .post(
+          "http://127.0.0.1:8000/api/post/updateCanceledStat/" + item.id,
+          {},
+          this.config
+        )
         .then(response => {
-          console.log('-----<<<<<<<-------', response.data)
+          console.log("-----<<<<<<<-------", response.data);
           this.fetchOrders();
           this.fetchPendingOrders();
         });
@@ -679,9 +683,13 @@ export default {
     deliveredItem(item) {
       // console.log("================ ", this.config)
       axios
-        .post("http://127.0.0.1:8000/api/post/updateStat/" + item.id,{}, this.config)
+        .post(
+          "http://127.0.0.1:8000/api/post/updateStat/" + item.id,
+          {},
+          this.config
+        )
         .then(response => {
-          console.log('-----------', response.data);
+          console.log("-----------", response.data);
           Swal.fire({
             title: "Order is being delivered",
             icon: "success",
@@ -692,25 +700,60 @@ export default {
         });
     },
     fetchOrders() {
-      axios.get("http://127.0.0.1:8000/api/posts/order",this.config).then(response => {
-        this.orders = response.data.data;
-        // console.log("ordersssssss: ", this.orders);
-      });
+      axios
+        .get("http://127.0.0.1:8000/api/posts/order", this.config)
+        .then(response => {
+          this.orders = response.data.data;
+          for(var i = 0; i < this.orders.length; i++ ){
+            var street = response.data.data[i].building_or_street;
+            var barangay = response.data.data[i].barangay;
+            var city = response.data.data[i].city_or_municipality;
+            var province = response.data.data[i].province;
+            var place = street.toString().concat(
+              " ",
+              barangay.toString(),
+              " ",
+              city.toString(),
+              " ",
+              province.toString()
+            );  
+            this.orders[i]['customer_address'] = place;
+          }
+        });
     },
     fetchPendingOrders() {
       axios
         .get("http://127.0.0.1:8000/api/fetch/pending-orders", this.config)
         .then(response => {
           this.pendingOrders = response.data.data;
+          for(var i = 0; i < this.pendingOrders.length; i++ ){
+            var street = response.data.data[i].building_or_street;
+            var barangay = response.data.data[i].barangay;
+            var city = response.data.data[i].city_or_municipality;
+            var province = response.data.data[i].province;
+            var place = street.toString().concat(
+              " ",
+              barangay.toString(),
+              " ",
+              city.toString(),
+              " ",
+              province.toString()
+            );  
+            this.pendingOrders[i]['customer_address'] = place;
+          }
           // console.log("ordersssssss: ", this.orders);
         });
     },
     confirmOrder(item) {
-      console.log('****hsdfnaiuerh*******', this.config)
+      console.log("****hsdfnaiuerh*******", this.config);
       axios
-        .post("http://127.0.0.1:8000/api/post/confirm/" + item.id, {}, this.config)
+        .post(
+          "http://127.0.0.1:8000/api/post/confirm/" + item.id,
+          {},
+          this.config
+        )
         .then(response => {
-          console.log('***********', response.data)
+          console.log("***********", response.data);
           Swal.fire({
             title: "Order is being confirmed",
             icon: "success",
@@ -718,7 +761,7 @@ export default {
             timer: 1500
           }),
             this.fetchPendingOrders();
-            this.fetchOrders();
+          this.fetchOrders();
         });
     }
   }
