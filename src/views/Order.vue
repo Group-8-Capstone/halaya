@@ -559,7 +559,7 @@ export default {
     },
     deleteItem(item) {
       axios
-        .put("http://127.0.0.1:8000/api/post/updateCanceledStat/" + item.id)
+        .post("http://127.0.0.1:8000/api/post/updateCanceledStat/" + item.id)
         .then(response => {
           this.fetchOrders();
         });
