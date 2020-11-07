@@ -576,7 +576,6 @@ export default {
           this.config
         )
         .then(response => {
-          console.log("-----<<<<<<<-------", response.data);
           this.fetchOrders();
           this.fetchPendingOrders();
         });
