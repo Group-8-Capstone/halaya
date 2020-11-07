@@ -135,6 +135,15 @@ import Swal from "sweetalert2";
       ],
         
     }),
+    beforeCreate() {
+    let config = {};
+    config.headers = {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+      'Access-Control-Allow-Origin':'*'
+    };
+    this.config = config;
+    console.log("this.config", this.config);
+  },
     created(){
       this.retrieveOnOrder();
       this.retrieveDeliveredOrder();
@@ -143,7 +152,7 @@ import Swal from "sweetalert2";
     methods: {
          retrieveOnOrder(){
       let id=localStorage.getItem('id')
-      axios.get("http://127.0.0.1:8000/api/fetchOnOrder/"+ id) .then(response => {
+      axios.get("http://127.0.0.1:8000/api/fetchOnOrder/"+ id, this.config) .then(response => {
           this.onOrder=response.data.post
           console.log(response.data.post)
           
@@ -158,7 +167,7 @@ import Swal from "sweetalert2";
     
       retrieveDeliveredOrder(){
       let id=localStorage.getItem('id')
-      axios.get("http://127.0.0.1:8000/api/fetchDeliveredOrder/"+ id) .then(response => {
+      axios.get("http://127.0.0.1:8000/api/fetchDeliveredOrder/"+ id, this.config) .then(response => {
           this.deliveredOrder=response.data.post
           console.log(response.data.post)
           

@@ -97,7 +97,8 @@ export default {
   beforeCreate() {
     let config = {}
     config.headers = {
-      Authorization: 'Bearer ' + localStorage.getItem('token')
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+      'Access-Control-Allow-Origin':'*'
     }
     this.config = config
     console.log(this.config)
@@ -125,7 +126,7 @@ export default {
       // })
 
       // http://localhost:8000/api/v1/auth/fetch/stock
-      axios.get("http://localhost:8000/api/fetch/stock",).then(response => {
+      axios.get("http://localhost:8000/api/fetch/stock",this.config).then(response => {
         let results = [];
         for (var i = 0; i < response.data.length; i++) {
           if (this.containsObject(results,response.data[i].id)) {

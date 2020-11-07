@@ -344,6 +344,15 @@ export default {
       required
     }
   },
+  beforeCreate() {
+    let config = {};
+    config.headers = {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+      'Access-Control-Allow-Origin':'*'
+    };
+    this.config = config;
+    console.log("this.config", this.config);
+  },
   created() {
     this.getHalayaIngredients();
     this.getButchiIngredients();
@@ -387,7 +396,7 @@ export default {
     }, 
     getHalayaIngredients() {
       axios
-        .get("http://127.0.0.1:8000/api/getHalayaIngredients/")
+        .get("http://127.0.0.1:8000/api/getHalayaIngredients/", this.config)
         .then(response => {
           console.log(response)
           let results = [];
@@ -404,7 +413,7 @@ export default {
     },
     getButchiIngredients() {
       axios
-        .get("http://127.0.0.1:8000/api/getButchiIngredients/")
+        .get("http://127.0.0.1:8000/api/getButchiIngredients/", this.config)
         .then(response => {
           let results = [];
           for (var i = 0; i < response.data.length; i++) {
@@ -421,7 +430,7 @@ export default {
     },
     getIceCreamIngredients() {
       axios
-        .get("http://127.0.0.1:8000/api/getIceCreamIngredients/")
+        .get("http://127.0.0.1:8000/api/getIceCreamIngredients/", this.config)
         .then(response => {
           let results = [];
           for (var i = 0; i < response.data.length; i++) {
@@ -439,7 +448,7 @@ export default {
     getAllIngredientsName() {
       let nameArray = [];
       axios
-        .get("http://127.0.0.1:8000/api/fetch/ingredientsName")
+        .get("http://127.0.0.1:8000/api/fetch/ingredientsName",this.config)
         .then(response => {
           for (var i = 0; i < response.data.length; i++) {
             if (nameArray.includes(response.data[i].ingredients_name)) {
@@ -469,7 +478,7 @@ export default {
       this.$v.$reset();
     },
     editIngredients(item) {
-      axios.get("http://127.0.0.1:8000/api/post/editStock/" + item.id)
+      axios.get("http://127.0.0.1:8000/api/post/editStock/" + item.id, this.config)
         .then(response => {
           this.editStockItem = response.data;
           console.log("edit stock item", JSON.stringify(this.editStockItem));
@@ -478,7 +487,7 @@ export default {
     updateIngredients() {
       // console.log('edit: ', JSON.stringify(this.editStockItem));
       axios
-        .post("http://127.0.0.1:8000/api/post/updateStock", this.editStockItem)
+        .post("http://127.0.0.1:8000/api/post/updateStock", this.editStockItem, this.config)
         .then(response => {
           console.log(response);
           this.getHalayaIngredients();
@@ -508,7 +517,7 @@ export default {
         axios
           .post(
             "http://127.0.0.1:8000/api/post/usedIngredients",
-            newAddedAmount
+            newAddedAmount, this.config
           )
           .then(response => {
             console.log(response);

@@ -269,6 +269,15 @@ export default {
       return errors;
     }
   },
+  beforeCreate() {
+    let config = {};
+    config.headers = {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+      'Access-Control-Allow-Origin':'*'
+    };
+    this.config = config;
+    console.log("this.config", this.config);
+  },
   created() {
     this.fetchStock();
     setInterval(this.fetchStock(), 3000);
@@ -292,7 +301,7 @@ export default {
     updateIngredients() {
       console.log("editSockItem: ", JSON.stringify(this.editStockItem));
       axios
-        .post("http://127.0.0.1:8000/api/post/updateStock", this.editStockItem)
+        .post("http://127.0.0.1:8000/api/post/updateStock", this.editStockItem, this.config)
         .then(response => {
           console.log(response);
           this.fetchStock();
@@ -316,7 +325,7 @@ export default {
         axios
           .post(
             "http://127.0.0.1:8000/api/post/usedIngredients",
-            newAddedAmount
+            newAddedAmount, this.config
           )
           .then(response => {
             console.log(response);
@@ -327,7 +336,7 @@ export default {
     },
     fetchStock() {
       let nameArray = [];
-      axios.get("http://127.0.0.1:8000/api/fetch/stock").then(response => {
+      axios.get("http://127.0.0.1:8000/api/fetch/stock", this.config).then(response => {
         this.stocks = response.data;
         for (var i = 0; i < response.data.length; i++) {
           if (nameArray.includes(response.data[i].ingredients_name)) {
@@ -358,7 +367,7 @@ export default {
     },
     editIngredients(item) {
       axios
-        .get("http://127.0.0.1:8000/api/post/editStock/" + item.id)
+        .get("http://127.0.0.1:8000/api/post/editStock/" + item.id, this.config)
         .then(response => {
           this.editStockItem = response.data;
           console.log("edit stock item", JSON.stringify(this.editStockItem));
@@ -396,7 +405,7 @@ export default {
           "Content-Type": "application/json"
         };
         axios
-          .post("http://127.0.0.1:8000/api/posts/ingredients", newStock)
+          .post("http://127.0.0.1:8000/api/posts/ingredients", newStock, this.config)
           .then(response => {
             if (response.data == "existed") {
               Swal.fire({
