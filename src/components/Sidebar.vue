@@ -10,7 +10,7 @@
       </v-list-item-avatar>
       <v-toolbar-title class="deep-purple--text">WAWEN'S UBE HALAYA</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-menu bottom>
+      <!-- <v-menu bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-btn dark icon v-bind="attrs" v-on="on">
             <v-icon class="mr-12 pt-5" size="30" color="grey">mdi-menu-down</v-icon>
@@ -31,7 +31,7 @@
             </v-list-item-content>
           </v-list-item>
         </v-list>
-      </v-menu>
+      </v-menu> -->
     </v-app-bar>
     <v-navigation-drawer
       v-model="drawer"
@@ -198,14 +198,14 @@ export default {
     drawer: true,
     model: 1,
     mini: true,
-    items2: [
-      {
-        icon: "mdi-account-settings",
-        title: "Profile Setting",
-        link: "/profileSetting"
-      },
-      { icon: "mdi-logout", title: "logout", link: "/login" }
-    ],
+    // items2: [
+    //   {
+    //     icon: "mdi-account-settings",
+    //     title: "Profile Setting",
+    //     link: "/profileSetting"
+    //   },
+    //   { icon: "mdi-logout", title: "logout", link: "/login" }
+    // ],
     admin: [
       { icon: "mdi-view-dashboard", text: "Dashboard", link: "/dashboard" },
       {
@@ -237,17 +237,37 @@ export default {
             link: "/delivered"
           }
         ]
+        
+        
       },
 
-      { icon: "mdi-cogs", text: "Business Settings", link: "/setting" }
+      { icon: "mdi-cogs", text: "Business Settings", link: "/setting" },
+      {
+        icon: "mdi-account-settings",
+        text: "Profile Setting",
+        link: "/profileSetting"
+      },
+      { icon: "mdi-logout", text: "logout", link: "/login" },
     ],
     customer: [
       { icon: "mdi-home-variant", text: "Home", link: "/customerHome" },
-      { icon: "mdi-package-variant-closed", text: "My Order", link: "/myorder" }
+      { icon: "mdi-package-variant-closed", text: "My Order", link: "/myorder" },
+      {
+        icon: "mdi-account-settings",
+        text: "Profile Setting",
+        link: "/profileSetting"
+      },
+      { icon: "mdi-logout", text: "logout", link: "/login" }
     ],
     driver: [
       { icon: "mdi-clipboard-outline", title: "To Deliver", link: "/delivery" },
       { icon: "mdi-content-copy", title: "Delivered Orders", link: "/delivered" },
+      {
+        icon: "mdi-account-settings",
+        text: "Profile Setting",
+        link: "/profileSetting"
+      },
+      { icon: "mdi-logout", text: "logout", link: "/login" }
     ]
   }),
   created() {

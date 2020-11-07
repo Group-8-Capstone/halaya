@@ -209,10 +209,10 @@ export default {
           let series = [];
           if (response.data.length > 0) {
             response.data.forEach((element) => {
-              category.push(element.delivery_date);
+              category.push(element.preferred_delivery_date);
               series.push(element.total);
             });
-            // console.log(category, series);
+            console.log(category, series);
             this.initializeData(category, series);
           } else {
             let year = this.filterByDate;
@@ -322,7 +322,7 @@ export default {
         let yearlyCategory = [];
         let yearlySeries = [];
         let data = response.data;
-        console.log(data);
+        console.log("okay"+ data);
         if (data.length > 0) {
           data.forEach((element) => {
             yearlyCategory.push(element.years);
