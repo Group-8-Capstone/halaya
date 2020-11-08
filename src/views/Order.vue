@@ -29,19 +29,38 @@
                 <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
               </template>
               <template v-slot:item.action="{ item }">
-                <v-icon
-                  normal
-                  class="mr-2"
-                  title="Delivered"
-                  @click="alertDelivered(item)"
-                >mdi-truck-check-outline</v-icon>
-                <v-icon
-                  @click="editDialog = !editDialog, editItem(item) "
-                  class="mr-2"
-                  normal
-                  title="Edit"
-                >mdi-table-edit</v-icon>
-                <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+                <div v-if="isCanceled(item) === true">
+                  <v-icon
+                    disabled
+                    normal
+                    class="mr-2"
+                    title="Delivered"
+                    @click="alertDelivered(item)"
+                  >mdi-truck-check-outline</v-icon>
+                  <v-icon
+                  disabled
+                    @click="editDialog = !editDialog, editItem(item) "
+                    class="mr-2"
+                    normal
+                    title="Edit"
+                  >mdi-table-edit</v-icon>
+                  <v-icon disabled @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+                </div>
+                <div v-else>
+                  <v-icon
+                    normal
+                    class="mr-2"
+                    title="Delivered"
+                    @click="alertDelivered(item)"
+                  >mdi-truck-check-outline</v-icon>
+                  <v-icon
+                    @click="editDialog = !editDialog, editItem(item) "
+                    class="mr-2"
+                    normal
+                    title="Edit"
+                  >mdi-table-edit</v-icon>
+                  <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+                </div>
               </template>
             </v-data-table>
           </v-row>
@@ -87,7 +106,7 @@
         </v-tab-item>
       </v-tabs-items>
 
-      <template>
+      <!-- <template>
         <v-dialog v-model="dialog" width="400px">
           <v-card>
             <v-spacer></v-spacer>
@@ -201,7 +220,7 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-      </template>
+      </template>-->
       <template>
         <v-dialog v-model="editDialog" width="400px">
           <v-card>
@@ -221,13 +240,30 @@
                     <v-text-field placeholder="Name" v-model="post.receiver_name"></v-text-field>
                   </v-row>
                 </v-col>
-                <v-col cols="12">
+                <label>Address</label>
+                <v-row class="pl-5">
+                  <v-col cols="6">
+                    <v-text-field v-model="post.building_or_street" label="Building Name/Street"></v-text-field>
+                  </v-col>
+                  <v-col cols="6">
+                    <v-text-field v-model="post.barangay" label="Barangay"></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row class="pl-5">
+                  <v-col cols="6">
+                    <v-text-field v-model="post.city_or_municipality" label="Municipality/City"></v-text-field>
+                  </v-col>
+                  <v-col cols="6">
+                    <v-text-field v-model="post.province" label="Province"></v-text-field>
+                  </v-col>
+                </v-row>
+                <!-- <v-col cols="12">
                   <v-text-field
                     v-model="post.customer_address"
                     prepend-icon="mdi-map-marker"
                     placeholder="address"
                   ></v-text-field>
-                </v-col>
+                </v-col>-->
                 <!-- <v-col cols="12">
                   <v-text-field
                     v-model="post.contact_number"
@@ -525,7 +561,11 @@ export default {
     updateItem() {
       if (
         this.post.receiver_name === "" ||
-        this.post.customer_address === "" ||
+        // this.post.customer_address === "" ||
+        this.post.building_or_street === "" ||
+        this.post.barangay === "" ||
+        this.post.city_or_municipality === "" ||
+        this.post.province === "" ||
         this.post.ubeHalayaJar_qty === "" ||
         this.post.preferred_delivery_date === "" ||
         this.post.ubehalayaTub_qty == ""
@@ -703,20 +743,22 @@ export default {
         .get("http://127.0.0.1:8000/api/posts/order", this.config)
         .then(response => {
           this.orders = response.data.data;
-          for(var i = 0; i < this.orders.length; i++ ){
+          for (var i = 0; i < this.orders.length; i++) {
             var street = response.data.data[i].building_or_street;
             var barangay = response.data.data[i].barangay;
             var city = response.data.data[i].city_or_municipality;
             var province = response.data.data[i].province;
-            var place = street.toString().concat(
-              " ",
-              barangay.toString(),
-              " ",
-              city.toString(),
-              " ",
-              province.toString()
-            );  
-            this.orders[i]['customer_address'] = place;
+            var place = street
+              .toString()
+              .concat(
+                " ",
+                barangay.toString(),
+                " ",
+                city.toString(),
+                " ",
+                province.toString()
+              );
+            this.orders[i]["customer_address"] = place;
           }
         });
     },
@@ -725,20 +767,22 @@ export default {
         .get("http://127.0.0.1:8000/api/fetch/pending-orders", this.config)
         .then(response => {
           this.pendingOrders = response.data.data;
-          for(var i = 0; i < this.pendingOrders.length; i++ ){
+          for (var i = 0; i < this.pendingOrders.length; i++) {
             var street = response.data.data[i].building_or_street;
             var barangay = response.data.data[i].barangay;
             var city = response.data.data[i].city_or_municipality;
             var province = response.data.data[i].province;
-            var place = street.toString().concat(
-              " ",
-              barangay.toString(),
-              " ",
-              city.toString(),
-              " ",
-              province.toString()
-            );  
-            this.pendingOrders[i]['customer_address'] = place;
+            var place = street
+              .toString()
+              .concat(
+                " ",
+                barangay.toString(),
+                " ",
+                city.toString(),
+                " ",
+                province.toString()
+              );
+            this.pendingOrders[i]["customer_address"] = place;
           }
           // console.log("ordersssssss: ", this.orders);
         });
@@ -762,6 +806,11 @@ export default {
             this.fetchPendingOrders();
           this.fetchOrders();
         });
+    },
+    isCanceled(item) {
+      if (item.order_status == "Canceled") {
+        return true;
+      }
     }
   }
 };

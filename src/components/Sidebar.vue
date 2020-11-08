@@ -281,8 +281,8 @@ export default {
       { icon: "mdi-logout", text: "logout", link: "/login" }
     ],
     driver: [
-      { icon: "mdi-clipboard-outline", title: "To Deliver", link: "/delivery" },
-      { icon: "mdi-content-copy", title: "Delivered Orders", link: "/delivered" },
+      { icon: "mdi-clipboard-outline", text: "To Deliver", link: "/delivery" },
+      { icon: "mdi-content-copy", text: "Delivered Orders", link: "/delivered" },
       {
         icon: "mdi-account-settings",
         text: "Profile Setting",
