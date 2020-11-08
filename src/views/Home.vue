@@ -1,20 +1,16 @@
 <template>
-  <v-col sm='12'>
+  <v-col sm="12">
     <v-row>
       <v-col>
         <v-row>
-          <v-col
-            v-for="(element, index) in IngredientsArray"
-            :key="index"
-          >
-            <v-card 
+          <v-col v-for="(element, index) in IngredientsArray" :key="index">
+            <v-card
               id="cards"
               class="mx-auto text-center"
               min-height="220"
               max-height="240"
               min-width="200"
               max-width="2000"
-              
             >
               <v-card-title class="deep-purple lighten-5" id="title">{{element.ingredients_name}}</v-card-title>
               <hr>
@@ -26,52 +22,97 @@
         </v-row>
       </v-col>
     </v-row>
-    <v-row>
-      <v-col
-        sm="6"
-        class="d-flex filter"
-      >
-        <v-select
-          :items="Dates"
-          v-model="filterBy"
-          @change="filtering"
-          label=" Filter by"
-          dense
-          class="dropdownFilter"
-        ></v-select>
-        <v-select
-          label=" Date"
-          v-model="filterByDate"
-          @change="filtering"
-          :items="Years"
-          dense
-          class="dropdownFilter"
-          :disabled="(filterBy.toLowerCase() === 'yearly' ) ? true : false "
-        ></v-select>
-      </v-col>
-      <v-col sm="12">
-        <v-card>
-          <Graph
-            type="area"
-            height="400px"
-            :options="chartOptions"
-            :series="series"
-          ></Graph>
-        </v-card>
-      </v-col>
-      <v-col>
-        <div class="text-center">
-          <v-pagination
-            v-model="page"
-            :length="12"
-            :total-visible="7"
-            circle
-            v-if="filterBy !== 'Yearly' && filterBy !== 'Monthly'"
-            @input="pageChange"
-          ></v-pagination>
-        </div>
-      </v-col>
-    </v-row>
+    <template>
+      <div align="center" justify="center">
+        <h2>Ube Halaya in a jar sales</h2>
+      </div>
+      <br>
+      <v-row>
+        <v-col sm="6" class="d-flex filter">
+          <v-select
+            :items="Dates"
+            v-model="filterBy"
+            @change="filtering"
+            label=" Filter by"
+            dense
+            class="dropdownFilter"
+          ></v-select>
+          <v-select
+            label=" Date"
+            v-model="filterByDate"
+            @change="filtering"
+            :items="Years"
+            dense
+            class="dropdownFilter"
+            :disabled="(filterBy.toLowerCase() === 'yearly' ) ? true : false "
+          ></v-select>
+        </v-col>
+        <v-col sm="12">
+          <v-card>
+            <Graph type="area" height="400px" :options="chartOptions" :series="series"></Graph>
+          </v-card>
+        </v-col>
+        <v-col>
+          <div class="text-center">
+            <v-pagination
+              v-model="page"
+              :length="12"
+              :total-visible="7"
+              circle
+              v-if="filterBy !== 'Yearly' && filterBy !== 'Monthly'"
+              @input="pageChange"
+            ></v-pagination>
+          </div>
+        </v-col>
+      </v-row>
+    </template>
+    <br>
+    <br>
+    <br>
+    <template>
+      <div align="center" justify="center">
+        <h2>Ube Halaya in a tub sales</h2>
+      </div>
+      <br>
+      <v-row>
+        <v-col sm="6" class="d-flex filter">
+          <v-select
+            :items="Dates"
+            v-model="filterBy"
+            @change="filtering"
+            label=" Filter by"
+            dense
+            class="dropdownFilter"
+          ></v-select>
+          <v-select
+            label=" Date"
+            v-model="filterByDate"
+            @change="filtering"
+            :items="Years"
+            dense
+            class="dropdownFilter"
+            :disabled="(filterBy.toLowerCase() === 'yearly' ) ? true : false "
+          ></v-select>
+        </v-col>
+        <v-col sm="12">
+          <v-card>
+            <Graph type="area" height="400px" :options="chartOptions" :series="series"></Graph>
+          </v-card>
+        </v-col>
+        <v-col>
+          <div class="text-center">
+            <v-pagination
+              v-model="page"
+              :length="12"
+              :total-visible="7"
+              circle
+              v-if="filterBy !== 'Yearly' && filterBy !== 'Monthly'"
+              @input="pageChange"
+            ></v-pagination>
+          </div>
+        </v-col>
+      </v-row>
+    </template>
   </v-col>
 </template>
 <script>
@@ -81,41 +122,41 @@ export default {
   data() {
     return {
       page: new Date().getMonth() + 1,
-      IngredientsArray: [], 
+      IngredientsArray: [],
       Dates: ["Daily", "Weekly", "Monthly", "Yearly"],
       Years: [],
       series: [],
       chartOptions: {},
       filterBy: "Daily",
-      filterByDate: new Date().getFullYear(),
+      filterByDate: new Date().getFullYear()
       // config:{}
     };
   },
   components: {
-    Graph,
+    Graph
   },
   beforeCreate() {
-    let config = {}
+    let config = {};
     config.headers = {
-      Authorization: 'Bearer ' + localStorage.getItem('token'),
-      'Access-Control-Allow-Origin':'*'
-    }
-    this.config = config
-    console.log(this.config)
+      Authorization: "Bearer " + localStorage.getItem("token"),
+      "Access-Control-Allow-Origin": "*"
+    };
+    this.config = config;
+    console.log(this.config);
   },
-  created(){
+  created() {
     this.filterByYear();
     this.daily();
     this.fetchIngredients();
   },
   methods: {
-    getColor (status) {
-        if (status ==='Alert! Very Low') return 'red'
-        else if (status ==='Warning! Running Low') return 'orange'
-        else if (status ==='Calculating...') return 'blue'
-        else return 'green'
-    }, 
-    fetchIngredients(){
+    getColor(status) {
+      if (status === "Alert! Very Low") return "red";
+      else if (status === "Warning! Running Low") return "orange";
+      else if (status === "Calculating...") return "blue";
+      else return "green";
+    },
+    fetchIngredients() {
       // console.log('test', this.config)
       // axios({
       //   method: "get",
@@ -126,32 +167,34 @@ export default {
       // })
 
       // http://localhost:8000/api/v1/auth/fetch/stock
-      axios.get("http://localhost:8000/api/fetch/stock",this.config).then(response => {
-        let results = [];
-        for (var i = 0; i < response.data.length; i++) {
-          if (this.containsObject(results,response.data[i].id)) {
-            console.log("good");
-          } else {
-            results.push(response.data[i]);
-            this.IngredientsArray = results;
+      axios
+        .get("http://localhost:8000/api/fetch/stock", this.config)
+        .then(response => {
+          let results = [];
+          for (var i = 0; i < response.data.length; i++) {
+            if (this.containsObject(results, response.data[i].id)) {
+              console.log("good");
+            } else {
+              results.push(response.data[i]);
+              this.IngredientsArray = results;
+            }
+            continue;
           }
-          continue;
-        }
-        console.log("ingredients array: ", this.IngredientsArray);
-      });
+          console.log("ingredients array: ", this.IngredientsArray);
+        });
     },
-    containsObject(arr,id) {
+    containsObject(arr, id) {
       return arr.some(function(el) {
         return el.id === id;
-      }); 
+      });
     },
     initializeData(category, series) {
       this.series = [
         {
           name: "Sales",
           data: series, // serries
-          color: "rgb(177, 117, 235)",
-        },
+          color: "rgb(177, 117, 235)"
+        }
       ];
 
       this.chartOptions = {
@@ -159,39 +202,39 @@ export default {
           height: 350,
           type: "area",
           zoom: {
-            enabled: false,
-          },
+            enabled: false
+          }
         },
         dataLabels: {
-          enabled: false,
+          enabled: false
         },
         markers: {
-          size: 6,
+          size: 6
         },
         stroke: {
-          curve: "smooth",
+          curve: "smooth"
         },
         title: {
           align: "left",
-          text: "Sold Jars",
+          text: "Sold Jars"
         },
         grid: {
           row: {
             colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
-            opacity: 0.5,
-          },
+            opacity: 0.5
+          }
         },
         yaxis: {
           title: {
-            text: "T o t a l",
-          },
+            text: "T o t a l"
+          }
         },
         xaxis: {
           categories: category, // categories,
           title: {
-            text: this.clickTitle(),
-          },
-        },
+            text: this.clickTitle()
+          }
+        }
       };
     },
     daily() {
@@ -200,15 +243,15 @@ export default {
        */
       let parameter = {
         year: this.filterByDate,
-        month: this.page,
+        month: this.page
       };
       axios
         .post("http://localhost:8000/api/sales/daily", parameter, this.config)
-        .then((response) => {
+        .then(response => {
           let category = [];
           let series = [];
           if (response.data.length > 0) {
-            response.data.forEach((element) => {
+            response.data.forEach(element => {
               category.push(element.preferred_delivery_date);
               series.push(element.total);
             });
@@ -261,11 +304,11 @@ export default {
     weekly() {
       // 'w' + (index + 1)
       let parameter = {
-        year: this.filterByDate,
+        year: this.filterByDate
       };
       axios
         .post("http://localhost:8000/api/sales/weekly", parameter, this.config)
-        .then((response) => {
+        .then(response => {
           let weeklyCategory = [];
           let weeklySeries = [];
           let data = response.data;
@@ -285,11 +328,11 @@ export default {
     },
     monthly() {
       let parameter = {
-        year: this.filterByDate,
+        year: this.filterByDate
       };
       axios
         .post("http://localhost:8000/api/sales/monthly", parameter, this.config)
-        .then((response) => {
+        .then(response => {
           let monthlyCategory = [];
           let monthlySeries = [];
           let WordMonths = [
@@ -304,11 +347,11 @@ export default {
             "September",
             "October",
             "November",
-            "December",
+            "December"
           ];
           let data = response.data;
           if (data.length > 0) {
-            data.forEach((element) => {
+            data.forEach(element => {
               let ConverttoNumber = Number(element.months) - 1;
               monthlyCategory.push(WordMonths[ConverttoNumber]);
               monthlySeries.push(element.totals);
@@ -318,26 +361,28 @@ export default {
         });
     },
     yearly() {
-      axios.get("http://localhost:8000/api/sales/yearly", this.config).then((response) => {
-        let yearlyCategory = [];
-        let yearlySeries = [];
-        let data = response.data;
-        console.log("okay"+ data);
-        if (data.length > 0) {
-          data.forEach((element) => {
-            yearlyCategory.push(element.years);
-            yearlySeries.push(element.totals);
-          });
-          this.initializeData(yearlyCategory, yearlySeries);
-        }
-      });
+      axios
+        .get("http://localhost:8000/api/sales/yearly", this.config)
+        .then(response => {
+          let yearlyCategory = [];
+          let yearlySeries = [];
+          let data = response.data;
+          console.log("okay" + data);
+          if (data.length > 0) {
+            data.forEach(element => {
+              yearlyCategory.push(element.years);
+              yearlySeries.push(element.totals);
+            });
+            this.initializeData(yearlyCategory, yearlySeries);
+          }
+        });
     },
     filterByYear() {
       axios
         .get("http://localhost:8000/api/sales/filterYear", this.config)
-        .then((response) => {
+        .then(response => {
           let tempYears = [];
-          response.data.forEach((element) => {
+          response.data.forEach(element => {
             tempYears.push(element.years);
           });
           this.Years = tempYears;
@@ -357,8 +402,8 @@ export default {
       } else if (this.filterBy == "Yearly") {
         return "Years";
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -372,13 +417,13 @@ export default {
   height: 43px;
   margin-left: 2%;
 }
-#title{
+#title {
   justify-content: center;
 }
-#qty{
+#qty {
   font-weight: bold;
 }
-#cards{
+#cards {
   border: 1px solid;
   border-color: purple;
   border-radius: 10px;

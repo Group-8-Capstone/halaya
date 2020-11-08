@@ -117,10 +117,10 @@
             v-if="!item.subItem"
             v-for="item in admin"
           >
-            <v-list-item-icon>
+            <v-list-item-icon @click="logout(item)">
               <v-icon v-text="item.icon"></v-icon>
             </v-list-item-icon>
-            <v-list-item-content>
+            <v-list-item-content @click="logout(item)">
               <v-list-item-title v-text="item.text"></v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -161,10 +161,10 @@
             v-if="!item.subItem"
             v-for="item in driver"
           >
-            <v-list-item-icon>
+            <v-list-item-icon @click="logout(item)">
               <v-icon v-text="item.icon"></v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
+            </v-list-item-icon >
+            <v-list-item-content @click="logout(item)">
               <v-list-item-title v-text="item.text"></v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -280,8 +280,8 @@ export default {
       { icon: "mdi-logout", text: "logout", link: "/login" }
     ],
     driver: [
-      { icon: "mdi-clipboard-outline", title: "To Deliver", link: "/delivery" },
-      { icon: "mdi-content-copy", title: "Delivered Orders", link: "/delivered" },
+      { icon: "mdi-clipboard-outline", text: "To Deliver", link: "/delivery" },
+      { icon: "mdi-content-copy", text: "Delivered Orders", link: "/delivered" },
       {
         icon: "mdi-account-settings",
         text: "Profile Setting",
