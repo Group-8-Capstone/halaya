@@ -10,7 +10,7 @@
                   <v-list-item-content>
                     <v-list-item-title
                       class="d-flex align-center justify-center pa-6 mx-auto headline"
-                    >SIGN UP</v-list-item-title>
+                    >Sign Up</v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
                 <v-list-item class="d-flex align-center justify-center pa-6 mx-auto">

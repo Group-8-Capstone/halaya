@@ -47,12 +47,12 @@
                   <v-icon disabled @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
                 </div>
                 <div v-else>
-                  <v-icon
-                    normal
-                    class="mr-2"
-                    title="Delivered"
-                    @click="alertDelivered(item)"
-                  >mdi-truck-check-outline</v-icon>
+                    <v-icon
+                      normal
+                      class="mr-2"
+                      title="Delivered"
+                      @click="alertDelivered(item)"
+                    >mdi-truck-check-outline</v-icon>
                   <v-icon
                     @click="editDialog = !editDialog, editItem(item) "
                     class="mr-2"

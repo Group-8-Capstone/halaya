@@ -118,10 +118,10 @@
             v-if="!item.subItem"
             v-for="item in admin"
           >
-            <v-list-item-icon>
+            <v-list-item-icon @click="logout(item)">
               <v-icon v-text="item.icon"></v-icon>
             </v-list-item-icon>
-            <v-list-item-content>
+            <v-list-item-content @click="logout(item)">
               <v-list-item-title v-text="item.text"></v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -162,10 +162,10 @@
             v-if="!item.subItem"
             v-for="item in driver"
           >
-            <v-list-item-icon>
+            <v-list-item-icon @click="logout(item)">
               <v-icon v-text="item.icon"></v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
+            </v-list-item-icon >
+            <v-list-item-content @click="logout(item)">
               <v-list-item-title v-text="item.text"></v-list-item-title>
             </v-list-item-content>
           </v-list-item>
