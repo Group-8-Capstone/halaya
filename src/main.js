@@ -3,14 +3,14 @@ import App from "./App.vue";
 import router from "./router";
 import vuetify from './plugins/vuetify';
 import Vuelidate from 'vuelidate'
-
+import underscore from "underscore";
 import mapboxgl from "mapbox-gl";
 import turf from "@turf/turf";
 import { Form, HasError, AlertError } from 'vform'
 import '@turf/helpers';
 import Print from 'vue-printjs'
 Vue.use(Print)
-
+Vue.prototype.$_ = underscore;
 Vue.use(Vuelidate)
 window.Form = Form;
 Vue.component(HasError.name, HasError)

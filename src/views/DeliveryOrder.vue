@@ -121,6 +121,7 @@ export default {
       editDialog: false,
       orderDetails: false,
       searchQuery: null,
+      barangay_array:[],
       search: "",
       headers: [
         {
@@ -412,27 +413,17 @@ export default {
         .catch(error => console.log(error));
     },
     dataGrouping() {
-    var barangay_array = [];
     axios
       .get("http://127.0.0.1:8000/api/posts/delivery", this.config)
       .then(response => {
         var result = response.data.data;
-        // console.log('result: ', result);
-        for (var i = 0; i < result.length; i++) {
-          var list = [];
-          list.push(result[i]);
-          for(var j = 0; j < list.length; j++){
-            // console.log('sulod sa list: ', list[j].barangay)
-            // console.log('sulod sa result: ', result[i].barangay)
-            if(result[i].barangay == list[j].barangay){
-              list.push(result[i]);
-              // console.log('nasuloddddddd')
-            }
-          }
-          barangay_array.push(list);
+        var templist = this.$_.groupBy(result, "barangay");
+        this.barangay_array = Object.entries(templist);
+        console.log('Barangay Array: ', this.barangay_array);
+        for (var i = 0; i < this.barangay_array.length; i++){
+          console.log('testing...........', this.barangay_array[i])
         }
       });
-      console.log('barangay array: ', barangay_array);
   }
   },
   
