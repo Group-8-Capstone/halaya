@@ -34,22 +34,17 @@
     </div>
     <v-row>
       <v-col class="text-center" cols="12" id="text">
-        <h4 id="ourStory" class="mb-5">OUR STORY</h4>
-        <h1 class="display-1 font-weight-bold">Who We Are</h1>
+        <h2 id="ourStory" class="mb-5">OUR STORY</h2>
         <v-row align="center" justify="center">
           <v-col cols="10">
             <div>
               <template>
                 <v-card flat class="mx-auto" max-width="400">
-                  <v-card-text id="pros" class="font-weight-bold">
-                    Since October 2019, we make bottled Ube Halaya readily available to UBElievers like you.
-                    <br>No more deep searching and cherry-picking(Ube-picking) in the market.
-                    <br>No more intense cleaning and brushing of Ube.
-                    <br>No more hard boiling.
-                    <br>No more meticulous peeling of the bark-like Ube skin.
-                    <br>No more bone-breaking grating and grinding.
-                    <br>No more arm-wrenching mixing and cooking.
-                    <br>No more careful bottling.
+                  <v-card-text id="story" class="font-weight-bold">
+                    12 Ube Halaya jars.
+                    1 Facebook post.
+                    <br><br>That's how our story began in October 17, 2019.
+                    <br><br>Today, we are privileged to have bottled and distributed more than 15,000 jars and counting.
                   </v-card-text>
                 </v-card>
               </template>
@@ -62,6 +57,7 @@
       <v-card flat>
         <v-row align="center" justify="center">
           <div id="planHeader" class="text-center">
+            <br>
             <h1 id="productsHeader">Ways To Enjoy Wawen's Ube Halaya</h1>
           </div>
         </v-row>
@@ -160,7 +156,7 @@
                 <v-card-title>
                   <v-icon large left>mdi-truck</v-icon>Delivery Time
                   <v-card-text class="text">
-                    <v-icon>mdi-clock</v-icon>Starts at 3:00 PM until orders for today
+                    <v-icon>mdi-clock</v-icon>Starts at 3:00 PM until orders for the day
                     <br>are all delivered
                   </v-card-text>
                   <v-card-text class="text">
@@ -171,25 +167,33 @@
             </v-row>
             <br>
             <v-row>
-                <v-layout wrap>
-                  <v-flex>
-                    <v-col sm="12">
-                      <v-card flat id="infoCrd" max-width="400" height="auto" :elevation="8">
-                        <v-card-title class="purple darken-2 white--text"><v-icon color="white" large light>mdi-information</v-icon></v-card-title>
-                        <center>
-                          <v-img src="../assets/order.png" height="100px" width="100px"></v-img>
-                        </center>
-                        <v-list-item class="justify-center"><h2>You can now place  your order online!</h2></v-list-item>
-                        <v-divider></v-divider>
-                        <v-list-item><h2>How to pay?</h2></v-list-item>
-                        <center>
-                          <v-img src="../assets/Pay_on_Delivery.png" height="100px" width="100px"></v-img>
-                        </center>
-                        <v-list-item class="justify-center"><h2>Cash On Delivery</h2></v-list-item>
-                      </v-card>
-                    </v-col>
-                  </v-flex>
-                </v-layout>
+              <v-layout wrap>
+                <v-flex>
+                  <v-col sm="12">
+                    <v-card flat id="infoCrd" max-width="400" height="auto" :elevation="8">
+                      <v-card-title class="purple darken-2 white--text">
+                        <v-icon color="white" large light>mdi-information</v-icon>
+                      </v-card-title>
+                      <center>
+                        <v-img src="../assets/order.png" height="100px" width="100px"></v-img>
+                      </center>
+                      <v-list-item class="justify-center">
+                        <h2>You can now place your order online!</h2>
+                      </v-list-item>
+                      <v-divider></v-divider>
+                      <v-list-item>
+                        <h2>How to pay?</h2>
+                      </v-list-item>
+                      <center>
+                        <v-img src="../assets/Pay_on_Delivery.png" height="100px" width="100px"></v-img>
+                      </center>
+                      <v-list-item class="justify-center">
+                        <h2>Cash On Delivery</h2>
+                      </v-list-item>
+                    </v-card>
+                  </v-col>
+                </v-flex>
+              </v-layout>
             </v-row>
           </v-col>
           <v-col align="left" justify="left">
@@ -338,8 +342,8 @@ export default {
   name: "Home",
   data: () => ({
     menu: false,
-    model: null,
-  }),
+    model: null
+  })
 };
 </script>
 
@@ -388,7 +392,7 @@ export default {
   align-items: center;
 }
 .homeContainer {
-  height: 20%;
+  height: 400px;
   width: 100%;
   position: relative;
   text-align: center;
@@ -416,6 +420,9 @@ export default {
   color: white;
   font-size: 1em;
 }
+#ourStory {
+  margin-top: 20px;
+}
 #infos {
   margin-top: 40px;
   justify-content: center;
@@ -429,13 +436,7 @@ export default {
   object-fit: cover;
   display: flex;
 }
-#adPro {
-  justify-content: center;
-  align-content: center;
-  justify-items: center;
-  align-items: center;
-}
-#pros {
+#story {
   font-weight: thin;
   color: black;
 }
