@@ -1,16 +1,16 @@
 <template>
  <div class="container " >
    <center>
-            <v-card width="400px" class="ml-10">
+            <v-card width="400px" class="ml-10 mt-5">
                  <v-card-title class=" deep-purple--text">Account</v-card-title>
-                <v-card-subtitle>
+                <!-- <v-card-subtitle>
                   Please fill in the required information 
-                </v-card-subtitle>
+                </v-card-subtitle> -->
                   <v-divider></v-divider>
-                 <div class="modal-body">
+                 <div class="modal-body mt-5">
                         <form @submit="formSubmit" enctype="multipart/form-data" action>
                           <v-container>
-                                <v-col cols="12">
+                                <!-- <v-col cols="12">
                                 <v-text-field outlined
                                 type="text" color="purple"
                                 class="form-control"
@@ -18,12 +18,14 @@
                                 label="Owner's Name"
                                 required></v-text-field> 
                                   </v-col>
-                                  <v-col cols=" 12" >
+                                  <v-col cols=" 12" > -->
                                   <center>
                                     <img class="addOnsImage" :src="imageURL"><br>
+                                     <h4 class=" deep-purple--text">{{username}}</h4>
                                     <input type="file" class="fileStyle" v-on:change="onImageChange">
+                                   
                             </center>
-                           </v-col>
+                           <!-- </v-col> -->
                             </v-container>
                     <v-card-actions>
                       <v-spacer></v-spacer>
@@ -71,9 +73,18 @@ import axios from "axios";
       disabled: true,
       btnDisabled:false,
       isHidden: true,
-      prodId:'1'
+      username:null
 
     }),
+    beforeCreate() {
+    let config = {};
+    config.headers = {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+      'Access-Control-Allow-Origin':'*'
+    };
+    this.config = config;
+    console.log("this.config", this.config);
+  },
 
     mounted() {
         this.avatarRetrieve()
@@ -99,7 +110,7 @@ import axios from "axios";
             this.imageURL = URL.createObjectURL(e.target.files[0])
         },
      formSubmit(e) {
-            if(this.image !== null && this.ownersName !== null){
+            if(this.image !== null ){
                 e.preventDefault();
                 let currentObj = this;
                 const config = {
@@ -107,10 +118,9 @@ import axios from "axios";
                 }
                 this.addProductDialog=false
                 let formData = new FormData();
-                formData.append('id', this.prodId)
+                let id=localStorage.getItem('id')
                 formData.append('image', this.image)
-                formData.append('ownersName', this.ownersName)
-                axios.post('http://127.0.0.1:8000/api/post/account', formData, config).then(function (response) {
+                axios.post('http://127.0.0.1:8000/api/ProfilePicUpdate/'+id, formData, config).then(function (response) {
                   console.log(formData)
                     currentObj.success = response.data.success
                 })
@@ -119,22 +129,26 @@ import axios from "axios";
                 });
             }else{
                 this.errorMessage = 'All fields are required!'
-            }   
+            }
+            window.location.reload()   
         },
 
-         avatarRetrieve(){
-            axios.get('http://127.0.0.1:8000/api/retrieveAccount').then(response => {
-              let arr =[]
-              arr = response.data.data
-                arr.forEach(element => {
-                  this.ownersName= element.owners_name,
-                  this.imageURL='http://localhost:8000/'+ element.avatar,
-                  console.log(element.avatar)
-                });
-            });
+
+      avatarRetrieve() {
+      let id=localStorage.getItem('id')
+      axios.get("http://127.0.0.1:8000/api/fetchProfile/"+ id, this.config).then(response => {
+        this.username=response.data.account[0].username
+        if(response.data.account[0].profile_url==null){
+          this.imageURL='http://localhost:8000/images/avatar.png'
+        }else{
+          this.imageURL='http://localhost:8000/'+ response.data.account[0].profile_url
+        }
+        console.log(response.data.account[0].username)
+      });
+    },
     
     }
-    }
+    
   }
 </script>
 
