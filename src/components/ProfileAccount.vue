@@ -120,7 +120,7 @@ import axios from "axios";
                 let formData = new FormData();
                 let id=localStorage.getItem('id')
                 formData.append('image', this.image)
-                axios.post('http://127.0.0.1:8000/api/ProfilePicUpdate/'+id, formData, config).then(function (response) {
+                axios.post('http://127.0.0.1:8000/api/ProfilePicUpdate/'+id, formData, this.config).then(function (response) {
                   console.log(formData)
                     currentObj.success = response.data.success
                 })
