@@ -161,7 +161,7 @@
                 <v-expand-transition>
                   <div
                     v-if="hover"
-                    class="d-flex transition-fast-in-fast-out purple darken-2 v-card--reveal display-3 white--text"
+                    class="d-flex transition-fast-in-fast-out purple darken-2 v-card--reveal display-1 white--text"
                     style="height: 100%;"
                   >Take a try</div>
                 </v-expand-transition>
@@ -169,7 +169,7 @@
               <v-card-text class="pt-6" style="position: relative;">
                 <div class="font-weight-light grey--text title mb-2">Perfect Ubelicious treat</div>
                 <h3 class="display-1 font-weight-light orange--text mb-2">Ube halaya in tub</h3>
-                <div id="price" class="font-weight-light grey--text title mb-2">₱150.00</div>
+                <div id="price" class="font-weight-light grey--text title mb-2">₱499.00</div>
               </v-card-text>
             </v-card>
           </v-hover>
@@ -181,7 +181,7 @@
                 <v-expand-transition>
                   <div
                     v-if="hover"
-                    class="d-flex transition-fast-in-fast-out purple darken-2 v-card--reveal display-3 white--text"
+                    class="d-flex transition-fast-in-fast-out purple darken-2 v-card--reveal display-1 white--text"
                     style="height: 100%;"
                   >Have a taste</div>
                 </v-expand-transition>
