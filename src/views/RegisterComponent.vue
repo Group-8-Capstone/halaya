@@ -82,7 +82,7 @@
                   outlined
                   rounded
                   @click="signUp"
-                >Log In</v-btn>
+                >Sign Up</v-btn>
               </center>
                 <div align="center" justify="center">
                   <span>
