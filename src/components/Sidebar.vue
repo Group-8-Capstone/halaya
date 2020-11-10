@@ -9,7 +9,6 @@
         <img src="../assets/wawens.png">
       </v-list-item-avatar>
       <v-toolbar-title class="deep-purple--text">WAWEN'S UBE HALAYA</v-toolbar-title>
-       
       <!-- <template v-slot:activator="{ on, attrs }">
           <v-list-item-avatar class="mr-5">
             <v-img :src="'http://localhost:8000/'+ avatarSrc"></v-img>
@@ -316,7 +315,7 @@ beforeCreate() {
       axios.get("http://127.0.0.1:8000/api/fetchProfile/"+ id, this.config).then(response => {
         // this.displayInfo = response.data.data;
         console.log(response.data.account)
-        this.name = response.data.account[0].username;
+        this.name = response.data.account[0].username
         this.image=response.data.account[0].profile_url
         // this.avatarSrc=response.data.account[0].profile_url
         console.log(response.data.account[0].username)
