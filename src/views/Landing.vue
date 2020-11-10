@@ -34,7 +34,7 @@
     </div>
     <v-row>
       <v-col class="text-center" cols="12" id="text">
-        <h2 id="ourStory" class="mb-5">OUR STORY</h2>
+        <h2 id="ourStory" class="mb-1">OUR STORY</h2>
         <v-row align="center" justify="center">
           <v-col cols="10">
             <div>
@@ -58,7 +58,7 @@
         <v-row align="center" justify="center">
           <div id="planHeader" class="text-center">
             <br>
-            <h1 id="productsHeader">Ways To Enjoy Wawen's Ube Halaya</h1>
+            <h1 id="productHeader">Ways To Enjoy Wawen's Ube Halaya</h1>
           </div>
         </v-row>
         <v-row>
@@ -161,6 +161,9 @@
                   </v-card-text>
                   <v-card-text class="text">
                     <v-icon>mdi-calendar</v-icon>Monday - Saturday
+                  </v-card-text>
+                  <v-card-text class="text">
+                    <v-icon>mdi-cart</v-icon>If your order is 10 jars or more, order a day ahead and we will give you freshly prepared and bottled Ube Halaya, ready for you to indulge.
                   </v-card-text>
                 </v-card-title>
               </v-card>
@@ -291,7 +294,7 @@
           <v-row id="footerContent" no-gutters>
             <v-col cols="4">
               <p>
-                <v-icon small>mdi-copyright</v-icon>2020 Wawen's Ube Halaya. All Rights Reserved
+                <v-icon small>mdi-copyright</v-icon>2020, Wawen's Ube Halaya. All Rights Reserved.
               </p>
             </v-col>
             <v-col cols="6">
@@ -439,6 +442,10 @@ export default {
 #story {
   font-weight: thin;
   color: black;
+}
+#productHeader {
+  align-content: center;
+  font-size: 2.5em;
 }
 #productsHeader {
   align-content: center;

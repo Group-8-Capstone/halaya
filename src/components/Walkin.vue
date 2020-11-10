@@ -145,8 +145,9 @@ export default {
       menu: false,
       btnDisable: true,
       addOrderDialog: false,
-      customerStreet: "Shambala Veterinary Clinic Hernan Cortes Street",
-      customerBarangay: "Mandaue City",
+      customerStreet: "Shambala Veterinary Clinic",
+      customerBarangay: "Hernan Cortes Street",
+      customerCity: "Mandaue City",
       customerProvince: "Cebu",
       customerName: null,
       contactNumber: null,
@@ -282,6 +283,8 @@ export default {
         " ",
         this.customerBarangay,
         " ",
+        this.customerCity,
+        " ",
         this.customerProvince
       );
       axios
@@ -302,7 +305,11 @@ export default {
           let param = {
             customer_id: localStorage.getItem("id"),
             receiver_name: this.customerName,
-            address: place,
+            // address: place,
+            building_street: this.customerStreet,
+            barangay: this.customerBarangay,
+            city_municipality: this.customerCity,
+            province: this.customerProvince,
             contactNumber: this.contactNumber,
             jar_qty: this.jarQuantity,
             tub_qty: this.tabQuantity,
@@ -319,7 +326,7 @@ export default {
                 Swal.fire({
                   position: "center",
                   icon: "success",
-                  title: "Your order has been sent",
+                  title: "Order saved",
                   showConfirmButton: false,
                   timer: 1500
                 });
