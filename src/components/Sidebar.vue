@@ -299,7 +299,6 @@ beforeCreate() {
       'Access-Control-Allow-Origin':'*'
     };
     this.config = config;
-    console.log("this.config", this.config);
   },
  
   created() {
@@ -315,11 +314,9 @@ beforeCreate() {
       let id=localStorage.getItem('id')
       axios.get("http://127.0.0.1:8000/api/fetchProfile/"+ id, this.config).then(response => {
         // this.displayInfo = response.data.data;
-        console.log(response.data.account)
         this.name = response.data.account[0].username;
         this.image=response.data.account[0].profile_url
         // this.avatarSrc=response.data.account[0].profile_url
-        console.log(response.data.account[0].username)
         // response.data.data.forEach(element => {
         //   console.log(element.profile_url);
         //   this.avatarSrc = element.profile_url;
@@ -329,7 +326,6 @@ beforeCreate() {
     },
     logout(item) {
       if (item.text == "logout") {
-        console.log("sdsd");
         localStorage.clear();
       }
     },

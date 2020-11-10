@@ -23,8 +23,8 @@
       </v-col>
     </v-row>
     <template>
-      <div align="center" justify="center">
-        <h2>Ube Halaya in a jar sales</h2>
+      <div>
+        <h4 class="letter">UBE HALAYA IN A JAR SALES</h4>
       </div>
       <br>
       <v-row>
@@ -70,44 +70,44 @@
     <br>
     <br>
     <template>
-      <div align="center" justify="center">
-        <h2>Ube Halaya in a tub sales</h2>
+      <div >
+       <h4 class="letter">UBE HALAYA IN A TUB SALES</h4>
       </div>
       <br>
       <v-row>
         <v-col sm="6" class="d-flex filter">
           <v-select
             :items="Dates"
-            v-model="filterBy"
-            @change="filtering"
+            v-model="filterByTubs"
+            @change="filteringTubs"
             label=" Filter by"
             dense
             class="dropdownFilter"
           ></v-select>
           <v-select
             label=" Date"
-            v-model="filterByDate"
-            @change="filtering"
+            v-model="filterByDateTubs"
+            @change="filteringTubs"
             :items="Years"
             dense
             class="dropdownFilter"
-            :disabled="(filterBy.toLowerCase() === 'yearly' ) ? true : false "
+            :disabled="(filterByTubs.toLowerCase() === 'yearly' ) ? true : false "
           ></v-select>
         </v-col>
         <v-col sm="12">
           <v-card>
-            <Graph type="area" height="400px" :options="chartOptions" :series="series"></Graph>
+            <Graph type="area" height="400px" :options="chartOptionsTubs" :series="seriesJarTubs"></Graph>
           </v-card>
         </v-col>
         <v-col>
-          <div class="text-center">
+          <div class="text-center">                                                           
             <v-pagination
-              v-model="page"
+              v-model="pageTubs"
               :length="12"
               :total-visible="7"
               circle
-              v-if="filterBy !== 'Yearly' && filterBy !== 'Monthly'"
-              @input="pageChange"
+              v-if="filterByTubs !== 'Yearly' && filterByTubs !== 'Monthly'"
+              @input="pageChangeTubs"
             ></v-pagination>
           </div>
         </v-col>
@@ -118,17 +118,26 @@
 <script>
 import Graph from "vue-apexcharts";
 import axios from "axios";
+import moment from 'moment';
+import VueMoment from 'vue-moment';
 export default {
   data() {
     return {
       page: new Date().getMonth() + 1,
+      pageTubs: new Date().getMonth() + 1,
       IngredientsArray: [],
       Dates: ["Daily", "Weekly", "Monthly", "Yearly"],
       Years: [],
       series: [],
       chartOptions: {},
+      chartOptionsTubs: {},
+      seriesJarTubs: [],
+
+
       filterBy: "Daily",
-      filterByDate: new Date().getFullYear()
+      filterByTubs: "Daily",
+      filterByDate: new Date().getFullYear(),
+      filterByDateTubs: new Date().getFullYear(),
       // config:{}
     };
   },
@@ -142,12 +151,14 @@ export default {
       "Access-Control-Allow-Origin": "*"
     };
     this.config = config;
-    console.log(this.config);
   },
   created() {
     this.filterByYear();
     this.daily();
+    this.dailyTubs();
     this.fetchIngredients();
+    this.weekCount(12 );
+
   },
   methods: {
     getColor(status) {
@@ -173,14 +184,12 @@ export default {
           let results = [];
           for (var i = 0; i < response.data.length; i++) {
             if (this.containsObject(results, response.data[i].id)) {
-              console.log("good");
             } else {
               results.push(response.data[i]);
               this.IngredientsArray = results;
             }
             continue;
           }
-          console.log("ingredients array: ", this.IngredientsArray);
         });
     },
     containsObject(arr, id) {
@@ -216,7 +225,7 @@ export default {
         },
         title: {
           align: "left",
-          text: "Sold Jars"
+          text: "Sold Ube in Jars"
         },
         grid: {
           row: {
@@ -237,6 +246,111 @@ export default {
         }
       };
     },
+    initializeDataTubs(categoryTubs, seriesTubs) {
+      this.seriesJarTubs = [
+        {
+          name: "Sales",
+          data: seriesTubs, // serries
+          color: "rgb(177, 117, 235)"
+        }
+      ];
+
+      this.chartOptionsTubs = {
+        chart: {
+          height: 350,
+          type: "area",
+          zoom: {
+            enabled: false
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        markers: {
+          size: 6
+        },
+        stroke: {
+          curve: "smooth"
+        },
+        title: {
+          align: "left",
+          text: "Sold Ube in Tubs"
+        },
+        grid: {
+          row: {
+            colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+            opacity: 0.5
+          }
+        },
+        yaxis: {
+          title: {
+            text: "T o t a l"
+          }
+        },
+        xaxis: {
+          categories: categoryTubs, // categories,
+          title: {
+            text: this.clickTitleTubs()
+          }
+        }
+      };
+    },
+     weekCount (month) {
+    month = moment(month, 'YYYY-MM-DD');
+
+    var first = month.day() == 0 ? 6 : month.day()-1;
+    var day = 7-first;
+
+    var last = month.daysInMonth();
+    var count = (last-day)/7;
+
+    var weeks = [];
+    weeks.push([1, day]);
+    for (var i=0; i < count; i++) {
+        weeks.push([(day+1), (Math.min(day+=7, last))]);
+
+    }
+    console.log(JSON.stringify(weeks));
+    return weeks;
+},
+    
+    dailyTubs(){
+      let parameter = {
+        year : this.filterByDateTubs,
+        month : this.pageTubs
+      };
+      axios.post("http://localhost:8000/api/sales/dailyTubs", parameter, this.config).then(response=>{
+        let category = [];
+        let series = [];
+
+        if(response.data.length > 0){
+          response.data.forEach(element =>{
+            category.push(element.preferred_delivery_date);
+            series.push(element.total);
+          });
+          this.initializeDataTubs(category, series);
+        }else{
+          let year = this.filterByDateTubs;
+          let month = String(this.pageTubs);
+          let days= "";
+          let lastday = Number(
+            new Date(new Date(year,month,1)-1).getDate()
+            );
+            if (month.length === 1){
+              month = "0" + month;
+            }
+            for (var i = 1; i < lastday + 1; i++) {
+              let days = String(i);
+              if (days.length === 1) {
+                days = "0" + days;
+              }
+              category.push(year + "-" + month + "-" + days);
+              series.push(0);
+            }
+            this.initializeDataTubs(category, series);
+        }
+      })
+    },
     daily() {
       /**
        * get the necessary DAILY DATA on mounted
@@ -255,7 +369,6 @@ export default {
               category.push(element.preferred_delivery_date);
               series.push(element.total);
             });
-            console.log(category, series);
             this.initializeData(category, series);
           } else {
             let year = this.filterByDate;
@@ -267,7 +380,6 @@ export default {
             if (month.length === 1) {
               month = "0" + month;
             }
-            console.log(month);
             for (var i = 1; i < lastday + 1; i++) {
               let days = String(i);
               if (days.length === 1) {
@@ -275,7 +387,6 @@ export default {
               }
               category.push(year + "-" + month + "-" + days);
               series.push(0);
-              console.log(year + "-" + month + "-" + days);
             }
             this.initializeData(category, series);
           }
@@ -301,6 +412,26 @@ export default {
           break;
       }
     },
+     filteringTubs() {
+      /**
+       * when the filter by is clicked this method is called
+       */
+      let graphFilter = this.filterByTubs;
+      switch (graphFilter) {
+        case "Daily":
+          this.dailyTubs();
+          break;
+        case "Weekly":
+          this.weeklyTubs();
+          break;
+        case "Monthly":
+          this.monthlyTubs();
+          break;
+        case "Yearly":
+          this.yearlyTubs();
+          break;
+      }
+    },
     weekly() {
       // 'w' + (index + 1)
       let parameter = {
@@ -323,6 +454,31 @@ export default {
               }
             });
             this.initializeData(weeklyCategory, weeklySeries);
+          }
+        });
+    },
+    weeklyTubs() {
+      // 'w' + (index + 1)
+      let parameter = {
+        year: this.filterByDateTubs
+      };
+      axios
+        .post("http://localhost:8000/api/sales/weeklyTubs", parameter, this.config)
+        .then(response => {
+          let weeklyCategory = [];
+          let weeklySeries = [];
+          let data = response.data;
+          if (data.length > 0) {
+            data.forEach((element, index) => {
+              if (element[0].totals === null) {
+                weeklySeries.push(0);
+                weeklyCategory.push("Week" + (index + 1));
+              } else {
+                weeklyCategory.push("Week" + (index + 1));
+                weeklySeries.push(element[0].totals);
+              }
+            });
+            this.initializeDataTubs(weeklyCategory, weeklySeries);
           }
         });
     },
@@ -360,6 +516,40 @@ export default {
           }
         });
     },
+    monthlyTubs() {
+      let parameter = {
+        year: this.filterByDateTubs
+      };
+      axios
+        .post("http://localhost:8000/api/sales/monthlyTubs", parameter, this.config)
+        .then(response => {
+          let monthlyCategory = [];
+          let monthlySeries = [];
+          let WordMonths = [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+          ];
+          let data = response.data;
+          if (data.length > 0) {
+            data.forEach(element => {
+              let ConverttoNumber = Number(element.months) - 1;
+              monthlyCategory.push(WordMonths[ConverttoNumber]);
+              monthlySeries.push(element.totals);
+            });
+            this.initializeDataTubs(monthlyCategory, monthlySeries);
+          }
+        });
+    },
     yearly() {
       axios
         .get("http://localhost:8000/api/sales/yearly", this.config)
@@ -367,13 +557,30 @@ export default {
           let yearlyCategory = [];
           let yearlySeries = [];
           let data = response.data;
-          console.log("okay" + data);
           if (data.length > 0) {
             data.forEach(element => {
               yearlyCategory.push(element.years);
               yearlySeries.push(element.totals);
+
             });
             this.initializeData(yearlyCategory, yearlySeries);
+          }
+        });
+    },
+    yearlyTubs() {
+      axios
+        .get("http://localhost:8000/api/sales/yearlyTubs", this.config)
+        .then(response => {
+          let yearlyCategory = [];
+          let yearlySeries = [];
+          let data = response.data;
+          if (data.length > 0) {
+            data.forEach(element => {
+              yearlyCategory.push(element.years);
+              yearlySeries.push(element.totals);
+
+            });
+            this.initializeDataTubs(yearlyCategory, yearlySeries);
           }
         });
     },
@@ -389,7 +596,6 @@ export default {
         });
     },
     pageChange() {
-      console.log("page number: ", this.page);
       this.filtering();
     },
     clickTitle() {
@@ -402,12 +608,29 @@ export default {
       } else if (this.filterBy == "Yearly") {
         return "Years";
       }
+    },
+    pageChangeTubs() {
+      this.filteringTubs();
+    },
+    clickTitleTubs() {
+      if (this.filterByTubs == "Daily") {
+        return "Days";
+      } else if (this.filterByTubs == "Monthly") {
+        return "Months";
+      } else if (this.filterByTubs == "Weekly") {
+        return "Weeks";
+      } else if (this.filterByTubs == "Yearly") {
+        return "Years";
+      }
     }
   }
 };
 </script>
 
 <style scoped>
+.letter{
+  color: #673ab7 !important;
+}
 .filter {
   padding-bottom: 0px !important;
   margin-bottom: 0px !important;
