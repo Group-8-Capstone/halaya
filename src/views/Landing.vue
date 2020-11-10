@@ -43,8 +43,10 @@
                   <v-card-text id="story" class="font-weight-bold">
                     12 Ube Halaya jars.
                     1 Facebook post.
-                    <br><br>That's how our story began in October 17, 2019.
-                    <br><br>Today, we are privileged to have bottled and distributed more than 15,000 jars and counting.
+                    <br>
+                    <br>That's how our story began in October 17, 2019.
+                    <br>
+                    <br>Today, we are privileged to have bottled and distributed more than 15,000 jars and counting.
                   </v-card-text>
                 </v-card>
               </template>
@@ -53,7 +55,6 @@
         </v-row>
       </v-col>
     </v-row>
-    <v-row id="photos">
       <v-card flat>
         <v-row align="center" justify="center">
           <div id="planHeader" class="text-center">
@@ -65,7 +66,7 @@
           <v-col sm="3">
             <div>
               <v-hover v-slot:default="{ hover }">
-                <v-card flat :elevation="8">
+                <v-card flat :elevation="8" data-aos="zoom-out">
                   <v-img id="photo" max-height="auto" src="../assets/photos/jar.png">
                     <v-expand-transition>
                       <div
@@ -82,7 +83,7 @@
           <v-col sm="3">
             <div>
               <v-hover v-slot:default="{ hover }">
-                <v-card flat :elevation="8">
+                <v-card flat :elevation="8" data-aos="zoom-out">
                   <v-img id="photo" height="315" src="../assets/ube.jpg">
                     <v-expand-transition>
                       <div
@@ -99,7 +100,7 @@
           <v-col sm="3">
             <div>
               <v-hover v-slot:default="{ hover }">
-                <v-card flat :elevation="8">
+                <v-card flat :elevation="8" data-aos="zoom-out">
                   <v-img id="photo" max-height="315" src="../assets/photos/ubechi.png">
                     <v-expand-transition>
                       <div
@@ -116,7 +117,7 @@
           <v-col sm="3">
             <div>
               <v-hover v-slot:default="{ hover }">
-                <v-card flat :elevation="8">
+                <v-card flat :elevation="8" data-aos="zoom-out">
                   <v-img id="photo" max-height="315" src="../assets/photos/ubecake.png">
                     <v-expand-transition>
                       <div
@@ -138,7 +139,7 @@
         <v-row id="infos">
           <v-col sm="4">
             <v-row>
-              <v-card id="infoCards" light max-width="400" height="auto" :elevation="8">
+              <v-card id="infoCards" light max-width="400" height="auto" :elevation="8" data-aos="fade-right">
                 <v-card-title>
                   <v-icon large left>mdi-bullhorn</v-icon>Suwayi na!
                   <v-card-text class="text">
@@ -152,7 +153,7 @@
             </v-row>
             <br>
             <v-row>
-              <v-card id="infoCards" light max-width="400" height="auto" :elevation="8">
+              <v-card id="infoCards" light max-width="400" height="auto" :elevation="8" data-aos="fade-right">
                 <v-card-title>
                   <v-icon large left>mdi-truck</v-icon>Delivery Time
                   <v-card-text class="text">
@@ -173,7 +174,7 @@
               <v-layout wrap>
                 <v-flex>
                   <v-col sm="12">
-                    <v-card flat id="infoCrd" max-width="400" height="auto" :elevation="8">
+                    <v-card flat id="infoCrd" max-width="400" height="auto" :elevation="8" data-aos="fade-right">
                       <v-card-title class="purple darken-2 white--text">
                         <v-icon color="white" large light>mdi-information</v-icon>
                       </v-card-title>
@@ -211,7 +212,7 @@
                   <v-row>
                     <v-col sm="6">
                       <v-hover id="products" v-slot:default="{ hover }">
-                        <v-card class="mx-auto" color="grey lighten-4" :elevation="8">
+                        <v-card class="mx-auto" color="grey lighten-4" :elevation="8" data-aos="flip-right">
                           <v-img :aspect-ratio="16/9" src="../assets/halayaTab.jpg">
                             <v-expand-transition>
                               <div
@@ -233,7 +234,7 @@
                     </v-col>
                     <v-col sm="6">
                       <v-hover id="products" v-slot:default="{ hover }">
-                        <v-card class="mx-auto" color="grey lighten-4" :elevation="8">
+                        <v-card class="mx-auto" color="grey lighten-4" :elevation="8" data-aos="flip-right">
                           <v-img :aspect-ratio="16/9" src="../assets/halayaJar.jpg">
                             <v-expand-transition>
                               <div
@@ -270,12 +271,12 @@
                   <v-col sm="12">
                     <v-row>
                       <v-col sm="6">
-                        <v-card max-width="400" flat :elevation="8">
+                        <v-card max-width="400" flat :elevation="8" data-aos="slide-up">
                           <v-img src="../assets/ad1.png"></v-img>
                         </v-card>
                       </v-col>
                       <v-col sm="6">
-                        <v-card max-width="400" flat :elevation="8">
+                        <v-card max-width="400" flat :elevation="8" data-aos="slide-up">
                           <v-img src="../assets/ad2.png"></v-img>
                         </v-card>
                       </v-col>
@@ -346,7 +347,7 @@ export default {
   data: () => ({
     menu: false,
     model: null
-  })
+  }),
 };
 </script>
 
