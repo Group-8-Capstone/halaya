@@ -9,7 +9,6 @@
         <img src="../assets/wawens.png">
       </v-list-item-avatar>
       <v-toolbar-title class="deep-purple--text">WAWEN'S UBE HALAYA</v-toolbar-title>
-       
       <!-- <template v-slot:activator="{ on, attrs }">
           <v-list-item-avatar class="mr-5">
             <v-img :src="'http://localhost:8000/'+ avatarSrc"></v-img>
