@@ -499,7 +499,7 @@ export default {
             distance: dist
           };
           axios
-            .post("http://127.0.0.1:8000/api/post/createOrder", param, this.config)
+            .post("https://wawenshalaya.herokuapp.com/api/post/createOrder", param, this.config)
             .then(response => {
               console.log("response.data: ", response.data);
               if (response.data == "success") {
