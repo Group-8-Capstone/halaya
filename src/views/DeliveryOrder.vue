@@ -338,7 +338,7 @@ export default {
       } else {
         // console.log('###########', this.post)
         axios
-          .post("http://127.0.0.1:8000/api/post/update", this.post, this.config)
+          .post(this.url+"/post/update", this.post, this.config)
           .then(response => {
             this.editDialog = false;
             Swal.fire({
@@ -352,7 +352,7 @@ export default {
     },
     editItem(item) {
       axios
-        .get("http://127.0.0.1:8000/api/post/edit/" + item.id, this.config)
+        .get(this.url+"/post/edit/" + item.id, this.config)
         .then(response => {
           this.post = response.data;
         });
@@ -361,7 +361,7 @@ export default {
       // console.log("================ ", this.config)
       axios
         .post(
-          "http://127.0.0.1:8000/api/post/updateStat/" + item.id,
+          this.url+"/post/updateStat/" + item.id,
           {},
           this.config
         )
@@ -402,7 +402,7 @@ export default {
     deleteItem(item) {
       axios
         .post(
-          "http://127.0.0.1:8000/api/post/updateCanceledStat/" + item.id,
+          this.url+"/post/updateCanceledStat/" + item.id,
           {},
           this.config
         )
@@ -430,7 +430,7 @@ export default {
     },
     fetchDelivery() {
       axios
-        .get("http://127.0.0.1:8000/api/posts/delivery", this.config)
+        .get(this.url+"/posts/delivery", this.config)
         .then(response => {
           // let results = [];
           this.deliveries = response.data.data;
@@ -474,7 +474,7 @@ export default {
     loadDelivery() {
       axios
         .get(
-          "https://wawens-backend.herokuapp.com/api/orders/confirmed",
+          this.url+"/orders/confirmed",
           this.config
         )
         .then(response => {
@@ -578,7 +578,7 @@ export default {
     },
     dataGrouping() {
       axios
-        .get("http://127.0.0.1:8000/api/posts/delivery", this.config)
+        .get(this.url+"/posts/delivery", this.config)
         .then(response => {
           var result = response.data.data;
           var templist = this.$_.groupBy(result, "barangay");

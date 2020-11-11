@@ -120,7 +120,7 @@ import axios from "axios";
                 let formData = new FormData();
                 let id=localStorage.getItem('id')
                 formData.append('image', this.image)
-                axios.post('http://127.0.0.1:8000/api/ProfilePicUpdate/'+id, formData, this.config).then(function (response) {
+                axios.post(this.this.url+'/ProfilePicUpdate/'+id, formData, this.config).then(function (response) {
                   console.log(formData)
                     currentObj.success = response.data.success
                 })
@@ -136,7 +136,7 @@ import axios from "axios";
 
       avatarRetrieve() {
       let id=localStorage.getItem('id')
-      axios.get("http://127.0.0.1:8000/api/fetchProfile/"+ id, this.config).then(response => {
+      axios.get(this.url+"/fetchProfile/"+ id, this.config).then(response => {
         this.username=response.data.account[0].username
         if(response.data.account[0].profile_url==null){
           this.imageURL='http://localhost:8000/images/avatar.png'

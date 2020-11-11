@@ -64,7 +64,7 @@ import axios from "axios";
 
     methods: {
       loadDelivered(){
-      axios.get('http://127.0.0.1:8000/api/posts/delivered', this.config).then(response => {
+      axios.get(this.url+'/posts/delivered', this.config).then(response => {
         this.deliveredOrder = response.data.data
         for(var i = 0; i < this.deliveredOrder.length; i++ ){
             var street = response.data.data[i].building_or_street;

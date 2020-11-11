@@ -424,7 +424,7 @@ import Swal from "sweetalert2";
           ingredientsEstimatedAmount:this.addedEstimatedAmount,
           ingredientsCategory:this.addedCategory
         }
-        axios.post("http://127.0.0.1:8000/api/post/neededValue",param, this.config).then(response=>{
+        axios.post(this.url+"/post/neededValue",param, this.config).then(response=>{
         console.log(param)
         this.addDialog=false,
          Swal.fire({
@@ -442,14 +442,14 @@ import Swal from "sweetalert2";
       },
 
       fetchEstimatedValue(){
-        axios.get("http://127.0.0.1:8000/api/fetch/estimatedValue", this.config).then(response=>{
+        axios.get(this.url+"/fetch/estimatedValue", this.config).then(response=>{
           this.estimatedValue=response.data;
           console.log(response.data);
         })
       },
 
       editEstimatedValue(item){
-        axios.get("http://127.0.0.1:8000/api/post/updateEstimatedValue/"+item.id, this.config).then(response=>{
+        axios.get(this.url+"/post/updateEstimatedValue/"+item.id, this.config).then(response=>{
           this.editValue = response.data
           console.log(this.editValue)
         })
@@ -465,7 +465,7 @@ import Swal from "sweetalert2";
         this.editDialog=this.editDialog;
        }
        else{
-        axios.post('http://127.0.0.1:8000/api/post/updateNewEstimatedValue', this.editValue, this.config).then(response => {
+        axios.post(this.url+'/post/updateNewEstimatedValue', this.editValue, this.config).then(response => {
         console.log(this.editValue)
         this.editDialog=false;
         Swal.fire({
@@ -498,7 +498,7 @@ import Swal from "sweetalert2";
                 let formData = new FormData();
                 formData.append('image', this.image)
                 formData.append('productName', this.productName)
-                axios.post('http://127.0.0.1:8000/api/post/product', formData, config,this.config).then(function (response) {
+                axios.post(this.url+'/post/product', formData, config,this.config).then(function (response) {
                     currentObj.success = response.data.success
 
                 })
@@ -513,7 +513,7 @@ import Swal from "sweetalert2";
            
         },
     retrieveProduct() {
-            axios.get('http://127.0.0.1:8000/api/fetch/product',this.config).then(response => {
+            axios.get(this.url+'/fetch/product',this.config).then(response => {
                 this.displayProduct = response.data.addProduct;
                 console.log(response.data.addProduct)
             });
@@ -538,7 +538,7 @@ import Swal from "sweetalert2";
                 formData.append('id', this.prodId)
                 formData.append('image', this.imageEdit)
                 formData.append('productName', this.editProductName)
-                axios.post('http://127.0.0.1:8000/api/post/updateProduct', formData, config, this.config)
+                axios.post(this.url+'/post/updateProduct', formData, config, this.config)
                 .then(function (response) {
                     currentObj.success = response.data.success
                 })
@@ -552,25 +552,25 @@ import Swal from "sweetalert2";
         },
 
       deleteProduct(item){
-          axios.delete('http://127.0.0.1:8000/api/softDeleteProduct/'+item.id, this.config).then(response => {
+          axios.delete(this.url+'/softDeleteProduct/'+item.id, this.config).then(response => {
           this.retrieveProduct();
         });
 
         },
 
         deleteStockProduct(item){
-          axios.delete('http://127.0.0.1:8000/api/softDeleteStockProduct/'+item.id, this.config).then(response => {
+          axios.delete(this.url+'/softDeleteStockProduct/'+item.id, this.config).then(response => {
           this.retrieveProduct();
         });
 
         },
         deleteStockIngredients(item){
-          axios.delete('http://127.0.0.1:8000/api/softDeleteStockIngredients/'+item.id, this.config).then(response => {
+          axios.delete(this.url+'/softDeleteStockIngredients/'+item.id, this.config).then(response => {
         });
 
         },
          deleteIngredients(item){
-          axios.delete('http://127.0.0.1:8000/api/softDeleteIngredients/'+item.id, this.config).then(response => {
+          axios.delete(this.url+'/softDeleteIngredients/'+item.id, this.config).then(response => {
           this.fetchEstimatedValue();
         });
         },

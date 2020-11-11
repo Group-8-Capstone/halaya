@@ -24,6 +24,15 @@ Vue.component('profile-component', require('./components/ProfileAccount.vue').de
 
 Vue.config.productionTip = false;
 Vue.use
+
+Vue.mixin({
+  data: function() {
+    return {
+      url:"http://127.0.0.1:8000/api"
+    }
+  }
+})
+
 new Vue({
   created: function () {
     AOS.init({

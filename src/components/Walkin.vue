@@ -319,7 +319,7 @@ export default {
           };
           console.log(this.date)
           axios
-            .post("http://127.0.0.1:8000/api/post/createOrder", param,this.config)
+            .post(this.url+"/post/createOrder", param,this.config)
             .then(response => {
               console.log("response.data: ", response.data);
               if (response.data == "success") {

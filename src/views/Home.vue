@@ -179,7 +179,7 @@ export default {
 
       // http://localhost:8000/api/v1/auth/fetch/stock
       axios
-        .get("http://localhost:8000/api/fetch/stock", this.config)
+        .get(this.url+"/fetch/stock", this.config)
         .then(response => {
           let results = [];
           for (var i = 0; i < response.data.length; i++) {
@@ -319,7 +319,7 @@ export default {
         year : this.filterByDateTubs,
         month : this.pageTubs
       };
-      axios.post("http://localhost:8000/api/sales/dailyTubs", parameter, this.config).then(response=>{
+      axios.post(this.url+"/sales/dailyTubs", parameter, this.config).then(response=>{
         let category = [];
         let series = [];
 
@@ -360,7 +360,7 @@ export default {
         month: this.page
       };
       axios
-        .post("http://localhost:8000/api/sales/daily", parameter, this.config)
+        .post(this.url+"/sales/daily", parameter, this.config)
         .then(response => {
           let category = [];
           let series = [];
@@ -438,7 +438,7 @@ export default {
         year: this.filterByDate
       };
       axios
-        .post("http://localhost:8000/api/sales/weekly", parameter, this.config)
+        .post(this.url+"/sales/weekly", parameter, this.config)
         .then(response => {
           let weeklyCategory = [];
           let weeklySeries = [];
@@ -463,7 +463,7 @@ export default {
         year: this.filterByDateTubs
       };
       axios
-        .post("http://localhost:8000/api/sales/weeklyTubs", parameter, this.config)
+        .post(this.url+"/sales/weeklyTubs", parameter, this.config)
         .then(response => {
           let weeklyCategory = [];
           let weeklySeries = [];
@@ -487,7 +487,7 @@ export default {
         year: this.filterByDate
       };
       axios
-        .post("http://localhost:8000/api/sales/monthly", parameter, this.config)
+        .post(this.url+"/sales/monthly", parameter, this.config)
         .then(response => {
           let monthlyCategory = [];
           let monthlySeries = [];
@@ -521,7 +521,7 @@ export default {
         year: this.filterByDateTubs
       };
       axios
-        .post("http://localhost:8000/api/sales/monthlyTubs", parameter, this.config)
+        .post(this.url+"/sales/monthlyTubs", parameter, this.config)
         .then(response => {
           let monthlyCategory = [];
           let monthlySeries = [];
@@ -552,7 +552,7 @@ export default {
     },
     yearly() {
       axios
-        .get("http://localhost:8000/api/sales/yearly", this.config)
+        .get(this.url+"/sales/yearly", this.config)
         .then(response => {
           let yearlyCategory = [];
           let yearlySeries = [];
@@ -569,7 +569,7 @@ export default {
     },
     yearlyTubs() {
       axios
-        .get("http://localhost:8000/api/sales/yearlyTubs", this.config)
+        .get(this.url+"/sales/yearlyTubs", this.config)
         .then(response => {
           let yearlyCategory = [];
           let yearlySeries = [];
@@ -586,7 +586,7 @@ export default {
     },
     filterByYear() {
       axios
-        .get("http://localhost:8000/api/sales/filterYear", this.config)
+        .get(this.url+"/sales/filterYear", this.config)
         .then(response => {
           let tempYears = [];
           response.data.forEach(element => {

@@ -166,7 +166,7 @@ export default {
         cPass: this.cPassword,
         role: "customer"
       };
-      axios.post("http://localhost:8000/api/register", Reg).then(response => {
+      axios.post(this.url+"/register", Reg).then(response => {
         // console.log("Successfully Registered: ", response.data.message.message);
         if (response.data.message.message == 'success'){
           localStorage.setItem('token', response.data.token);
