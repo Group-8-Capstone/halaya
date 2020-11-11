@@ -28,7 +28,7 @@ Vue.use
 Vue.mixin({
   data: function() {
     return {
-      url:"http://127.0.0.1:8000/api"
+      url:"https://wawenshalaya.herokuapp.com/"
     }
   }
 })

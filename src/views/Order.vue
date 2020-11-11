@@ -791,7 +791,7 @@ export default {
       console.log("****hsdfnaiuerh*******", this.config);
       axios
         .post(
-          "http://127.0.0.1:8000/api/post/confirm/" + item.id,
+          this.url+"/post/confirm/" + item.id,
           {},
           this.config
         )
