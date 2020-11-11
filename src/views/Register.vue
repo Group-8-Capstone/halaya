@@ -164,7 +164,7 @@ export default {
                 cPass: this.cPassword,
                 role: "customer"
             }
-            axios.post("https://wawenshalaya.herokuapp.com/api/register", Reg).then((response) =>{
+            axios.post("http://localhost:8000/api/register", Reg).then((response) =>{
                 console.log(Reg);
                  this.$router.push('/customerHome');
 
