@@ -168,7 +168,6 @@ router.beforeEach(async(to, from, next) => {
   const authenticated = await verify_auth().then(res=> {
     return res
   });
-  console.log('variable ' + authenticated)
   const requiresAuth = await to.matched.some(record => record.meta.requiresAuth);
   // if (requiresAuth && authenticated){
   //   console.log("authenticated")
@@ -190,7 +189,6 @@ router.beforeEach(async(to, from, next) => {
 const verify_auth = () => {
   return new Promise((resolve, reject) => {
     if(localStorage.getItem("token") === null){
-      console.log("no token")
       resolve(false);
     }else{
       let config = {
@@ -203,10 +201,8 @@ const verify_auth = () => {
         && response.data.status.toLowerCase() !== 'token is expired' 
         && response.data.status.toLowerCase() !== 'authorization token not found'
         && response.data.status.toLowerCase() === 'verified'){
-          console.log("-----------------------------------procceed")
           resolve(true)
         }else{
-          console.log("-----------------------------------oops")
           localStorage.clear();
           resolve(false)
         } 
@@ -215,7 +211,6 @@ const verify_auth = () => {
       })
     }
   })
-  console.log("--------")
   return rtrn;
 }
 // router.beforeEach((to, from, next) => {
