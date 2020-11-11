@@ -110,7 +110,7 @@
           </v-container>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="JarDialog=false">Cancel</v-btn>
+            <v-btn text color="primary" @click="JarDialog=false,getHalayaJar()">Cancel</v-btn>
             <v-btn text @click="editHalayaJar()" >Save</v-btn>
           </v-card-actions>
         </v-card>
@@ -148,7 +148,7 @@
           </v-container>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="TubDialog=false">Cancel</v-btn>
+            <v-btn text color="primary" @click="TubDialog=false,getHalayaTub()">Cancel</v-btn>
             <v-btn text @click="editHalayaTub()" >Save</v-btn>
           </v-card-actions>
         </v-card>
@@ -286,7 +286,7 @@ import axios from "axios";
           this.editedTubPrice=response.data.product[0].product_price
           this.editedTubAvail=response.data.product[0].product_availability
           this.tubPrice=response.data.product[0].product_price
-          this.halayaTubAvailability=response.data.product[0].product_availability
+          this.halayaTubAvailability=response.data.product[0].product_availability - this.totalTub
         });
     },
 
@@ -299,9 +299,9 @@ import axios from "axios";
           this.editedJarPrice=response.data.product[0].product_price
           this.editedJarAvail=response.data.product[0].product_availability
           this.jarPrice=response.data.product[0].product_price
-          this.halayaJarAvailability=response.data.product[0].product_availability
+          this.halayaJarAvailability=response.data.product[0].product_availability-this.totalJar 
         });
-          },
+      },
 
     editHalayaTub(){
         let param = {
@@ -318,8 +318,6 @@ import axios from "axios";
           });
           this. TubDialog=false
           this.getHalayaTub();
-         
-       
       }  )},
 
        editHalayaJar(){
@@ -344,7 +342,7 @@ import axios from "axios";
       },
        
       comparedJarAvailability(){
-        if (this.totalJar<this.halayaJarAvailability){
+        if (this.totalJar<this.editedJarAvail){
           this.jarStat='Enough'
           return "green";
         } else {
@@ -354,7 +352,7 @@ import axios from "axios";
       
        },
       comparedTubAvailability(){
-        if (this.totalTub<this.halayaTubAvailability){
+        if (this.totalTub<this.editedTubAvail){
           this.tubStat='Enough'
           return "green";
         } else{
@@ -423,7 +421,7 @@ import axios from "axios";
                   showConfirmButton: false,
                   timer: 1500
                 });
-                }
+              }
             });
     },
 
@@ -434,6 +432,8 @@ import axios from "axios";
               this.records=response.data.product
             });
     },
+
+
     },
   
   }
