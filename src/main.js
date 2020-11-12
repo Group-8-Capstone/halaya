@@ -9,6 +9,10 @@ import turf from "@turf/turf";
 import { Form, HasError, AlertError } from 'vform'
 import '@turf/helpers';
 import Print from 'vue-printjs'
+import AOS from 'aos';
+import 'aos/dist/aos.css'
+
+AOS.init();
 Vue.use(Print)
 Vue.prototype.$_ = underscore;
 Vue.use(Vuelidate)
@@ -21,6 +25,12 @@ Vue.component('profile-component', require('./components/ProfileAccount.vue').de
 Vue.config.productionTip = false;
 Vue.use
 new Vue({
+  created: function () {
+    AOS.init({
+      duration: 1200,
+    });
+    // Typed.init()
+  },
   router,
   vuetify,
   mapboxgl,

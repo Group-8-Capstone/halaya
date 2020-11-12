@@ -34,7 +34,7 @@
     </div>
     <v-row>
       <v-col class="text-center" cols="12" id="text">
-        <h2 id="ourStory" class="mb-5">OUR STORY</h2>
+        <h2 id="ourStory" class="mb-1">OUR STORY</h2>
         <v-row align="center" justify="center">
           <v-col cols="10">
             <div>
@@ -43,8 +43,10 @@
                   <v-card-text id="story" class="font-weight-bold">
                     12 Ube Halaya jars.
                     1 Facebook post.
-                    <br><br>That's how our story began in October 17, 2019.
-                    <br><br>Today, we are privileged to have bottled and distributed more than 15,000 jars and counting.
+                    <br>
+                    <br>That's how our story began in October 17, 2019.
+                    <br>
+                    <br>Today, we are privileged to have bottled and distributed more than 15,000 jars and counting.
                   </v-card-text>
                 </v-card>
               </template>
@@ -53,19 +55,18 @@
         </v-row>
       </v-col>
     </v-row>
-    <v-row id="photos">
       <v-card flat>
         <v-row align="center" justify="center">
           <div id="planHeader" class="text-center">
             <br>
-            <h1 id="productsHeader">Ways To Enjoy Wawen's Ube Halaya</h1>
+            <h1 id="productHeader">Ways To Enjoy Wawen's Ube Halaya</h1>
           </div>
         </v-row>
         <v-row>
           <v-col sm="3">
             <div>
               <v-hover v-slot:default="{ hover }">
-                <v-card flat :elevation="8">
+                <v-card flat :elevation="8" data-aos="zoom-out">
                   <v-img id="photo" max-height="auto" src="../assets/photos/jar.png">
                     <v-expand-transition>
                       <div
@@ -82,7 +83,7 @@
           <v-col sm="3">
             <div>
               <v-hover v-slot:default="{ hover }">
-                <v-card flat :elevation="8">
+                <v-card flat :elevation="8" data-aos="zoom-out">
                   <v-img id="photo" height="315" src="../assets/ube.jpg">
                     <v-expand-transition>
                       <div
@@ -99,7 +100,7 @@
           <v-col sm="3">
             <div>
               <v-hover v-slot:default="{ hover }">
-                <v-card flat :elevation="8">
+                <v-card flat :elevation="8" data-aos="zoom-out">
                   <v-img id="photo" max-height="315" src="../assets/photos/ubechi.png">
                     <v-expand-transition>
                       <div
@@ -116,7 +117,7 @@
           <v-col sm="3">
             <div>
               <v-hover v-slot:default="{ hover }">
-                <v-card flat :elevation="8">
+                <v-card flat :elevation="8" data-aos="zoom-out">
                   <v-img id="photo" max-height="315" src="../assets/photos/ubecake.png">
                     <v-expand-transition>
                       <div
@@ -138,7 +139,7 @@
         <v-row id="infos">
           <v-col sm="4">
             <v-row>
-              <v-card id="infoCards" light max-width="400" height="auto" :elevation="8">
+              <v-card id="infoCards" light max-width="400" height="auto" :elevation="8" data-aos="fade-right">
                 <v-card-title>
                   <v-icon large left>mdi-bullhorn</v-icon>Suwayi na!
                   <v-card-text class="text">
@@ -152,7 +153,7 @@
             </v-row>
             <br>
             <v-row>
-              <v-card id="infoCards" light max-width="400" height="auto" :elevation="8">
+              <v-card id="infoCards" light max-width="400" height="auto" :elevation="8" data-aos="fade-right">
                 <v-card-title>
                   <v-icon large left>mdi-truck</v-icon>Delivery Time
                   <v-card-text class="text">
@@ -162,6 +163,9 @@
                   <v-card-text class="text">
                     <v-icon>mdi-calendar</v-icon>Monday - Saturday
                   </v-card-text>
+                  <v-card-text class="text">
+                    <v-icon>mdi-cart</v-icon>If your order is 10 jars or more, order a day ahead and we will give you freshly prepared and bottled Ube Halaya, ready for you to indulge.
+                  </v-card-text>
                 </v-card-title>
               </v-card>
             </v-row>
@@ -170,7 +174,7 @@
               <v-layout wrap>
                 <v-flex>
                   <v-col sm="12">
-                    <v-card flat id="infoCrd" max-width="400" height="auto" :elevation="8">
+                    <v-card flat id="infoCrd" max-width="400" height="auto" :elevation="8" data-aos="fade-right">
                       <v-card-title class="purple darken-2 white--text">
                         <v-icon color="white" large light>mdi-information</v-icon>
                       </v-card-title>
@@ -208,7 +212,7 @@
                   <v-row>
                     <v-col sm="6">
                       <v-hover id="products" v-slot:default="{ hover }">
-                        <v-card class="mx-auto" color="grey lighten-4" :elevation="8">
+                        <v-card class="mx-auto" color="grey lighten-4" :elevation="8" data-aos="flip-right">
                           <v-img :aspect-ratio="16/9" src="../assets/halayaTab.jpg">
                             <v-expand-transition>
                               <div
@@ -230,7 +234,7 @@
                     </v-col>
                     <v-col sm="6">
                       <v-hover id="products" v-slot:default="{ hover }">
-                        <v-card class="mx-auto" color="grey lighten-4" :elevation="8">
+                        <v-card class="mx-auto" color="grey lighten-4" :elevation="8" data-aos="flip-right">
                           <v-img :aspect-ratio="16/9" src="../assets/halayaJar.jpg">
                             <v-expand-transition>
                               <div
@@ -267,12 +271,12 @@
                   <v-col sm="12">
                     <v-row>
                       <v-col sm="6">
-                        <v-card max-width="400" flat :elevation="8">
+                        <v-card max-width="400" flat :elevation="8" data-aos="slide-up">
                           <v-img src="../assets/ad1.png"></v-img>
                         </v-card>
                       </v-col>
                       <v-col sm="6">
-                        <v-card max-width="400" flat :elevation="8">
+                        <v-card max-width="400" flat :elevation="8" data-aos="slide-up">
                           <v-img src="../assets/ad2.png"></v-img>
                         </v-card>
                       </v-col>
@@ -291,7 +295,7 @@
           <v-row id="footerContent" no-gutters>
             <v-col cols="4">
               <p>
-                <v-icon small>mdi-copyright</v-icon>2020 Wawen's Ube Halaya. All Rights Reserved
+                <v-icon small>mdi-copyright</v-icon>2020, Wawen's Ube Halaya. All Rights Reserved.
               </p>
             </v-col>
             <v-col cols="6">
@@ -343,7 +347,7 @@ export default {
   data: () => ({
     menu: false,
     model: null
-  })
+  }),
 };
 </script>
 
@@ -439,6 +443,10 @@ export default {
 #story {
   font-weight: thin;
   color: black;
+}
+#productHeader {
+  align-content: center;
+  font-size: 2.5em;
 }
 #productsHeader {
   align-content: center;

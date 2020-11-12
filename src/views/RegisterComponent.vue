@@ -82,7 +82,7 @@
                   outlined
                   rounded
                   @click="signUp"
-                >Log In</v-btn>
+                >Sign Up</v-btn>
               </center>
                 <div align="center" justify="center">
                   <span>
@@ -139,7 +139,7 @@ export default {
     rules: {
       required: value => !!value || " Password is required.",
       password: value => {
-        const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
+        const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#_\$%\^&\*])(?=.{8,})/;
         return (
           pattern.test(value) ||
           "Min. 8 characters with at least one capital letter, a number and a special character."

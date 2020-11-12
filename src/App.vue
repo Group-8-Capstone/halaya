@@ -34,7 +34,7 @@ export default {
   methods:{
 
     setUser(){
-      console.log('sxczfvxdfgdxfg', localStorage.getItem("id"))
+
     }
 
   }

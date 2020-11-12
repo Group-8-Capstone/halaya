@@ -144,8 +144,6 @@ export default {
       }
       axios.post("http://localhost:8000/api/login",userAccount).then((response) => {
         if(response.data.message === 'successfully_login'){
-          console.log('success');
-          console.log(response.data.UserAccount[0].username);
           localStorage.setItem("token", response.data.token);
           // localStorage.setItem("username", response.data.UserAccount[0].username);
           localStorage.setItem("role", response.data.UserAccount[0].role);
@@ -158,7 +156,6 @@ export default {
             this.$router.push('/delivery');
           }
         }else{
-          console.log('invalid');
           this.error = true;
         }
         // console.log('test ', response);
