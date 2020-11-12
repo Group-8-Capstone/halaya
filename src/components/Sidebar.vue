@@ -312,15 +312,8 @@ beforeCreate() {
     avatarRetrieve() {
       let id=localStorage.getItem('id')
       axios.get(this.url+"/api/fetchProfile/"+ id, this.config).then(response => {
-        // this.displayInfo = response.data.data;
         this.name = response.data.account[0].username;
         this.image=response.data.account[0].profile_url
-        // this.avatarSrc=response.data.account[0].profile_url
-        // response.data.data.forEach(element => {
-        //   console.log(element.profile_url);
-        //   this.avatarSrc = element.profile_url;
-        //   this.name = element.username;
-        // });
       });
     },
     logout(item) {
