@@ -245,7 +245,7 @@ export default {
     },
     getTotalJar(item) {
       axios
-        .get(this.url+"/totalJar", this.config)
+        .get(this.url+"/api/totalJar", this.config)
         .then(response => {
           console.log(response.data);
           this.totalJar = response.data;
@@ -253,7 +253,7 @@ export default {
     },
     gettotalTub(item) {
       axios
-        .get(this.url+"/totalTab", this.config)
+        .get(this.url+"/api/totalTab", this.config)
         .then(response => {
           console.log(response.data);
 
@@ -263,7 +263,7 @@ export default {
 
     getHalayaTub(item) {
       axios
-        .get(this.url+"/fetchHalayaTub", this.config)
+        .get(this.url+"/api/fetchHalayaTub", this.config)
         .then(response => {
           console.log(response.data.product[0].id)
           this.tubId=response.data.product[0].id
@@ -277,7 +277,7 @@ export default {
 
     getHalayaJar(item) {
       axios
-        .get(this.url+"/fetchHalayaJar", this.config)
+        .get(this.url+"/api/fetchHalayaJar", this.config)
         .then(response => {
            console.log(response.data.product[0])
           this.jarId=response.data.product[0].id
@@ -296,7 +296,7 @@ export default {
       };
       axios
         .post(
-          this.url+"/editTub/" + this.tubId,
+          this.url+"/api/editTub/" + this.tubId,
           param,
           this.config
         )
@@ -318,7 +318,7 @@ export default {
       };
       axios
         .post(
-          this.url+"/editTub/" + this.jarId,
+          this.url+"/api/editTub/" + this.jarId,
           param,
           this.config
         )
@@ -381,7 +381,7 @@ export default {
         availability_status: this.jarStat
       };
       axios
-        .post(this.url+"/dailyRecords", param, this.config)
+        .post(this.url+"/api/dailyRecords", param, this.config)
         .then(response => {
           if (response.data == "success") {
             Swal.fire({
@@ -412,7 +412,7 @@ export default {
             availability_status: this.tubStat,
           };
           axios
-            .post(this.url+"/dailyRecords", param,this.config)
+            .post(this.url+"/api/dailyRecords", param,this.config)
             .then(response => {
               console.log(response.data)
                 if (response.data =='success'){
@@ -437,7 +437,7 @@ export default {
           },
     fetchRecordedProduct() {
           axios
-            .get(this.url+"/fetchRecordedProduct",this.config)
+            .get(this.url+"/api/fetchRecordedProduct",this.config)
             .then(response => {
               this.records=response.data.product
             });

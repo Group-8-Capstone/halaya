@@ -311,7 +311,7 @@ beforeCreate() {
     },
     avatarRetrieve() {
       let id=localStorage.getItem('id')
-      axios.get(this.url+"/fetchProfile/"+ id, this.config).then(response => {
+      axios.get(this.url+"/api/fetchProfile/"+ id, this.config).then(response => {
         // this.displayInfo = response.data.data;
         this.name = response.data.account[0].username;
         this.image=response.data.account[0].profile_url

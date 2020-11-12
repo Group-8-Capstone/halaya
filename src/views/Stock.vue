@@ -301,7 +301,7 @@ export default {
     updateIngredients() {
       console.log("editSockItem: ", JSON.stringify(this.editStockItem));
       axios
-        .post(this.url+"/post/updateStock", this.editStockItem, this.config)
+        .post(this.url+"/api/post/updateStock", this.editStockItem, this.config)
         .then(response => {
           console.log(response);
           this.fetchStock();
@@ -324,7 +324,7 @@ export default {
         console.log("used_amount", newAddedAmount);
         axios
           .post(
-            this.url+"/post/usedIngredients",
+            this.url+"/api/post/usedIngredients",
             newAddedAmount, this.config
           )
           .then(response => {
@@ -336,7 +336,7 @@ export default {
     },
     fetchStock() {
       let nameArray = [];
-      axios.get(this.url+"/fetch/stock", this.config).then(response => {
+      axios.get(this.url+"/api/fetch/stock", this.config).then(response => {
         this.stocks = response.data;
         for (var i = 0; i < response.data.length; i++) {
           if (nameArray.includes(response.data[i].ingredients_name)) {
@@ -367,7 +367,7 @@ export default {
     },
     editIngredients(item) {
       axios
-        .get(this.url+"/post/editStock/" + item.id, this.config)
+        .get(this.url+"/api/post/editStock/" + item.id, this.config)
         .then(response => {
           this.editStockItem = response.data;
           console.log("edit stock item", JSON.stringify(this.editStockItem));
@@ -405,7 +405,7 @@ export default {
           "Content-Type": "application/json"
         };
         axios
-          .post(this.url+"/posts/ingredients", newStock, this.config)
+          .post(this.url+"/api/posts/ingredients", newStock, this.config)
           .then(response => {
             if (response.data == "existed") {
               Swal.fire({

@@ -164,7 +164,7 @@ export default {
                 cPass: this.cPassword,
                 role: "customer"
             }
-            axios.post(this.url+"/register", Reg).then((response) =>{
+            axios.post(this.url+"/api/register", Reg).then((response) =>{
                 console.log(Reg);
                  this.$router.push('/customerHome');
 

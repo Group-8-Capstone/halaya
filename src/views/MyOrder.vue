@@ -155,7 +155,7 @@ export default {
     retrieveOnOrder() {
       let id = localStorage.getItem("id");
       axios
-        .get(this.url+"/fetchOnOrder/" + id, this.config)
+        .get(this.url+"/api/fetchOnOrder/" + id, this.config)
         .then(response => {
           this.onOrder = response.data.post;
           console.log(response.data.post);
@@ -170,7 +170,7 @@ export default {
     retrieveDeliveredOrder() {
       let id = localStorage.getItem("id");
       axios
-        .get(this.url+"/fetchDeliveredOrder/" + id, this.config)
+        .get(this.url+"/api/fetchDeliveredOrder/" + id, this.config)
         .then(response => {
           this.deliveredOrder = response.data.post;
           console.log(response.data.post);

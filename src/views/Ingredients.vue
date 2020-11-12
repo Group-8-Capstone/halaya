@@ -396,7 +396,7 @@ export default {
     }, 
     getHalayaIngredients() {
       axios
-        .get(this.url+"/getHalayaIngredients/", this.config)
+        .get(this.url+"/api/getHalayaIngredients/", this.config)
         .then(response => {
           console.log(response)
           let results = [];
@@ -413,7 +413,7 @@ export default {
     },
     getButchiIngredients() {
       axios
-        .get(this.url+"/getButchiIngredients/", this.config)
+        .get(this.url+"/api/getButchiIngredients/", this.config)
         .then(response => {
           let results = [];
           for (var i = 0; i < response.data.length; i++) {
@@ -430,7 +430,7 @@ export default {
     },
     getIceCreamIngredients() {
       axios
-        .get(this.url+"/getIceCreamIngredients/", this.config)
+        .get(this.url+"/api/getIceCreamIngredients/", this.config)
         .then(response => {
           let results = [];
           for (var i = 0; i < response.data.length; i++) {
@@ -448,7 +448,7 @@ export default {
     getAllIngredientsName() {
       let nameArray = [];
       axios
-        .get(this.url+"/fetch/ingredientsName",this.config)
+        .get(this.url+"/api/fetch/ingredientsName",this.config)
         .then(response => {
           for (var i = 0; i < response.data.length; i++) {
             if (nameArray.includes(response.data[i].ingredients_name)) {
@@ -478,7 +478,7 @@ export default {
       this.$v.$reset();
     },
     editIngredients(item) {
-      axios.get(this.url+"/post/editStock/" + item.id, this.config)
+      axios.get(this.url+"/api/post/editStock/" + item.id, this.config)
         .then(response => {
           this.editStockItem = response.data;
           console.log("edit stock item", JSON.stringify(this.editStockItem));
@@ -487,7 +487,7 @@ export default {
     updateIngredients() {
       // console.log('edit: ', JSON.stringify(this.editStockItem));
       axios
-        .post(this.url+"/post/updateStock", this.editStockItem, this.config)
+        .post(this.url+"/api/post/updateStock", this.editStockItem, this.config)
         .then(response => {
           console.log(response);
           this.getHalayaIngredients();
@@ -516,7 +516,7 @@ export default {
         console.log("used_amount", newAddedAmount);
         axios
           .post(
-            this.url+"/post/usedIngredients",
+            this.url+"/api/post/usedIngredients",
             newAddedAmount, this.config
           )
           .then(response => {

@@ -499,7 +499,7 @@ export default {
             distance: dist
           };
           axios
-            .post(this.url+"/post/createOrder", param, this.config)
+            .post(this.url+"/api/post/createOrder", param, this.config)
             .then(response => {
               console.log("response.data: ", response.data);
               if (response.data == "success") {
@@ -541,7 +541,7 @@ export default {
     },
 
      getHalayaTub(item){
-        axios.get(this.url+"/fetchHalayaTub", this.config)
+        axios.get(this.url+"/api/fetchHalayaTub", this.config)
         .then(response => {
           this.tubName=response.data.product[0].product_name
           this.tubPrice=response.data.product[0].product_price
@@ -549,7 +549,7 @@ export default {
     },
 
     getHalayaJar(item){
-        axios.get(this.url+"/fetchHalayaJar", this.config)
+        axios.get(this.url+"/api/fetchHalayaJar", this.config)
         .then(response => {
           this.jarName=response.data.product[0].product_name
           this.jarPrice=response.data.product[0].product_price

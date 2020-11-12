@@ -28,7 +28,7 @@ Vue.use
 Vue.mixin({
   data: function() {
     return {
-      url:"https://wawenshalaya.herokuapp.com/api"
+      url:"https://wawenshalaya.herokuapp.com"
     }
   }
 })
@@ -38,7 +38,6 @@ new Vue({
     AOS.init({
       duration: 1200,
     });
-    // Typed.init()
   },
   router,
   vuetify,

@@ -79,7 +79,7 @@ export default {
     },
     methods: {
         loadOrder() {
-      axios.get(this.url+"/orders/confirmed").then(response => {
+      axios.get(this.url+"/api/orders/confirmed").then(response => {
         console.log('testing orders:', response.data)
         this.orders = response.data;
         // console.log('------------:', this.orders[0].receiver_name)

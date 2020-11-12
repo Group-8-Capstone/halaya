@@ -338,7 +338,7 @@ export default {
       } else {
         // console.log('###########', this.post)
         axios
-          .post(this.url+"/post/update", this.post, this.config)
+          .post(this.url+"/api/post/update", this.post, this.config)
           .then(response => {
             this.editDialog = false;
             Swal.fire({
@@ -352,7 +352,7 @@ export default {
     },
     editItem(item) {
       axios
-        .get(this.url+"/post/edit/" + item.id, this.config)
+        .get(this.url+"/api/post/edit/" + item.id, this.config)
         .then(response => {
           this.post = response.data;
         });
@@ -361,7 +361,7 @@ export default {
       // console.log("================ ", this.config)
       axios
         .post(
-          this.url+"/post/updateStat/" + item.id,
+          this.url+"/api/post/updateStat/" + item.id,
           {},
           this.config
         )
@@ -402,7 +402,7 @@ export default {
     deleteItem(item) {
       axios
         .post(
-          this.url+"/post/updateCanceledStat/" + item.id,
+          this.url+"/api/post/updateCanceledStat/" + item.id,
           {},
           this.config
         )
@@ -430,7 +430,7 @@ export default {
     },
     fetchDelivery() {
       axios
-        .get(this.url+"/posts/delivery", this.config)
+        .get(this.url+"/api/posts/delivery", this.config)
         .then(response => {
           // let results = [];
           this.deliveries = response.data.data;
@@ -474,7 +474,7 @@ export default {
     loadDelivery() {
       axios
         .get(
-          this.url+"/orders/confirmed",
+          this.url+"/api/orders/confirmed",
           this.config
         )
         .then(response => {
@@ -578,7 +578,7 @@ export default {
     },
     dataGrouping() {
       axios
-        .get(this.url+"/posts/delivery", this.config)
+        .get(this.url+"/api/posts/delivery", this.config)
         .then(response => {
           var result = response.data.data;
           var templist = this.$_.groupBy(result, "barangay");
