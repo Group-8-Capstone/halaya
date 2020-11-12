@@ -1,19 +1,11 @@
 <template>
   <div class="ma-5 mb-12 pa-5">
-    <!-- <v-tabs v-model="tabs" right color="deep-purple accent-4">
-      <v-tab>Ube Halaya</v-tab>
-      <v-tab>Butchi</v-tab>
-      <v-tab>Ube Ice Cream</v-tab>
-    </v-tabs> -->
-    <!-- <v-tabs-items v-model="tabs">
-      <v-tab-item> -->
         <v-card flat>
           <v-card-title>Ube Halaya List of Ingredients</v-card-title>
           <v-row>
             <v-flex>
               <v-layout wrap>
                 <v-flex md4 v-for="item in halayaIngredients" :key="item.id">
-
                   <v-card id="cards" class="card-container ma-5">
                     <v-card-title class="deep-purple lighten-5">{{item.ingredients_name}}</v-card-title>
                     <hr>
@@ -25,18 +17,9 @@
                           :color="getColor(item.ingredients_status)"
                         >{{item.ingredients_status}}</v-chip>
                       </v-list-item>
-
                     </v-row>
                     <v-row class="d-flex justify-end mb-6">
                       <template>
-                        <!-- <v-button icon>
-                          <v-icon
-                            normal
-                            class="mr-2"
-                            title="Add Quantity"
-                            @click="editDialog = !editDialog, editIngredients(item)"
-                          >mdi-plus</v-icon>
-                        </v-button>-->
                         <v-card-actions>
                           <v-spacer></v-spacer>
 
@@ -260,9 +243,6 @@
           </v-card-title>
           <v-container>
             <v-row class="mx-2">
-              <!-- <v-col cols="12">
-                <v-text-field color="purple" outlined placeholder="ingredientsName"></v-text-field>
-              </v-col>-->
               <v-col cols="12">
                 <v-text-field
                   color="purple"
@@ -295,7 +275,6 @@ import {
 } from "vuelidate/lib/validators";
 export default {
   name: "Ingredients",
-
   data() {
     return {
       displayIngredientsRecords:[],
@@ -395,8 +374,7 @@ export default {
         else return 'green'
     }, 
     getHalayaIngredients() {
-      axios
-        .get(this.url+"/api/getHalayaIngredients/", this.config)
+      axios.get(this.url+"/api/getHalayaIngredients/", this.config)
         .then(response => {
           console.log(response)
           let results = [];
@@ -425,7 +403,6 @@ export default {
             }
             continue;
           }
-          // console.log("butchi: ", response.data);
         });
     },
     getIceCreamIngredients() {
@@ -442,7 +419,6 @@ export default {
             }
             continue;
           }
-          // console.log("ice cream: ", response.data);
         });
     },
     getAllIngredientsName() {
@@ -463,8 +439,8 @@ export default {
     },
     reloadDataAddStock() {
       (this.ingredientsName = ""),
-        (this.ingredientsUnit = ""),
-        this.getHalayaIngredients();
+      (this.ingredientsUnit = ""),
+      this.getHalayaIngredients();
       this.getButchiIngredients();
       this.getIceCreamIngredients();
       this.$v.$reset();
@@ -485,7 +461,6 @@ export default {
         });
     },
     updateIngredients() {
-      // console.log('edit: ', JSON.stringify(this.editStockItem));
       axios
         .post(this.url+"/api/post/updateStock", this.editStockItem, this.config)
         .then(response => {

@@ -28,7 +28,7 @@ Vue.use
 Vue.mixin({
   data: function() {
     return {
-      url:"https://wawenshalaya.herokuapp.com"
+      url:"http://localhost:8000"
     }
   }
 })
