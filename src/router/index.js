@@ -196,7 +196,7 @@ const verify_auth = () => {
           Authorization: "Bearer" + localStorage.getItem("token")
         }
       }
-      axios.post("http://localhost:8000/api/verify_auth", {}, config).then((response) => {
+      axios.post(this.url+"/api/verify_auth", {}, config).then((response) => {
         if(response.data.status.toLowerCase() !== 'token is invalid' 
         && response.data.status.toLowerCase() !== 'token is expired' 
         && response.data.status.toLowerCase() !== 'authorization token not found'
