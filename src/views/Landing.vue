@@ -55,6 +55,7 @@
         </v-row>
       </v-col>
     </v-row>
+    <v-row>
       <v-card flat>
         <v-row align="center" justify="center">
           <div id="planHeader" class="text-center">
@@ -139,7 +140,14 @@
         <v-row id="infos">
           <v-col sm="4">
             <v-row>
-              <v-card id="infoCards" light max-width="400" height="auto" :elevation="8" data-aos="fade-right">
+              <v-card
+                id="infoCards"
+                light
+                max-width="400"
+                height="auto"
+                :elevation="8"
+                data-aos="fade-right"
+              >
                 <v-card-title>
                   <v-icon large left>mdi-bullhorn</v-icon>Suwayi na!
                   <v-card-text class="text">
@@ -153,7 +161,14 @@
             </v-row>
             <br>
             <v-row>
-              <v-card id="infoCards" light max-width="400" height="auto" :elevation="8" data-aos="fade-right">
+              <v-card
+                id="infoCards"
+                light
+                max-width="400"
+                height="auto"
+                :elevation="8"
+                data-aos="fade-right"
+              >
                 <v-card-title>
                   <v-icon large left>mdi-truck</v-icon>Delivery Time
                   <v-card-text class="text">
@@ -174,7 +189,14 @@
               <v-layout wrap>
                 <v-flex>
                   <v-col sm="12">
-                    <v-card flat id="infoCrd" max-width="400" height="auto" :elevation="8" data-aos="fade-right">
+                    <v-card
+                      flat
+                      id="infoCrd"
+                      max-width="400"
+                      height="auto"
+                      :elevation="8"
+                      data-aos="fade-right"
+                    >
                       <v-card-title class="purple darken-2 white--text">
                         <v-icon color="white" large light>mdi-information</v-icon>
                       </v-card-title>
@@ -212,7 +234,12 @@
                   <v-row>
                     <v-col sm="6">
                       <v-hover id="products" v-slot:default="{ hover }">
-                        <v-card class="mx-auto" color="grey lighten-4" :elevation="8" data-aos="flip-right">
+                        <v-card
+                          class="mx-auto"
+                          color="grey lighten-4"
+                          :elevation="8"
+                          data-aos="flip-right"
+                        >
                           <v-img :aspect-ratio="16/9" src="../assets/halayaTab.jpg">
                             <v-expand-transition>
                               <div
@@ -234,7 +261,12 @@
                     </v-col>
                     <v-col sm="6">
                       <v-hover id="products" v-slot:default="{ hover }">
-                        <v-card class="mx-auto" color="grey lighten-4" :elevation="8" data-aos="flip-right">
+                        <v-card
+                          class="mx-auto"
+                          color="grey lighten-4"
+                          :elevation="8"
+                          data-aos="flip-right"
+                        >
                           <v-img :aspect-ratio="16/9" src="../assets/halayaJar.jpg">
                             <v-expand-transition>
                               <div
@@ -347,7 +379,7 @@ export default {
   data: () => ({
     menu: false,
     model: null
-  }),
+  })
 };
 </script>
 
