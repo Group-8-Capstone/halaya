@@ -142,7 +142,8 @@ export default {
         username: this.user,
         password: this.pass,
       }
-      axios.post("http://localhost:8000/api/login",userAccount).then((response) => {
+  
+      axios.post(this.url+"/api/login", userAccount).then((response) => {
         if(response.data.message === 'successfully_login'){
           localStorage.setItem("token", response.data.token);
           // localStorage.setItem("username", response.data.UserAccount[0].username);
