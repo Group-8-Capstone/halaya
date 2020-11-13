@@ -38,7 +38,7 @@
                       color="deep-purple accent-4"
                       elevation="24"
                     >
-                      Username alread exists
+                      Username already exists
                       <template v-slot:action="{ attrs }">
                         <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">Close</v-btn>
                       </template>
