@@ -579,7 +579,7 @@ export default {
       } else {
         // console.log('###########', this.post)
         axios
-          .post("http://127.0.0.1:8000/api/post/update", this.post, this.config)
+          .post(this.url+"/api/post/update", this.post, this.config)
           .then(response => {
             this.editDialog = false;
             Swal.fire({
@@ -603,7 +603,7 @@ export default {
     },
     updateDeliveredStatus() {
       axios
-        .post("http://127.0.0.1:8000/api/post/update", this.post, this.config)
+        .post(this.url+"/api/post/update", this.post, this.config)
         .then(response => {
           this.fetchOrders();
         });
@@ -611,7 +611,7 @@ export default {
     deleteItem(item) {
       axios
         .post(
-          "http://127.0.0.1:8000/api/post/updateCanceledStat/" + item.id,
+          this.url+"/api/post/updateCanceledStat/" + item.id,
           {},
           this.config
         )
@@ -622,7 +622,7 @@ export default {
     },
     editItem(item) {
       axios
-        .get("http://127.0.0.1:8000/api/post/edit/" + item.id, this.config)
+        .get(this.url+"/api/post/edit/" + item.id, this.config)
         .then(response => {
           this.post = response.data;
         });
@@ -684,7 +684,7 @@ export default {
         distance: this.distance
       };
       axios
-        .post("http://127.0.0.1:8000/api/post", param, this.config)
+        .post(this.url+"/api/post", param, this.config)
         .then(response => {
           Swal.fire({
             title: "Successfully Added",
@@ -723,7 +723,7 @@ export default {
       // console.log("================ ", this.config)
       axios
         .post(
-          "http://127.0.0.1:8000/api/post/updateStat/" + item.id,
+          this.url+"/api/post/updateStat/" + item.id,
           {},
           this.config
         )
@@ -740,7 +740,7 @@ export default {
     },
     fetchOrders() {
       axios
-        .get("http://127.0.0.1:8000/api/posts/order", this.config)
+        .get(this.url+"/api/posts/order", this.config)
         .then(response => {
           this.orders = response.data.data;
           for (var i = 0; i < this.orders.length; i++) {
@@ -764,7 +764,7 @@ export default {
     },
     fetchPendingOrders() {
       axios
-        .get("http://127.0.0.1:8000/api/fetch/pending-orders", this.config)
+        .get(this.url+"/api/fetch/pending-orders", this.config)
         .then(response => {
           this.pendingOrders = response.data.data;
           for (var i = 0; i < this.pendingOrders.length; i++) {
@@ -791,7 +791,7 @@ export default {
       console.log("****hsdfnaiuerh*******", this.config);
       axios
         .post(
-          "http://127.0.0.1:8000/api/post/confirm/" + item.id,
+          this.url+"/post/confirm/" + item.id,
           {},
           this.config
         )

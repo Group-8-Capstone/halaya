@@ -9,36 +9,6 @@
         <img src="../assets/wawens.png">
       </v-list-item-avatar>
       <v-toolbar-title class="deep-purple--text">WAWEN'S UBE HALAYA</v-toolbar-title>
-      <!-- <template v-slot:activator="{ on, attrs }">
-          <v-list-item-avatar class="mr-5">
-            <v-img :src="'http://localhost:8000/'+ avatarSrc"></v-img>
-          </v-list-item-avatar>
-
-          <v-toolbar-title class="grey--text mr-1 sub_title pt-5">{{name}}</v-toolbar-title>
-        </template> -->
-      <!-- <v-spacer></v-spacer>
-      <v-menu bottom>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn dark icon v-bind="attrs" v-on="on">
-            <v-icon class="mr-12 pt-5" size="30" color="grey">mdi-menu-down</v-icon>
-          </v-btn>
-          <v-list-item-avatar class="mr-5">
-            <v-img :src="'http://localhost:8000/'+ avatarSrc"></v-img>
-          </v-list-item-avatar>
-
-          <v-toolbar-title class="grey--text mr-1 sub_title pt-5">{{name}}</v-toolbar-title>
-        </template>
-        <v-list>
-          <v-list-item v-for="item in items2" :key="item.title" :to="item.link" link>
-            <v-list-item-icon @click="logout(item)">
-              <v-icon v-text="item.icon"></v-icon>
-            </v-list-item-icon>
-            <v-list-item-content @click="logout(item)">
-              <v-list-item-title v-text="item.title"></v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-menu> -->
     </v-app-bar>
     <v-navigation-drawer
       v-model="drawer"
@@ -53,9 +23,8 @@
           <v-sheet color="purple darken-3" >
             <v-row>
 <v-list-item-avatar class="ma-2" color="grey darken-1" size="40">
-<img  :src="image === null ? avatarSrc : 'http://127.0.0.1:8000/' + image" >
+<img  :src="image === null ? avatarSrc : this.url + image" >
 </v-list-item-avatar>
-<!-- <div style="color:white"></div> -->
 <v-list-item-content>
 <v-toolbar-title class="white--text ml-5 ">{{name}}</v-toolbar-title>
 </v-list-item-content>
@@ -209,7 +178,6 @@ export default {
   name: "Sidebar",
   props: {},
   data: () => ({
-    // displayInfo:[],
     avatarSrc: 'http://localhost:8000/images/avatar.png',
     image: null,
     name: null,
@@ -218,14 +186,6 @@ export default {
     drawer: true,
     model: 1,
     mini: true,
-    // items2: [
-    //   {
-    //     icon: "mdi-account-settings",
-    //     title: "Profile Setting",
-    //     link: "/profileSetting"
-    //   },
-    //   { icon: "mdi-logout", title: "logout", link: "/login" }
-    // ],
     admin: [
       { icon: "mdi-view-dashboard", text: "Dashboard", link: "/dashboard" },
       {
@@ -238,7 +198,6 @@ export default {
             title: "Products",
             link: "/product"
           },
-          // { icon: "mdi-table", title: "Logs", link: "/logs" }
         ]
       },
       {
@@ -311,16 +270,9 @@ beforeCreate() {
     },
     avatarRetrieve() {
       let id=localStorage.getItem('id')
-      axios.get("http://127.0.0.1:8000/api/fetchProfile/"+ id, this.config).then(response => {
-        // this.displayInfo = response.data.data;
+      axios.get(this.url+"/api/fetchProfile/"+ id, this.config).then(response => {
         this.name = response.data.account[0].username;
         this.image=response.data.account[0].profile_url
-        // this.avatarSrc=response.data.account[0].profile_url
-        // response.data.data.forEach(element => {
-        //   console.log(element.profile_url);
-        //   this.avatarSrc = element.profile_url;
-        //   this.name = element.username;
-        // });
       });
     },
     logout(item) {

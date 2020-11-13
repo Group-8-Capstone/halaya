@@ -24,12 +24,20 @@ Vue.component('profile-component', require('./components/ProfileAccount.vue').de
 
 Vue.config.productionTip = false;
 Vue.use
+
+Vue.mixin({
+  data: function() {
+    return {
+      url:"http://localhost:8000"
+    }
+  }
+})
+
 new Vue({
   created: function () {
     AOS.init({
       duration: 1200,
     });
-    // Typed.init()
   },
   router,
   vuetify,
