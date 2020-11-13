@@ -96,8 +96,8 @@
           </v-container>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="JarDialog=false">Cancel</v-btn>
-            <v-btn text @click="editHalayaJar()">Save</v-btn>
+            <v-btn text color="primary" @click="JarDialog=false,getHalayaJar()">Cancel</v-btn>
+            <v-btn text @click="editHalayaJar()" >Save</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -133,8 +133,8 @@
           </v-container>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="TubDialog=false">Cancel</v-btn>
-            <v-btn text @click="editHalayaTub()">Save</v-btn>
+            <v-btn text color="primary" @click="TubDialog=false,getHalayaTub()">Cancel</v-btn>
+            <v-btn text @click="editHalayaTub()" >Save</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -245,7 +245,7 @@ export default {
     },
     getTotalJar(item) {
       axios
-        .get("http://127.0.0.1:8000/api/totalJar", this.config)
+        .get(this.url+"/api/totalJar", this.config)
         .then(response => {
           console.log(response.data);
           this.totalJar = response.data;
@@ -253,7 +253,7 @@ export default {
     },
     gettotalTub(item) {
       axios
-        .get("http://127.0.0.1:8000/api/totalTab", this.config)
+        .get(this.url+"/api/totalTab", this.config)
         .then(response => {
           console.log(response.data);
 
@@ -263,33 +263,31 @@ export default {
 
     getHalayaTub(item) {
       axios
-        .get("http://127.0.0.1:8000/api/fetchHalayaTub", this.config)
+        .get(this.url+"/api/fetchHalayaTub", this.config)
         .then(response => {
-          console.log(response.data.product[0].id);
-          this.tubId = response.data.product[0].id;
-          this.tubName = response.data.product[0].product_name;
-          this.editedTubPrice = response.data.product[0].product_price;
-          this.editedTubAvail = response.data.product[0].product_availability;
-          this.tubPrice = response.data.product[0].product_price;
-          this.halayaTubAvailability =
-            response.data.product[0].product_availability;
+          console.log(response.data.product[0].id)
+          this.tubId=response.data.product[0].id
+          this.tubName=response.data.product[0].product_name
+          this.editedTubPrice=response.data.product[0].product_price
+          this.editedTubAvail=response.data.product[0].product_availability
+          this.tubPrice=response.data.product[0].product_price
+          this.halayaTubAvailability=response.data.product[0].product_availability - this.totalTub
         });
     },
 
     getHalayaJar(item) {
       axios
-        .get("http://127.0.0.1:8000/api/fetchHalayaJar", this.config)
+        .get(this.url+"/api/fetchHalayaJar", this.config)
         .then(response => {
-          console.log(response.data.product[0]);
-          this.jarId = response.data.product[0].id;
-          this.jarName = response.data.product[0].product_name;
-          this.editedJarPrice = response.data.product[0].product_price;
-          this.editedJarAvail = response.data.product[0].product_availability;
-          this.jarPrice = response.data.product[0].product_price;
-          this.halayaJarAvailability =
-            response.data.product[0].product_availability;
+           console.log(response.data.product[0])
+          this.jarId=response.data.product[0].id
+          this.jarName=response.data.product[0].product_name
+          this.editedJarPrice=response.data.product[0].product_price
+          this.editedJarAvail=response.data.product[0].product_availability
+          this.jarPrice=response.data.product[0].product_price
+          this.halayaJarAvailability=response.data.product[0].product_availability-this.totalJar 
         });
-    },
+      },
 
     editHalayaTub() {
       let param = {
@@ -298,7 +296,7 @@ export default {
       };
       axios
         .post(
-          "http://127.0.0.1:8000/api/editTub/" + this.tubId,
+          this.url+"/api/editTub/" + this.tubId,
           param,
           this.config
         )
@@ -310,8 +308,7 @@ export default {
           });
           this.TubDialog = false;
           this.getHalayaTub();
-        });
-    },
+      }  )},
 
     editHalayaJar() {
       console.log(this.tubId);
@@ -321,7 +318,7 @@ export default {
       };
       axios
         .post(
-          "http://127.0.0.1:8000/api/editTub/" + this.jarId,
+          this.url+"/api/editTub/" + this.jarId,
           param,
           this.config
         )
@@ -333,9 +330,30 @@ export default {
           });
           this.JarDialog = false;
           this.getHalayaJar();
-        });
-    },
-
+       
+       
+      })
+      },
+       
+      comparedJarAvailability(){
+        if (this.totalJar<this.editedJarAvail){
+          this.jarStat='Enough'
+          return "green";
+        } else {
+          this.jarStat='Lack'
+          return "red"
+        }
+      
+       },
+      comparedTubAvailability(){
+        if (this.totalTub<this.editedTubAvail){
+          this.tubStat='Enough'
+          return "green";
+        } else{
+          this.tubStat='Lack'
+          return "red"
+        } 
+},
     comparedJarAvailability() {
       if (this.totalJar < this.halayaJarAvailability) {
         this.jarStat = "Enough";
@@ -363,7 +381,7 @@ export default {
         availability_status: this.jarStat
       };
       axios
-        .post("http://127.0.0.1:8000/api/dailyRecords", param, this.config)
+        .post(this.url+"/api/dailyRecords", param, this.config)
         .then(response => {
           if (response.data == "success") {
             Swal.fire({
@@ -387,44 +405,43 @@ export default {
     },
 
     recordProductTub() {
-      let param = {
-        product_name: this.tubName,
-        remaining_quantity: this.halayaTubAvailability,
-        total_ordered: this.totalTub,
-        availability_status: this.tubStat
-      };
-      axios
-        .post("http://127.0.0.1:8000/api/dailyRecords", param, this.config)
-        .then(response => {
-          console.log(response.data);
-          if (response.data == "success") {
-            Swal.fire({
-              position: "center",
-              icon: "success",
-              title: "Recorded!",
-              showConfirmButton: false,
-              timer: 1500
+         let param = {
+            product_name: this.tubName,
+            remaining_quantity: this.halayaTubAvailability,
+            total_ordered: this.totalTub,
+            availability_status: this.tubStat,
+          };
+          axios
+            .post(this.url+"/api/dailyRecords", param,this.config)
+            .then(response => {
+              console.log(response.data)
+                if (response.data =='success'){
+                Swal.fire({
+                  position: "center",
+                  icon: "success",
+                  title: "Recorded!",
+                  showConfirmButton: false,
+                  timer: 1500
+                });
+                }else{
+                  Swal.fire({
+                  position: "center",
+                  icon: "warning",
+                  titleText:"Recorded",
+                  text:'See below Record',
+                  showConfirmButton: false,
+                  timer: 1500
+                });
+              }
             });
-          } else {
-            Swal.fire({
-              position: "center",
-              icon: "warning",
-              titleText: "Recorded",
-              text: "See below Record",
-              showConfirmButton: false,
-              timer: 1500
-            });
-          }
-        });
-    },
-
+          },
     fetchRecordedProduct() {
-      axios
-        .get("http://127.0.0.1:8000/api/fetchRecordedProduct", this.config)
-        .then(response => {
-          this.records = response.data.product;
-        });
-    }
+          axios
+            .get(this.url+"/api/fetchRecordedProduct",this.config)
+            .then(response => {
+              this.records=response.data.product
+            });
+    },
   }
-};
+}
 </script>

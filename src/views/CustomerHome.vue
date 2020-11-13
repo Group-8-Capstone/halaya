@@ -92,27 +92,36 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col>
-              <v-img class="ml-5" width="250px" height="200px" src="../assets/halayaTab.jpg"></v-img>
+             <v-col>
+              <v-img class="ml-5" width="250px" height="200px" src="../assets/halayaJar.jpg"></v-img>
+              <h6 class="display-1 font-weight-light orange--text ml-5">{{jarName}}</h6>
+              <div id="price" class="font-weight-light grey--text title ml-5">{{jarPrice}}</div>
             </v-col>
             <v-col>
-              <v-img width="250px" height="200px" src="../assets/halayaJar.jpg"></v-img>
+              <v-img  width="250px" height="200px" src="../assets/halayaTab.jpg"></v-img>
+               <h6 class="display-1 font-weight-light orange--text ">{{tubName}}</h6>
+                <div id="price" class="font-weight-light grey--text title ">{{tubPrice}}</div>
             </v-col>
           </v-row>
           <v-row class="pl-5">
-            <v-col cols="5" class="pl-5">
-              <v-text-field min="0" type="number" label="Quantity" v-model="tabQuantity">
+            <v-col cols="4" class="pl-5">
+              <v-text-field min="0" type="number" label="Quantity" v-model="jarQuantity">
                 <template slot="prepend">
-                  <!-- <v-icon >mdi-minus</v-icon>
-                  <v-icon>mdi-plus</v-icon> -->
+                  <div id="vue-counter">
+              <v-icon type="button" v-on:click="increaseJar">mdi-plus</v-icon> 
+                <v-icon type="button" v-on:click="decreaseJar" >mdi-minus</v-icon>
+              </div>
                 </template>
               </v-text-field>
             </v-col>
-            <v-col cols="5" class="pl-12">
-              <v-text-field min="0" type="number" label="Quantity" v-model="jarQuantity">
+            <v-col cols="4" class="pl-5">
+               <v-text-field min="0" type="number" label="Quantity" v-model="tabQuantity">
                 <template slot="prepend">
-                  <!-- <v-icon>mdi-minus</v-icon>
-                  <v-icon>mdi-plus</v-icon> -->
+                  <div id="vue-counter" >
+          <v-icon type="button" v-on:click="increaseTub">mdi-plus</v-icon>
+          <v-icon type="button" v-on:click="decreaseTub" disabled:isDisabled class="ml-1">mdi-minus</v-icon>
+        
+              </div>
                 </template>
               </v-text-field>
             </v-col>
@@ -148,7 +157,7 @@
         <v-card-actions >
           <v-spacer></v-spacer>
           <v-btn text color="orange" @click="addOrderDialog = false" class="mb-5" >Cancel</v-btn>
-          <v-btn text color="primary" @click="placeOrder()" class="mb-5">Save</v-btn>
+          <v-btn text color="primary" @click="addCard()" class="mb-5">Create</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -195,6 +204,52 @@
           </v-hover>
         </v-col>
       </v-row>
+    </template>
+    <template>
+     
+      <v-dialog v-model="addCardDialog" width="500px">
+         <v-card >
+           <v-card-title class="align-center">
+          <v-list-item-title
+            class="d-flex align-center justify-center mx-auto headline black--text"
+          >SUMMARY OF ORDER</v-list-item-title>
+        </v-card-title>
+        <v-row>
+           <v-col cols="5" class="pl-12">
+                   <span>Recievers Name: {{customerName}}</span>
+           </v-col>
+           <v-col cols="5" class="pl-12">
+           <span>Reciever Number: {{contactNumber}}</span>
+           </v-col>
+           </v-row>
+           <v-row>
+           <v-col cols="5" class="pl-12">
+              <span>Address: {{customerStreet}}, {{customerBarangay}}, {{customerMunicipality}}</span>
+           </v-col>
+           <v-col cols="5" class="pl-12">
+             <span>Preferred Delivery: {{date}}</span>
+           </v-col>
+           </v-row>
+           <v-row>
+            <v-col cols="5" class="pl-12">
+           <span>Jar Quantity: {{jarQuantity}}</span>
+           </v-col>
+            <v-col cols="5" class="pl-12">
+                 <span>Tub Quntity: {{tabQuantity}}</span>
+           </v-col>
+           </v-row>
+           
+           <v-col cols="5" class="pl-12">
+                 <span>Your total payment: {{totalPay}}</span>
+           </v-col>
+        
+        <v-card-actions>
+           <v-spacer></v-spacer>
+          <v-btn class="ma-3" color="orange" text @click="addCardDialog=false , addOrderDialog=true">Cancel</v-btn>
+          <v-btn class="ma-3" color="primary" text @click="placeOrder()" >Place Order</v-btn>
+        </v-card-actions>
+        </v-card>
+      </v-dialog>
     </template>
   </div>
 </template>
@@ -245,6 +300,15 @@ export default {
       jarQuantity: "0",
       tabQuantity: "0",
       distance: 0,
+      jarName:null,
+      tubName:null,
+      tubPrice:null,
+      jarPrice:null,
+      counterJar: 0,
+      counterTub:0,
+      disableButton:false,
+      addCardDialog:false,
+      totalPay:0,
     };
   },
   components: {
@@ -284,6 +348,9 @@ export default {
   
 
   computed: {
+     isDisabled() {
+        return disableButton == false
+      },
     addressErrors() {
       const errors = [];
       if (!this.$v.address.$dirty) return errors;
@@ -360,6 +427,8 @@ export default {
     console.log("this.config", this.config);
   },
   created() {
+    this.getHalayaTub(),
+    this.getHalayaJar()
   
   },
 
@@ -387,14 +456,10 @@ export default {
     },
     placeOrder() {
       this.$v.$touch();
-      var street=this.customerStreet.charAt(0).toUpperCase() +
-          this.customerStreet.slice(1).toLowerCase();
-      var barangay=this.customerBarangay.charAt(0).toUpperCase() +
-          this.customerBarangay.slice(1).toLowerCase();
-      var municipality=this.customerMunicipality.charAt(0).toUpperCase() +
-          this.customerMunicipality.slice(1).toLowerCase();
-      var province=this.customerProvince.charAt(0).toUpperCase() +
-          this.customerProvince.slice(1).toLowerCase();
+      var street=this.customerStreet
+      var barangay=this.customerBarangay
+      var municipality=this.customerMunicipality
+      var province=this.customerProvince
 
       var place = street.concat(
         " ",
@@ -422,7 +487,6 @@ export default {
           let param = {
             customer_id: localStorage.getItem("id"),
             receiver_name: this.customerName,
-            // address: place,
             building_street: street,
             barangay: barangay,
             city_municipality: municipality,
@@ -435,7 +499,7 @@ export default {
             distance: dist
           };
           axios
-            .post("http://127.0.0.1:8000/api/post/createOrder", param, this.config)
+            .post(this.url+"/api/post/createOrder", param, this.config)
             .then(response => {
               console.log("response.data: ", response.data);
               if (response.data == "success") {
@@ -447,14 +511,77 @@ export default {
                   timer: 1500
                 });
                 this.addOrderDialog=false;
+                this.addCardDialog=false;
               }
             });
         });
         
     },
+    addCard(){
+      if (this.jarQuantity=='0' && this.tabQuantity=='0' ){
+         Swal.fire({
+                  position: "center",
+                  icon: "warning",
+                  title: "You haven't order",
+                  showConfirmButton: false,
+                  timer: 1500
+                });
+         this.$v.$touch();
+         this.addOrderDialog=true
+      } else {
+        this.addCardDialog=true
+        this.addOrderDialog=false
+        console.log(this.jarPrice)
+        console.log(this.jarQuantity)
+        this.totalPay= (this.jarQuantity*this.jarPrice)+(this.tabQuantity*this.tubPrice)
+      }
+    },
     notLessDate(deliveredDate) {
       return deliveredDate >= new Date().toISOString().substr(0, 10);
-    }
+    },
+
+     getHalayaTub(item){
+        axios.get(this.url+"/api/fetchHalayaTub", this.config)
+        .then(response => {
+          this.tubName=response.data.product[0].product_name
+          this.tubPrice=response.data.product[0].product_price
+        });
+    },
+
+    getHalayaJar(item){
+        axios.get(this.url+"/api/fetchHalayaJar", this.config)
+        .then(response => {
+          this.jarName=response.data.product[0].product_name
+          this.jarPrice=response.data.product[0].product_price
+        });
+    },
+    increaseJar: function() {
+      this.jarQuantity++;
+    },
+    decreaseJar:  function() {
+      if (this.jarQuantity==0){
+        this.jarQuantity=0
+      }else{
+      this.jarQuantity--;   
+}
+    },
+    resetJar: function() {
+      this.jarQuantity = 0;
+    },
+    increaseTub: function() {
+      this.tabQuantity++;
+    },
+    decreaseTub:  function() {
+      if (this.tabQuantity==0){
+        this.tabQuantity=0
+      }else{
+      this.tabQuantity--;   
+}
+    },
+
+    resetTub: function() {
+      this.tabQuantity = 0;
+    },
   }
 };
 </script>
