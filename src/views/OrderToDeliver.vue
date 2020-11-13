@@ -71,7 +71,7 @@ import axios from "axios";
 import { connect } from "tls";
 import * as turf from "@turf/turf";
 import Swal from "sweetalert2";
-import { constants } from 'os';
+import { constants } from "os";
 export default {
   name: "Delivery",
   data() {
@@ -117,11 +117,13 @@ export default {
         .get("http://127.0.0.1:8000/api/posts/delivery", this.config)
         .then(response => {
           var result = response.data.data;
-          console.log("Groupby", result);
+          // console.log("Groupby", result);
           var templist = this.$_.groupBy(result, "barangay");
-          this.barangay_array = Object.entries(templist);
+          this.barangay_array = Object.entries(templist); //array cotaining data nga gi group by barangay
           console.log("Barangay Array: ", this.barangay_array);
-          var arr = [];
+
+          var arr = []; //mother array containing arrays of barangay nga naka divide na by batch ang orders
+
           for (var i = 0; i < this.barangay_array.length; i++) {
             this.barangay_array[i]["barangay_name"] = this.barangay_array[i][0];
             this.barangay_array[i]["orders"] = this.barangay_array[i][1];
@@ -129,56 +131,67 @@ export default {
               i
             ][1].length;
 
-            var barangay_orders = this.barangay_array[i][1];
-            var total = 0;
+            var barangay_orders = this.barangay_array[3][1]; //array of objects containing the orders per barangay
 
             var max_qty = 96;
             var tub_value = 4;
-            var list = [];
-            var tubToJar = 0;
-            console.log("barangay_orders: ", barangay_orders);
-            for (var j = 0; j < barangay_orders.length; j++) {
-              // console.log("barangay_name: ", barangay_orders);
-              var delivery_batch = [];
+            var list = [];         // array containing sa all batch of orders
+            var batch = [];        // array containing 1 batch of orders
+            var tubToJar = 0;      //number of ordered jars apil ang tub converted into jars
+            var total = 0;         //total of ordered jars in one batch
+            // console.log("barangay_orders: ", barangay_orders);
+            for (var j = 0; j < barangay_orders.length; j++) { 
               if (barangay_orders[j].ubeHalayaTub_qty != 0) {
                 tubToJar += barangay_orders[j].ubeHalayaTub_qty * tub_value;
                 if (barangay_orders[j].ubeHalayaJar_qty != 0) {
                   tubToJar += barangay_orders[j].ubeHalayaJar_qty;
                   if (max_qty - tubToJar >= 0) {
                     console.log("============if ", tubToJar);
-                    if(this.containsObject(delivery_batch, barangay_orders[j].id)){
-                      console.log("already exist")
-                    } else {
-                      delivery_batch.push(barangay_orders[j]);
-                    }
+                    batch.push(barangay_orders[j]);
+                    max_qty -= tubToJar;
+                    // total += tubToJar;
+                    console.log('batch', batch);
+                    continue;
+                  } else {
+                    // list.push(batch);
+                    // batch = [];
+                    continue;
                   }
-                } else if (barangay_orders[j].ubeHalayaTub_qty != 0) {
-                  tubToJar += barangay_orders[j].ubeHalayaJar_qty;
-                  if (max_qty - tubToJar >= 0) {
-                    console.log("============else if ", tubToJar);
-                    if(this.containsObject(delivery_batch, barangay_orders[j].id)){
-                      console.log("already exist")
-                    } else {
-                      delivery_batch.push(barangay_orders[j]);
-                    }
-                  }
-                }
+                } 
+                // else if (barangay_orders[j].ubeHalayaJar_qty == 0) {
+                //   if (max_qty - tubToJar >= 0) {
+                //     console.log("============else if ", tubToJar);
+                //     batch.push(barangay_orders[j]);
+                //     max_qty -= tubToJar;
+                //     // total += tubToJar;
+                //     console.log('batch', batch);
+                //     continue;
+                //   } else {
+                //     list.push(batch);
+                //     batch = [];
+                //     continue;
+                //   }
+                // } 
               } else if (barangay_orders[j].ubeHalayaTub_qty == 0) {
-                tubToJar += barangay_orders[j].ubeHalayaJar_qty;
-                if (max_qty - tubToJar >= 0) {
-                  console.log("============else ", tubToJar);
-                  if(this.containsObject(delivery_batch, barangay_orders[j].id)){
-                      console.log("already exist")
-                    } else {
-                      delivery_batch.push(barangay_orders[j]);
-                    }
+                  tubToJar += barangay_orders[j].ubeHalayaJar_qty;
+                  console.log('para sa ikutulong index: ', max_qty);
+                  if (max_qty - tubToJar >= 0) {
+                    console.log("============else ", tubToJar);
+                    batch.push(barangay_orders[j]);
+                    max_qty -= tubToJar;
+                    // total += tubToJar;
+                    console.log('batch', batch);
+                    continue;
+                  } else {
+                    // list.push(batch);
+                    // batch = [];
+                    continue;
+                  }
                 }
-              }
-              list.push(delivery_batch);
-              console.log("delivery_batch: ", delivery_batch);
+             
             }
-            arr.push(list);
-            console.log("liiiiiiiiissssttt: ", list);
+             arr.push(list);
+              console.log("liiiiiiiiissssttt: ", list);
           }
           console.log("mother array: ", arr);
         });
