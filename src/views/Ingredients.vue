@@ -374,7 +374,7 @@ export default {
         else return 'green'
     }, 
     getHalayaIngredients() {
-      axios.get(this.url+"/api/getHalayaIngredients/", this.config)
+      axios.get(this.url+"/api/getHalayaIngredients", this.config)
         .then(response => {
           console.log(response)
           let results = [];
@@ -391,7 +391,7 @@ export default {
     },
     getButchiIngredients() {
       axios
-        .get(this.url+"/api/getButchiIngredients/", this.config)
+        .get(this.url+"/api/getButchiIngredients", this.config)
         .then(response => {
           let results = [];
           for (var i = 0; i < response.data.length; i++) {
@@ -407,7 +407,7 @@ export default {
     },
     getIceCreamIngredients() {
       axios
-        .get(this.url+"/api/getIceCreamIngredients/", this.config)
+        .get(this.url+"/api/getIceCreamIngredients", this.config)
         .then(response => {
           let results = [];
           for (var i = 0; i < response.data.length; i++) {
