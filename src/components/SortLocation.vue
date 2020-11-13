@@ -33,7 +33,7 @@ export default {
     });
 
     axios
-      .get("https://wawens-backend.herokuapp.com/api/orders/confirmed")
+      .get(this.url+"/api/orders/confirmed")
       .then(response => {
         let Data = response.data;
         let address = [];

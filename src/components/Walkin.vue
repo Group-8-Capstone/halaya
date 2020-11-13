@@ -259,7 +259,6 @@ export default {
   methods: {
     showDialog() {
       this.$v.$reset();
-      // this.addOrderDialog = true
       this.customerStreet = null
       this.customerBarangay = null
       this.customerProvince = null
@@ -270,13 +269,6 @@ export default {
       this.tabQuantity="0"
       this.date = null
     },
-    // getOrderStatus(qty) {
-    //   if (qty <= 9) {
-    //     return "On order";
-    //   } else if (qty >= 10) {
-    //     return "Pending";
-    //   }
-    // },
     placeOrder() {
       this.$v.$touch();
       var place = this.customerStreet.concat(
@@ -319,7 +311,7 @@ export default {
           };
           console.log(this.date)
           axios
-            .post("http://127.0.0.1:8000/api/post/createOrder", param,this.config)
+            .post(this.url+"/api/post/createOrder", param,this.config)
             .then(response => {
               console.log("response.data: ", response.data);
               if (response.data == "success") {
