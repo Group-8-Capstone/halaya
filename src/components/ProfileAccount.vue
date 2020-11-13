@@ -1,6 +1,12 @@
 <template>
  <div class="container " >
    <center>
+      <v-progress-circular
+      :size="70"
+      :width="7"
+      color="purple"
+      indeterminate
+    ></v-progress-circular>
             <v-card width="400px" class="ml-10">
                  <v-card-title >ACCOUNT PROFILE</v-card-title>
                   <v-divider></v-divider>

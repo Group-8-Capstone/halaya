@@ -163,7 +163,7 @@ export default {
   name: "Sidebar",
   props: {},
   data: () => ({
-    avatarSrc: 'http://localhost:8000/images/avatar.png',
+    avatarSrc:'https://wawenshalaya.herokuapp.com/images/avatar.png',
     image: null,
     name: null,
     dialog: false,
