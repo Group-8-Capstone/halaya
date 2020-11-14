@@ -5,64 +5,118 @@
         Deliveries for TODAY
         <v-spacer></v-spacer>
       </v-card-title>
-      <div>
-        <!-- <v-container>
-          <v-row justify="space-around">
-            <v-card width="300" v-for="(item) in barangay_array" :key="item.barangay_name">
-              <v-img height="200px" src="../assets/halayaJar.jpg"></v-img>
-
-              <v-card-text align="center" justify="center">
-                <br>
-                <h2>{{item.barangay_name}}</h2>
-                <br>
-                <div>Number of Orders: {{item.number_of_orders}}</div>
-                <br>
-                <v-btn>View Orders</v-btn>
-              </v-card-text>
+      <template>
+        <v-row justify="center">
+          <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+            <template v-slot:activator="{ on, attrs }">
+              <v-row>
+                <v-col v-for="(item, i) in deliveriesByBrngy" :key="i">
+                  <v-card
+                    id="cards"
+                    class="text-center"
+                    min-height="220"
+                    max-height="240"
+                    min-width="200"
+                    max-width="230"
+                  >
+                    <v-card-title class="deep-purple lighten-5" id="title">{{item.barangay_name}}</v-card-title>
+                    <hr>
+                    <v-spacer/>
+                    <v-card-text id="qty">
+                      <b>Number of Batch/s:</b>
+                      {{item.length}}
+                    </v-card-text>
+                    <v-btn
+                      outlined
+                      rounded
+                      color="purple"
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="viewOrders(item)"
+                    >View Orders</v-btn>
+                  </v-card>
+                </v-col>
+              </v-row>
+            </template>
+            <v-card>
+              <v-toolbar dark color="purple">
+                <v-btn icon dark @click="dialog = false">
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+                <v-toolbar-title>{{barangay_name}}</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-toolbar-items>
+                  <v-btn dark text @click="dialog = false">Export as PDF</v-btn>
+                </v-toolbar-items>
+              </v-toolbar>
+              <v-divider></v-divider>
+              <v-row>
+                <v-col v-for="i in orders" :key="i.id">
+                  <v-card
+                    id="cards"
+                    class="mx-auto text-center"
+                    min-height="220"
+                    max-height="240"
+                    min-width="300"
+                    max-width="300"
+                  >
+                    <v-card-title
+                      class="deep-purple lighten-5"
+                      id="title"
+                    >Batch {{i.batchNo}} Delivery</v-card-title>
+                    <hr>
+                    <v-spacer/>
+                    <v-card-text>
+                      <span>
+                        <b>No. of Orders:</b>
+                        &nbsp;{{i.orders.length}}
+                      </span>
+                    </v-card-text>
+                    <v-btn outlined rounded @click="viewDetails(i)" color="purple">View Details</v-btn>
+                    <br>
+                  </v-card>
+                </v-col>
+              </v-row>
             </v-card>
-          </v-row>
-        </v-container>-->
-
-        <v-row>
-          <v-col>
-            <v-row>
-              <v-col v-for="(item) in barangay_array" :key="item.barangay_name">
-                <v-card
-                  id="cards"
-                  class="mx-auto text-center"
-                  min-height="220"
-                  max-height="240"
-                  min-width="200"
-                  max-width="2000"
-                >
-                  <v-card-title class="deep-purple lighten-5" id="title">{{item.barangay_name}}</v-card-title>
-                  <hr>
-                  <v-spacer/>
-                  <v-card-text id="qty">Number of Orders: {{item.number_of_orders}}</v-card-text>
-                  <v-btn>View Orders</v-btn>
-                </v-card>
-              </v-col>
-            </v-row>
-          </v-col>
+          </v-dialog>
         </v-row>
-      </div>
-
-      <!-- <div v-for="(item) in barangay_array" :key="item.barangay_name">
-        <v-container>
-          <v-row justify="space-around">
-            <v-card width="400" v-for="i in item.orders" :key="i.id">
-              <v-img height="200px" src="../assets/halayaJar.jpg"></v-img>
-
-      <v-card-text align="center" justify="center">-->
-      <!-- <v-timeline-item v-for="i in item.orders" :key="i.id" small> -->
-      <!-- <div>Receiver Name: {{i.receiver_name}}</div>
-                <br>
-              </v-card-text>
-            </v-card>
-          </v-row>
-        </v-container>
-      </div>-->
+      </template>
     </v-card>
+    <v-dialog max-width="800" v-model="detailsDialog">
+      <template>
+        <v-data-table
+          :headers="headers"
+          :items="delivery_batch.orders"
+          :items-per-page="5"
+          class="elevation-1"
+        >
+          <template v-slot:item.order_status="{ item }">
+            <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
+          </template>
+          <template v-slot:item.action="{ item }">
+            <div v-if="isCanceled(item) === true">
+              <v-icon
+                disabled
+                normal
+                class="mr-2"
+                title="Delivered"
+                @click="alertDelivered(item)"
+              >mdi-truck-check-outline</v-icon>
+              <v-icon disabled @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+            </div>
+            <div v-else>
+              <v-icon
+                normal
+                class="mr-2"
+                title="Delivered"
+                @click="alertDelivered(item)"
+              >mdi-truck-check-outline</v-icon>
+              <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+            </div>
+          </template>
+        </v-data-table>
+      </template>
+    </v-dialog>
   </div>
 </template>
 
@@ -70,6 +124,7 @@
 import axios from "axios";
 import { connect } from "tls";
 import * as turf from "@turf/turf";
+import { setInterval } from "timers";
 import Swal from "sweetalert2";
 import { constants } from "os";
 export default {
@@ -77,11 +132,30 @@ export default {
   data() {
     return {
       delivery_range: [],
+      detailsDialog: false,
       barangay_array: [],
       dialog: false,
       notifications: false,
       sound: true,
-      widgets: false
+      widgets: false,
+      orders: [],
+      allOrders: [],
+      barangay_name: "",
+      delivery_batch: [],
+      deliveries: [],
+      deliveriesByBrngy: {},
+      headers: [
+        {
+          text: "Receiver Name: ",
+          align: "start",
+          sortable: false,
+          value: "receiver_name"
+        },
+        { text: "Ube Halaya Tub Order Qty", value: "ubeHalayaTub_qty" },
+        { text: "Ube Halaya Tub Order Qty", value: "ubeHalayaJar_qty" },
+        { text: "Action", value: "action" },
+        { text: "Status", value: "order_status" }
+      ]
     };
   },
   beforeCreate() {
@@ -96,9 +170,27 @@ export default {
   created() {
     this.getRange();
     this.dataGrouping();
+    this.fetchOrders();
+    setInterval(this.fetchOrders(), 3000);
   },
 
   methods: {
+    getColor(status) {
+      if (status === "Canceled") return "orange";
+      else if (status === "On order") return "blue";
+      else return "green";
+    },
+    viewOrders(item) {
+      this.orders = item;
+      this.barangay_name = item.barangay_name;
+      this.fetchOrders();
+    },
+    viewDetails(i) {
+      this.delivery_batch = i;
+      this.detailsDialog = true;
+      console.log("iiiiiii", this.delivery_batch.orders);
+      this.fetchOrders();
+    },
     getRange() {
       axios
         .get("http://127.0.0.1:8000/api/fetch/delivery-range", this.config)
@@ -112,101 +204,161 @@ export default {
         return el.id === id;
       });
     },
+    alertDelivered(item) {
+      Swal.fire({
+        title: "Are you sure item is being delivered?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#CFD8D",
+        cancelButtonText: "No",
+        confirmButtonText: "Yes",
+        reverseButtons: true
+      }).then(result => {
+        if (result.value) {
+          // console.log("lllllllllllll========== ", this.config)
+          this.deliveredItem(item);
+        }
+      });
+    },
+    deliveredItem(item) {
+      // console.log("================ ", this.config)
+      axios
+        .post(this.url + "/api/post/updateStat/" + item.id, {}, this.config)
+        .then(response => {
+          console.log("-----------", response.data);
+          Swal.fire({
+            title: "Order is being delivered",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500
+          }),
+            this.fetchOrders();
+          // this.detailsDialog = false;
+        });
+    },
+    alertCancel(item) {
+      Swal.fire({
+        title: "Are you sure?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#CFD8D",
+        cancelButtonText: "No",
+        confirmButtonText: "Yes",
+        reverseButtons: true
+      }).then(result => {
+        if (result.value) {
+          this.deleteItem(item);
+          Swal.fire({
+            title: "Canceled!",
+            text: "Order is being canceled",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500
+          });
+        }
+      });
+    },
+    deleteItem(item) {
+      axios
+        .post(
+          this.url + "/api/post/updateCanceledStat/" + item.id,
+          {},
+          this.config
+        )
+        .then(response => {
+          this.fetchOrders();
+          // this.detailsDialog = false;
+        });
+    },
+    fetchOrders() {
+      axios.get(this.url + "/api/posts/order", this.config).then(response => {
+        this.allOrders = response.data.data;
+        console.log("ooooo", this.allOrders);
+        for (var i = 0; i < this.allOrders.length; i++) {
+          var street = response.data.data[i].building_or_street;
+          var barangay = response.data.data[i].barangay;
+          var city = response.data.data[i].city_or_municipality;
+          var province = response.data.data[i].province;
+          var place = street
+            .toString()
+            .concat(
+              " ",
+              barangay.toString(),
+              " ",
+              city.toString(),
+              " ",
+              province.toString()
+            );
+          this.allOrders[i]["customer_address"] = place;
+        }
+      });
+    },
     dataGrouping() {
       axios
         .get("http://127.0.0.1:8000/api/posts/delivery", this.config)
         .then(response => {
           var result = response.data.data;
-          // console.log("Groupby", result);
-          var templist = this.$_.groupBy(result, "barangay");
-          this.barangay_array = Object.entries(templist); //array cotaining data nga gi group by barangay
-          console.log("Barangay Array: ", this.barangay_array);
+          // console.log(result);
+          let groupedOrders = {};
+          result.forEach(data => {
+            let { barangay } = data;
+            groupedOrders[barangay] = result.filter(
+              order => order.barangay == barangay
+            );
 
-          var arr = []; //mother array containing arrays of barangay nga naka divide na by batch ang orders
+            // console.log("barangay_name", this.barangay_name);
+          });
+          let deliveries = {};
+          const MAX_QUANTITY = 96;
 
-          for (var i = 0; i < this.barangay_array.length; i++) {
-            this.barangay_array[i]["barangay_name"] = this.barangay_array[i][0];
-            this.barangay_array[i]["orders"] = this.barangay_array[i][1];
-            this.barangay_array[i]["number_of_orders"] = this.barangay_array[
-              i
-            ][1].length;
-
-            var barangay_orders = this.barangay_array[3][1]; //array of objects containing the orders per barangay
-
-            var max_qty = 96;
-            var tub_value = 4;
-            var list = [];         // array containing sa all batch of orders
-            var batch = [];        // array containing 1 batch of orders
-            var tubToJar = 0;      //number of ordered jars apil ang tub converted into jars
-            var total = 0;         //total of ordered jars in one batch
-            // console.log("barangay_orders: ", barangay_orders);
-            for (var j = 0; j < barangay_orders.length; j++) { 
-              if (barangay_orders[j].ubeHalayaTub_qty != 0) {
-                tubToJar += barangay_orders[j].ubeHalayaTub_qty * tub_value;
-                if (barangay_orders[j].ubeHalayaJar_qty != 0) {
-                  tubToJar += barangay_orders[j].ubeHalayaJar_qty;
-                  if (max_qty - tubToJar >= 0) {
-                    console.log("============if ", tubToJar);
-                    batch.push(barangay_orders[j]);
-                    max_qty -= tubToJar;
-                    // total += tubToJar;
-                    console.log('batch', batch);
-                    continue;
-                  } else {
-                    // list.push(batch);
-                    // batch = [];
-                    continue;
-                  }
-                } 
-                // else if (barangay_orders[j].ubeHalayaJar_qty == 0) {
-                //   if (max_qty - tubToJar >= 0) {
-                //     console.log("============else if ", tubToJar);
-                //     batch.push(barangay_orders[j]);
-                //     max_qty -= tubToJar;
-                //     // total += tubToJar;
-                //     console.log('batch', batch);
-                //     continue;
-                //   } else {
-                //     list.push(batch);
-                //     batch = [];
-                //     continue;
-                //   }
-                // } 
-              } else if (barangay_orders[j].ubeHalayaTub_qty == 0) {
-                  tubToJar += barangay_orders[j].ubeHalayaJar_qty;
-                  console.log('para sa ikutulong index: ', max_qty);
-                  if (max_qty - tubToJar >= 0) {
-                    console.log("============else ", tubToJar);
-                    batch.push(barangay_orders[j]);
-                    max_qty -= tubToJar;
-                    // total += tubToJar;
-                    console.log('batch', batch);
-                    continue;
-                  } else {
-                    // list.push(batch);
-                    // batch = [];
-                    continue;
-                  }
-                }
-             
+          const createBatches = (barangayOrders, callback) => {
+            let currentAmount = 0;
+            let arr = [];
+            barangayOrders.forEach((order, idx) => {
+              let { ubeHalayaJar_qty, ubeHalayaTub_qty } = order;
+              let total = ubeHalayaJar_qty + ubeHalayaTub_qty * 4;
+              if (total + currentAmount <= MAX_QUANTITY) {
+                arr.push(order);
+                currentAmount += total;
+                barangayOrders.splice(idx, 1);
+              }
+            });
+            callback(arr, currentAmount);
+            if (barangayOrders.length !== 0) {
+              createBatches(barangayOrders, callback);
             }
-             arr.push(list);
-              console.log("liiiiiiiiissssttt: ", list);
+          };
+
+          for (const barangayOrders in groupedOrders) {
+            createBatches(groupedOrders[barangayOrders], (batch, total) => {
+              if (!deliveries.hasOwnProperty(barangayOrders)) {
+                deliveries[barangayOrders] = [];
+              }
+              deliveries[barangayOrders].push({
+                batchNo: deliveries[barangayOrders].length + 1,
+                total,
+                orders: batch
+              });
+            });
           }
-          console.log("mother array: ", arr);
+          for (const key in deliveries) {
+            deliveries[key]["barangay_name"] = key;
+
+            this.deliveriesByBrngy = deliveries;
+            console.log("===================", this.deliveriesByBrngy);
+          }
         });
     },
-    testing(order_array) {
-      for (var i = 0; i < order_array.length; i++) {}
+    isCanceled(item) {
+      if (item.order_status == "Canceled") {
+        return true;
+      }
     }
   }
 };
 </script>
 
 <style>
-#cards {
-  border: 1px solid;
-  border-color: purple;
-  border-radius: 10px;
-}
 </style>

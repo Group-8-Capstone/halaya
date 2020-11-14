@@ -334,8 +334,8 @@ export default {
   },
   created() {
     this.getHalayaIngredients();
-    this.getButchiIngredients();
-    this.getIceCreamIngredients();
+    // this.getButchiIngredients();
+    // this.getIceCreamIngredients();
     this.getAllIngredientsName();
   },
   computed: {
@@ -374,9 +374,10 @@ export default {
         else return 'green'
     }, 
     getHalayaIngredients() {
+      console.log("**********", this.config)
       axios.get(this.url+"/api/getHalayaIngredients/", this.config)
         .then(response => {
-          console.log(response)
+          console.log("========", response)
           let results = [];
           for (var i = 0; i < response.data.length; i++) {
             if (this.containsObject(results, response.data[i].id)) {
@@ -389,38 +390,38 @@ export default {
           }
         });
     },
-    getButchiIngredients() {
-      axios
-        .get(this.url+"/api/getButchiIngredients/", this.config)
-        .then(response => {
-          let results = [];
-          for (var i = 0; i < response.data.length; i++) {
-            if (this.containsObject(results, response.data[i].id)) {
-              console.log("good");
-            } else {
-              results.push(response.data[i]);
-              this.butchiIngredients = results;
-            }
-            continue;
-          }
-        });
-    },
-    getIceCreamIngredients() {
-      axios
-        .get(this.url+"/api/getIceCreamIngredients/", this.config)
-        .then(response => {
-          let results = [];
-          for (var i = 0; i < response.data.length; i++) {
-            if (this.containsObject(results, response.data[i].id)) {
-              console.log("good");
-            } else {
-              results.push(response.data[i]);
-              this.icecreamIngredients = results;
-            }
-            continue;
-          }
-        });
-    },
+    // getButchiIngredients() {
+    //   axios
+    //     .get(this.url+"/api/getButchiIngredients/", this.config)
+    //     .then(response => {
+    //       let results = [];
+    //       for (var i = 0; i < response.data.length; i++) {
+    //         if (this.containsObject(results, response.data[i].id)) {
+    //           console.log("good");
+    //         } else {
+    //           results.push(response.data[i]);
+    //           this.butchiIngredients = results;
+    //         }
+    //         continue;
+    //       }
+    //     });
+    // },
+    // getIceCreamIngredients() {
+    //   axios
+    //     .get(this.url+"/api/getIceCreamIngredients/", this.config)
+    //     .then(response => {
+    //       let results = [];
+    //       for (var i = 0; i < response.data.length; i++) {
+    //         if (this.containsObject(results, response.data[i].id)) {
+    //           console.log("good");
+    //         } else {
+    //           results.push(response.data[i]);
+    //           this.icecreamIngredients = results;
+    //         }
+    //         continue;
+    //       }
+    //     });
+    // },
     getAllIngredientsName() {
       let nameArray = [];
       axios
