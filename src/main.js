@@ -12,6 +12,7 @@ import Print from 'vue-printjs'
 import AOS from 'aos';
 import 'aos/dist/aos.css'
 
+
 AOS.init();
 Vue.use(Print)
 Vue.prototype.$_ = underscore;
@@ -28,7 +29,8 @@ Vue.use
 Vue.mixin({
   data: function() {
     return {
-      url:"http://localhost:8000"
+      // url:"http://localhost:8000"
+      url:"https://wawenshalaya.herokuapp.com"
     }
   }
 })

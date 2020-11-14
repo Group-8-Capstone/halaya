@@ -1,0 +1,138 @@
+{
+    "Bakilid": [
+        {
+            "batchNo": 1,
+            "total": 46,
+            "orders": [
+                {
+                    "id": 44,
+                    "customer_id": 1,
+                    "receiver_name": "Kuya",
+                    "contact_number": 9347834629,
+                    "building_or_street": "Japanese Restaurant Matsunoya",
+                    "barangay": "Bakilid",
+                    "city_or_municipality": "Mandaue City",
+                    "province": "Cebu",
+                    "ubeHalayaJar_qty": 30,
+                    "ubeHalayaTub_qty": 4,
+                    "preferred_delivery_date": "2020-11-14",
+                    "distance": 0.99231828497065,
+                    "order_status": "On order",
+                    "created_at": "2020-11-14T00:59:49.000000Z",
+                    "updated_at": "2020-11-14T01:11:39.000000Z"
+                }
+            ]
+        },
+        {
+            "batchNo": 2,
+            "total": 9,
+            "orders": [
+                {
+                    "id": 45,
+                    "customer_id": 1,
+                    "receiver_name": "Ate",
+                    "contact_number": 9745983645,
+                    "building_or_street": "Benedicto College",
+                    "barangay": "Bakilid",
+                    "city_or_municipality": "Mandaue City",
+                    "province": "Cebu",
+                    "ubeHalayaJar_qty": 9,
+                    "ubeHalayaTub_qty": 0,
+                    "preferred_delivery_date": "2020-11-14",
+                    "distance": 1.9742114918732,
+                    "order_status": "On order",
+                    "created_at": "2020-11-14T01:01:36.000000Z",
+                    "updated_at": "2020-11-14T01:01:36.000000Z"
+                }
+            ]
+        }
+    ],
+    "Casuntingan": [
+        {
+            "batchNo": 1,
+            "total": 70,
+            "orders": [
+                {
+                    "id": 47,
+                    "customer_id": 1,
+                    "receiver_name": "Amped",
+                    "contact_number": 9346756345,
+                    "building_or_street": "Castilex Drive",
+                    "barangay": "Casuntingan",
+                    "city_or_municipality": "Mandaue City",
+                    "province": "Cebu",
+                    "ubeHalayaJar_qty": 49,
+                    "ubeHalayaTub_qty": 3,
+                    "preferred_delivery_date": "2020-11-14",
+                    "distance": 1.5133219857219,
+                    "order_status": "On order",
+                    "created_at": "2020-11-14T01:04:27.000000Z",
+                    "updated_at": "2020-11-14T01:11:46.000000Z"
+                },
+                {
+                    "id": 48,
+                    "customer_id": 1,
+                    "receiver_name": "Janrel",
+                    "contact_number": 9374387563,
+                    "building_or_street": "Exatech",
+                    "barangay": "Casuntingan",
+                    "city_or_municipality": "Mandaue City",
+                    "province": "Cebu",
+                    "ubeHalayaJar_qty": 9,
+                    "ubeHalayaTub_qty": 0,
+                    "preferred_delivery_date": "2020-11-14",
+                    "distance": 2.4126642164221,
+                    "order_status": "On order",
+                    "created_at": "2020-11-14T01:05:22.000000Z",
+                    "updated_at": "2020-11-14T01:05:22.000000Z"
+                }
+            ]
+        },
+        {
+            "batchNo": 2,
+            "total": 36,
+            "orders": [
+                {
+                    "id": 46,
+                    "customer_id": 1,
+                    "receiver_name": "Kuya Junrey",
+                    "contact_number": 9984593845,
+                    "building_or_street": "Villa Terace",
+                    "barangay": "Casuntingan",
+                    "city_or_municipality": "Mandaue City",
+                    "province": "Cebu",
+                    "ubeHalayaJar_qty": 30,
+                    "ubeHalayaTub_qty": 4,
+                    "preferred_delivery_date": "2020-11-14",
+                    "distance": 0.99231828497065,
+                    "order_status": "On order",
+                    "created_at": "2020-11-14T00:59:49.000000Z",
+                    "updated_at": "2020-11-14T01:11:39.000000Z"
+                }
+            ]
+        },
+        {
+            "batchNo": 2,
+            "total": 9,
+            "orders": [
+                {
+                    "id": 45,
+                    "customer_id": 1,
+                    "receiver_name": "Ate",
+                    "contact_number": 9745983645,
+                    "building_or_street": "Benedicto College",
+                    "barangay": "Bakilid",
+                    "city_or_municipality": "Mandaue City",
+                    "province": "Cebu",
+                    "ubeHalayaJar_qty": 9,
+                    "ubeHalayaTub_qty": 0,
+                    "preferred_delivery_date": "2020-11-14",
+                    "distance": 1.9742114918732,
+                    "order_status": "On order",
+                    "created_at": "2020-11-14T01:01:36.000000Z",
+                    "updated_at": "2020-11-14T01:01:36.000000Z"
+                }
+            ]
+        }
+    ]
+}
