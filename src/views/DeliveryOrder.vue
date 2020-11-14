@@ -272,7 +272,7 @@ export default {
   },
   created() {
     this.fetchDelivery();
-    this.getRange();
+    // this.getRange();
     this.dataGrouping();
     // this.loadOrder();
     // this.fetchOrders();
@@ -594,14 +594,14 @@ export default {
         })
         .catch(error => console.log(error));
     },
-    getRange() {
-      axios
-        .get("http://127.0.0.1:8000/api/fetch/delivery-range", this.config)
-        .then(response => {
-          this.delivery_range = response.data.range;
-          console.log("delivery range: ", this.delivery_range);
-        });
-    },
+    // getRange() {
+    //   axios
+    //     .get("http://127.0.0.1:8000/api/fetch/delivery-range", this.config)
+    //     .then(response => {
+    //       this.delivery_range = response.data.range;
+    //       console.log("delivery range: ", this.delivery_range);
+    //     });
+    // },
     dataGrouping() {
       axios
         .get(this.url+"/api/posts/delivery", this.config)
