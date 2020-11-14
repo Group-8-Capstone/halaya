@@ -188,8 +188,8 @@ router.beforeEach(async(to, from, next) => {
   next();
 });
 const verify_auth = () => {
-  let url="http://localhost:8000"
-  // let url="https://wawenshalaya.herokuapp.com"
+  //let url="http://localhost:8000"
+  let url="http://wawenshalaya.herokuapp.com"
   return new Promise((resolve, reject) => {
     if(localStorage.getItem("token") === null){
       resolve(false);
