@@ -362,6 +362,7 @@ export default {
       axios
         .post(this.url+"/api/sales/daily", parameter, this.config)
         .then(response => {
+          console.log("this is daily" + JSON.stringify(response.data))
           let category = [];
           let series = [];
           if (response.data.length > 0) {
