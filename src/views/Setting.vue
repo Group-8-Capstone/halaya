@@ -1,15 +1,17 @@
 <template>
 <div>
+   <center>
+         <v-progress-circular
+         class="ma-5 mb-12 pa-5"
+          v-show="loading"
+          :size="70"
+          :width="7"
+          color="purple"
+          indeterminate
+      ></v-progress-circular>
+        </center>
+  
     <v-card id="cardtable" class="ma-5 mb-12 pa-5">
-      <!-- <v-tabs
-        v-model="tabs"
-        right
-        color="deep-purple accent-4">
-        <v-tab>Ingredients Value</v-tab> -->
-         <!-- <v-tab>New Products</v-tab>
-      </v-tabs> -->
-      <!-- <v-tabs-items v-model="tabs">
-      <v-tab-item> -->
       <v-card-title>
          <v-text-field
           v-model="search"
@@ -63,18 +65,6 @@
       v-model="addedEstimatedAmount"
       outlined></v-text-field>
    </v-col>
-    <!-- <v-col cols="12">
-    <v-select
-          color="purple"
-          :items="items"
-          label="Product Category"
-           v-model="addedCategory"
-           :error-messages="addedCategoryErrors"
-          @input="$v.addedCategory.$touch()"
-          @blur="$v.addedCategory.$touch()"
-          outlined
-        ></v-select>
-   </v-col> -->
       <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn text color="orange" @click="addDialog = false">Cancel</v-btn>
@@ -82,7 +72,9 @@
             </v-card-actions>
           </v-card> 
           </v-dialog>
+           
            </v-card-title>
+         
               <v-data-table :headers="headersIngredients" :items="estimatedValue" :search="search">
               <template v-slot:item.action="{ item }" >
                 <v-icon
@@ -100,119 +92,6 @@
                 </v-icon>
               </template>
             </v-data-table>
-            <!-- </v-tab-item>
-            <v-tab-item> -->
-               <!-- <v-card-title>
-         <v-text-field
-          v-model="search"
-          append-icon="mdi-magnify"
-          label="Search"
-          single-line
-          hide-details
-        ></v-text-field>
-            <v-btn
-            class="ma-5"
-            color="purple darken-2"
-            rounded
-            outlined
-            dark
-            @click="addProductDialog=true, reloadProduct">
-            <v-icon>mdi-plus</v-icon>
-            <v-toolbar-title>Add Product</v-toolbar-title>
-          </v-btn>
-          </v-card-title> -->
-            <!-- <v-btn @click="addProductDialog=true, reloadProduct">Add Product</v-btn> -->
-            <!-- <v-data-table :headers="headersProduct" :items="displayProduct" :search="search">
-                          <template  v-slot:item.image="{ item }" class="mt-2" >
-                  <img :src="'http://localhost:8000/' + item.image" alt="" width="100" height="50">
-              </template>
-              <template v-slot:item.action="{ item }" >
-                <v-icon
-                
-          
-                @click="editProduct(item)"
-                  normal
-                  title="Edit"
-                >mdi-table-edit
-                </v-icon>
-                <v-icon
-                class="mr-3"
-                color="red"
-                @click="AlertDelete(item)"
-                  normal
-                  title="Delete Product"
-                >mdi-delete
-                </v-icon>
-              </template>
-            </v-data-table>
-            <v-dialog  v-model="editProductDialog" width="400px">
-                  <v-card>
-                  <v-card-title class=" deep-purple--text">UPDATE PRODUCT</v-card-title>
-                  <v-card-subtitle>
-                    Please fill in the required information 
-                  </v-card-subtitle>
-                  <v-divider></v-divider>
-                 <div class="modal-body">
-                         <form @submit="updateProduct" enctype="multipart/form-data" action>
-                            <div class="form-group">
-                                  <v-col cols="12">
-                                      <v-text-field outlined type="text" label="Product Name" color="purple" class="form-control"
-                                       v-model="editProductName" required></v-text-field> 
-                                  </v-col>
-                                      <v-col cols="12">
-                                        <center>
-                                    <img class="addOnsImage" :src="editImageURL"><br>
-                                    <input type="file" class="fileStyle" v-on:change="onImageEdit">
-                                    <br>
-                                  </center>
-                           </v-col>
-                            </div>
-                             <v-card-actions>
-                      <v-spacer></v-spacer>
-                      <v-btn type="button"  color="orange" text @click="editProductDialog=false" >Cancel</v-btn>
-                      <v-btn type="submit"    text color="primary">Save</v-btn>
-                      </v-card-actions>
-                        </form>
-                    </div>
-              </v-card>
-            </v-dialog>
-              <v-dialog v-model="addProductDialog" width="400px">
-              <v-card> 
-                 <v-card-title class=" deep-purple--text">ADD PRODUCT</v-card-title>
-                <v-card-subtitle>
-                  Please fill in the required information 
-                </v-card-subtitle>
-                  <v-divider></v-divider>
-                 <div class="modal-body">
-                   
-                         <form @submit="formSubmit" enctype="multipart/form-data" action>
-                          <v-container>
-                                  <v-col cols="12">
-                                <v-text-field outlined
-                                  type="text" color="purple"
-                                class="form-control"
-                                v-model="productName" 
-                                label="Product Name"
-                                required></v-text-field> 
-                                  </v-col>
-                                  <v-col cols=" 12" >
-                                  <center>
-                                    <img class="addOnsImage" :src="imageURL"><br>
-                                    <input type="file" class="fileStyle" v-on:change="onImageChange">
-                            </center>
-                           </v-col>
-                            </v-container>
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-                      <v-btn type="button" color="orange" text @click="addProductDialog=false">Cancel</v-btn>
-                      <v-btn type="submit"  color="primary" text >Save</v-btn>
-                      </v-card-actions>
-                        </form>
-                    </div>
-              </v-card>
-                </v-dialog> -->
-            <!-- </v-tab-item>
-        </v-tabs-items> -->
           <v-dialog v-model="editDialog" width="400px">
             <v-card>
       <v-card-title class="deep-purple--text">
@@ -240,15 +119,6 @@
                     outlined
                    ></v-text-field>
                   </v-col>
-                  <!-- <v-col cols="12">
-                  <v-select
-                        :items="items"
-                        label="Product Category"
-                        color="purple"
-                        v-model="editValue.ingredients_category"
-                        outlined
-                  ></v-select>
-                </v-col> -->
                 </v-row>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -287,6 +157,7 @@ import Swal from "sweetalert2";
   export default {
     name: "BusinessSetting",
     data: () => ({
+      loading:false,
       addedEstimatedAmount:'',
       addedIngredientsName:'',
       addProductDialog:false,
@@ -317,10 +188,6 @@ import Swal from "sweetalert2";
          { text: "Category", value: "ingredients_category" },
         { text: "Actions", value: "action", sortable: false },
       ],
-      //   items: ['Ube Halaya', 'Butchi', 'Ice Cream'],
-      // rules: [
-      //   value => !!value || 'Required.',
-      // ],
        headersProduct: [
         {
           text: "Product Name",
@@ -331,10 +198,6 @@ import Swal from "sweetalert2";
         { text: "Image", value: "image" },
         { text: "Actions", value: "action", sortable: false },
       ],
-      //   items: ['Ube Halaya', 'Butchi', 'Ice Cream'],
-      // rules: [
-      //   value => !!value || 'Required.',
-      // ],
       alignments: [
         'start',
         'center',
@@ -403,7 +266,6 @@ import Swal from "sweetalert2";
         this.isHidden=false
       },
        reloadData(){
-
         this.addedIngredientsName="",
         this.addedEstimatedAmount="",
         this.$v.$reset();
@@ -414,7 +276,7 @@ import Swal from "sweetalert2";
         this.imageURL= null
     },
 
-      addEstimatedValue(){
+    addEstimatedValue(){
          this.$v.$touch();
          var upperIngredientsName =
           this.addedIngredientsName.charAt(0).toUpperCase() +
@@ -442,7 +304,9 @@ import Swal from "sweetalert2";
       },
 
       fetchEstimatedValue(){
+        this.loading=true
         axios.get(this.url+"/api/fetch/estimatedValue", this.config).then(response=>{
+          this.loading=false
           this.estimatedValue=response.data;
           console.log(response.data);
         })

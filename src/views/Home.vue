@@ -365,6 +365,7 @@ export default {
           console.log("this is daily" + JSON.stringify(response.data))
           let category = [];
           let series = [];
+          console.log("daily data ", response.data);
           if (response.data.length > 0) {
             response.data.forEach(element => {
               category.push(element.preferred_delivery_date);

@@ -1,12 +1,12 @@
 <template>
-  <div class="ma-5 mb-12 pa-5">
-        <v-card flat>
+  <div >
+        <v-card flat class="ma-5 mb-12 pa-5">
           <v-card-title>Ube Halaya List of Ingredients</v-card-title>
           <v-row>
             <v-flex>
               <v-layout wrap>
                 <v-flex md4 v-for="item in halayaIngredients" :key="item.id">
-                  <v-card id="cards" class="card-container ma-5">
+                  <v-card id="cards" class="card-container">
                     <v-card-title class="deep-purple lighten-5">{{item.ingredients_name}}</v-card-title>
                     <hr>
                     <v-row class="mx-auto text-center">
@@ -22,7 +22,6 @@
                       <template>
                         <v-card-actions>
                           <v-spacer></v-spacer>
-
                           <v-btn icon>
                             <v-icon
                               title="Add Quantity"
@@ -44,6 +43,16 @@
             </v-flex>
           </v-row>
         </v-card>
+        <center>
+         <v-progress-circular
+         class="ma-5 mb-12 pa-5"
+          v-show="loading"
+          :size="70"
+          :width="7"
+          color="purple"
+          indeterminate
+      ></v-progress-circular>
+        </center>
       <!-- </v-tab-item>
       <v-tab-item> -->
         <!-- <v-card flat>
@@ -165,8 +174,6 @@
         ></v-text-field>
            </v-card-title>
         <v-spacer></v-spacer>
-       
-         
               <v-data-table :headers="headersIngredients" :items="displayIngredientsRecords" :search="search">
               <template v-slot:item.action="{ item }" >
                 <v-icon
@@ -277,6 +284,7 @@ export default {
   name: "Ingredients",
   data() {
     return {
+      loading: true,
       displayIngredientsRecords:[],
       stockDialog: false,
       editDialog: false,
@@ -334,8 +342,6 @@ export default {
   },
   created() {
     this.getHalayaIngredients();
-    this.getButchiIngredients();
-    this.getIceCreamIngredients();
     this.getAllIngredientsName();
   },
   computed: {
@@ -374,9 +380,11 @@ export default {
         else return 'green'
     }, 
     getHalayaIngredients() {
+      this.loading = true;
       axios.get(this.url+"/api/getHalayaIngredients", this.config)
         .then(response => {
-          console.log(response)
+          console.log("========", response)
+          this.loading = false;
           let results = [];
           for (var i = 0; i < response.data.length; i++) {
             if (this.containsObject(results, response.data[i].id)) {
@@ -422,6 +430,7 @@ export default {
         });
     },
     getAllIngredientsName() {
+
       let nameArray = [];
       axios
         .get(this.url+"/api/fetch/ingredientsName",this.config)
@@ -454,7 +463,7 @@ export default {
       this.$v.$reset();
     },
     editIngredients(item) {
-      axios.get(this.url+"/api/post/editStock/" + item.id, this.config)
+      axios.get(this.url+"/api/post/editStock" + item.id, this.config)
         .then(response => {
           this.editStockItem = response.data;
           console.log("edit stock item", JSON.stringify(this.editStockItem));
