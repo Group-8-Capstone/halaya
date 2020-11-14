@@ -20,8 +20,9 @@
                 <v-spacer></v-spacer>
 
                 <v-card-text>
-                  <v-form>
+                  <v-form autocomplete="off">
                     <v-text-field
+                      ref="username"
                       label="Username"
                       name="Username"
                       prepend-icon="mdi-account"
@@ -32,6 +33,16 @@
                       outlined
                       dense
                     ></v-text-field>
+                    <v-snackbar 
+                      v-model="isValid"
+                      color="deep-purple accent-4"
+                      elevation="24"
+                    >
+                      Username already exists
+                      <template v-slot:action="{ attrs }">
+                        <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">Close</v-btn>
+                      </template>
+                    </v-snackbar>
 
                     <v-text-field
                       id="contact"
@@ -74,16 +85,9 @@
                     ></v-text-field>
                   </v-form>
                 </v-card-text>
-                  <center>
-                <v-btn
-                id="btnLogin"
-                  class="mb-5"
-                  block
-                  outlined
-                  rounded
-                  @click="signUp"
-                >Sign Up</v-btn>
-              </center>
+                <center>
+                  <v-btn id="btnLogin" class="mb-5" block outlined rounded @click="signUp">Sign Up</v-btn>
+                </center>
                 <div align="center" justify="center">
                   <span>
                     Already have an account?
@@ -108,7 +112,7 @@
   color: purple !important;
 }
 .v-btn {
-  width: 85%  !important;
+  width: 85% !important;
   min-width: 85% !important;
   margin-left: 6%;
 }
@@ -123,6 +127,7 @@ export default {
   data: () => ({
     valid: false,
     username: "",
+    isValid: false,
     showPassword: false,
     nameRules: [
       v => !!v || "Username is required",
@@ -168,11 +173,14 @@ export default {
       };
       axios.post(this.url+"/api/register", Reg).then(response => {
         // console.log("Successfully Registered: ", response.data.message.message);
-        if (response.data.message.message == 'success'){
-          localStorage.setItem('token', response.data.token);
-          localStorage.setItem('id', response.data.user.id);
-          localStorage.setItem('role', response.data.user.role);
-          this.$router.push('/customerHome');
+        if (response.data.message.message == "success") {
+          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("id", response.data.user.id);
+          localStorage.setItem("role", response.data.user.role);
+          this.$router.push("/customerHome");
+        } else if (response.data.message === "invalid_username") {
+          this.isValid = true;
+          console.log("invali");
         }
       });
     }

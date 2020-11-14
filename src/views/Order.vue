@@ -790,11 +790,7 @@ export default {
     confirmOrder(item) {
       console.log("****hsdfnaiuerh*******", this.config);
       axios
-        .post(
-          this.url+"/post/confirm/" + item.id,
-          {},
-          this.config
-        )
+        .post(this.url+"/api/post/confirm/" + item.id, {}, this.config)
         .then(response => {
           console.log("***********", response.data);
           Swal.fire({
