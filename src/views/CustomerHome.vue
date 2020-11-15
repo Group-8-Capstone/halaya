@@ -120,7 +120,6 @@
                   <div id="vue-counter" >
           <v-icon type="button" v-on:click="increaseTub">mdi-plus</v-icon>
           <v-icon type="button" v-on:click="decreaseTub" disabled:isDisabled class="ml-1">mdi-minus</v-icon>
-        
               </div>
                 </template>
               </v-text-field>
