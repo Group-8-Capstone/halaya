@@ -1,5 +1,7 @@
 <template>
-     <v-card>
+<div>
+  <center>
+     <v-card width="75%" class="mb-12" >
         <v-spacer></v-spacer>
         <v-card-title class="align-center">
           <v-list-item-title
@@ -8,7 +10,7 @@
         </v-card-title>
         <v-container>
           <v-row>
-            <v-col cols="6">
+            <v-col cols="5">
               <v-text-field
                 prepend-icon="mdi-account-outline"
                 label="Customer Name"
@@ -19,7 +21,7 @@
                 required
               ></v-text-field>
             </v-col>
-            <v-col cols="6">
+            <v-col cols="5" class="pl-12">
               <v-text-field
                 type="number"
                 prepend-icon="mdi-phone"
@@ -32,31 +34,49 @@
               ></v-text-field>
             </v-col>
           </v-row>
-          <v-row>
-            <v-col>
-              <v-img class="ml-5" width="250px" height="200px" src="../assets/halayaTab.jpg"></v-img>
+              <v-row>
+             <v-col cols="5" >
+              <v-img  width="250px" height="200px" src="../assets/halayaJar.jpg"></v-img>
+              <h6 class="display-1 font-weight-light orange--text ml-5">{{jarName}}</h6>
+              <div id="price" class="font-weight-light grey--text title ml-5">{{jarPrice}}</div>
             </v-col>
             <v-col>
-              <v-img width="250px" height="200px" src="../assets/halayaJar.jpg"></v-img>
+              <v-img  width="250px" height="200px" src="../assets/halayaTab.jpg"></v-img>
+               <h6 class="display-1 font-weight-light orange--text ">{{tubName}}</h6>
+                <div id="price" class="font-weight-light grey--text title ">{{tubPrice}}</div>
             </v-col>
           </v-row>
-          <v-row>
-            <v-col cols="5" class="pl-5">
-              <v-text-field min="0" type="number" label="Quantity" v-model="tabQuantity">
+          <v-row >
+            <v-col cols="5" >
+              <v-text-field min="0" type="number" label="Quantity" v-model="jarQuantity">
+                <template slot="prepend">
+                  <div id="vue-counter">
+              <v-icon type="button" v-on:click="increaseJar">mdi-plus</v-icon> 
+                <v-icon type="button" v-on:click="decreaseJar" >mdi-minus</v-icon>
+              </div>
+                </template>
               </v-text-field>
             </v-col>
-            <v-col cols="5" class="pl-12">
-              <v-text-field min="0" type="number" label="Quantity" v-model="jarQuantity">
+            <v-col  cols="5" class="pl-12">
+               <v-text-field min="0" type="number" label="Quantity" v-model="tabQuantity">
+                <template slot="prepend">
+                  <div id="vue-counter" >
+              <v-icon type="button" v-on:click="increaseTub">mdi-plus</v-icon>
+              <v-icon type="button" v-on:click="decreaseTub" disabled:isDisabled class="ml-1">mdi-minus</v-icon>
+              </div>
+                </template>
               </v-text-field>
             </v-col>
           </v-row>
         </v-container>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn text color="primary" @click="addOrderDialog = false, reloadData()">Cancel</v-btn>
-          <v-btn text @click="placeOrder()">Save</v-btn>
+          <v-btn outlined color="purple darken-2" @click="placeOrder()">PLACE ORDER</v-btn>
         </v-card-actions>
       </v-card>
+      </center>
+        
+    </div>  
 </template>
 <script>
 import Swal from "sweetalert2";
@@ -84,10 +104,15 @@ export default {
       customerName: null,
       contactNumber: null,
       orderQuantity: null,
-      orderStatus: "",
+      jarName:null,
+      tubName:null,
+      tubPrice:null,
+      jarPrice:null,
+      orderStatus: null,
       date:  new Date().toISOString().substr(0, 10),
       jarQuantity: "0",
       tabQuantity: "0",
+      totalPay:null,
       distance: 0
     };
   },
@@ -188,6 +213,12 @@ export default {
     }
   },
 
+  created(){
+    this.getHalayaJar()
+    this.getHalayaTub()
+
+  },
+
   methods: {
     showDialog() {
       this.$v.$reset();
@@ -201,8 +232,19 @@ export default {
       this.tabQuantity="0"
       this.date = null
     },
+
     placeOrder() {
-      this.$v.$touch();
+        if (this.jarQuantity=='0' && this.tabQuantity=='0' ){
+         Swal.fire({
+                  position: "center",
+                  icon: "warning",
+                  title: "No order",
+                  showConfirmButton: false,
+                  timer: 1500
+                });
+         this.$v.$touch();
+        
+      }else{
       var place = this.customerStreet.concat(
         " ",
         this.customerBarangay,
@@ -229,7 +271,6 @@ export default {
           let param = {
             customer_id: localStorage.getItem("id"),
             receiver_name: this.customerName,
-            // address: place,
             building_street: this.customerStreet,
             barangay: this.customerBarangay,
             city_municipality: this.customerCity,
@@ -258,6 +299,7 @@ export default {
               }
             });
         });
+        } 
     },
     isDisabled: function() {
       return !this.tabQuantity;
@@ -265,7 +307,50 @@ export default {
 
     notLessDate(deliveredDate) {
       return deliveredDate >= new Date().toISOString().substr(0, 10);
-    }
+    },
+    getHalayaTub(item){
+        axios.get(this.url+"/api/fetchHalayaTub", this.config)
+        .then(response => {
+          this.tubName=response.data.product[0].product_name
+          this.tubPrice=response.data.product[0].product_price
+        });
+    },
+
+    getHalayaJar(item){
+        axios.get(this.url+"/api/fetchHalayaJar", this.config)
+        .then(response => {
+          this.jarName=response.data.product[0].product_name
+          this.jarPrice=response.data.product[0].product_price
+        });
+    },
+     increaseJar: function() {
+      this.jarQuantity++;
+    },
+    decreaseJar:  function() {
+      if (this.jarQuantity==0){
+        this.jarQuantity=0
+      }else{
+      this.jarQuantity--;   
+}
+    },
+    resetJar: function() {
+      this.jarQuantity = 0;
+    },
+    increaseTub: function() {
+      this.tabQuantity++;
+    },
+    decreaseTub:  function() {
+      if (this.tabQuantity==0){
+        this.tabQuantity=0
+      }else{
+      this.tabQuantity--;   
+}
+    },
+
+    resetTub: function() {
+      this.tabQuantity = 0;
+    },
+
   }
 };
 </script>
