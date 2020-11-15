@@ -1,16 +1,17 @@
 <template>
-  <div >
+  <div>
     <v-card class="ma-5 mb-12 pa-5">
-      <v-card-title>THE BEST OF WAWEN'S UBE HALAYA
-          <v-spacer></v-spacer>
-          <v-list class>
-      <v-btn class="ma-5" color="purple darken-2" rounded dark @click="showDialog">
-        <v-icon>mdi-plus</v-icon>
-        <v-toolbar-title>Create Order</v-toolbar-title>
-      </v-btn>
-    </v-list>
+      <v-card-title>
+        THE BEST OF WAWEN'S UBE HALAYA
+        <v-spacer></v-spacer>
+        <v-list class>
+          <v-btn class="ma-5" color="purple darken-2" rounded dark @click="showDialog">
+            <v-icon>mdi-plus</v-icon>
+            <v-toolbar-title>Create Order</v-toolbar-title>
+          </v-btn>
+        </v-list>
       </v-card-title>
-       <OrderingInfo></OrderingInfo>
+      <OrderingInfo></OrderingInfo>
     </v-card>
     <v-dialog v-model="addOrderDialog" width="800px">
       <v-card>
@@ -70,7 +71,7 @@
             </v-col>
           </v-row>
           <v-row class="pl-5">
-             <v-col cols="6">
+            <v-col cols="6">
               <v-text-field
                 v-model="customerMunicipality"
                 label="Municipality/City"
@@ -92,15 +93,15 @@
             </v-col>
           </v-row>
           <v-row>
-             <v-col>
+            <v-col>
               <v-img class="ml-5" width="250px" height="200px" src="../assets/halayaJar.jpg"></v-img>
               <h6 class="display-1 font-weight-light orange--text ml-5">{{jarName}}</h6>
               <div id="price" class="font-weight-light grey--text title ml-5">{{jarPrice}}</div>
             </v-col>
             <v-col>
-              <v-img  width="250px" height="200px" src="../assets/halayaTab.jpg"></v-img>
-               <h6 class="display-1 font-weight-light orange--text ">{{tubName}}</h6>
-                <div id="price" class="font-weight-light grey--text title ">{{tubPrice}}</div>
+              <v-img width="250px" height="200px" src="../assets/halayaTab.jpg"></v-img>
+              <h6 class="display-1 font-weight-light orange--text">{{tubName}}</h6>
+              <div id="price" class="font-weight-light grey--text title">{{tubPrice}}</div>
             </v-col>
           </v-row>
           <v-row class="pl-5">
@@ -108,54 +109,59 @@
               <v-text-field min="0" type="number" label="Quantity" v-model="jarQuantity">
                 <template slot="prepend">
                   <div id="vue-counter">
-              <v-icon type="button" v-on:click="increaseJar">mdi-plus</v-icon> 
-                <v-icon type="button" v-on:click="decreaseJar" >mdi-minus</v-icon>
-              </div>
+                    <v-icon type="button" v-on:click="increaseJar">mdi-plus</v-icon>
+                    <v-icon type="button" v-on:click="decreaseJar">mdi-minus</v-icon>
+                  </div>
                 </template>
               </v-text-field>
             </v-col>
             <v-col cols="4" class="pl-5">
-               <v-text-field min="0" type="number" label="Quantity" v-model="tabQuantity">
+              <v-text-field min="0" type="number" label="Quantity" v-model="tabQuantity">
                 <template slot="prepend">
-                  <div id="vue-counter" >
-          <v-icon type="button" v-on:click="increaseTub">mdi-plus</v-icon>
-          <v-icon type="button" v-on:click="decreaseTub" disabled:isDisabled class="ml-1">mdi-minus</v-icon>
-              </div>
+                  <div id="vue-counter">
+                    <v-icon type="button" v-on:click="increaseTub">mdi-plus</v-icon>
+                    <v-icon
+                      type="button"
+                      v-on:click="decreaseTub"
+                      disabled:isDisabled
+                      class="ml-1"
+                    >mdi-minus</v-icon>
+                  </div>
                 </template>
               </v-text-field>
             </v-col>
           </v-row>
-        <v-row class="pl-5">
-          <v-col cols="12" sm="6" md="4"   >
-            <v-menu
-              v-model="menu"
-              :close-on-content-click="true"
-              transition="scale-transition"
-              offset-y
-              min-width="290px"
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-text-field
-                  v-model="date"
-                  label="Preferred Delivery Date"
-                  prepend-icon="mdi-calendar"
-                  readonly
-                  v-bind="attrs"
-                  v-on="on"
-                  :error-messages="deliveryDateErrors"
-                  @input="$v.date.$touch()"
-                  @blur="$v.date.$touch()"
-                  required
-                ></v-text-field>
-              </template>
-              <v-date-picker v-model="date" no-title scrollable :allowed-dates="notLessDate"></v-date-picker>
-            </v-menu>
-          </v-col>
+          <v-row class="pl-5">
+            <v-col cols="12" sm="6" md="4">
+              <v-menu
+                v-model="menu"
+                :close-on-content-click="true"
+                transition="scale-transition"
+                offset-y
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-model="date"
+                    label="Preferred Delivery Date"
+                    prepend-icon="mdi-calendar"
+                    readonly
+                    v-bind="attrs"
+                    v-on="on"
+                    :error-messages="deliveryDateErrors"
+                    @input="$v.date.$touch()"
+                    @blur="$v.date.$touch()"
+                    required
+                  ></v-text-field>
+                </template>
+                <v-date-picker v-model="date" no-title scrollable :allowed-dates="notLessDate"></v-date-picker>
+              </v-menu>
+            </v-col>
           </v-row>
         </v-container>
-        <v-card-actions >
+        <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn text color="orange" @click="addOrderDialog = false" class="mb-5" >Cancel</v-btn>
+          <v-btn text color="orange" @click="addOrderDialog = false" class="mb-5">Cancel</v-btn>
           <v-btn text color="primary" @click="addCard()" class="mb-5">Create</v-btn>
         </v-card-actions>
       </v-card>
@@ -174,10 +180,12 @@
                   >Take a try</div>
                 </v-expand-transition>
               </v-img>
-              <v-card-text class="pt-6" style="position: relative;">
-                <div class="font-weight-light grey--text title mb-2">Perfect Ubelicious treat</div>
-                <h3 class="display-1 font-weight-light orange--text mb-2">Ube halaya in tub</h3>
-                <div id="price" class="font-weight-light grey--text title mb-2">₱499.00</div>
+              <v-card-text class="pt-6">
+                <center>
+                  <div class="font-weight-light grey--text title mb-2">Perfect Ubelicious treat</div>
+                  <h1 class="font-weight-light orange--text mb-2">Ube halaya in a tub</h1>
+                  <div id="price" class="font-weight-light grey--text title mb-2">₱499.00</div>
+                </center>
               </v-card-text>
             </v-card>
           </v-hover>
@@ -194,59 +202,66 @@
                   >Have a taste</div>
                 </v-expand-transition>
               </v-img>
-              <v-card-text class="pt-6" style="position: relative;">
-                <div class="font-weight-light grey--text title mb-2">Perfect Ubelicious snack</div>
-                <h3 class="display-1 font-weight-light orange--text mb-2">Ube halaya in jar</h3>
-                <div id="price" class="font-weight-light grey--text title mb-2">₱150.00</div>
+              <v-card-text class="pt-6">
+                <center>
+                  <div class="font-weight-light grey--text title mb-2">Perfect Ubelicious snack</div>
+                  <h1 class="font-weight-light orange--text mb-2">Ube halaya in a jar</h1>
+                  <div id="price" class="font-weight-light grey--text title mb-2">₱150.00</div>
+                </center>
               </v-card-text>
             </v-card>
           </v-hover>
         </v-col>
       </v-row>
+      <br>
     </template>
     <template>
-     
       <v-dialog v-model="addCardDialog" width="500px">
-         <v-card >
-           <v-card-title class="align-center">
-          <v-list-item-title
-            class="d-flex align-center justify-center mx-auto headline black--text"
-          >SUMMARY OF ORDER</v-list-item-title>
-        </v-card-title>
-        <v-row>
-           <v-col cols="5" class="pl-12">
-                   <span>Recievers Name: {{customerName}}</span>
-           </v-col>
-           <v-col cols="5" class="pl-12">
-           <span>Reciever Number: {{contactNumber}}</span>
-           </v-col>
-           </v-row>
-           <v-row>
-           <v-col cols="5" class="pl-12">
+        <v-card>
+          <v-card-title class="align-center">
+            <v-list-item-title
+              class="d-flex align-center justify-center mx-auto headline black--text"
+            >SUMMARY OF ORDER</v-list-item-title>
+          </v-card-title>
+          <v-row>
+            <v-col cols="5" class="pl-12">
+              <span>Recievers Name: {{customerName}}</span>
+            </v-col>
+            <v-col cols="5" class="pl-12">
+              <span>Reciever Number: {{contactNumber}}</span>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="5" class="pl-12">
               <span>Address: {{customerStreet}}, {{customerBarangay}}, {{customerMunicipality}}</span>
-           </v-col>
-           <v-col cols="5" class="pl-12">
-             <span>Preferred Delivery: {{date}}</span>
-           </v-col>
-           </v-row>
-           <v-row>
+            </v-col>
             <v-col cols="5" class="pl-12">
-           <span>Jar Quantity: {{jarQuantity}}</span>
-           </v-col>
+              <span>Preferred Delivery: {{date}}</span>
+            </v-col>
+          </v-row>
+          <v-row>
             <v-col cols="5" class="pl-12">
-                 <span>Tub Quntity: {{tabQuantity}}</span>
-           </v-col>
-           </v-row>
-           
-           <v-col cols="5" class="pl-12">
-                 <span>Your total payment: {{totalPay}}</span>
-           </v-col>
-        
-        <v-card-actions>
-           <v-spacer></v-spacer>
-          <v-btn class="ma-3" color="orange" text @click="addCardDialog=false , addOrderDialog=true">Cancel</v-btn>
-          <v-btn class="ma-3" color="primary" text @click="placeOrder()" >Place Order</v-btn>
-        </v-card-actions>
+              <span>Jar Quantity: {{jarQuantity}}</span>
+            </v-col>
+            <v-col cols="5" class="pl-12">
+              <span>Tub Quntity: {{tabQuantity}}</span>
+            </v-col>
+          </v-row>
+
+          <v-col cols="5" class="pl-12">
+            <span>Your total payment: {{totalPay}}</span>
+          </v-col>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              class="ma-3"
+              color="orange"
+              text
+              @click="addCardDialog=false , addOrderDialog=true"
+            >Cancel</v-btn>
+            <v-btn class="ma-3" color="primary" text @click="placeOrder()">Place Order</v-btn>
+          </v-card-actions>
         </v-card>
       </v-dialog>
     </template>
@@ -293,25 +308,25 @@ export default {
       customerName: null,
       contactNumber: null,
       orderQuantity: null,
-      customerMunicipality:null,
+      customerMunicipality: null,
       orderStatus: "",
       date: null,
       jarQuantity: "0",
       tabQuantity: "0",
       distance: 0,
-      jarName:null,
-      tubName:null,
-      tubPrice:null,
-      jarPrice:null,
+      jarName: null,
+      tubName: null,
+      tubPrice: null,
+      jarPrice: null,
       counterJar: 0,
-      counterTub:0,
-      disableButton:false,
-      addCardDialog:false,
-      totalPay:0,
+      counterTub: 0,
+      disableButton: false,
+      addCardDialog: false,
+      totalPay: 0
     };
   },
   components: {
-    OrderingInfo,
+    OrderingInfo
   },
   validations: {
     customerName: {
@@ -334,7 +349,7 @@ export default {
     customerBarangay: {
       required
     },
-    customerMunicipality:{
+    customerMunicipality: {
       required
     },
     customerProvince: {
@@ -344,12 +359,11 @@ export default {
       required
     }
   },
-  
 
   computed: {
-     isDisabled() {
-        return disableButton == false
-      },
+    isDisabled() {
+      return disableButton == false;
+    },
     addressErrors() {
       const errors = [];
       if (!this.$v.address.$dirty) return errors;
@@ -394,13 +408,12 @@ export default {
         errors.push("Barangay is required.");
       return errors;
     },
-    customerMunicipalityErrors(){
-       const errors = [];
+    customerMunicipalityErrors() {
+      const errors = [];
       if (!this.$v.customerMunicipality.$dirty) return errors;
       !this.$v.customerMunicipality.required &&
         errors.push("Municipality is required.");
       return errors;
-
     },
     customerProvinceErrors() {
       const errors = [];
@@ -420,31 +433,29 @@ export default {
     let config = {};
     config.headers = {
       Authorization: "Bearer " + localStorage.getItem("token"),
-      'Access-Control-Allow-Origin':'*'
+      "Access-Control-Allow-Origin": "*"
     };
     this.config = config;
     console.log("this.config", this.config);
   },
   created() {
-    this.getHalayaTub(),
-    this.getHalayaJar()
-  
+    this.getHalayaTub(), this.getHalayaJar();
   },
 
   methods: {
     showDialog() {
       this.$v.$reset();
-      this.addOrderDialog = true
-      this.customerStreet = null
-      this.customerBarangay = null
-      this.customerMunicipality = null
-      this.customerProvince = null
-      this.customerName = null
-      this.contactNumber = null
-      this.jarQuantity="0"
-      this.ubeQuantity="0"
-      this.orderQuantity = null
-      this.date = null
+      this.addOrderDialog = true;
+      this.customerStreet = null;
+      this.customerBarangay = null;
+      this.customerMunicipality = null;
+      this.customerProvince = null;
+      this.customerName = null;
+      this.contactNumber = null;
+      this.jarQuantity = "0";
+      this.ubeQuantity = "0";
+      this.orderQuantity = null;
+      this.date = null;
     },
     getOrderStatus(qty) {
       if (qty <= 9) {
@@ -455,16 +466,16 @@ export default {
     },
     placeOrder() {
       this.$v.$touch();
-      var street=this.customerStreet
-      var barangay=this.customerBarangay
-      var municipality=this.customerMunicipality
-      var province=this.customerProvince
+      var street = this.customerStreet;
+      var barangay = this.customerBarangay;
+      var municipality = this.customerMunicipality;
+      var province = this.customerProvince;
 
       var place = street.concat(
         " ",
         barangay,
         " ",
-       municipality,
+        municipality,
         " ",
         province
       );
@@ -476,8 +487,8 @@ export default {
         )
         .then(response => {
           let res = JSON.stringify(response.data);
-          let result = JSON.parse(res); 
-          var coordinates = result.features[0].geometry.coordinates
+          let result = JSON.parse(res);
+          var coordinates = result.features[0].geometry.coordinates;
           var from_place = turf.point([123.921969, 10.329892]);
           var to_place = turf.point(coordinates);
           var options = { units: "kilometers" };
@@ -498,7 +509,7 @@ export default {
             distance: dist
           };
           axios
-            .post(this.url+"/api/post/createOrder", param, this.config)
+            .post(this.url + "/api/post/createOrder", param, this.config)
             .then(response => {
               console.log("response.data: ", response.data);
               if (response.data == "success") {
@@ -509,60 +520,62 @@ export default {
                   showConfirmButton: false,
                   timer: 1500
                 });
-                this.addOrderDialog=false;
-                this.addCardDialog=false;
+                this.addOrderDialog = false;
+                this.addCardDialog = false;
               }
             });
         });
-        
     },
-    addCard(){
-      if (this.jarQuantity=='0' && this.tabQuantity=='0' ){
-         Swal.fire({
-                  position: "center",
-                  icon: "warning",
-                  title: "You haven't order",
-                  showConfirmButton: false,
-                  timer: 1500
-                });
-         this.$v.$touch();
-         this.addOrderDialog=true
+    addCard() {
+      if (this.jarQuantity == "0" && this.tabQuantity == "0") {
+        Swal.fire({
+          position: "center",
+          icon: "warning",
+          title: "You haven't order",
+          showConfirmButton: false,
+          timer: 1500
+        });
+        this.$v.$touch();
+        this.addOrderDialog = true;
       } else {
-        this.addCardDialog=true
-        this.addOrderDialog=false
-        console.log(this.jarPrice)
-        console.log(this.jarQuantity)
-        this.totalPay= (this.jarQuantity*this.jarPrice)+(this.tabQuantity*this.tubPrice)
+        this.addCardDialog = true;
+        this.addOrderDialog = false;
+        console.log(this.jarPrice);
+        console.log(this.jarQuantity);
+        this.totalPay =
+          this.jarQuantity * this.jarPrice + this.tabQuantity * this.tubPrice;
       }
     },
     notLessDate(deliveredDate) {
       return deliveredDate >= new Date().toISOString().substr(0, 10);
     },
 
-     getHalayaTub(item){
-        axios.get(this.url+"/api/fetchHalayaTub", this.config)
+    getHalayaTub(item) {
+      axios
+        .get(this.url + "/api/fetchHalayaTub", this.config)
         .then(response => {
-          this.tubName=response.data.product[0].product_name
-          this.tubPrice=response.data.product[0].product_price
+          this.tubName = response.data.product[0].product_name;
+          this.tubPrice = response.data.product[0].product_price;
         });
     },
 
-    getHalayaJar(item){
-        axios.get(this.url+"/api/fetchHalayaJar", this.config)
+    getHalayaJar(item) {
+      axios
+        .get(this.url + "/api/fetchHalayaJar", this.config)
         .then(response => {
-          this.jarName=response.data.product[0].product_name
-          this.jarPrice=response.data.product[0].product_price
+          this.jarName = response.data.product[0].product_name;
+          this.jarPrice = response.data.product[0].product_price;
         });
     },
     increaseJar: function() {
       this.jarQuantity++;
     },
-    decreaseJar:  function() {
-      if (this.jarQuantity==0){
-        this.jarQuantity=0
-      }else{
-      this.jarQuantity--;   
-}
+    decreaseJar: function() {
+      if (this.jarQuantity == 0) {
+        this.jarQuantity = 0;
+      } else {
+        this.jarQuantity--;
+      }
     },
     resetJar: function() {
       this.jarQuantity = 0;
@@ -570,17 +583,17 @@ export default {
     increaseTub: function() {
       this.tabQuantity++;
     },
-    decreaseTub:  function() {
-      if (this.tabQuantity==0){
-        this.tabQuantity=0
-      }else{
-      this.tabQuantity--;   
-}
+    decreaseTub: function() {
+      if (this.tabQuantity == 0) {
+        this.tabQuantity = 0;
+      } else {
+        this.tabQuantity--;
+      }
     },
 
     resetTub: function() {
       this.tabQuantity = 0;
-    },
+    }
   }
 };
 </script>

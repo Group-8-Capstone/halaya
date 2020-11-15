@@ -24,11 +24,11 @@
 </template>
 
 <script>
-import Pdf from "./Pdf.vue";
+import DeliveredPdf from "./DeliveredPdf.vue";
 import axios from "axios";
 export default {
   name: "Delivery",
-  components: { Pdf },
+  components: { DeliveredPdf },
   data() {
     return {
       deliveredOrder: [],

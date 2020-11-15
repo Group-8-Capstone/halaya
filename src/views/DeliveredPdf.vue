@@ -1,0 +1,74 @@
+<template>
+  <div class="mt-5">
+    <v-spacer></v-spacer>
+    <v-btn class="mr-5" outlined float-right small color="purple" @click="generateReport">
+      <v-icon>mdi-download</v-icon>Export as PDF
+    </v-btn>
+    <vue-html2pdf
+      :show-layout="false"
+      :float-layout="true"
+      :enable-download="true"
+      :preview-modal="false"
+      :paginate-elements-by-height="5000"
+      :filename="'Delivered Orders'"
+      :pdf-quality="2"
+      :manual-pagination="false"
+      pdf-format="a4"
+      pdf-orientation="portrait"
+      pdf-content-width="800px"
+      ref="html2Pdf"
+    >
+      <section slot="pdf-content">
+        <section class="pdf-item">
+          <center style="margin:50px">
+            <div>
+              <img class="logo" width="50" :src="require('@/assets/wawens.png')">
+            </div>
+            <div>
+              <h4>WAWEN'S UBE HALAYA</h4>
+              <h6>DELIVERED ORDERS</h6>
+            </div>
+          </center>
+          <div style="margin:50px" class="pa-5">
+            <div class="border border-2 mx-auto p-3 rounded">
+              <div>
+                <v-data-table :headers="headers" :items="deliveredOrder">
+                  <template v-slot:item.order_status="{ item }">
+                    <v-chip color="green">{{ item.order_status }}</v-chip>
+                  </template>
+                </v-data-table>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+    </vue-html2pdf>
+  </div>
+</template>
+<script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/0.9.0rc1/jspdf.min.js"></script>
+<script>
+import VueHtml2pdf from "vue-html2pdf";
+export default {
+  props: ["headers", "deliveredOrder"],
+  components: {
+    VueHtml2pdf
+  },
+  methods: {
+    generateReport() {
+      this.$refs.html2Pdf.generatePdf();
+    }
+  }
+};
+</script>
+
+<style>
+.logo {
+  border-radius: 50%;
+  width: 10%;
+  height: 10%;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
