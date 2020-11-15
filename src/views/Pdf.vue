@@ -82,7 +82,7 @@ v-simple-table {
 .logo {
   border-radius: 50%;
   width: 10%;
-  length: 10%;
+  height: 10%;
   margin-left: auto;
   margin-right: auto;
 }

@@ -42,9 +42,9 @@ export default {
         },
         { text: "Address", value: "customer_address" },
         { text: "Distance", value: "distance" },
-        { text: "Ube Halaya Qty", value: "ubeHalayaJar_qty" },
-        { text: "Ubechi Qty", value: "ubeHalayaTub_qty" },
-        { text: "Delivery Date", value: "preferred_delivery_date" },
+        { text: "Ube Halaya Jar(Quantity)", value: "ubeHalayaJar_qty", sortable: false },
+        { text: "Ube Halaya Tub(Quantity)", value: "ubeHalayaTub_qty", sortable: false },
+        { text: "Delivered Date", value: "preferred_delivery_date" },
         { text: "Order Status", value: "order_status" }
       ]
     };

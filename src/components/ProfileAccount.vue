@@ -1,41 +1,27 @@
 <template>
  <div class="container " >
    <center>
-            <v-card width="400px" class="ml-10 mt-5">
-                 <v-card-title class=" deep-purple--text">Account</v-card-title>
-                <!-- <v-card-subtitle>
-                  Please fill in the required information 
-                </v-card-subtitle> -->
+     
+            <v-card width="400px" class="ml-10">
+                 <v-card-title >ACCOUNT PROFILE</v-card-title>
                   <v-divider></v-divider>
                  <div class="modal-body mt-5">
                         <form @submit="formSubmit" enctype="multipart/form-data" action>
                           <v-container>
-                                <!-- <v-col cols="12">
-                                <v-text-field outlined
-                                type="text" color="purple"
-                                class="form-control"
-                                v-model="ownersName"
-                                label="Owner's Name"
-                                required></v-text-field> 
-                                  </v-col>
-                                  <v-col cols=" 12" > -->
                                   <center>
                                     <img class="addOnsImage" :src="imageURL"><br>
-                                     <h4 class=" deep-purple--text">{{username}}</h4>
-                                    <input type="file" class="fileStyle" v-on:change="onImageChange">
-                                   
+                                     <h4 class=" gray--text">{{username}}</h4>
+                                    <input type="file" class="fileStyle deep-purple--text" v-on:change="onImageChange">
                             </center>
-                           <!-- </v-col> -->
                             </v-container>
                     <v-card-actions>
                       <v-spacer></v-spacer>
-                      <v-btn type="button" color="orange" text>Cancel</v-btn>
-                      <v-btn type="submit"  color="primary" text>Update</v-btn>
+                      <v-btn type="submit" class="ma-3" color="primary" outlined>Update</v-btn>
                       </v-card-actions>
                         </form>
                   </div>
             </v-card>
-            </center>
+        </center>
  </div>
 </template>
 <style>
@@ -46,9 +32,14 @@
 }
 .fileStyle{
     font-size: 17px !important;
-    width: 200px;
+    width: 50%;
     margin-top: 3%;
     margin-bottom: 3%;
+    
+}
+
+.v-card{
+  margin-top: 10%
 }
 </style>
 
@@ -123,6 +114,7 @@ import axios from "axios";
                 axios.post(this.url+'/api/ProfilePicUpdate/'+id, formData, this.config).then(function (response) {
                   console.log(formData)
                     currentObj.success = response.data.success
+                    window.location.reload()
                 })
                 .catch(function (error) {
                     currentObj.output = error;
@@ -130,10 +122,8 @@ import axios from "axios";
             }else{
                 this.errorMessage = 'All fields are required!'
             }
-            window.location.reload()   
+               
         },
-
-
       avatarRetrieve() {
       let id=localStorage.getItem('id')
       axios.get(this.url+"/api/fetchProfile/"+ id, this.config).then(response => {

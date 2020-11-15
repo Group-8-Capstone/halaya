@@ -32,41 +32,6 @@
               ></v-text-field>
             </v-col>
           </v-row>
-          <!-- <v-icon class="pl-5">mdi-map-marker</v-icon> -->
-          <!-- <label>Address</label>
-
-          <v-row class="pl-5">
-            <v-col cols="4">
-              <v-text-field
-                v-model="customerStreet"
-                placeholder="Street"
-                :error-messages="customerStreetErrors"
-                @input="$v.customerStreet.$touch()"
-                @blur="$v.customerStreet.$touch()"
-                required
-              ></v-text-field>
-            </v-col>
-            <v-col cols="4">
-              <v-text-field
-                v-model="customerBarangay"
-                placeholder="Barangay"
-                :error-messages="customerBarangayErrors"
-                @input="$v.customerBarangay.$touch()"
-                @blur="$v.customerBarangay.$touch()"
-                required
-              ></v-text-field>
-            </v-col>
-            <v-col cols="4">
-              <v-text-field
-                v-model="customerProvince"
-                placeholder="Province"
-                :error-messages="customerProvinceErrors"
-                @input="$v.customerProvince.$touch()"
-                @blur="$v.customerProvince.$touch()"
-                required
-              ></v-text-field>
-            </v-col>
-          </v-row> -->
           <v-row>
             <v-col>
               <v-img class="ml-5" width="250px" height="200px" src="../assets/halayaTab.jpg"></v-img>
@@ -78,46 +43,13 @@
           <v-row>
             <v-col cols="5" class="pl-5">
               <v-text-field min="0" type="number" label="Quantity" v-model="tabQuantity">
-                <!-- <template slot="prepend">
-                  <v-icon v-bind:disabled="isDisabled">mdi-minus</v-icon>
-                  <v-icon>mdi-plus</v-icon>
-                </template> -->
               </v-text-field>
             </v-col>
             <v-col cols="5" class="pl-12">
               <v-text-field min="0" type="number" label="Quantity" v-model="jarQuantity">
-                <!-- <template slot="prepend">
-                  <v-icon>mdi-minus</v-icon>
-                  <v-icon>mdi-plus</v-icon>
-                </template> -->
               </v-text-field>
             </v-col>
           </v-row>
-          <!-- <v-col cols="12" sm="6" md="4">
-            <v-menu
-              v-model="menu"
-              :close-on-content-click="true"
-              transition="scale-transition"
-              offset-y
-              min-width="290px"
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-text-field
-                  v-model="date"
-                  label="Delivery Date"
-                  prepend-icon="mdi-calendar"
-                  readonly
-                  v-bind="attrs"
-                  v-on="on"
-                  :error-messages="deliveryDateErrors"
-                  @input="$v.date.$touch()"
-                  @blur="$v.date.$touch()"
-                  required
-                ></v-text-field>
-              </template>
-              <v-date-picker v-model="date" no-title scrollable :allowed-dates="notLessDate"></v-date-picker>
-            </v-menu>
-          </v-col> -->
         </v-container>
         <v-card-actions>
           <v-spacer></v-spacer>

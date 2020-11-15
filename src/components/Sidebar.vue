@@ -4,7 +4,6 @@
       <v-btn color="grey" icon @click.stop="mini = !mini">
         <v-icon>mdi-menu</v-icon>
       </v-btn>
-
       <v-list-item-avatar size="60">
         <img src="../assets/wawens.png">
       </v-list-item-avatar>
@@ -23,7 +22,7 @@
           <v-sheet color="purple darken-3" >
             <v-row>
 <v-list-item-avatar class="ma-2" color="grey darken-1" size="40">
-<img  :src="image === null ? avatarSrc : this.url + image" >
+<img  :src="image === null ? avatarSrc : this.url+'/'+ image" >
 </v-list-item-avatar>
 <v-list-item-content>
 <v-toolbar-title class="white--text ml-5 ">{{name}}</v-toolbar-title>
@@ -58,20 +57,6 @@
                 <v-list-item-title v-text="item.text"></v-list-item-title>
               </v-list-item-content>
             </template>
-            <v-list-item
-              v-for="_subItem in item.subItem"
-              active-class="white purple--text"
-              :key="_subItem.title"
-              :to="_subItem.link"
-              link
-            >
-              <v-list-item-icon>
-                <v-icon>{{ _subItem.icon }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title>{{ _subItem.title }}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
           </v-list-group>
         </v-list>
       </template>
@@ -103,16 +88,17 @@
               </v-list-item-content>
             </template>
             <v-list-item
+            
               v-for="_subItem in item.subItem"
               active-class="white purple--text"
               :key="_subItem.title"
               :to="_subItem.link"
               link
             >
-              <v-list-item-icon>
+              <v-list-item-icon  class="ml-5">
                 <v-icon>{{ _subItem.icon }}</v-icon>
               </v-list-item-icon>
-              <v-list-item-content>
+              <v-list-item-content  class="ml-2">
                 <v-list-item-title>{{ _subItem.title }}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
@@ -178,7 +164,7 @@ export default {
   name: "Sidebar",
   props: {},
   data: () => ({
-    avatarSrc: 'http://localhost:8000/images/avatar.png',
+    avatarSrc:'https://wawenshalaya.herokuapp.com/images/avatar.png',
     image: null,
     name: null,
     dialog: false,

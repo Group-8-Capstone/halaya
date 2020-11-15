@@ -2,8 +2,9 @@
   <div class="ma-5 mb-12 pa-5">
     <v-row>
       <v-layout wrap class="justify-center">
-        <v-card class="card-container ma-5 productCard" outlined>
+        <v-card class="card-container ma-5 productCard" width="30%" >
           <v-card-title class="justify-center productName">{{jarName}}</v-card-title>
+             <v-divider></v-divider>
           <v-list-item class="justify-center mt-5">
             <img src="../assets/ubeJar.jpg" alt width="100" height="100">
           </v-list-item>
@@ -13,16 +14,16 @@
             <v-chip :color="comparedJarAvailability()" dark>{{ jarStat }}</v-chip>
           </center>
           <v-list-item class="justify-center">Ordered Quantity: {{totalJar}} pcs</v-list-item>
-          <v-card-actions class="justify-center">
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="JarDialog=true">Edit</v-btn>
-              <v-btn text color="grey" @click="recordProductJar">Record</v-btn>
-            </v-card-actions>
+             <v-divider></v-divider>
+          <v-card-actions class="justify-end">
+              <v-btn small outlined color="primary" @click="JarDialog=true">EDIT</v-btn>
+              <v-btn small outlined color="purple darken-2" @click="recordProductJar">RECORD</v-btn>
+     
           </v-card-actions>
         </v-card>
-        <v-card class="card-container ma-5 productCard" outlined>
+        <v-card class="card-container ma-5 productCard"  width="30%">
           <v-card-title class="justify-center productName">{{tubName}}</v-card-title>
+           <v-divider></v-divider>
           <v-list-item class="justify-center mt-5">
             <img src="../assets/ubeTab.jpg" alt width="100" height="100">
           </v-list-item>
@@ -32,12 +33,12 @@
             <v-chip :color="comparedTubAvailability()" dark>{{ tubStat }}</v-chip>
             <v-list-item class="justify-center">Ordered Quantity: {{totalTub}} pcs</v-list-item>
           </center>
-          <v-card-actions class="justify-center">
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="TubDialog=true">Edit</v-btn>
-              <v-btn text color="grey" @click="recordProductTub">Record</v-btn>
-            </v-card-actions>
+          <v-divider></v-divider>
+          <v-card-actions class="justify-end">
+         
+              <v-btn small outlined color="primary" @click="TubDialog=true">EDIT</v-btn>
+              <v-btn small outlined color="purple darken-2" @click="recordProductTub">RECORD</v-btn>
+      
           </v-card-actions>
         </v-card>
       </v-layout>
@@ -90,7 +91,7 @@
                 <v-text-field v-model="editedJarPrice" color="purple" outlined label="Price"></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field v-model="editedJarAvail" color="purple" outlined label="Remaining"></v-text-field>
+                <v-text-field v-model="editedJarAvail" color="purple" outlined label="Make Product"></v-text-field>
               </v-col>
             </v-row>
           </v-container>
@@ -118,7 +119,7 @@
                   v-model="editedTubPrice"
                   color="purple"
                   outlined
-                  placeholder="Quantity (g)"
+                  placeholder="Price"
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
@@ -126,7 +127,7 @@
                   v-model="editedTubAvail"
                   color="purple"
                   outlined
-                  placeholder="Quantity (g)"
+                  placeholder="Make Product"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -144,11 +145,11 @@
 <style>
 .productCard {
   background-color: #ffffff !important;
-  border: 2px solid #7b1fa2 !important;
+
 }
 .productName {
-  background-color: rgb(79, 53, 122) !important;
-  color: white;
+  /* background-color: rgb(79, 53, 122) !important; */
+  color: rgb(79, 53, 122);
 }
 </style>
 <script>
@@ -335,31 +336,31 @@ export default {
       })
       },
        
-      comparedJarAvailability(){
-        if (this.totalJar<this.editedJarAvail){
-          this.jarStat='Enough'
-          return "green";
-        } else {
-          this.jarStat='Lack'
-          return "red"
-        }
+//       comparedJarAvailability(){
+//         if (this.totalJar<this.editedJarAvail){
+//           this.jarStat='Enough'
+//           return "green";
+//         } else {
+//           this.jarStat='Lacking'
+//           return "red"
+//         }
       
-       },
-      comparedTubAvailability(){
-        if (this.totalTub<this.editedTubAvail){
-          this.tubStat='Enough'
-          return "green";
-        } else{
-          this.tubStat='Lack'
-          return "red"
-        } 
-},
+//        },
+//       comparedTubAvailability(){
+//         if (this.totalTub<this.editedTubAvail){
+//           this.tubStat='Enough'
+//           return "green";
+//         } else{
+//           this.tubStat='Lacking'
+//           return "red"
+//         } 
+// },
     comparedJarAvailability() {
       if (this.totalJar < this.halayaJarAvailability) {
         this.jarStat = "Enough";
         return "green";
       } else {
-        this.jarStat = "Lack";
+        this.jarStat = "Lacking";
         return "red";
       }
     },
@@ -368,7 +369,7 @@ export default {
         this.tubStat = "Enough";
         return "green";
       } else {
-        this.tubStat = "Lack";
+        this.tubStat = "Lacking";
         return "red";
       }
     },
@@ -391,6 +392,8 @@ export default {
               showConfirmButton: false,
               timer: 1500
             });
+             this.fetchRecordedProduct();
+            
           } else {
             Swal.fire({
               position: "center",
@@ -401,6 +404,7 @@ export default {
               timer: 1500
             });
           }
+         
         });
     },
 
