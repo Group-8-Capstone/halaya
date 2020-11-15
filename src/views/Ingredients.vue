@@ -1,161 +1,64 @@
 <template>
-  <div class="ma-5 mb-12 pa-5">
-        <v-card flat>
-          <v-card-title>Ube Halaya List of Ingredients</v-card-title>
-          <v-row>
-            <v-flex>
-              <v-layout wrap>
-                <v-flex md4 v-for="item in halayaIngredients" :key="item.id">
-                  <v-card id="cards" class="card-container ma-5">
-                    <v-card-title class="deep-purple lighten-5">{{item.ingredients_name}}</v-card-title>
-                    <hr>
-                    <v-row class="mx-auto text-center">
-                      <v-list-item>Available Qty : <b>{{item.ingredients_remaining + ' kg/cans'}}</b></v-list-item>
-                      <v-list-item>Used Qty : <b>{{item.total  + ' kg/cans'}}</b></v-list-item>
-                      <v-list-item>
-                        <v-chip
-                          :color="getColor(item.ingredients_status)"
-                        >{{item.ingredients_status}}</v-chip>
-                      </v-list-item>
-                    </v-row>
-                    <v-row class="d-flex justify-end mb-6">
-                      <template>
-                        <v-card-actions>
-                          <v-spacer></v-spacer>
-
-                          <v-btn icon>
-                            <v-icon
-                              title="Add Quantity"
-                              @click="editDialog = !editDialog, editIngredients(item)"
-                            >mdi-plus</v-icon>
-                          </v-btn>
-                          <v-btn icon>
-                            <v-icon
-                              @click=" addUsedStockDialog=!addUsedStockDialog "
-                              title="Used Quantity"
-                            >mdi-minus</v-icon>
-                          </v-btn>
-                        </v-card-actions>
-                      </template>
-                    </v-row>
-                  </v-card>
-                </v-flex>
-              </v-layout>
-            </v-flex>
-          </v-row>
-        </v-card>
-      <!-- </v-tab-item>
-      <v-tab-item> -->
-        <!-- <v-card flat>
-          <v-card-title>Butchi List of Ingredients</v-card-title>
-          <v-row>
-            <v-flex d-flex>
-              <v-layout wrap>
-                <v-flex md4 v-for="item in butchiIngredients" :key="item.id">
-                  <v-card id="cards" class="card-container ma-5">
-                    <v-card-title class="deep-purple lighten-5">{{item.ingredients_name}}</v-card-title>
-                    <hr>
-                    <v-row class="mx-auto text-center">
-                      <v-list-item>Available Qty : <b>{{item.ingredients_remaining + ' kg/cans'}}</b></v-list-item>
-                      <v-list-item>Used Qty : <b>{{item.total  + ' kg/cans'}}</b></v-list-item>
-                      <v-list-item>
-                        <v-chip
-                          :color="getColor(item.ingredients_status)"
-                        >{{item.ingredients_status}}</v-chip>
-                      </v-list-item>
-                    </v-row>
-                    <v-row class="d-flex justify-end mb-6">
-                      <template> -->
-                        <!-- <v-icon
-                          normal
-                          class="mr-2"
+  <div>
+    <v-card flat class="ma-5 mb-12 pa-5">
+      <v-card-title>Ube Halaya List of Ingredients</v-card-title>
+      <v-row>
+        <v-flex>
+          <v-layout wrap>
+            <v-flex md4 v-for="item in halayaIngredients" :key="item.id">
+              <v-card id="cards" class="card-container ma-5">
+                <v-card-title class="deep-purple lighten-5">{{item.ingredients_name}}</v-card-title>
+                <hr>
+                <v-row class="mx-auto text-center">
+                  <v-list-item>
+                    Available Qty :
+                    <b>{{item.ingredients_remaining}} {{item.ingredients_unit}}</b>
+                  </v-list-item>
+                  <v-list-item>
+                    Used Qty :
+                    <b>{{item.total}} {{item.ingredients_unit}}</b>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-chip
+                      text-color="white"
+                      :color="getColor(item.ingredients_status)"
+                    >{{item.ingredients_status}}</v-chip>
+                  </v-list-item>
+                </v-row>
+                <v-row class="d-flex justify-end mb-6">
+                  <template>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn icon>
+                        <v-icon
                           title="Add Quantity"
-                          @click="stockDialog=!stockDialog"
-                        >mdi-plus</v-icon>-->
-                        <!-- <v-card-actions>
-                          <v-spacer></v-spacer>
-
-                          <v-btn icon>
-                            <v-icon
-                              title="Add Quantity"
-                              @click="editDialog = !editDialog, editIngredients(item)"
-                            >mdi-plus</v-icon>
-                          </v-btn>
-
-                          <v-btn icon>
-                            <v-icon
-                              @click=" addUsedStockDialog=!addUsedStockDialog "
-                              title="Used Quantity"
-                            >mdi-minus</v-icon>
-                          </v-btn>
-                        </v-card-actions>
-                      </template>
-                    </v-row>
-                  </v-card>
-                </v-flex>
-              </v-layout>
+                          @click="editDialog = !editDialog, editIngredients(item) "
+                        >mdi-plus</v-icon>
+                      </v-btn>
+                      <v-btn icon>
+                        <v-icon
+                          @click=" addUsedStockDialog=!addUsedStockDialog ,editEstimatedValue(item) "
+                          title="Used Quantity"
+                        >mdi-minus</v-icon>
+                      </v-btn>
+                    </v-card-actions>
+                  </template>
+                </v-row>
+              </v-card>
             </v-flex>
-          </v-row>
-        </v-card> -->
-      <!-- </v-tab-item>
-      <v-tab-item> -->
-        <!-- <v-card flat>
-          <v-card-title>Ice Cream List of Ingredients</v-card-title>
-          <v-row>
-            <v-flex d-flex>
-              <v-layout wrap>
-                <v-flex md4 v-for="item in icecreamIngredients" :key="item.id">
-                  <v-card id="cards" class="card-container ma-5">
-                    <v-card-title class="deep-purple lighten-5">{{item.ingredients_name}}</v-card-title>
-                    <hr>
-                    <v-row class="mx-auto text-center">
-                      <v-list-item>Available Qty : <b>{{item.ingredients_remaining + ' kg/cans'}}</b></v-list-item>
-                      <v-list-item>Used Qty : <b>{{item.total  + ' kg/cans'}}</b></v-list-item>
-                      <v-list-item>
-                        <v-chip
-                          :color="getColor(item.ingredients_status)"
-                        >{{item.ingredients_status}}</v-chip>
-                      </v-list-item>
-                    </v-row>
-                    <v-row class="d-flex justify-end mb-6">
-                      <template> -->
-                        <!-- <v-icon
-                          normal
-                          class="mr-2"
-                          title="Add Quantity"
-                          @click="stockDialog=!stockDialog "
-                        >mdi-plus</v-icon>-->
-                        <!-- <v-card-actions>
-                          <v-spacer></v-spacer>
+          </v-layout>
+        </v-flex>
+      </v-row>
+    </v-card>
 
-                          <v-btn icon>
-                            <v-icon
-                              title="Add Quantity"
-                              @click="editDialog = !editDialog, editIngredients(item)"
-                            >mdi-plus</v-icon>
-                          </v-btn>
-
-                          <v-btn icon>
-                            <v-icon
-                              @click=" addUsedStockDialog=!addUsedStockDialog "
-                              title="Used Quantity"
-                            >mdi-minus</v-icon>
-                          </v-btn>
-                        </v-card-actions>
-                      </template> -->
-                    <!-- </v-row>
-                  </v-card>
-                </v-flex>
-              </v-layout>
-            </v-flex>
-          </v-row>
-        </v-card>
-      </v-tab-item>
-    </v-tabs-items> -->
-     <v-card id="cardtable" class="ma-5 mb-12 pa-5">
-        <v-card-title>
+    <v-card id="cardtable" class="ma-5 mb-12 pa-5">
+      <v-row>
+        <v-spacer></v-spacer>
+        <Pdf :headers="headers" :displayIngredientsRecords="displayIngredientsRecords" class="float-right mr-5"></Pdf>
+      </v-row>
+      <v-card-title>
         Recorded Used Ingredients
-    <v-spacer></v-spacer>
+        <v-spacer></v-spacer>
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
@@ -163,27 +66,19 @@
           single-line
           hide-details
         ></v-text-field>
-           </v-card-title>
-        <v-spacer></v-spacer>
-       
-         
-              <v-data-table :headers="headersIngredients" :items="displayIngredientsRecords" :search="search">
-              <template v-slot:item.action="{ item }" >
-                <v-icon
-                  normal
-                  title="Edit"
-                >mdi-table-edit</v-icon>
-                <v-icon
-                class="mr-3"
-                color="red"
-                normal
-                title="Delete Product"
-                >mdi-delete
-                </v-icon>
-              </template>
-            </v-data-table>
-           </v-card>
-
+      </v-card-title>
+      <v-spacer></v-spacer>
+      <v-data-table
+        :headers="headersIngredients"
+        :items="displayIngredientsRecords"
+        :search="search"
+      >
+        <template v-slot:item.action="{ item }">
+          <v-icon normal title="Edit">mdi-table-edit</v-icon>
+          <v-icon class="mr-3" color="red" normal title="Delete Product">mdi-delete</v-icon>
+        </template>
+      </v-data-table>
+    </v-card>
     <template>
       <v-dialog v-model="addUsedStockDialog" width="400px">
         <v-card>
@@ -196,17 +91,13 @@
           <v-container>
             <v-row class="mx-2">
               <v-col cols="12">
-                <v-select
+                <v-text-field
                   color="purple"
                   outlined
-                  filled
-                  :items="itemSelect"
-                  label="Available ingredients"
-                  v-model="availableIngredients"
-                  :error-messages="ingredientsAvailableErrors"
-                  @input="$v.availableIngredients.$touch()"
-                  @blur="$v.availableIngredients.$touch()"
-                ></v-select>
+                  label="Ingredients Name"
+                  v-model="editValue.ingredients_name"
+                  v-bind:disabled="disabled"
+                ></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-text-field
@@ -230,6 +121,18 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+    </template>
+    <template>
+      <center>
+        <v-progress-circular
+          class="ma-5 mb-12 pa-5"
+          v-show="loading"
+          :size="70"
+          :width="7"
+          color="purple"
+          indeterminate
+        ></v-progress-circular>
+      </center>
     </template>
 
     <template>
@@ -264,6 +167,7 @@
   </div>
 </template>
 <script>
+import IngredientsPdf from "./IngredientsPdf.vue";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { setInterval } from "timers";
@@ -275,9 +179,11 @@ import {
 } from "vuelidate/lib/validators";
 export default {
   name: "Ingredients",
+  components: { IngredientsPdf },
   data() {
     return {
-      displayIngredientsRecords:[],
+      loading: true,
+      displayIngredientsRecords: [],
       stockDialog: false,
       editDialog: false,
       addUsedStockDialog: false,
@@ -290,23 +196,22 @@ export default {
       availableIngredients: "",
       usedIngredientsAmount: "",
       halayaIngredients: [],
-      butchiIngredients: [],
-      icecreamIngredients: [],
       editStockItem: {},
       itemSelect: [],
+      editValue: [],
       tabs: null,
-        headersIngredients: [
+      disabled: true,
+      headersIngredients: [
         {
           text: "Ingredient's Name",
           align: "start",
           sortable: false,
-          value: 'ingredients_name'
+          value: "ingredients_name"
         },
-     { text: "Needed Value", value: "ingredients_need_amount" },
-         { text: "Category", value: "ingredients_category" },
-         { text: "Recorded Date", value: "recorded_date" },
-        { text: "Actions", value: "action", sortable: false },
-      ],
+
+        { text: "Used Quantity", value: "used_ingredients_amount" },
+        { text: "Recorded Date", value: "updated_at" }
+      ]
     };
   },
   validations: {
@@ -327,16 +232,15 @@ export default {
     let config = {};
     config.headers = {
       Authorization: "Bearer " + localStorage.getItem("token"),
-      'Access-Control-Allow-Origin':'*'
+      "Access-Control-Allow-Origin": "*"
     };
     this.config = config;
     console.log("this.config", this.config);
   },
   created() {
     this.getHalayaIngredients();
-    // this.getButchiIngredients();
-    // this.getIceCreamIngredients();
     this.getAllIngredientsName();
+    this.retrieveUsedIngredients();
   },
   computed: {
     ingredientsNameErrors() {
@@ -367,21 +271,22 @@ export default {
     }
   },
   methods: {
-    getColor (status) {
-        if (status ==='Alert! Very Low') return 'red'
-        else if (status ==='Warning! Running Low') return 'orange'
-        else if (status ==='Calculating...') return 'blue'
-        else return 'green'
-    }, 
+    getColor(status) {
+      if (status === "Alert! Very Low") return "red";
+      else if (status === "Warning! Running Low") return "orange";
+      else if (status === "Calculating...") return "blue";
+      else return "green";
+    },
     getHalayaIngredients() {
-      console.log("**********", this.config)
-      axios.get(this.url+"/api/getHalayaIngredients/", this.config)
+      this.loading = true;
+      axios
+        .get(this.url + "/api/getHalayaIngredients", this.config)
         .then(response => {
-          console.log("========", response)
+          console.log(response);
+          this.loading = false;
           let results = [];
           for (var i = 0; i < response.data.length; i++) {
             if (this.containsObject(results, response.data[i].id)) {
-              console.log("good");
             } else {
               results.push(response.data[i]);
               this.halayaIngredients = results;
@@ -390,42 +295,27 @@ export default {
           }
         });
     },
-    // getButchiIngredients() {
-    //   axios
-    //     .get(this.url+"/api/getButchiIngredients/", this.config)
-    //     .then(response => {
-    //       let results = [];
-    //       for (var i = 0; i < response.data.length; i++) {
-    //         if (this.containsObject(results, response.data[i].id)) {
-    //           console.log("good");
-    //         } else {
-    //           results.push(response.data[i]);
-    //           this.butchiIngredients = results;
-    //         }
-    //         continue;
-    //       }
-    //     });
-    // },
-    // getIceCreamIngredients() {
-    //   axios
-    //     .get(this.url+"/api/getIceCreamIngredients/", this.config)
-    //     .then(response => {
-    //       let results = [];
-    //       for (var i = 0; i < response.data.length; i++) {
-    //         if (this.containsObject(results, response.data[i].id)) {
-    //           console.log("good");
-    //         } else {
-    //           results.push(response.data[i]);
-    //           this.icecreamIngredients = results;
-    //         }
-    //         continue;
-    //       }
-    //     });
-    // },
+    editEstimatedValue(item) {
+      axios
+        .get(
+          this.url + "/api/post/updateEstimatedValue/" + item.id,
+          this.config
+        )
+        .then(response => {
+          this.editValue = response.data;
+          console.log(this.editValue);
+        });
+    },
+    retrieveUsedIngredients() {
+      axios.get(this.url + "/api/fetchUsedIng", this.config).then(response => {
+        this.displayIngredientsRecords = response.data;
+        console.log(response);
+      });
+    },
     getAllIngredientsName() {
       let nameArray = [];
       axios
-        .get(this.url+"/api/fetch/ingredientsName",this.config)
+        .get(this.url + "/api/fetch/ingredientsName", this.config)
         .then(response => {
           for (var i = 0; i < response.data.length; i++) {
             if (nameArray.includes(response.data[i].ingredients_name)) {
@@ -440,35 +330,36 @@ export default {
     },
     reloadDataAddStock() {
       (this.ingredientsName = ""),
-      (this.ingredientsUnit = ""),
-      this.getHalayaIngredients();
-      this.getButchiIngredients();
-      this.getIceCreamIngredients();
+        (this.ingredientsUnit = ""),
+        this.getHalayaIngredients();
+      this.retrieveUsedIngredients();
       this.$v.$reset();
     },
     reloadDataAddUsedAmount() {
       (this.availableIngredients = ""),
         (this.usedIngredientsAmount = ""),
         this.getHalayaIngredients();
-      this.getButchiIngredients();
-      this.getIceCreamIngredients();
+      this.retrieveUsedIngredients();
       this.$v.$reset();
     },
     editIngredients(item) {
-      axios.get(this.url+"/api/post/editStock/" + item.id, this.config)
+      axios
+        .get(this.url + "/api/post/editStock/" + item.id, this.config)
         .then(response => {
           this.editStockItem = response.data;
-          console.log("edit stock item", JSON.stringify(this.editStockItem));
         });
     },
     updateIngredients() {
       axios
-        .post(this.url+"/api/post/updateStock", this.editStockItem, this.config)
+        .post(
+          this.url + "/api/post/updateStock",
+          this.editStockItem,
+          this.config
+        )
         .then(response => {
           console.log(response);
           this.getHalayaIngredients();
-          this.getButchiIngredients();
-          this.getIceCreamIngredients();
+          this.retrieveUsedIngredients();
           this.editDialog = false;
         });
     },
@@ -480,24 +371,25 @@ export default {
     addIngredientsAmount() {
       this.$v.$touch();
       if (
-        this.availableIngredients === "" ||
-        this.availableIngredients === ""
+        this.editValue.ingredients_name === "" ||
+        this.usedIngredientsAmount === ""
       ) {
         this.addUsedStockDialog = true;
       } else {
         let newAddedAmount = {
-          availableIngredients: this.availableIngredients,
+          availableIngredients: this.editValue.ingredients_name,
           usedIngredientsAmount: this.usedIngredientsAmount
         };
-        console.log("used_amount", newAddedAmount);
         axios
           .post(
-            this.url+"/api/post/usedIngredients",
-            newAddedAmount, this.config
+            this.url + "/api/post/usedIngredients",
+            newAddedAmount,
+            this.config
           )
           .then(response => {
             console.log(response);
             this.reloadDataAddUsedAmount();
+            this.retrieveUsedIngredients();
             this.addUsedStockDialog = false;
           });
       }

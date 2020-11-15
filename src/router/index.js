@@ -3,11 +3,9 @@ import VueRouter from "vue-router";
 import Order from "../views/Order.vue";
 import Stock from "../views/Stock.vue";
 import Delivery from "../views/OrderToDeliver.vue";
-// import Delivery from "../views/DeliveryOrder.vue";
 import Login from "../views/Login.vue"
 import Delivered from "../views/Delivered.vue";
 import Home from "../views/Home.vue";
-import DeliveryDetails from "../views/DeliveryDetails";
 import Setting from "../views/Setting.vue";
 import Ingredients from "../views/Ingredients.vue";
 import Product from "../views/Product.vue";
@@ -109,14 +107,6 @@ const router = new VueRouter({
       },
     },
     {
-      path: "/delivery-details",
-      name: "DeliveryDetails",
-      component: DeliveryDetails,
-      meta: {
-        requiresAuth: true,
-      },
-    },
-    {
       path: "/dashboard",
       name: "dashboard",
       component: Home,
@@ -189,7 +179,7 @@ router.beforeEach(async(to, from, next) => {
 });
 const verify_auth = () => {
   let url="http://localhost:8000"
-  // let url="http://wawenshalaya.herokuapp.com"
+  // let url="https://wawenshalaya.herokuapp.com"
   return new Promise((resolve, reject) => {
     if(localStorage.getItem("token") === null){
       resolve(false);

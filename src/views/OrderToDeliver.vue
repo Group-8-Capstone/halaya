@@ -168,7 +168,7 @@ export default {
     console.log("this.config", this.config);
   },
   created() {
-    this.getRange();
+    // this.getRange();
     this.dataGrouping();
     this.fetchOrders();
     setInterval(this.fetchOrders(), 3000);
@@ -191,14 +191,15 @@ export default {
       console.log("iiiiiii", this.delivery_batch.orders);
       this.fetchOrders();
     },
-    getRange() {
-      axios
-        .get("http://127.0.0.1:8000/api/fetch/delivery-range", this.config)
-        .then(response => {
-          this.delivery_range = response.data.range;
-          console.log("delivery range: ", this.delivery_range);
-        });
-    },
+    // getRange() {
+    //   axios
+    //     .get(this.url+"/api/fetch/delivery-range", this.config)
+    //     .then(response => {
+    //       console.log(response)
+    //       this.delivery_range = response.data.range;
+    //       console.log("delivery range: ", this.delivery_range);
+    //     });
+    // },
     containsObject(arr, id) {
       return arr.some(function(el) {
         return el.id === id;
@@ -297,7 +298,7 @@ export default {
     },
     dataGrouping() {
       axios
-        .get(this.url+ "/api/posts/delivery", this.config)
+        .get(this.url+"/api/posts/delivery", this.config)
         .then(response => {
           var result = response.data.data;
           console.log("=-------->",result);
