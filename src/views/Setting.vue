@@ -10,7 +10,6 @@
           indeterminate
       ></v-progress-circular>
         </center>
-  
     <v-card id="cardtable" class="ma-5 mb-12 pa-5">
       <v-card-title>
          <v-text-field
@@ -21,25 +20,27 @@
           hide-details
         ></v-text-field>
             <v-btn
+            small
             class="ma-5"
             color="purple darken-2"
-            rounded
             outlined
             dark
             @click="showDialog">
-            <v-icon>mdi-plus</v-icon>
+            <!-- <v-icon>mdi-plus</v-icon> -->
             <v-toolbar-title>Add Estimated Value</v-toolbar-title>
           </v-btn>
-          <v-dialog v-model="addDialog" width="400px">
+           </v-card-title>
+           <template>
+              <v-dialog v-model="addDialog" width="400px">
         <v-card>
     <v-card-title class=" deep-purple--text">
        ESTIMATED INGREDIENTS VALUE
     </v-card-title>
-
     <v-card-subtitle>
       Please fill in the required information 
     </v-card-subtitle>
     <v-divider></v-divider>
+    <v-container>
     <v-col cols="12">
     <v-text-field
       color="purple"
@@ -53,6 +54,22 @@
       outlined>
     </v-text-field>
    </v-col>
+   <br>
+   <v-col cols="12">
+    <v-select
+      color="purple"
+      label="Ingredients Unit"
+      :error-messages="addedIngredientsUnitErrors"
+      @input="$v.addedIngredientsUnit.$touch()"
+      @blur="$v.addedIngredientsUnit.$touch()"
+      required
+      hide-details="auto"
+      v-model="addedIngredientsUnit"
+      outlined
+      :items="items">
+    </v-select>
+   </v-col>
+      <br>
    <v-col cols="12">
     <v-text-field
       color="purple"
@@ -65,17 +82,18 @@
       v-model="addedEstimatedAmount"
       outlined></v-text-field>
    </v-col>
+      </v-container>
+       <v-divider></v-divider>
       <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn text color="orange" @click="addDialog = false">Cancel</v-btn>
-              <v-btn text color="primary"  @click="addEstimatedValue">Save</v-btn>
+              <v-btn outlined color="orange" @click="addDialog = false">CANCEL</v-btn>
+              <v-btn outlined color="purple darken-2"  @click="addEstimatedValue">ADD</v-btn>
             </v-card-actions>
           </v-card> 
           </v-dialog>
-           
-           </v-card-title>
-         
+           </template>
               <v-data-table :headers="headersIngredients" :items="estimatedValue" :search="search">
+                <template #item.ingredients_amount="{ item }">{{ item.ingredients_need_amount }} {{ item.ingredients_unit }}</template>
               <template v-slot:item.action="{ item }" >
                 <v-icon
                   @click="editDialog = !editDialog, editEstimatedValue(item) "
@@ -91,9 +109,12 @@
                 >mdi-delete
                 </v-icon>
               </template>
-            </v-data-table>
-          <v-dialog v-model="editDialog" width="400px">
-            <v-card>
+            </v-data-table>   
+     </v-card>
+     
+     <template>
+        <v-dialog v-model="editDialog" width="400px">
+      <v-card>
       <v-card-title class="deep-purple--text">
        UPDATE ESTIMATED VALUE
     </v-card-title>
@@ -112,23 +133,32 @@
                     ></v-text-field>
                   </v-col>
                    <v-col cols="12">
+                    <v-select
+                      label="Ingredients Unit"
+                      outlined
+                      v-model="editValue.ingredients_unit"
+                      :items="items"
+                    ></v-select>
+                  </v-col>
+                   <v-col cols="12">
                     <v-text-field
                     label="Estimated Amount"
-                     color="purple"
+                    color="purple"
                     v-model="editValue.ingredients_need_amount"
                     outlined
                    ></v-text-field>
                   </v-col>
                 </v-row>
+                 </v-container>
+                 <v-divider></v-divider>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn text color="orange" @click="editDialog = false">Cancel</v-btn>
-                <v-btn text color="primary" @click="updateEstimatedValue()">Save</v-btn>
+                <v-btn outlined color="orange" @click="editDialog = false">CANCEL</v-btn>
+                <v-btn outlined color="purple darken-2" @click="updateEstimatedValue()">SAVE</v-btn>
               </v-card-actions>
-                </v-container>
             </v-card>
           </v-dialog>
-     </v-card>
+     </template>
 </div>
 </template>
 <style>
@@ -157,9 +187,11 @@ import Swal from "sweetalert2";
   export default {
     name: "BusinessSetting",
     data: () => ({
+       items: ['kg', 'g', 'mg', 'can'],
       loading:false,
-      addedEstimatedAmount:'',
-      addedIngredientsName:'',
+      addedEstimatedAmount:null,
+      addedIngredientsName:null,
+      addedIngredientsUnit:null,
       addProductDialog:false,
       editProductDialog:false,
       productName:null,
@@ -184,27 +216,10 @@ import Swal from "sweetalert2";
           sortable: false,
           value: 'ingredients_name'
         },
-     { text: "Needed Quantity", value: "ingredients_need_amount" },
-         { text: "Category", value: "ingredients_category" },
-        { text: "Actions", value: "action", sortable: false },
+     { text: "Needed Quantity", value: "ingredients_amount" },
+      { text: "Category", value: "ingredients_category" },
+      { text: "Actions", value: "action", sortable: false },
       ],
-       headersProduct: [
-        {
-          text: "Product Name",
-          align: "start",
-          sortable: false,
-          value: 'product_name'
-        },
-        { text: "Image", value: "image" },
-        { text: "Actions", value: "action", sortable: false },
-      ],
-      alignments: [
-        'start',
-        'center',
-        'end',
-      ],
-     
-      text: "",
       disabled: true,
       btnDisabled:false,
       isHidden: true
@@ -220,18 +235,21 @@ import Swal from "sweetalert2";
      addedCategory: {
       required,
     },
+    addedIngredientsUnit:{
+      required,
+    }
       },
       computed:{
       AddedIngredientsNameErrors () {
       const errors = []
       if (!this.$v.addedIngredientsName.$dirty) return errors
-      !this.$v.addedIngredientsName.required && errors.push('Ingredients Name is required.')
+      !this.$v.addedIngredientsName.required && errors.push('Ingredients name is required.')
       return errors
     },
     AddedIngredientsValueErrors () {
       const errors = []
       if (!this.$v.addedEstimatedAmount.$dirty) return errors
-      !this.$v.addedEstimatedAmount.required && errors.push('Estimated Value is required.')
+      !this.$v.addedEstimatedAmount.required && errors.push('Estimated value is required.')
       return errors
     },
      addedCategoryErrors() {
@@ -240,13 +258,17 @@ import Swal from "sweetalert2";
       !this.$v.addedCategory.required && errors.push('Category is required.')
       return errors
     },
+    addedIngredientsUnitErrors(){
+      const errors = []
+      if (!this.$v.addedIngredientsUnit.$dirty) return errors
+      !this.$v.addedIngredientsUnit.required && errors.push('Ingredients unit is required.')
+      return errors
+
+    }
 },
     mounted() {
       this.fetchEstimatedValue();
-      this. retrieveProduct();
       setInterval(this.fetchEstimatedValue(),3000)
-      setInterval(this.retrieveProduct(),3000)
-    
     },
     beforeCreate() {
     let config = {};
@@ -257,7 +279,7 @@ import Swal from "sweetalert2";
     this.config = config;
     console.log("this.config", this.config);
   },
-    created(){ 
+  created(){ 
     },
     methods: {
       editAmount(){
@@ -284,6 +306,7 @@ import Swal from "sweetalert2";
         let param ={
           ingredientsName:upperIngredientsName,
           ingredientsEstimatedAmount:this.addedEstimatedAmount,
+          ingredientsUnit:this.addedIngredientsUnit,
           ingredientsCategory:this.addedCategory
         }
         axios.post(this.url+"/api/post/neededValue",param, this.config).then(response=>{
@@ -306,6 +329,7 @@ import Swal from "sweetalert2";
       fetchEstimatedValue(){
         this.loading=true
         axios.get(this.url+"/api/fetch/estimatedValue", this.config).then(response=>{
+          console.log(response)
           this.loading=false
           this.estimatedValue=response.data;
           console.log(response.data);
@@ -320,7 +344,7 @@ import Swal from "sweetalert2";
 
       },
        updateEstimatedValue(){
-       if (this.editValue.ingredients_need_amount===""){
+       if (this.editValue.ingredients_need_amount===""||this.editValue.ingredients_unit===""){
         Swal.fire({
         title: "Please fill in all required field",
         icon: "warning",
@@ -341,93 +365,7 @@ import Swal from "sweetalert2";
         
         })
        }
-       
     },
-     onImageChange(e){
-            this.image = e.target.files[0]
-            this.imageURL = URL.createObjectURL(e.target.files[0])
-        },
-    onImageEdit(e){
-            this.imageEdit = e.target.files[0]
-            this.editImageURL = URL.createObjectURL(e.target.files[0])
-        },
-     formSubmit(e) {
-            if(this.image !== null && this.productName !== null){
-                e.preventDefault();
-                let currentObj = this;
-                const config = {
-                    headers: { 'content-type': 'multipart/form-data' }
-                }
-                this.addProductDialog=false
-                let formData = new FormData();
-                formData.append('image', this.image)
-                formData.append('productName', this.productName)
-                axios.post(this.url+'/api/post/product', formData, config,this.config).then(function (response) {
-                    currentObj.success = response.data.success
-
-                })
-                .catch(function (error) {
-                    currentObj.output = error;
-                });
-            }else{
-                this.errorMessage = 'All fields are required!'
-            }
-                  this.retrieveProduct();
-
-           
-        },
-    retrieveProduct() {
-            axios.get(this.url+'/api/fetch/product',this.config).then(response => {
-                this.displayProduct = response.data.addProduct;
-                console.log(response.data.addProduct)
-            });
-        },
-     editProduct(item) {
-       console.log(item)
-       this.editProductDialog=true,
-       this.editProductName=item.product_name
-       this.editImageURL = this.url+"/"+item.image
-      this.prodId = item.id
-    },
-    updateProduct(e){
-            if (this.imageEdit !== null  && this.editProductName !== null ){
-              console.log(this.editImageURL);
-                e.preventDefault();
-                let currentObj = this;
-                const config = {
-                    headers: { 'content-type': 'multipart/form-data' }
-                }
-                this.editProductDialog=false
-                let formData = new FormData();
-                formData.append('id', this.prodId)
-                formData.append('image', this.imageEdit)
-                formData.append('productName', this.editProductName)
-                axios.post(this.url+'/api/post/updateProduct', formData, config, this.config)
-                .then(function (response) {
-                    currentObj.success = response.data.success
-                })
-                .catch(function (error) {
-                    currentObj.output = error;
-                });
-            }else{
-                this.errorMessage = 'All fields are required!'
-            }
-            this.retrieveProduct();
-        },
-
-      deleteProduct(item){
-          axios.delete(this.url+'/api/softDeleteProduct/'+item.id, this.config).then(response => {
-          this.retrieveProduct();
-        });
-
-        },
-
-        deleteStockProduct(item){
-          axios.delete(this.url+'/api/softDeleteStockProduct/'+item.id, this.config).then(response => {
-          this.retrieveProduct();
-        });
-
-        },
         deleteStockIngredients(item){
           axios.delete(this.url+'/api/softDeleteStockIngredients/'+item.id, this.config).then(response => {
         });

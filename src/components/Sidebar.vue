@@ -88,16 +88,17 @@
               </v-list-item-content>
             </template>
             <v-list-item
+            
               v-for="_subItem in item.subItem"
               active-class="white purple--text"
               :key="_subItem.title"
               :to="_subItem.link"
               link
             >
-              <v-list-item-icon>
+              <v-list-item-icon  class="ml-5">
                 <v-icon>{{ _subItem.icon }}</v-icon>
               </v-list-item-icon>
-              <v-list-item-content>
+              <v-list-item-content  class="ml-2">
                 <v-list-item-title>{{ _subItem.title }}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
