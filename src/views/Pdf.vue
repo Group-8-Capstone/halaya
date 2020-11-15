@@ -1,8 +1,8 @@
 <template>
   <div class="mt-5">
     <v-spacer></v-spacer>
-    <v-btn class="mr-5" float-right small color="lighten-2 purple" @click="generateReport">
-      <v-icon>mdi-export</v-icon>Export as PDF
+    <v-btn class="mr-5" outlined float-right small color="purple" @click="generateReport">
+      <v-icon>mdi-download</v-icon>Export as PDF
     </v-btn>
     <vue-html2pdf
       :show-layout="false"
@@ -21,17 +21,12 @@
       <section slot="pdf-content">
         <section class="pdf-item">
           <center style="margin:50px">
-            <br>
-            <br>
-            <br>
-            <br>
             <div>
               <img class="logo" width="50" :src="require('@/assets/wawens.png')">
             </div>
             <div>
               <h4>WAWEN'S UBE HALAYA</h4>
               <h6>DELIVERED ORDERS</h6>
-              <br>
             </div>
           </center>
           <div style="margin:50px" class="pa-5">
