@@ -44,11 +44,11 @@
       <v-card>
         <v-row>
           <v-spacer></v-spacer>
-          <DeliveredPdf
+          <ProductPdf
             :headers="headers"
             :records="records"
             class="float-right mr-5"
-          ></DeliveredPdf>
+          ></ProductPdf>
         </v-row>
         <v-card-title>
           Product Logs
