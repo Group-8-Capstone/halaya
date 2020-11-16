@@ -2,7 +2,7 @@
   <v-card class="ma-5 mb-12 pa-5">
     <v-row>
       <v-spacer></v-spacer>
-      <Pdf :headers="headers" :deliveredOrder="deliveredOrder" class="float-right mr-5"></Pdf>
+      <DeliveredPdf :headers="headers" :deliveredOrder="deliveredOrder" class="float-right mr-5"></DeliveredPdf>
     </v-row>
     <v-card-title>
       Delivered Orders
