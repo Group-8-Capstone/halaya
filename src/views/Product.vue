@@ -2,9 +2,9 @@
   <div class="ma-5 mb-12 pa-5">
     <v-row>
       <v-layout wrap class="justify-center">
-        <v-card class="card-container ma-5 productCard" width="30%" >
+        <v-card class="card-container ma-5 productCard" width="30%">
           <v-card-title class="justify-center productName">{{jarName}}</v-card-title>
-             <v-divider></v-divider>
+          <v-divider></v-divider>
           <v-list-item class="justify-center mt-5">
             <img src="../assets/ubeJar.jpg" alt width="100" height="100">
           </v-list-item>
@@ -14,16 +14,15 @@
             <v-chip :color="comparedJarAvailability()" dark>{{ jarStat }}</v-chip>
           </center>
           <v-list-item class="justify-center">Ordered Quantity: {{totalJar}} pcs</v-list-item>
-             <v-divider></v-divider>
+          <v-divider></v-divider>
           <v-card-actions class="justify-end">
-              <v-btn small outlined color="primary" @click="JarDialog=true">EDIT</v-btn>
-              <v-btn small outlined color="purple darken-2" @click="recordProductJar">RECORD</v-btn>
-     
+            <v-btn small outlined color="primary" @click="JarDialog=true">EDIT</v-btn>
+            <v-btn small outlined color="purple darken-2" @click="recordProductJar">RECORD</v-btn>
           </v-card-actions>
         </v-card>
-        <v-card class="card-container ma-5 productCard"  width="30%">
+        <v-card class="card-container ma-5 productCard" width="30%">
           <v-card-title class="justify-center productName">{{tubName}}</v-card-title>
-           <v-divider></v-divider>
+          <v-divider></v-divider>
           <v-list-item class="justify-center mt-5">
             <img src="../assets/ubeTab.jpg" alt width="100" height="100">
           </v-list-item>
@@ -35,18 +34,24 @@
           </center>
           <v-divider></v-divider>
           <v-card-actions class="justify-end">
-         
-              <v-btn small outlined color="primary" @click="TubDialog=true">EDIT</v-btn>
-              <v-btn small outlined color="purple darken-2" @click="recordProductTub">RECORD</v-btn>
-      
+            <v-btn small outlined color="primary" @click="TubDialog=true">EDIT</v-btn>
+            <v-btn small outlined color="purple darken-2" @click="recordProductTub">RECORD</v-btn>
           </v-card-actions>
         </v-card>
       </v-layout>
     </v-row>
     <template>
       <v-card>
+        <v-row>
+          <v-spacer></v-spacer>
+          <ProductPdf
+            :headers="headers"
+            :records="records"
+            class="float-right mr-5"
+          ></ProductPdf>
+        </v-row>
         <v-card-title>
-          Sales
+          Product Logs
           <v-spacer></v-spacer>
           <v-text-field
             v-model="search"
@@ -98,7 +103,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn text color="primary" @click="JarDialog=false,getHalayaJar()">Cancel</v-btn>
-            <v-btn text @click="editHalayaJar()" >Save</v-btn>
+            <v-btn text @click="editHalayaJar()">Save</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -115,12 +120,7 @@
           <v-container>
             <v-row class="mx-2">
               <v-col cols="12">
-                <v-text-field
-                  v-model="editedTubPrice"
-                  color="purple"
-                  outlined
-                  placeholder="Price"
-                ></v-text-field>
+                <v-text-field v-model="editedTubPrice" color="purple" outlined placeholder="Price"></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-text-field
@@ -135,7 +135,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn text color="primary" @click="TubDialog=false,getHalayaTub()">Cancel</v-btn>
-            <v-btn text @click="editHalayaTub()" >Save</v-btn>
+            <v-btn text @click="editHalayaTub()">Save</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -145,7 +145,6 @@
 <style>
 .productCard {
   background-color: #ffffff !important;
-
 }
 .productName {
   /* background-color: rgb(79, 53, 122) !important; */
@@ -153,6 +152,7 @@
 }
 </style>
 <script>
+import ProductPdf from "./ProductPdf.vue";
 import {
   required,
   minLength,
@@ -163,6 +163,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 export default {
   name: "Delivery",
+  components: { ProductPdf },
   data() {
     return {
       records: [],
@@ -245,50 +246,48 @@ export default {
       else return "green";
     },
     getTotalJar(item) {
-      axios
-        .get(this.url+"/api/totalJar", this.config)
-        .then(response => {
-          console.log(response.data);
-          this.totalJar = response.data;
-        });
+      axios.get(this.url + "/api/totalJar", this.config).then(response => {
+        console.log(response.data);
+        this.totalJar = response.data;
+      });
     },
     gettotalTub(item) {
-      axios
-        .get(this.url+"/api/totalTab", this.config)
-        .then(response => {
-          console.log(response.data);
+      axios.get(this.url + "/api/totalTab", this.config).then(response => {
+        console.log(response.data);
 
-          this.totalTub = response.data;
-        });
+        this.totalTub = response.data;
+      });
     },
 
     getHalayaTub(item) {
       axios
-        .get(this.url+"/api/fetchHalayaTub", this.config)
+        .get(this.url + "/api/fetchHalayaTub", this.config)
         .then(response => {
-          console.log(response.data.product[0].id)
-          this.tubId=response.data.product[0].id
-          this.tubName=response.data.product[0].product_name
-          this.editedTubPrice=response.data.product[0].product_price
-          this.editedTubAvail=response.data.product[0].product_availability
-          this.tubPrice=response.data.product[0].product_price
-          this.halayaTubAvailability=response.data.product[0].product_availability - this.totalTub
+          console.log(response.data.product[0].id);
+          this.tubId = response.data.product[0].id;
+          this.tubName = response.data.product[0].product_name;
+          this.editedTubPrice = response.data.product[0].product_price;
+          this.editedTubAvail = response.data.product[0].product_availability;
+          this.tubPrice = response.data.product[0].product_price;
+          this.halayaTubAvailability =
+            response.data.product[0].product_availability - this.totalTub;
         });
     },
 
     getHalayaJar(item) {
       axios
-        .get(this.url+"/api/fetchHalayaJar", this.config)
+        .get(this.url + "/api/fetchHalayaJar", this.config)
         .then(response => {
-           console.log(response.data.product[0])
-          this.jarId=response.data.product[0].id
-          this.jarName=response.data.product[0].product_name
-          this.editedJarPrice=response.data.product[0].product_price
-          this.editedJarAvail=response.data.product[0].product_availability
-          this.jarPrice=response.data.product[0].product_price
-          this.halayaJarAvailability=response.data.product[0].product_availability-this.totalJar 
+          console.log(response.data.product[0]);
+          this.jarId = response.data.product[0].id;
+          this.jarName = response.data.product[0].product_name;
+          this.editedJarPrice = response.data.product[0].product_price;
+          this.editedJarAvail = response.data.product[0].product_availability;
+          this.jarPrice = response.data.product[0].product_price;
+          this.halayaJarAvailability =
+            response.data.product[0].product_availability - this.totalJar;
         });
-      },
+    },
 
     editHalayaTub() {
       let param = {
@@ -296,11 +295,7 @@ export default {
         product_availability: this.editedTubAvail
       };
       axios
-        .post(
-          this.url+"/api/editTub/" + this.tubId,
-          param,
-          this.config
-        )
+        .post(this.url + "/api/editTub/" + this.tubId, param, this.config)
         .then(response => {
           Swal.fire({
             title: "Successfully Added",
@@ -309,7 +304,8 @@ export default {
           });
           this.TubDialog = false;
           this.getHalayaTub();
-      }  )},
+        });
+    },
 
     editHalayaJar() {
       console.log(this.tubId);
@@ -318,11 +314,7 @@ export default {
         product_availability: this.editedJarAvail
       };
       axios
-        .post(
-          this.url+"/api/editTub/" + this.jarId,
-          param,
-          this.config
-        )
+        .post(this.url + "/api/editTub/" + this.jarId, param, this.config)
         .then(response => {
           Swal.fire({
             title: "Successfully Added",
@@ -331,30 +323,28 @@ export default {
           });
           this.JarDialog = false;
           this.getHalayaJar();
-       
-       
-      })
-      },
-       
-//       comparedJarAvailability(){
-//         if (this.totalJar<this.editedJarAvail){
-//           this.jarStat='Enough'
-//           return "green";
-//         } else {
-//           this.jarStat='Lacking'
-//           return "red"
-//         }
-      
-//        },
-//       comparedTubAvailability(){
-//         if (this.totalTub<this.editedTubAvail){
-//           this.tubStat='Enough'
-//           return "green";
-//         } else{
-//           this.tubStat='Lacking'
-//           return "red"
-//         } 
-// },
+        });
+    },
+
+    //       comparedJarAvailability(){
+    //         if (this.totalJar<this.editedJarAvail){
+    //           this.jarStat='Enough'
+    //           return "green";
+    //         } else {
+    //           this.jarStat='Lacking'
+    //           return "red"
+    //         }
+
+    //        },
+    //       comparedTubAvailability(){
+    //         if (this.totalTub<this.editedTubAvail){
+    //           this.tubStat='Enough'
+    //           return "green";
+    //         } else{
+    //           this.tubStat='Lacking'
+    //           return "red"
+    //         }
+    // },
     comparedJarAvailability() {
       if (this.totalJar < this.halayaJarAvailability) {
         this.jarStat = "Enough";
@@ -382,7 +372,7 @@ export default {
         availability_status: this.jarStat
       };
       axios
-        .post(this.url+"/api/dailyRecords", param, this.config)
+        .post(this.url + "/api/dailyRecords", param, this.config)
         .then(response => {
           if (response.data == "success") {
             Swal.fire({
@@ -392,8 +382,7 @@ export default {
               showConfirmButton: false,
               timer: 1500
             });
-             this.fetchRecordedProduct();
-            
+            this.fetchRecordedProduct();
           } else {
             Swal.fire({
               position: "center",
@@ -404,48 +393,47 @@ export default {
               timer: 1500
             });
           }
-         
         });
     },
 
     recordProductTub() {
-         let param = {
-            product_name: this.tubName,
-            remaining_quantity: this.halayaTubAvailability,
-            total_ordered: this.totalTub,
-            availability_status: this.tubStat,
-          };
-          axios
-            .post(this.url+"/api/dailyRecords", param,this.config)
-            .then(response => {
-              console.log(response.data)
-                if (response.data =='success'){
-                Swal.fire({
-                  position: "center",
-                  icon: "success",
-                  title: "Recorded!",
-                  showConfirmButton: false,
-                  timer: 1500
-                });
-                }else{
-                  Swal.fire({
-                  position: "center",
-                  icon: "warning",
-                  titleText:"Recorded",
-                  text:'See below Record',
-                  showConfirmButton: false,
-                  timer: 1500
-                });
-              }
+      let param = {
+        product_name: this.tubName,
+        remaining_quantity: this.halayaTubAvailability,
+        total_ordered: this.totalTub,
+        availability_status: this.tubStat
+      };
+      axios
+        .post(this.url + "/api/dailyRecords", param, this.config)
+        .then(response => {
+          console.log(response.data);
+          if (response.data == "success") {
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Recorded!",
+              showConfirmButton: false,
+              timer: 1500
             });
-          },
-    fetchRecordedProduct() {
-          axios
-            .get(this.url+"/api/fetchRecordedProduct",this.config)
-            .then(response => {
-              this.records=response.data.product
+          } else {
+            Swal.fire({
+              position: "center",
+              icon: "warning",
+              titleText: "Recorded",
+              text: "See below Record",
+              showConfirmButton: false,
+              timer: 1500
             });
+          }
+        });
     },
+    fetchRecordedProduct() {
+      axios
+        .get(this.url + "/api/fetchRecordedProduct", this.config)
+        .then(response => {
+          this.records = response.data.product;
+        });
+    }
   }
-}
+};
 </script>

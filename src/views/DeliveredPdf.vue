@@ -51,6 +51,7 @@
 <script>
 import VueHtml2pdf from "vue-html2pdf";
 export default {
+  name: "DeliveredPdf",
   props: ["headers", "deliveredOrder"],
   components: {
     VueHtml2pdf
@@ -63,7 +64,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .logo {
   border-radius: 50%;
   width: 10%;
