@@ -5,16 +5,16 @@
         THE BEST OF WAWEN'S UBE HALAYA
         <v-spacer></v-spacer>
         <v-list class>
-          <v-btn class="ma-5" color="purple darken-2" rounded dark @click="showDialog">
-            <v-icon>mdi-plus</v-icon>
+          <v-btn class="ma-5" color="purple darken-2" outlined dark @click="showDialog">
+            <!-- <v-icon>mdi-plus</v-icon> -->
             <v-toolbar-title>Create Order</v-toolbar-title>
           </v-btn>
         </v-list>
       </v-card-title>
       <OrderingInfo></OrderingInfo>
     </v-card>
-    <v-dialog v-model="addOrderDialog" width="800px">
-      <v-card>
+    <v-dialog v-model="addOrderDialog" width="50%" >
+      <v-card class="ma-0 pa-0">
         <v-card-title class="align-center">
           <v-list-item-title
             class="d-flex align-center justify-center mx-auto headline black--text"
@@ -104,8 +104,8 @@
               <div id="price" class="font-weight-light grey--text title">{{tubPrice}}</div>
             </v-col>
           </v-row>
-          <v-row class="pl-5">
-            <v-col cols="4" class="pl-5">
+          <v-row >
+            <v-col cols="6" class="pl-5">
               <v-text-field min="0" type="number" label="Quantity" v-model="jarQuantity">
                 <template slot="prepend">
                   <div id="vue-counter">
@@ -115,7 +115,7 @@
                 </template>
               </v-text-field>
             </v-col>
-            <v-col cols="4" class="pl-5">
+            <v-col cols="6" class="pl-5">
               <v-text-field min="0" type="number" label="Quantity" v-model="tabQuantity">
                 <template slot="prepend">
                   <div id="vue-counter">
@@ -123,8 +123,6 @@
                     <v-icon
                       type="button"
                       v-on:click="decreaseTub"
-                      disabled:isDisabled
-                      class="ml-1"
                     >mdi-minus</v-icon>
                   </div>
                 </template>
@@ -161,8 +159,8 @@
         </v-container>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn text color="orange" @click="addOrderDialog = false" class="mb-5">Cancel</v-btn>
-          <v-btn text color="primary" @click="addCard()" class="mb-5">Create</v-btn>
+          <v-btn outlined color="orange" @click="addOrderDialog = false" class="mb-5">CANCEL</v-btn>
+          <v-btn outlined color="purple darken-2" @click="addCard()" class="mb-5">CREATE</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -272,10 +270,10 @@
   align-items: center;
   bottom: 0;
   justify-content: center;
-  opacity: 0.5;
   position: absolute;
   width: 100%;
 }
+
 
 .v-application--wrap {
   min-height: 100vh;
@@ -453,7 +451,7 @@ export default {
       this.customerName = null;
       this.contactNumber = null;
       this.jarQuantity = "0";
-      this.ubeQuantity = "0";
+      this.tabQuantity = "0";
       this.orderQuantity = null;
       this.date = null;
     },
@@ -528,6 +526,7 @@ export default {
     },
     addCard() {
       if (this.jarQuantity == "0" && this.tabQuantity == "0") {
+        console.log("date" +this.date)
         Swal.fire({
           position: "center",
           icon: "warning",
@@ -535,13 +534,19 @@ export default {
           showConfirmButton: false,
           timer: 1500
         });
-        this.$v.$touch();
-        this.addOrderDialog = true;
-      } else {
+        this.addOrderDialog = true
+      }else if(this.date== null || this.customerName==null || this.customerStreet==null
+      || this.customerBarangay==null|| this.customerMunicipality==null || this.contactNumber==null 
+      ||this.customerProvince==null ){
+              this.$v.$touch();
+
+      }
+       else {
         this.addCardDialog = true;
         this.addOrderDialog = false;
         console.log(this.jarPrice);
         console.log(this.jarQuantity);
+        console.log("date" +this.date)
         this.totalPay =
           this.jarQuantity * this.jarPrice + this.tabQuantity * this.tubPrice;
       }
