@@ -23,7 +23,7 @@
                     <hr>
                     <v-spacer/>
                     <v-card-text id="qty">
-                      <b>Number of Batch/s:</b>
+                      <b>Number of Batch/es:</b>
                       {{item.length}}
                     </v-card-text>
                     <v-btn
@@ -51,11 +51,11 @@
               </v-toolbar>
               <v-divider></v-divider>
               <v-row>
-                <v-col v-for="i in orders" :key="i.id">
+                <v-col id="batchCards" v-for="i in orders" :key="i.id">
                   <v-card
                     id="cards"
                     class="mx-auto text-center"
-                    min-height="220"
+                    min-height="240"
                     max-height="240"
                     min-width="300"
                     max-width="300"
@@ -71,8 +71,23 @@
                         <b>No. of Orders:</b>
                         &nbsp;{{i.orders.length}}
                       </span>
+                      <br>
+                      <div v-show="isComplete(i) === true">
+                        <v-btn rounded class="white--text" color="success" depressed>
+                          Completed
+                          <v-icon dark right>mdi-checkbox-marked-circle</v-icon>
+                        </v-btn>
+                      </div>
+                      <!-- <div v-if="isCanceled(i) === true">
+                        <v-badge bordered color="warning" dot overlap>
+                          <v-btn rounded class="white--text" color="success" depressed>
+                            Completed
+                            <v-icon dark right>mdi-checkbox-marked-circle</v-icon>
+                          </v-btn>
+                        </v-badge>
+                      </div> -->
                     </v-card-text>
-                    <v-btn outlined rounded @click="viewDetails(i)" color="purple">View Details</v-btn>
+                    <v-btn outlined @click="viewDetails(i)" color="purple">View Details</v-btn>
                     <br>
                   </v-card>
                 </v-col>
@@ -102,7 +117,13 @@
                 title="Delivered"
                 @click="alertDelivered(item)"
               >mdi-truck-check-outline</v-icon>
-              <v-icon disabled @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+              <v-icon
+                disabled
+                @click="alertCancel(item)"
+                normal
+                class="mr-2"
+                title="Cancel"
+              >mdi-cancel</v-icon>
             </div>
             <div v-else>
               <v-icon
@@ -152,7 +173,7 @@ export default {
           value: "receiver_name"
         },
         { text: "Ube Halaya Tub Order Qty", value: "ubeHalayaTub_qty" },
-        { text: "Ube Halaya Tub Order Qty", value: "ubeHalayaJar_qty" },
+        { text: "Ube Halaya Jar Order Qty", value: "ubeHalayaJar_qty" },
         { text: "Action", value: "action" },
         { text: "Status", value: "order_status" }
       ]
@@ -168,10 +189,8 @@ export default {
     console.log("this.config", this.config);
   },
   created() {
-    this.getRange();
     this.dataGrouping();
-    this.fetchOrders();
-    setInterval(this.fetchOrders(), 3000);
+    setInterval(this.dataGrouping(), 3000);
   },
 
   methods: {
@@ -183,21 +202,13 @@ export default {
     viewOrders(item) {
       this.orders = item;
       this.barangay_name = item.barangay_name;
-      this.fetchOrders();
+      this.dataGrouping();
     },
     viewDetails(i) {
       this.delivery_batch = i;
       this.detailsDialog = true;
-      console.log("iiiiiii", this.delivery_batch.orders);
-      this.fetchOrders();
-    },
-    getRange() {
-      axios
-        .get("http://127.0.0.1:8000/api/fetch/delivery-range", this.config)
-        .then(response => {
-          this.delivery_range = response.data.range;
-          console.log("delivery range: ", this.delivery_range);
-        });
+      // console.log("iiiiiii", this.delivery_batch.orders);
+      this.dataGrouping();
     },
     containsObject(arr, id) {
       return arr.some(function(el) {
@@ -216,13 +227,11 @@ export default {
         reverseButtons: true
       }).then(result => {
         if (result.value) {
-          // console.log("lllllllllllll========== ", this.config)
           this.deliveredItem(item);
         }
       });
     },
     deliveredItem(item) {
-      // console.log("================ ", this.config)
       axios
         .post(this.url + "/api/post/updateStat/" + item.id, {}, this.config)
         .then(response => {
@@ -233,8 +242,7 @@ export default {
             showConfirmButton: false,
             timer: 1500
           }),
-            this.fetchOrders();
-          // this.detailsDialog = false;
+            this.dataGrouping();
         });
     },
     alertCancel(item) {
@@ -268,47 +276,20 @@ export default {
           this.config
         )
         .then(response => {
-          this.fetchOrders();
-          // this.detailsDialog = false;
+          this.dataGrouping();
         });
-    },
-    fetchOrders() {
-      axios.get(this.url + "/api/posts/order", this.config).then(response => {
-        this.allOrders = response.data.data;
-        console.log("ooooo", this.allOrders);
-        for (var i = 0; i < this.allOrders.length; i++) {
-          var street = response.data.data[i].building_or_street;
-          var barangay = response.data.data[i].barangay;
-          var city = response.data.data[i].city_or_municipality;
-          var province = response.data.data[i].province;
-          var place = street
-            .toString()
-            .concat(
-              " ",
-              barangay.toString(),
-              " ",
-              city.toString(),
-              " ",
-              province.toString()
-            );
-          this.allOrders[i]["customer_address"] = place;
-        }
-      });
     },
     dataGrouping() {
       axios
-        .get("http://127.0.0.1:8000/api/posts/delivery", this.config)
+        .get(this.url + "/api/posts/delivery", this.config)
         .then(response => {
           var result = response.data.data;
-          // console.log(result);
           let groupedOrders = {};
           result.forEach(data => {
             let { barangay } = data;
             groupedOrders[barangay] = result.filter(
               order => order.barangay == barangay
             );
-
-            // console.log("barangay_name", this.barangay_name);
           });
           let deliveries = {};
           const MAX_QUANTITY = 96;
@@ -347,7 +328,6 @@ export default {
             deliveries[key]["barangay_name"] = key;
 
             this.deliveriesByBrngy = deliveries;
-            console.log("===================", this.deliveriesByBrngy);
           }
         });
     },
@@ -355,10 +335,31 @@ export default {
       if (item.order_status == "Canceled") {
         return true;
       }
-    }
+    },
+    isComplete(item) {
+      for (var i = 0; i < item.orders.length; i++) {
+        if (
+          item.orders[i].order_status === "On order" || item.orders[i].order_status === "Canceled"
+        ) {
+          return false;
+        } else {
+          return true;
+        }
+      }
+    },
+    // isCanceled(item) {
+    //   for (var i = 0; i < item.orders.length; i++) {
+    //     if (item.orders[i].order_status === "Canceled") {
+    //       return true;
+    //     }
+    //   }
+    // }
   }
 };
 </script>
 
 <style>
+#batchCards {
+  flex-grow: 0 !important;
+}
 </style>

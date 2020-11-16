@@ -359,6 +359,7 @@ export default {
         year: this.filterByDate,
         month: this.page
       };
+      console.log("parameter", parameter);
       axios
         .post(this.url+"/api/sales/daily", parameter, this.config)
         .then(response => {
