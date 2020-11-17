@@ -1,7 +1,7 @@
 <template>
   <v-app id="inspire">
     <v-app-bar app fixed light lights-in height="70" color="white" dense dark elevation="40">
-      <v-btn color="grey" icon @click.stop="mini = !mini">
+      <v-btn color="grey" icon @click.stop="mini = !mini, subItemList=false"  >
         <v-icon>mdi-menu</v-icon>
       </v-btn>
       <v-list-item-avatar size="60">
@@ -19,16 +19,15 @@
       dark
       id="drawer"
     >
-          <v-sheet color="purple darken-3" >
-            <v-row>
-<v-list-item-avatar class="ma-2" color="grey darken-1" size="40">
+ <v-sheet color="purple darken-3" >
+ <v-row>
+<v-list-item-avatar class="ma-2" color="grey darken-1" size="40"> 
 <img  :src="image === null ? avatarSrc : this.url+'/'+ image" >
 </v-list-item-avatar>
 <v-list-item-content>
 <v-toolbar-title class="white--text ml-5 ">{{name}}</v-toolbar-title>
 </v-list-item-content>
 </v-row>
-
 </v-sheet>
       <v-divider></v-divider>
       <template v-if="isCustomer() === true">
@@ -95,10 +94,10 @@
               :to="_subItem.link"
               link
             >
-              <v-list-item-icon  class="ml-5">
+              <v-list-item-icon >
                 <v-icon>{{ _subItem.icon }}</v-icon>
               </v-list-item-icon>
-              <v-list-item-content  class="ml-2">
+              <v-list-item-content  >
                 <v-list-item-title>{{ _subItem.title }}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
