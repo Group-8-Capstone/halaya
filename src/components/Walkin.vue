@@ -1,7 +1,7 @@
 <template>
 <div>
   <center>
-     <v-card width="75%" class="mb-12" >
+     <v-card style="max-width:800px;height:auto;" class="mb-12" >
         <v-spacer></v-spacer>
         <v-card-title class="align-center">
           <v-list-item-title
@@ -10,7 +10,7 @@
         </v-card-title>
         <v-container>
           <v-row>
-            <v-col cols="5">
+            <v-col cols="6">
               <v-text-field
                 prepend-icon="mdi-account-outline"
                 label="Customer Name"
@@ -21,7 +21,7 @@
                 required
               ></v-text-field>
             </v-col>
-            <v-col cols="5" class="pl-12">
+            <v-col cols="6" >
               <v-text-field
                 type="number"
                 prepend-icon="mdi-phone"
@@ -35,19 +35,19 @@
             </v-col>
           </v-row>
               <v-row>
-             <v-col cols="5" >
+             <v-col cols="6" class="pl-5" >
               <v-img  width="250px" height="200px" src="../assets/halayaJar.jpg"></v-img>
               <h6 class="display-1 font-weight-light orange--text ml-5">{{jarName}}</h6>
               <div id="price" class="font-weight-light grey--text title ml-5">{{jarPrice}}</div>
             </v-col>
-            <v-col>
+            <v-col cols="6" class="pl-5" >
               <v-img  width="250px" height="200px" src="../assets/halayaTab.jpg"></v-img>
                <h6 class="display-1 font-weight-light orange--text ">{{tubName}}</h6>
                 <div id="price" class="font-weight-light grey--text title ">{{tubPrice}}</div>
             </v-col>
           </v-row>
           <v-row >
-            <v-col cols="5" >
+            <v-col cols="6" >
               <v-text-field min="0" type="number" label="Quantity" v-model="jarQuantity">
                 <template slot="prepend">
                   <div id="vue-counter">
@@ -57,7 +57,7 @@
                 </template>
               </v-text-field>
             </v-col>
-            <v-col  cols="5" class="pl-12">
+            <v-col  cols="6" class="pl-12">
                <v-text-field min="0" type="number" label="Quantity" v-model="tabQuantity">
                 <template slot="prepend">
                   <div id="vue-counter" >
@@ -71,11 +71,10 @@
         </v-container>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn outlined color="purple darken-2" @click="placeOrder()">PLACE ORDER</v-btn>
+          <v-btn outlined color="purple darken-2" @click="placeOrder()">ADD ORDER</v-btn>
         </v-card-actions>
       </v-card>
       </center>
-        
     </div>  
 </template>
 <script>

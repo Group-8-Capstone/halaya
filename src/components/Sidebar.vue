@@ -1,7 +1,7 @@
 <template>
   <v-app id="inspire">
-    <v-app-bar app fixed light lights-in height="70" color="white" dense dark elevation="40">
-      <v-btn color="grey" icon @click.stop="mini = !mini, subItemList=false"  >
+    <v-app-bar app  light lights-in height="70" color="white" dense dark elevation="40">
+      <v-btn color="grey" icon @click.stop="drawer = !drawer"  >
         <v-icon>mdi-menu</v-icon>
       </v-btn>
       <v-list-item-avatar size="60">
@@ -12,9 +12,6 @@
     <v-navigation-drawer
       v-model="drawer"
       app
-      :mini-variant.sync="mini"
-      permanent
-      fixed
       color="purple darken-3"
       dark
       id="drawer"
@@ -59,7 +56,6 @@
           </v-list-group>
         </v-list>
       </template>
-
       <template v-if="isAdmin() === true">
         <v-list>
           <v-list-item
@@ -79,25 +75,24 @@
           </v-list-item>
           <v-list-group v-else-if="item.subItem" active-class="purple--text">
             <template v-slot:activator>
-              <v-list-item-icon>
+              <v-list-item-icon >
                 <v-icon v-text="item.icon"></v-icon>
               </v-list-item-icon>
-              <v-list-item-content>
+              <v-list-item-content >
                 <v-list-item-title v-text="item.text"></v-list-item-title>
               </v-list-item-content>
             </template>
             <v-list-item
-            
               v-for="_subItem in item.subItem"
               active-class="white purple--text"
               :key="_subItem.title"
               :to="_subItem.link"
               link
             >
-              <v-list-item-icon >
+              <v-list-item-icon class="ml-3">
                 <v-icon>{{ _subItem.icon }}</v-icon>
               </v-list-item-icon>
-              <v-list-item-content  >
+              <v-list-item-content class="ml-2" >
                 <v-list-item-title>{{ _subItem.title }}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>

@@ -65,7 +65,6 @@
             </v-data-table>
           </v-row>
         </v-tab-item>
-
         <v-tab-item>
           <v-card-title>
             Pending Orders
@@ -98,25 +97,25 @@
         </v-tab-item>
       </v-tabs-items>
       <template>
-        <v-dialog v-model="editDialog" width="400px">
+        <v-dialog v-model="editDialog" style="height:auto;" width="400px">
           <v-card>
             <v-spacer></v-spacer>
-            <v-card-title class="deep-purple lighten-1 align-center">
-              <v-list-item-title
-                class="d-flex align-center justify-center mx-auto headline"
-              >UPDATE ORDER</v-list-item-title>
-            </v-card-title>
+             <v-card-title class="deep-purple--text">
+       UPDATE ORDER
+    </v-card-title>
+    <v-card-subtitle>
+      Please fill in the required information 
+    </v-card-subtitle>
+    <v-divider></v-divider> 
             <v-container>
               <v-row class="mx-2">
                 <v-col class="align-center justify-space-between" cols="12">
                   <v-row align="center" class="mr-0">
-                    <v-avatar size="40px" class="mx-3">
-                      <img src="//ssl.gstatic.com/s2/oz/images/sge/grey_silhouette.png" alt>
-                    </v-avatar>
-                    <v-text-field placeholder="Name" v-model="post.receiver_name"></v-text-field>
+                    <v-text-field  prepend-icon="mdi-account-outline" label="Receiver's Name" v-model="post.receiver_name"></v-text-field>
                   </v-row>
                 </v-col>
-                <label>Address</label>
+                 <v-icon class="pl-4">mdi-map-marker</v-icon>
+                  <label>Receiver Address</label>
                 <v-row class="pl-5">
                   <v-col cols="6">
                     <v-text-field v-model="post.building_or_street" label="Building Name/Street"></v-text-field>
@@ -165,49 +164,35 @@
                 </v-col>
                 <v-col cols="12">
                   <v-text-field
-                    v-model="post.ubeHalayaJar_qty"
+                    v-model="post.ubehalayajar_qty"
                     prepend-icon="mdi-plus"
                     min="1"
                     type="number"
-                    placeholder="Quantity"
+                    label="Halaya Jar Quantity"
+                    v-bind:disabled="disabled"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12">
                   <v-text-field
-                    v-model="post.ubeHalayaTub_qty"
+                    v-model="post.ubehalayatub_qty"
                     prepend-icon="mdi-plus"
                     min="1"
                     type="number"
-                    placeholder="Quantity"
+                    label="Halaya Tub Quantity"
+                    v-bind:disabled="disabled"
                   ></v-text-field>
                 </v-col>
               </v-row>
             </v-container>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="editDialog = false">Cancel</v-btn>
-              <v-btn text @click=" updateItem()">Save</v-btn>
+              <v-btn small outlined color="orange" @click="editDialog = false">CANCEL</v-btn>
+              <v-btn small outlined color="purple darken-2" @click=" updateItem()">UPDATE</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
       </template>
       <template>
-        <!-- <v-dialog v-model="orderDetails" persistent max-width="500px">
-          <v-card>
-            <v-card-title>
-              <span>Order Details</span>
-            </v-card-title>
-            <hr>
-            <v-spacer></v-spacer>
-            <v-list id="list" v-for="i in orderedProducts" v-bind:key="i.id">
-              <v-list-item-title>Product Name: {{i.product_name}}</v-list-item-title>
-              <v-list-item-subtitle>Order Qty: {{ i.pivot.sub_quantity }}</v-list-item-subtitle>
-            </v-list>
-            <v-card-actions>
-              <v-btn id="closeBtn" color="primary" text @click="closeDialog()">Close</v-btn>
-            </v-card-actions>
-          </v-card> 
-        </v-dialog>-->
       </template>
     </v-card>
   </div>
@@ -294,6 +279,7 @@ export default {
       orderStatus: "On order",
       search: "",
       dialog: false,
+      disabled: true,
       headers: [
         {
           text: "Customer's Name",
@@ -308,8 +294,8 @@ export default {
           value: "preferred_delivery_date",
           sortable: false
         },
-        { text: "Ube Halaya Jar(Quantity)", value: "ubeHalayaJar_qty", sortable: false },
-        { text: "Ube Halaya Tub(Quantity)", value: "ubeHalayaTub_qty", sortable: false },
+        { text: "Ube Halaya Jar(Quantity)", value: "ubehalayajar_qty", sortable: false },
+        { text: "Ube Halaya Tub(Quantity)", value: "ubehalayatub_qty", sortable: false },
         { text: "Actions", value: "action", sortable: false },
         { text: "Status", value: "order_status" }
       ]
@@ -424,9 +410,9 @@ export default {
         this.post.barangay === "" ||
         this.post.city_or_municipality === "" ||
         this.post.province === "" ||
-        this.post.ubeHalayaJar_qty === "" ||
+        this.post.ubehalayajar_qty === "" ||
         this.post.preferred_delivery_date === "" ||
-        this.post.ubehalayaTub_qty == ""
+        this.post.ubehalayatub_qty == ""
       ) {
         Swal.fire({
           title: "Please fill in all required field",
