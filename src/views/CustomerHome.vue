@@ -1,19 +1,18 @@
 <template>
   <div>
-    <v-card class="ma-5 mb-12 pa-5">
+     <v-card class="ma-5 mb-12 pa-5">
       <v-card-title>
-        THE BEST OF WAWEN'S UBE HALAYA
+        THE BEST OF WAWEN'S UBE HALAYA 
         <v-spacer></v-spacer>
-        <v-list class>
+        <v-list class="justify-sm-end justify-lg-end">
           <v-btn class="ma-5" color="purple darken-2" outlined dark @click="showDialog">
-            <!-- <v-icon>mdi-plus</v-icon> -->
             <v-toolbar-title>Create Order</v-toolbar-title>
           </v-btn>
         </v-list>
       </v-card-title>
       <OrderingInfo></OrderingInfo>
     </v-card>
-    <v-dialog v-model="addOrderDialog" width="50%" >
+    <v-dialog v-model="addOrderDialog" style="height:auto;" width="500px" >
       <v-card class="ma-0 pa-0">
         <v-card-title class="align-center">
           <v-list-item-title
@@ -93,12 +92,12 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col>
+            <v-col cols="6" class="pl-5">
               <v-img class="ml-5" width="250px" height="200px" src="../assets/halayaJar.jpg"></v-img>
               <h6 class="display-1 font-weight-light orange--text ml-5">{{jarName}}</h6>
               <div id="price" class="font-weight-light grey--text title ml-5">{{jarPrice}}</div>
             </v-col>
-            <v-col>
+            <v-col cols="6" class="pl-5">
               <v-img width="250px" height="200px" src="../assets/halayaTab.jpg"></v-img>
               <h6 class="display-1 font-weight-light orange--text">{{tubName}}</h6>
               <div id="price" class="font-weight-light grey--text title">{{tubPrice}}</div>
@@ -223,31 +222,31 @@
           </v-card-title>
           <v-row>
             <v-col cols="5" class="pl-12">
-              <span>Recievers Name: {{customerName}}</span>
+              <span><h4>Recievers Name: </h4>{{customerName}}</span>
             </v-col>
             <v-col cols="5" class="pl-12">
-              <span>Reciever Number: {{contactNumber}}</span>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="5" class="pl-12">
-              <span>Address: {{customerStreet}}, {{customerBarangay}}, {{customerMunicipality}}</span>
-            </v-col>
-            <v-col cols="5" class="pl-12">
-              <span>Preferred Delivery: {{date}}</span>
+              <span><h4>Reciever Number: </h4>{{contactNumber}}</span>
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="5" class="pl-12">
-              <span>Jar Quantity: {{jarQuantity}}</span>
+              <span><h4>Address: </h4>{{customerStreet}}, {{customerBarangay}}, {{customerMunicipality}}</span>
             </v-col>
             <v-col cols="5" class="pl-12">
-              <span>Tub Quntity: {{tabQuantity}}</span>
+              <span><h4>Delivery: </h4>{{date}}</span>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="5" class="pl-12">
+              <span><h4>Jar Quantity: </h4>{{jarQuantity}}</span>
+            </v-col>
+            <v-col cols="5" class="pl-12">
+              <span><h4>Tub Quntity: </h4>{{tabQuantity}}</span>
             </v-col>
           </v-row>
 
           <v-col cols="5" class="pl-12">
-            <span>Your total payment: {{totalPay}}</span>
+            <span><h4>Your total payment: </h4>{{totalPay}}</span>
           </v-col>
 
           <v-card-actions>
@@ -255,10 +254,10 @@
             <v-btn
               class="ma-3"
               color="orange"
-              text
+              outlined
               @click="addCardDialog=false , addOrderDialog=true"
-            >Cancel</v-btn>
-            <v-btn class="ma-3" color="primary" text @click="placeOrder()">Place Order</v-btn>
+            >CANCEL</v-btn>
+            <v-btn class="ma-3" color="purple darken-2" outlined @click="placeOrder()">PLACE ORDER</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>

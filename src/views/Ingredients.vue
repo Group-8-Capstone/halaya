@@ -80,13 +80,13 @@
       </v-data-table>
     </v-card>
     <template>
-      <v-dialog v-model="addUsedStockDialog" width="30%" >
+      <v-dialog v-model="addUsedStockDialog"  style="height:auto;" width="400px" >
         <v-card class="ma-0 pa-0">
           <v-spacer></v-spacer>
           <v-card-title class=" align-center">
             <v-list-item-title
               class="deep-purple--text d-flex align-center justify-center mx-auto headline"
-            >AMOUNT USED</v-list-item-title>
+            >QUANTITY BEING USED</v-list-item-title>
           </v-card-title>
           <v-divider></v-divider>
           <v-container>
@@ -94,7 +94,7 @@
               <v-col cols="12">
                 <v-text-field
                   color="purple"
-                  outlined
+             
                   label="Ingredients Name"
                   v-model="editValue.ingredients_name"
                   v-bind:disabled="disabled"
@@ -103,7 +103,7 @@
               <v-col cols="8">
                 <v-text-field
                   color="purple"
-                  outlined
+           
                   min="1"
                   type="number"
                   label="Quantity"
@@ -117,7 +117,7 @@
                 <v-text-field
                   color="purple"
                   label="Unit"
-                  outlined
+                
                   v-model="editValue.ingredients_unit"
                   v-bind:disabled="disabled"
                 ></v-text-field>
@@ -145,7 +145,7 @@
       </center>
     </template>
     <template>
-      <v-dialog v-model="editDialog" width="30%" >
+      <v-dialog v-model="editDialog"  style="height:auto;" width="400px" >
         <v-card class="ma-0 pa-0">
           <v-spacer></v-spacer>
           <v-card-title class="deep-purple--text align-center">
@@ -160,7 +160,6 @@
                 <v-text-field
                   color="purple"
                   v-model="editStockItem.ingredients_remaining"
-                  outlined
                   label="Available Quantity"
                 >{{editStockItem.ingredients_remaining}}</v-text-field>
               </v-col>

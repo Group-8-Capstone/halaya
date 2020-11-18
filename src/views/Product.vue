@@ -2,7 +2,7 @@
   <div class="ma-5 mb-12 pa-5">
     <v-row>
       <v-layout wrap class="justify-center">
-        <v-card class="card-container ma-5 productCard" width="30%">
+        <v-card class="card-container ma-5 productCard" style="max-width:500px;height:auto;">
           <v-card-title class="justify-center productName">{{jarName}}</v-card-title>
           <v-divider></v-divider>
           <v-list-item class="justify-center mt-5">
@@ -20,7 +20,7 @@
             <v-btn small outlined color="purple darken-2" @click="recordProductJar">RECORD</v-btn>
           </v-card-actions>
         </v-card>
-        <v-card class="card-container ma-5 productCard" width="30%">
+        <v-card class="card-container ma-5 productCard" style="max-width:500px;height:auto;">
           <v-card-title class="justify-center productName">{{tubName}}</v-card-title>
           <v-divider></v-divider>
           <v-list-item class="justify-center mt-5">
