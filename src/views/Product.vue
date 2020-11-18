@@ -83,13 +83,14 @@
     </template>
     <template>
       <v-dialog v-model="JarDialog" width="350px">
-        <v-card>
+        <v-card class="ma-0 pa-0">
           <v-spacer></v-spacer>
-          <v-card-title class="deep-purple lighten-1 align-center">
+          <v-card-title class=" align-center">
             <v-list-item-title
-              class="d-flex align-center justify-center mx-auto headline"
+              class=" deep-purple--text d-flex align-center justify-center mx-auto headline"
             >Update Jar Info</v-list-item-title>
           </v-card-title>
+          <v-divider></v-divider>
           <v-container>
             <v-row class="mx-2">
               <v-col cols="12">
@@ -102,40 +103,41 @@
           </v-container>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="JarDialog=false,getHalayaJar()">Cancel</v-btn>
-            <v-btn text @click="editHalayaJar()">Save</v-btn>
+            <v-btn small outlined color="orange" @click="JarDialog=false,getHalayaJar()">CANCEL</v-btn>
+            <v-btn small outlined color="purple darken-2" @click="editHalayaJar()">UPDATE</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
     </template>
     <template>
       <v-dialog v-model="TubDialog" width="350px">
-        <v-card>
+        <v-card class="ma-0 pa-0">
           <v-spacer></v-spacer>
-          <v-card-title class="deep-purple lighten-1 align-center">
+          <v-card-title class=" align-center">
             <v-list-item-title
-              class="d-flex align-center justify-center mx-auto headline"
+              class="deep-purple--text d-flex align-center justify-center mx-auto headline"
             >Update Tub Info</v-list-item-title>
           </v-card-title>
+          <v-divider></v-divider>
           <v-container>
             <v-row class="mx-2">
               <v-col cols="12">
-                <v-text-field v-model="editedTubPrice" color="purple" outlined placeholder="Price"></v-text-field>
+                <v-text-field v-model="editedTubPrice" color="purple" outlined label="Price"></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-text-field
                   v-model="editedTubAvail"
                   color="purple"
                   outlined
-                  placeholder="Make Product"
+                  label="Make Product"
                 ></v-text-field>
               </v-col>
             </v-row>
           </v-container>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="TubDialog=false,getHalayaTub()">Cancel</v-btn>
-            <v-btn text @click="editHalayaTub()">Save</v-btn>
+            <v-btn small outlined color="orange" @click="TubDialog=false,getHalayaTub()">CANCEL</v-btn>
+            <v-btn small outlined color= "purple darken-2" @click="editHalayaTub()">UPDATE</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
