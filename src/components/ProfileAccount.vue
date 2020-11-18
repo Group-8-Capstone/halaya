@@ -1,25 +1,67 @@
 <template>
  <div class="container " >
    <center>
-     
-            <v-card width="400px" class="ml-10">
+            <v-card style="max-width:500px;height:auto;" class="ml-10">
                  <v-card-title >ACCOUNT PROFILE</v-card-title>
-                  <v-divider></v-divider>
-                 <div class="modal-body mt-5">
+                 <div class="modal-body">
                         <form @submit="formSubmit" enctype="multipart/form-data" action>
                           <v-container>
                                   <center>
-                                    <img class="addOnsImage" :src="imageURL"><br>
+                                    <img style="max-width:100%;height:auto;" class="addOnsImage" :src="imageURL"><br>
                                      <h4 class=" gray--text">{{username}}</h4>
                                     <input type="file" class="fileStyle deep-purple--text" v-on:change="onImageChange">
+                                    
                             </center>
                             </v-container>
                     <v-card-actions>
                       <v-spacer></v-spacer>
-                      <v-btn type="submit" class="ma-3" color="primary" outlined>Update</v-btn>
+                      <v-btn small type="submit" class="ma-3" color="purple darken-2" outlined>UPDATE PROFILE</v-btn>
                       </v-card-actions>
                         </form>
                   </div>
+                  <v-divider></v-divider>
+                    <v-card-title >ACCOUNT PASSWORD</v-card-title>
+                    <span id="message"></span>
+                  <v-row>
+                    <v-col cols="12">  <v-text-field
+                      
+                      v-model="userPassword"
+                      prepend-icon="mdi-lock"
+                      label="Enter password"
+                      :append-icon="value ? 'mdi-eye-off' : 'mdi-eye'"
+                      @click:append="() => (value = !value)"
+                      :type="value ? 'password' : 'text'"
+                      :rules="[rules.password]"
+                      outlined
+                      dense
+                      :error-messages="userPasswordErrors"
+                      @input="$v.userPassword.$touch()"
+                      @blur="$v.userPassword.$touch()"
+                      required
+                    ></v-text-field>
+                    <v-text-field
+                     
+                      label="Confirm Password"
+                      :append-icon="valuePass ? 'mdi-eye-off' : 'mdi-eye'"
+                      @click:append="() => (valuePass = !valuePass)"
+                      :type="valuePass ? 'password' : 'text'"
+                      name="password"
+                      prepend-icon="mdi-lock"
+                      v-model="confirmPassword"
+                      :rules="[passwordConfirmationRule]"
+                      class="border-design"
+                      outlined
+                      dense
+                      :error-messages="confirmPasswordErrors"
+                      @input="$v.confirmPassword.$touch()"
+                      @blur="$v.confirmPassword.$touch()"
+                      required
+                    ></v-text-field></v-col>
+                  </v-row>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                  <v-btn outlined small @click="updatePassword" class="ma-3" color="purple darken-2">UPDATE PASSWORD</v-btn>
+                  </v-card-actions>
             </v-card>
         </center>
  </div>
@@ -38,14 +80,19 @@
     
 }
 
-.v-card{
-  margin-top: 10%
-}
+
 </style>
 
 
 <script>
 import axios from "axios";
+import Swal from "sweetalert2";
+import {
+  required,
+  minLength,
+  maxLength,
+  between
+} from "vuelidate/lib/validators";
   export default {
     name: "BusinessSetting",
     data: () => ({
@@ -64,9 +111,31 @@ import axios from "axios";
       disabled: true,
       btnDisabled:false,
       isHidden: true,
-      username:null
+      username:null,
+      rules: {
+      required: value => !!value || " Password is required.",
+      password: value => {
+        const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#_\$%\^&\*])(?=.{8,})/;
+        return (
+          pattern.test(value) ||
+          "Min. 8 characters with at least one capital letter, a number and a special character."
+        );
+      }
+    },
+    confirmPassword: null,
+    userPassword: null,
+    valuePass: true,
+    value: true,
 
     }),
+     validations: {
+    userPassword: {
+      required
+    },
+    confirmPassword: {
+      required
+    }
+     },
     beforeCreate() {
     let config = {};
     config.headers = {
@@ -76,6 +145,24 @@ import axios from "axios";
     this.config = config;
     console.log("this.config", this.config);
   },
+   computed: {
+    passwordConfirmationRule() {
+      return () =>
+        this.userPassword === this.confirmPassword || "Password does not match";
+    },
+    userPasswordErrors() {
+      const errors = [];
+      if (!this.$v.userPassword.$dirty) return errors;
+      !this.$v.userPassword.required && errors.push("Pasword is required.");
+      return errors;
+    },
+    confirmPasswordErrors() {
+      const errors = [];
+      if (!this.$v.confirmPassword.$dirty) return errors;
+      !this.$v.confirmPassword.required && errors.push("Pasword is required.");
+      return errors;
+    },
+  },
 
     mounted() {
         this.avatarRetrieve()
@@ -83,6 +170,10 @@ import axios from "axios";
     },
 
     methods: {
+      reloadPassword(){
+        this.userPassword=null,
+        this.confirmPassword=null
+      },
       editAmount(){
         console.log('good')
         this.disabled= false
@@ -136,7 +227,32 @@ import axios from "axios";
         console.log(response.data.account[0].username)
       });
     },
+    updatePassword(){
+      if (this.userPassword ==null || this.confirmPassword ==null){
+         this.$v.$touch();
+      }else{
+      let id=localStorage.getItem('id')
+      let param={
+        confirmPassword:this.confirmPassword
+      }
+      axios.post(this.url+'/api/passwordUpdate/'+id, param, this.config)
+            .then(response => {
+                Swal.fire({
+                  position: "center",
+                  icon: "success",
+                  title: "Your updated your password",
+                  showConfirmButton: false,
+                  timer: 1500
+                });
+              })
+        // this.reloadPassword();
+        this.$v.$reset();
+      
     }
+    }
+    }
+
+ 
     
   }
 </script>

@@ -50,11 +50,10 @@
         </v-flex>
       </v-row>
     </v-card>
-
     <v-card id="cardtable" class="ma-5 mb-12 pa-5">
       <v-row>
         <v-spacer></v-spacer>
-        <Pdf :headers="headers" :displayIngredientsRecords="displayIngredientsRecords" class="float-right mr-5"></Pdf>
+        <IngredientsPdf :headers="headers" :displayIngredientsRecords="displayIngredientsRecords" class="float-right mr-5"></IngredientsPdf>
       </v-row>
       <v-card-title>
         Recorded Used Ingredients
@@ -73,6 +72,7 @@
         :items="displayIngredientsRecords"
         :search="search"
       >
+        <template #item.used_ingredients_amount="{ item }">{{ item.used_ingredients_amount }} {{ item.ingredients_unit }}</template>
         <template v-slot:item.action="{ item }">
           <v-icon normal title="Edit">mdi-table-edit</v-icon>
           <v-icon class="mr-3" color="red" normal title="Delete Product">mdi-delete</v-icon>
@@ -80,44 +80,54 @@
       </v-data-table>
     </v-card>
     <template>
-      <v-dialog v-model="addUsedStockDialog" width="400px">
-        <v-card>
+      <v-dialog v-model="addUsedStockDialog"  style="height:auto;" width="400px" >
+        <v-card class="ma-0 pa-0">
           <v-spacer></v-spacer>
-          <v-card-title class="deep-purple lighten-1 align-center">
+          <v-card-title class=" align-center">
             <v-list-item-title
-              class="d-flex align-center justify-center mx-auto headline"
-            >Amount used</v-list-item-title>
+              class="deep-purple--text d-flex align-center justify-center mx-auto headline"
+            >QUANTITY BEING USED</v-list-item-title>
           </v-card-title>
+          <v-divider></v-divider>
           <v-container>
             <v-row class="mx-2">
               <v-col cols="12">
                 <v-text-field
                   color="purple"
-                  outlined
+             
                   label="Ingredients Name"
                   v-model="editValue.ingredients_name"
                   v-bind:disabled="disabled"
                 ></v-text-field>
               </v-col>
-              <v-col cols="12">
+              <v-col cols="8">
                 <v-text-field
                   color="purple"
-                  outlined
+           
                   min="1"
                   type="number"
-                  label="Quantity (kg/number of cans)"
+                  label="Quantity"
                   v-model="usedIngredientsAmount"
                   :error-messages="ingredientsUsedAmountErrors"
                   @input="$v.usedIngredientsAmount.$touch()"
                   @blur="$v.usedIngredientsAmount.$touch()"
                 ></v-text-field>
               </v-col>
+              <v-col cols="4">
+                <v-text-field
+                  color="purple"
+                  label="Unit"
+                
+                  v-model="editValue.ingredients_unit"
+                  v-bind:disabled="disabled"
+                ></v-text-field>
+              </v-col>
             </v-row>
           </v-container>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="addUsedStockDialog = false">Cancel</v-btn>
-            <v-btn text @click="addIngredientsAmount()">Save</v-btn>
+            <v-btn small outlined color="orange" @click="addUsedStockDialog = false">CANCEL</v-btn>
+            <v-btn small outlined color="purple darken-2" @click="addIngredientsAmount()">SAVE</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -134,32 +144,31 @@
         ></v-progress-circular>
       </center>
     </template>
-
     <template>
-      <v-dialog v-model="editDialog" width="350px">
-        <v-card>
+      <v-dialog v-model="editDialog"  style="height:auto;" width="400px" >
+        <v-card class="ma-0 pa-0">
           <v-spacer></v-spacer>
-          <v-card-title class="deep-purple lighten-1 align-center">
+          <v-card-title class="deep-purple--text align-center">
             <v-list-item-title
-              class="d-flex align-center justify-center mx-auto headline"
+              class="deep-purple--text d-flex align-center justify-center mx-auto headline"
             >UPDATE AMOUNT</v-list-item-title>
           </v-card-title>
+          <v-divider></v-divider>
           <v-container>
             <v-row class="mx-2">
               <v-col cols="12">
                 <v-text-field
                   color="purple"
                   v-model="editStockItem.ingredients_remaining"
-                  outlined
-                  placeholder="Quantity (kg/number of cans)"
+                  label="Available Quantity"
                 >{{editStockItem.ingredients_remaining}}</v-text-field>
               </v-col>
             </v-row>
           </v-container>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="editDialog = false,reloadDataAddStock()">Cancel</v-btn>
-            <v-btn text @click=" updateIngredients()">Save</v-btn>
+            <v-btn small outlined color="orange" @click="editDialog = false,reloadDataAddStock()">CANCEL</v-btn>
+            <v-btn small outlined color ="purple darken-2" @click=" updateIngredients()">SAVE</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -252,7 +261,7 @@ export default {
     ingredientsUnitErrors() {
       const errors = [];
       if (!this.$v.ingredientsUnit.$dirty) return errors;
-      !this.$v.ingredientsUnit.required && errors.push("unit is required.");
+      !this.$v.ingredientsUnit.required && errors.push("quantity is required.");
       return errors;
     },
     ingredientsAvailableErrors() {
@@ -377,7 +386,8 @@ export default {
         this.addUsedStockDialog = true;
       } else {
         let newAddedAmount = {
-          availableIngredients: this.editValue.ingredients_name,
+          availableIngredients: this.editValue.ingredients_name ,
+          ingredientsUnit:this.editValue.ingredients_unit,
           usedIngredientsAmount: this.usedIngredientsAmount
         };
         axios

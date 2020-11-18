@@ -10,7 +10,7 @@
       :enable-download="true"
       :preview-modal="false"
       :paginate-elements-by-height="5000"
-      :filename="'Used Ingredients'"
+      :filename="'Product Logs'"
       :pdf-quality="2"
       :manual-pagination="false"
       pdf-format="a4"
@@ -26,13 +26,14 @@
             </div>
             <div>
               <h4>WAWEN'S UBE HALAYA</h4>
-              <h6>RECORDED USED INGREDIENTS</h6>
+              <h6>PRODUCT LOGS</h6>
             </div>
           </center>
           <div style="margin:50px" class="pa-5">
             <div class="border border-2 mx-auto p-3 rounded">
               <div>
-                <v-data-table :headers="headersIngredients" :items="displayIngredientsRecords"></v-data-table>
+                <v-data-table :headers="headers" :items="records">
+                </v-data-table>
               </div>
             </div>
           </div>
@@ -47,8 +48,8 @@
 <script>
 import VueHtml2pdf from "vue-html2pdf";
 export default {
-  name: "IngredientsPDf",
-  props: ["headers", "displayIngredientsRecords"],
+  name: "ProductPDf",
+  props: ["headers", "records"],
   components: {
     VueHtml2pdf
   },

@@ -27,12 +27,12 @@
             dark
             @click="showDialog">
             <!-- <v-icon>mdi-plus</v-icon> -->
-            <v-toolbar-title>Add Estimated Value</v-toolbar-title>
+            <v-toolbar-title>ADD ESTIMATED VALUE</v-toolbar-title>
           </v-btn>
            </v-card-title>
            <template>
-              <v-dialog v-model="addDialog" width="400px">
-        <v-card>
+              <v-dialog v-model="addDialog" style="height:auto;" width="400px">
+        <v-card class="ma-0 pa-0">
     <v-card-title class=" deep-purple--text">
        ESTIMATED INGREDIENTS VALUE
     </v-card-title>
@@ -113,8 +113,8 @@
      </v-card>
      
      <template>
-        <v-dialog v-model="editDialog" width="400px">
-      <v-card>
+        <v-dialog v-model="editDialog" style="height:auto;" width="400px" >
+      <v-card class="ma-0 pa-0" >
       <v-card-title class="deep-purple--text">
        UPDATE ESTIMATED VALUE
     </v-card-title>
