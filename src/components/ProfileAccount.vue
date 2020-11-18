@@ -1,16 +1,16 @@
 <template>
  <div class="container " >
    <center>
-            <v-card width="50%" class="ml-10">
+            <v-card style="max-width:500px;height:auto;" class="ml-10">
                  <v-card-title >ACCOUNT PROFILE</v-card-title>
-                 
                  <div class="modal-body">
                         <form @submit="formSubmit" enctype="multipart/form-data" action>
                           <v-container>
                                   <center>
-                                    <img class="addOnsImage" :src="imageURL"><br>
+                                    <img style="max-width:100%;height:auto;" class="addOnsImage" :src="imageURL"><br>
                                      <h4 class=" gray--text">{{username}}</h4>
                                     <input type="file" class="fileStyle deep-purple--text" v-on:change="onImageChange">
+                                    
                             </center>
                             </v-container>
                     <v-card-actions>

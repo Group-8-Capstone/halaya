@@ -17,38 +17,6 @@
             ></v-text-field>
           </v-card-title>
           <v-data-table :headers="headers" :items="onOrder" :search="search">
-            <template v-slot:item.details="{ item }">
-              <v-dialog v-model="dialogOnOrder" max-width="300px">
-                <template v-slot:activator="{ on }">
-                  <v-icon small @click="details(item)" v-on="on">mdi-information</v-icon>
-                </template>
-                <v-card class="pa-4">
-                  <v-card-title class="deep-purple--text">ORDER DETAILS</v-card-title>
-                  <v-divider color="light-purple lighten-2"></v-divider>
-                  <v-list-item two-line>
-                    <v-list-item-content class="justify-center">
-                      <v-list-item-title>Ube Halaya Jar Quantity: {{ubeJar}}</v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                  <v-list-item two-line>
-                    <v-list-item-content class="justify-center">
-                      <v-list-item-title>Ube Halaya Tab Quantity: {{ubeTab}}</v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                  <v-divider color="light-purple lighten-2"></v-divider>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                      type="button"
-                      color="orange"
-                      class="mt-3"
-                      text
-                      @click="dialogOnOrder=false"
-                    >Close</v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-            </template>
             <template v-slot:item.order_status="{ item }">
               <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
             </template>
@@ -65,37 +33,8 @@
             ></v-text-field>
           </v-card-title>
           <v-data-table :headers="headers2" :items="deliveredOrder" :search="search">
-            <template v-slot:item.details="{ item }">
-              <v-dialog v-model="dialogDelivered" max-width="300px">
-                <template v-slot:activator="{ on }">
-                  <v-icon small @click="details(item)" v-on="on">mdi-information</v-icon>
-                </template>
-                <v-card class="pa-4">
-                  <v-card-title class="deep-purple--text title">ORDER DETAILS</v-card-title>
-                  <v-divider color="light-purple lighten-2"></v-divider>
-                  <v-list-item two-line>
-                    <v-list-item-content class="justify-center">
-                      <v-list-item-title>Ube Halaya Jar Quantity: {{ubeJar}}</v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                  <v-list-item two-line>
-                    <v-list-item-content class="justify-center">
-                      <v-list-item-title>Ube Halaya Tab Quantity: {{ubeTab}}</v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                  <v-divider color="light-purple lighten-2"></v-divider>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                      type="button"
-                      color="orange"
-                      class="mt-3"
-                      text
-                      @click="dialogDelivered=false"
-                    >Close</v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
+            <template v-slot:item.order_status="{ item }">
+              <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
             </template>
           </v-data-table>
         </v-tab-item>
@@ -105,7 +44,6 @@
 </template>
 <style>
 </style>
-
 <script>
 import {
   required,
@@ -129,13 +67,16 @@ export default {
     headers: [
       { text: "Receivers Name", value: "receiver_name" },
       { text: "Prefered Delivery Date", value: "preferred_delivery_date" },
-      { text: "Order Details", value: "details" },
+      { text: "Halaya Jar Quantity", value: "ubeHalayaJar_qty" },
+      { text: "Halaya Tub Quantity", value: "ubeHalayaTub_qty" },
       { text: "Status", value: "order_status" }
     ],
     headers2: [
       { text: "Receivers Name", value: "receiver_name" },
       { text: "Delivered Date", value: "preferred_delivery_date" },
-      { text: "Order Details", value: "details" }
+      { text: "Halaya Jar Quantity", value: "ubeHalayaJar_qty" },
+      { text: "Halaya Tub Quantity", value: "ubeHalayaTub_qty" },
+      { text: "Status", value: "order_status" }
     ]
   }),
   beforeCreate() {
@@ -155,18 +96,17 @@ export default {
     retrieveOnOrder() {
       let id = localStorage.getItem("id");
       axios
-        .get(this.url+"/api/fetchOnOrder/" + id, this.config)
+        .get(this.url+"/api/fetchOnOrderStat/" + id, this.config)
         .then(response => {
           this.onOrder = response.data.post;
           console.log(response.data.post);
         });
     },
     getColor(status) {
-      if (status === "On Order") return "green";
+      if (status === "On order") return "green";
       else if (status === "Pending") return "orange";
-      else return "green";
+      else return "blue";
     },
-
     retrieveDeliveredOrder() {
       let id = localStorage.getItem("id");
       axios
