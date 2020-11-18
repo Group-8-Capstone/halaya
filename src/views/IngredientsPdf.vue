@@ -15,7 +15,7 @@
       :manual-pagination="false"
       pdf-format="a4"
       pdf-orientation="portrait"
-      pdf-content-width="800px"
+      pdf-content-width="900px"
       ref="html2Pdf"
     >
       <section slot="pdf-content">
@@ -32,7 +32,12 @@
           <div style="margin:50px" class="pa-5">
             <div class="border border-2 mx-auto p-3 rounded">
               <div>
-                <v-data-table :headers="headersIngredients" :items="displayIngredientsRecords"></v-data-table>
+                <v-data-table :headers="headersIngredients" :items="displayIngredientsRecords">
+                  <template v-slot:item.action="{ item }">
+                    <v-icon normal title="Edit">mdi-table-edit</v-icon>
+                    <v-icon class="mr-3" color="red" normal title="Delete Product">mdi-delete</v-icon>
+                  </template>
+                </v-data-table>
               </div>
             </div>
           </div>
@@ -48,7 +53,7 @@
 import VueHtml2pdf from "vue-html2pdf";
 export default {
   name: "IngredientsPDf",
-  props: ["headers", "displayIngredientsRecords"],
+  props: ["headersIngredients", "displayIngredientsRecords"],
   components: {
     VueHtml2pdf
   },
@@ -67,5 +72,48 @@ export default {
   height: 10%;
   margin-left: auto;
   margin-right: auto;
+}
+v-simple-table {
+  width: 100%;
+}
+.title {
+  text-align: center;
+  margin-top: 20px;
+}
+.divider {
+  margin-top: 80px;
+}
+.table {
+  text-align: left;
+}
+.v-text-field {
+  padding: 0px;
+  margin: 0px;
+}
+.col {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  margin: 0px;
+}
+p,
+b {
+  letter-spacing: 1px;
+  font-size: 14px;
+}
+h3,
+b {
+  letter-spacing: 1px;
+}
+.v-input__slot {
+  margin-bottom: 0px;
+}
+.date_picker {
+  height: 40px !important;
+}
+.v-text-field__slot {
+  height: 40px !important;
+}
+.v-application p {
+  margin-bottom: 0px;
 }
 </style>

@@ -27,7 +27,7 @@
             <v-col cols="10">
               <div>
                 <template>
-                  <v-card flat class="mx-auto" max-width="400">
+                  <v-card flat class="mx-auto mt-1" max-width="400">
                     <v-card-text id="story" class="font-weight-bold">
                       12 Ube Halaya jars.
                       1 Facebook post.
@@ -44,10 +44,9 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-card flat>
-          <v-row align="center" justify="center">
+        <v-card flat class="pa-1 mt-1">
+          <v-row align="center" justify="center" class="mt-1">
             <div id="planHeader" class="text-center">
-              <br>
               <h1 id="productHeader">Ways To Enjoy Wawen's Ube Halaya</h1>
             </div>
           </v-row>
@@ -227,7 +226,7 @@
                       <v-col sm="6">
                         <v-hover id="products" v-slot:default="{ hover }">
                           <v-card
-                            class="mx-auto"
+                            class="mx-auto mt-1"
                             color="grey lighten-4"
                             :elevation="8"
                             data-aos="flip-right"
@@ -259,7 +258,7 @@
                       <v-col sm="6">
                         <v-hover id="products" v-slot:default="{ hover }">
                           <v-card
-                            class="mx-auto"
+                            class="mx-auto mt-1"
                             color="grey lighten-4"
                             :elevation="8"
                             data-aos="flip-right"
@@ -296,15 +295,12 @@
                 <div id="planHeader" class="text-center">
                   <br>
                   <br>
-                  <br>
-                  <br>
-                  <h1 id="adHeader">Eyes here!</h1>
-                  <br>
+                  <h1 id="adHeader" class="mb-1">Eyes here!</h1>
                 </div>
               </v-row>
               <v-row>
                 <div>
-                  <v-card flat>
+                  <v-card flat class="pa-1 mt-1">
                     <v-col sm="12">
                       <v-row>
                         <v-col sm="6">

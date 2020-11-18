@@ -15,22 +15,24 @@
       :manual-pagination="false"
       pdf-format="a4"
       pdf-orientation="portrait"
-      pdf-content-width="800px"
+      pdf-content-width="900px"
       ref="html2Pdf"
     >
       <section slot="pdf-content">
         <section class="pdf-item">
-          <center style="margin:50px">
+          <center>
             <div>
+              <br>
               <img class="logo" width="50" :src="require('@/assets/wawens.png')">
             </div>
             <div>
               <h4>WAWEN'S UBE HALAYA</h4>
               <h6>DELIVERED ORDERS</h6>
+              <br>
             </div>
           </center>
-          <div style="margin:50px" class="pa-5">
-            <div class="border border-2 mx-auto p-3 rounded">
+          <div style="margin:5px" class="pa-1">
+            <div class="border border-1 mx-auto p-1 rounded">
               <div>
                 <v-data-table :headers="headers" :items="deliveredOrder">
                   <template v-slot:item.order_status="{ item }">
@@ -71,5 +73,48 @@ export default {
   height: 10%;
   margin-left: auto;
   margin-right: auto;
+}
+v-simple-table {
+  width: 100%;
+}
+.title {
+  text-align: center;
+  margin-top: 20px;
+}
+.divider {
+  margin-top: 80px;
+}
+.table {
+  text-align: left;
+}
+.v-text-field {
+  padding: 0px;
+  margin: 0px;
+}
+.col {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  margin: 0px;
+}
+p,
+b {
+  letter-spacing: 1px;
+  font-size: 14px;
+}
+h3,
+b {
+  letter-spacing: 1px;
+}
+.v-input__slot {
+  margin-bottom: 0px;
+}
+.date_picker {
+  height: 40px !important;
+}
+.v-text-field__slot {
+  height: 40px !important;
+}
+.v-application p {
+  margin-bottom: 0px;
 }
 </style>

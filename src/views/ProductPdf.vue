@@ -9,13 +9,13 @@
       :float-layout="true"
       :enable-download="true"
       :preview-modal="false"
-      :paginate-elements-by-height="5000"
+      :paginate-elements-by-height="2500"
       :filename="'Product Logs'"
       :pdf-quality="2"
       :manual-pagination="false"
       pdf-format="a4"
       pdf-orientation="portrait"
-      pdf-content-width="800px"
+      pdf-content-width="900px"
       ref="html2Pdf"
     >
       <section slot="pdf-content">
@@ -33,6 +33,21 @@
             <div class="border border-2 mx-auto p-3 rounded">
               <div>
                 <v-data-table :headers="headers" :items="records">
+                  <template v-slot:item.action="{ item }">
+                    <v-icon
+                      normal
+                      class="mr-2"
+                      title="Delivered"
+                      @click="alertDelivered(item)"
+                    >mdi-truck-check-outline</v-icon>
+                    <v-icon
+                      @click="editDialog = !editDialog, editItem(item) "
+                      class="mr-2"
+                      normal
+                      title="Edit"
+                    >mdi-table-edit</v-icon>
+                    <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+                  </template>
                 </v-data-table>
               </div>
             </div>
@@ -68,5 +83,48 @@ export default {
   height: 10%;
   margin-left: auto;
   margin-right: auto;
+}
+v-simple-table {
+  width: 100%;
+}
+.title {
+  text-align: center;
+  margin-top: 20px;
+}
+.divider {
+  margin-top: 80px;
+}
+.table {
+  text-align: left;
+}
+.v-text-field {
+  padding: 0px;
+  margin: 0px;
+}
+.col {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  margin: 0px;
+}
+p,
+b {
+  letter-spacing: 1px;
+  font-size: 14px;
+}
+h3,
+b {
+  letter-spacing: 1px;
+}
+.v-input__slot {
+  margin-bottom: 0px;
+}
+.date_picker {
+  height: 40px !important;
+}
+.v-text-field__slot {
+  height: 40px !important;
+}
+.v-application p {
+  margin-bottom: 0px;
 }
 </style>
