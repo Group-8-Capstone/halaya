@@ -24,6 +24,7 @@
     </v-row>
     <template>
       <div>
+        <br>
         <h4 class="letter">UBE HALAYA IN A JAR SALES</h4>
       </div>
       <br>
@@ -363,6 +364,7 @@ export default {
       axios
         .post(this.url+"/api/sales/daily", parameter, this.config)
         .then(response => {
+          console.log("this is daily" + JSON.stringify(response.data))
           let category = [];
           let series = [];
           console.log("daily data ", response.data);

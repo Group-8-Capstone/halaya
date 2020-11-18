@@ -299,7 +299,7 @@ export default {
             let arr = [];
             barangayOrders.forEach((order, idx) => {
               let { ubeHalayaJar_qty, ubeHalayaTub_qty } = order;
-              let total = ubeHalayaJar_qty + ubeHalayaTub_qty * 4;
+              let total = ubeHalayaJar_qty + (ubeHalayaTub_qty * 4);
               if (total + currentAmount <= MAX_QUANTITY) {
                 arr.push(order);
                 currentAmount += total;

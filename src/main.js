@@ -12,6 +12,7 @@ import Print from 'vue-printjs'
 import AOS from 'aos';
 import 'aos/dist/aos.css'
 
+
 AOS.init();
 Vue.use(Print)
 Vue.prototype.$_ = underscore;

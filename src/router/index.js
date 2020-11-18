@@ -3,11 +3,9 @@ import VueRouter from "vue-router";
 import Order from "../views/Order.vue";
 import Stock from "../views/Stock.vue";
 import Delivery from "../views/OrderToDeliver.vue";
-// import Delivery from "../views/DeliveryOrder.vue";
 import Login from "../views/Login.vue"
 import Delivered from "../views/Delivered.vue";
 import Home from "../views/Home.vue";
-import DeliveryDetails from "../views/DeliveryDetails";
 import Setting from "../views/Setting.vue";
 import Ingredients from "../views/Ingredients.vue";
 import Product from "../views/Product.vue";
@@ -104,14 +102,6 @@ const router = new VueRouter({
       path: "/logs",
       name: "Logs",
       component: Logs,
-      meta: {
-        requiresAuth: true,
-      },
-    },
-    {
-      path: "/delivery-details",
-      name: "DeliveryDetails",
-      component: DeliveryDetails,
       meta: {
         requiresAuth: true,
       },
