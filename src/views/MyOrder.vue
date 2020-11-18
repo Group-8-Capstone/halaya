@@ -67,15 +67,15 @@ export default {
     headers: [
       { text: "Receivers Name", value: "receiver_name" },
       { text: "Prefered Delivery Date", value: "preferred_delivery_date" },
-      { text: "Halaya Jar Quantity", value: "ubeHalayaJar_qty" },
-      { text: "Halaya Tub Quantity", value: "ubeHalayaTub_qty" },
+      { text: "Halaya Jar Quantity", value: "ubehalayajar_qty" },
+      { text: "Halaya Tub Quantity", value: "ubehalayatub_qty" },
       { text: "Status", value: "order_status" }
     ],
     headers2: [
       { text: "Receivers Name", value: "receiver_name" },
       { text: "Delivered Date", value: "preferred_delivery_date" },
-      { text: "Halaya Jar Quantity", value: "ubeHalayaJar_qty" },
-      { text: "Halaya Tub Quantity", value: "ubeHalayaTub_qty" },
+      { text: "Halaya Jar Quantity", value: "ubehalayajar_qty" },
+      { text: "Halaya Tub Quantity", value: "ubehalayatub_qty" },
       { text: "Status", value: "order_status" }
     ]
   }),
@@ -118,8 +118,8 @@ export default {
     },
     details(item) {
       console.log(item);
-      this.ubeJar = item.ubeHalayaJar_qty;
-      this.ubeTab = item.ubeHalayaTub_qty;
+      this.ubeJar = item.ubehalayajar_qty;
+      this.ubeTab = item.ubehalayatub_qty;
     }
   }
 };

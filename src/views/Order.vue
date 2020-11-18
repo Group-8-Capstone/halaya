@@ -164,7 +164,7 @@
                 </v-col>
                 <v-col cols="12">
                   <v-text-field
-                    v-model="post.ubeHalayaJar_qty"
+                    v-model="post.ubehalayajar_qty"
                     prepend-icon="mdi-plus"
                     min="1"
                     type="number"
@@ -174,7 +174,7 @@
                 </v-col>
                 <v-col cols="12">
                   <v-text-field
-                    v-model="post.ubeHalayaTub_qty"
+                    v-model="post.ubehalayatub_qty"
                     prepend-icon="mdi-plus"
                     min="1"
                     type="number"
@@ -294,8 +294,8 @@ export default {
           value: "preferred_delivery_date",
           sortable: false
         },
-        { text: "Ube Halaya Jar(Quantity)", value: "ubeHalayaJar_qty", sortable: false },
-        { text: "Ube Halaya Tub(Quantity)", value: "ubeHalayaTub_qty", sortable: false },
+        { text: "Ube Halaya Jar(Quantity)", value: "ubehalayajar_qty", sortable: false },
+        { text: "Ube Halaya Tub(Quantity)", value: "ubehalayatub_qty", sortable: false },
         { text: "Actions", value: "action", sortable: false },
         { text: "Status", value: "order_status" }
       ]
@@ -410,9 +410,9 @@ export default {
         this.post.barangay === "" ||
         this.post.city_or_municipality === "" ||
         this.post.province === "" ||
-        this.post.ubeHalayaJar_qty === "" ||
+        this.post.ubehalayajar_qty === "" ||
         this.post.preferred_delivery_date === "" ||
-        this.post.ubehalayaTub_qty == ""
+        this.post.ubehalayatub_qty == ""
       ) {
         Swal.fire({
           title: "Please fill in all required field",

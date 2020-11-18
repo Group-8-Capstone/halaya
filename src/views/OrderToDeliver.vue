@@ -172,8 +172,8 @@ export default {
           sortable: false,
           value: "receiver_name"
         },
-        { text: "Ube Halaya Tub Order Qty", value: "ubeHalayaTub_qty" },
-        { text: "Ube Halaya Jar Order Qty", value: "ubeHalayaJar_qty" },
+        { text: "Ube Halaya Tub Order Qty", value: "ubehalayatub_qty" },
+        { text: "Ube Halaya Jar Order Qty", value: "ubehalayajar_qty" },
         { text: "Action", value: "action" },
         { text: "Status", value: "order_status" }
       ]
@@ -298,8 +298,8 @@ export default {
             let currentAmount = 0;
             let arr = [];
             barangayOrders.forEach((order, idx) => {
-              let { ubeHalayaJar_qty, ubeHalayaTub_qty } = order;
-              let total = ubeHalayaJar_qty + (ubeHalayaTub_qty * 4);
+              let { ubehalayajar_qty, ubehalayatub_qty } = order;
+              let total = ubehalayajar_qty + (ubehalayatub_qty * 4);
               if (total + currentAmount <= MAX_QUANTITY) {
                 arr.push(order);
                 currentAmount += total;
