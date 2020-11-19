@@ -33,11 +33,7 @@
                       outlined
                       dense
                     ></v-text-field>
-                    <v-snackbar 
-                      v-model="isValid"
-                      color="deep-purple accent-4"
-                      elevation="24"
-                    >
+                    <v-snackbar v-model="isValid" color="deep-purple accent-4" elevation="24">
                       Username already exists
                       <template v-slot:action="{ attrs }">
                         <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">Close</v-btn>
@@ -96,6 +92,13 @@
                     <br>
                   </span>
                 </div>
+                <v-progress-linear
+                  color="deep-purple accent-4"
+                  v-show="loading"
+                  indeterminate
+                  rounded
+                  height="6"
+                ></v-progress-linear>
               </v-card>
             </v-col>
           </v-row>
@@ -125,6 +128,7 @@
 import axios from "axios";
 export default {
   data: () => ({
+    loading: false,
     valid: false,
     username: "",
     isValid: false,
@@ -164,6 +168,7 @@ export default {
   mounted() {},
   methods: {
     signUp() {
+      this.loading = true;
       let Reg = {
         uName: this.username,
         phone: this.contact,
@@ -171,12 +176,13 @@ export default {
         cPass: this.cPassword,
         role: "customer"
       };
-      axios.post(this.url+"/api/register", Reg).then(response => {
+      axios.post(this.url + "/api/register", Reg).then(response => {
         // console.log("Successfully Registered: ", response.data.message.message);
         if (response.data.message.message == "success") {
           localStorage.setItem("token", response.data.token);
           localStorage.setItem("id", response.data.user.id);
           localStorage.setItem("role", response.data.user.role);
+          this.loading = false;
           this.$router.push("/customerHome");
         } else if (response.data.message === "invalid_username") {
           this.isValid = true;

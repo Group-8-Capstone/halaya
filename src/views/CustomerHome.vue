@@ -212,6 +212,7 @@
     <template>
       <v-dialog v-model="addCardDialog" width="500px">
         <v-card>
+          <v-progress-linear color="deep-purple accent-4" v-show="loading" indeterminate rounded height="6"></v-progress-linear>
           <v-card-title class="align-center">
             <v-list-item-title
               class="d-flex align-center justify-center mx-auto headline black--text"
@@ -276,7 +277,7 @@
               @click="addCardDialog=false , addOrderDialog=true"
             >CANCEL</v-btn>
             <!-- <Loader> -->
-              <v-btn class="ma-3" color="purple darken-2" outlined @click="placeOrder()">PLACE ORDER</v-btn>
+            <v-btn class="ma-3" color="purple darken-2" outlined @click="placeOrder()">PLACE ORDER</v-btn>
             <!-- </Loader> -->
           </v-card-actions>
         </v-card>
@@ -314,6 +315,7 @@ import {
 export default {
   data() {
     return {
+      loading: false,
       accessToken:
         "pk.eyJ1IjoiamllbnhpeWEiLCJhIjoiY2tlaTM3d2VrMWcxczJybjc0cmZkamk3eiJ9.JzrYlG2kZ08Pkk24hvKDJw",
       menu: false,
@@ -343,7 +345,7 @@ export default {
     };
   },
   components: {
-    OrderingInfo,
+    OrderingInfo
     // Loader
   },
   validations: {
@@ -483,6 +485,7 @@ export default {
       }
     },
     placeOrder() {
+      this.loading = true;
       this.$v.$touch();
       var street = this.customerStreet;
       var barangay = this.customerBarangay;
@@ -529,6 +532,7 @@ export default {
           axios
             .post(this.url + "/api/post/createOrder", param, this.config)
             .then(response => {
+              this.loading = false;
               console.log("response.data: ", response.data);
               if (response.data == "success") {
                 Swal.fire({
