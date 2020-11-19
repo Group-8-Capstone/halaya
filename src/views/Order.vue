@@ -32,27 +32,20 @@
                 <div v-if="isCanceled(item) === true">
                   <v-icon
                     disabled
-                    normal
-                    class="mr-2"
-                    title="Delivered"
-                    @click="alertDelivered(item)"
-                  >mdi-truck-check-outline</v-icon>
-                  <v-icon
-                  disabled
                     @click="editDialog = !editDialog, editItem(item) "
                     class="mr-2"
                     normal
                     title="Edit"
                   >mdi-table-edit</v-icon>
-                  <v-icon disabled @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+                  <v-icon
+                    disabled
+                    @click="alertCancel(item)"
+                    normal
+                    class="mr-2"
+                    title="Cancel"
+                  >mdi-cancel</v-icon>
                 </div>
                 <div v-else>
-                    <v-icon
-                      normal
-                      class="mr-2"
-                      title="Delivered"
-                      @click="alertDelivered(item)"
-                    >mdi-truck-check-outline</v-icon>
                   <v-icon
                     @click="editDialog = !editDialog, editItem(item) "
                     class="mr-2"
@@ -100,22 +93,22 @@
         <v-dialog v-model="editDialog" style="height:auto;" width="400px">
           <v-card>
             <v-spacer></v-spacer>
-             <v-card-title class="deep-purple--text">
-       UPDATE ORDER
-    </v-card-title>
-    <v-card-subtitle>
-      Please fill in the required information 
-    </v-card-subtitle>
-    <v-divider></v-divider> 
+            <v-card-title class="deep-purple--text">UPDATE ORDER</v-card-title>
+            <v-card-subtitle>Please fill in the required information</v-card-subtitle>
+            <v-divider></v-divider>
             <v-container>
               <v-row class="mx-2">
                 <v-col class="align-center justify-space-between" cols="12">
                   <v-row align="center" class="mr-0">
-                    <v-text-field  prepend-icon="mdi-account-outline" label="Receiver's Name" v-model="post.receiver_name"></v-text-field>
+                    <v-text-field
+                      prepend-icon="mdi-account-outline"
+                      label="Receiver's Name"
+                      v-model="post.receiver_name"
+                    ></v-text-field>
                   </v-row>
                 </v-col>
-                 <v-icon class="pl-4">mdi-map-marker</v-icon>
-                  <label>Receiver Address</label>
+                <v-icon class="pl-4">mdi-map-marker</v-icon>
+                <label>Receiver Address</label>
                 <v-row class="pl-5">
                   <v-col cols="6">
                     <v-text-field v-model="post.building_or_street" label="Building Name/Street"></v-text-field>
@@ -189,11 +182,17 @@
               <v-btn small outlined color="orange" @click="editDialog = false">CANCEL</v-btn>
               <v-btn small outlined color="purple darken-2" @click=" updateItem()">UPDATE</v-btn>
             </v-card-actions>
+            <v-progress-linear
+              color="deep-purple accent-4"
+              v-show="loading"
+              indeterminate
+              rounded
+              height="6"
+            ></v-progress-linear>
           </v-card>
         </v-dialog>
       </template>
-      <template>
-      </template>
+      <template></template>
     </v-card>
   </div>
 </template>
@@ -251,6 +250,9 @@ export default {
   },
   data() {
     return {
+      loading: false,
+      accessToken:
+        "pk.eyJ1IjoiamllbnhpeWEiLCJhIjoiY2tlaTM3d2VrMWcxczJybjc0cmZkamk3eiJ9.JzrYlG2kZ08Pkk24hvKDJw",
       deliveryDate: new Date().toISOString().substr(0, 10),
       addDateMenu: false,
       updateDateMenu: false,
@@ -269,7 +271,7 @@ export default {
       modal: false,
       dialog: false,
       editDialog: false,
-      search1:null,
+      search1: null,
       customerName: "",
       complete_address: "",
       address: "",
@@ -294,8 +296,16 @@ export default {
           value: "preferred_delivery_date",
           sortable: false
         },
-        { text: "Ube Halaya Jar(Quantity)", value: "ubehalayajar_qty", sortable: false },
-        { text: "Ube Halaya Tub(Quantity)", value: "ubehalayatub_qty", sortable: false },
+        {
+          text: "Ube Halaya Jar(Quantity)",
+          value: "ubehalayajar_qty",
+          sortable: false
+        },
+        {
+          text: "Ube Halaya Tub(Quantity)",
+          value: "ubehalayatub_qty",
+          sortable: false
+        },
         { text: "Actions", value: "action", sortable: false },
         { text: "Status", value: "order_status" }
       ]
@@ -403,9 +413,9 @@ export default {
       this.orderedProducts = [];
     },
     updateItem() {
+      this.loading = true;
       if (
         this.post.receiver_name === "" ||
-        // this.post.customer_address === "" ||
         this.post.building_or_street === "" ||
         this.post.barangay === "" ||
         this.post.city_or_municipality === "" ||
@@ -421,17 +431,43 @@ export default {
         }),
           (this.editDialog = this.editDialog);
       } else {
-        // console.log('###########', this.post)
+        var place = this.post.building_or_street.concat(
+          " ",
+          this.post.barangay,
+          " ",
+          this.post.city_or_municipality,
+          " ",
+          this.post.province
+        );
+
         axios
-          .post(this.url+"/api/post/update", this.post, this.config)
+          .get(
+            `https://api.mapbox.com/geocoding/v5/mapbox.places/${place}.json?limit=2&access_token=${
+              this.accessToken
+            }`
+          )
           .then(response => {
-            this.editDialog = false;
-            Swal.fire({
-              title: "Successfully Updated",
-              icon: "success",
-              timer: 3000
-            }),
-              this.fetchOrders();
+            let res = JSON.stringify(response.data);
+            let result = JSON.parse(res);
+            var coordinates = result.features[0].geometry.coordinates;
+            var from_place = turf.point([123.921969, 10.329892]);
+            var to_place = turf.point(coordinates);
+            var options = { units: "kilometers" };
+            var dist = turf.distance(from_place, to_place, options);
+            this.post.distance = dist;
+
+            axios
+              .post(this.url + "/api/post/update", this.post, this.config)
+              .then(response => {
+                this.editDialog = false;
+                this.loading = false;
+                Swal.fire({
+                  title: "Successfully Updated",
+                  icon: "success",
+                  timer: 3000
+                }),
+                 this.fetchOrders();
+              });
           });
       }
     },
@@ -447,7 +483,7 @@ export default {
     },
     updateDeliveredStatus() {
       axios
-        .post(this.url+"/api/post/update", this.post, this.config)
+        .post(this.url + "/api/post/update", this.post, this.config)
         .then(response => {
           this.fetchOrders();
         });
@@ -455,7 +491,7 @@ export default {
     deleteItem(item) {
       axios
         .post(
-          this.url+"/api/post/updateCanceledStat/" + item.id,
+          this.url + "/api/post/updateCanceledStat/" + item.id,
           {},
           this.config
         )
@@ -466,7 +502,7 @@ export default {
     },
     editItem(item) {
       axios
-        .get(this.url+"/api/post/edit/" + item.id, this.config)
+        .get(this.url + "/api/post/edit/" + item.id, this.config)
         .then(response => {
           this.post = response.data;
         });
@@ -497,23 +533,6 @@ export default {
         }
       });
     },
-    alertDelivered(item) {
-      Swal.fire({
-        title: "Are you sure item is being delivered?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#CFD8D",
-        cancelButtonText: "No",
-        confirmButtonText: "Yes",
-        reverseButtons: true
-      }).then(result => {
-        if (result.value) {
-          // console.log("lllllllllllll========== ", this.config)
-          this.deliveredItem(item);
-        }
-      });
-    },
     addOrder() {
       this.$v.$touch();
       let param = {
@@ -528,7 +547,7 @@ export default {
         distance: this.distance
       };
       axios
-        .post(this.url+"/api/post", param, this.config)
+        .post(this.url + "/api/post", param, this.config)
         .then(response => {
           Swal.fire({
             title: "Successfully Added",
@@ -563,52 +582,31 @@ export default {
       }
       return ubechiQty;
     },
-    deliveredItem(item) {
-      // console.log("================ ", this.config)
-      axios
-        .post(
-          this.url+"/api/post/updateStat/" + item.id,
-          {},
-          this.config
-        )
-        .then(response => {
-          console.log("-----------", response.data);
-          Swal.fire({
-            title: "Order is being delivered",
-            icon: "success",
-            showConfirmButton: false,
-            timer: 1500
-          }),
-            this.fetchOrders();
-        });
-    },
     fetchOrders() {
-      axios
-        .get(this.url+"/api/posts/order", this.config)
-        .then(response => {
-          this.orders = response.data.data;
-          for (var i = 0; i < this.orders.length; i++) {
-            var street = response.data.data[i].building_or_street;
-            var barangay = response.data.data[i].barangay;
-            var city = response.data.data[i].city_or_municipality;
-            var province = response.data.data[i].province;
-            var place = street
-              .toString()
-              .concat(
-                " ",
-                barangay.toString(),
-                " ",
-                city.toString(),
-                " ",
-                province.toString()
-              );
-            this.orders[i]["customer_address"] = place;
-          }
-        });
+      axios.get(this.url + "/api/posts/order", this.config).then(response => {
+        this.orders = response.data.data;
+        for (var i = 0; i < this.orders.length; i++) {
+          var street = response.data.data[i].building_or_street;
+          var barangay = response.data.data[i].barangay;
+          var city = response.data.data[i].city_or_municipality;
+          var province = response.data.data[i].province;
+          var place = street
+            .toString()
+            .concat(
+              " ",
+              barangay.toString(),
+              " ",
+              city.toString(),
+              " ",
+              province.toString()
+            );
+          this.orders[i]["customer_address"] = place;
+        }
+      });
     },
     fetchPendingOrders() {
       axios
-        .get(this.url+"/api/fetch/pending-orders", this.config)
+        .get(this.url + "/api/fetch/pending-orders", this.config)
         .then(response => {
           this.pendingOrders = response.data.data;
           for (var i = 0; i < this.pendingOrders.length; i++) {
@@ -634,7 +632,7 @@ export default {
     confirmOrder(item) {
       console.log("****hsdfnaiuerh*******", this.config);
       axios
-        .post(this.url+"/api/post/confirm/" + item.id, {}, this.config)
+        .post(this.url + "/api/post/confirm/" + item.id, {}, this.config)
         .then(response => {
           console.log("***********", response.data);
           Swal.fire({
