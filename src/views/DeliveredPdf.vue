@@ -15,11 +15,11 @@
       :manual-pagination="false"
       pdf-format="a4"
       pdf-orientation="portrait"
-      pdf-content-width="900px"
+      pdf-content-width="800px"
       ref="html2Pdf"
     >
       <section slot="pdf-content">
-        <section class="pdf-item">
+        <section class="pdf-item" justify="center">
           <center>
             <div>
               <br>
@@ -31,7 +31,7 @@
               <br>
             </div>
           </center>
-          <div style="margin:5px" class="pa-1">
+          <div style="margin:1px" class="pa-1">
             <div class="border border-1 mx-auto p-1 rounded">
               <div>
                 <v-data-table :headers="headers" :items="deliveredOrder">
@@ -74,47 +74,7 @@ export default {
   margin-left: auto;
   margin-right: auto;
 }
-v-simple-table {
+v-data-table {
   width: 100%;
-}
-.title {
-  text-align: center;
-  margin-top: 20px;
-}
-.divider {
-  margin-top: 80px;
-}
-.table {
-  text-align: left;
-}
-.v-text-field {
-  padding: 0px;
-  margin: 0px;
-}
-.col {
-  padding-top: 0px;
-  padding-bottom: 0px;
-  margin: 0px;
-}
-p,
-b {
-  letter-spacing: 1px;
-  font-size: 14px;
-}
-h3,
-b {
-  letter-spacing: 1px;
-}
-.v-input__slot {
-  margin-bottom: 0px;
-}
-.date_picker {
-  height: 40px !important;
-}
-.v-text-field__slot {
-  height: 40px !important;
-}
-.v-application p {
-  margin-bottom: 0px;
 }
 </style>

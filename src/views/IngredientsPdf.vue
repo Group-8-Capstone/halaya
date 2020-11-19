@@ -15,12 +15,12 @@
       :manual-pagination="false"
       pdf-format="a4"
       pdf-orientation="portrait"
-      pdf-content-width="900px"
+      pdf-content-width="800px"
       ref="html2Pdf"
     >
       <section slot="pdf-content">
-        <section class="pdf-item">
-          <center style="margin:50px">
+        <section class="pdf-item" justify="center">
+          <center>
             <div>
               <img class="logo" width="50" :src="require('@/assets/wawens.png')">
             </div>
@@ -29,16 +29,14 @@
               <h6>RECORDED USED INGREDIENTS</h6>
             </div>
           </center>
-          <div style="margin:50px" class="pa-5">
-            <div class="border border-2 mx-auto p-3 rounded">
-              <div>
+          <div style="margin:50px" class="pa-1">
+            <div class="border border-2 mx-auto p-1 rounded">
                 <v-data-table :headers="headersIngredients" :items="displayIngredientsRecords">
                   <template v-slot:item.action="{ item }">
                     <v-icon normal title="Edit">mdi-table-edit</v-icon>
                     <v-icon class="mr-3" color="red" normal title="Delete Product">mdi-delete</v-icon>
                   </template>
                 </v-data-table>
-              </div>
             </div>
           </div>
         </section>
@@ -73,47 +71,8 @@ export default {
   margin-left: auto;
   margin-right: auto;
 }
-v-simple-table {
+v-data-table {
   width: 100%;
-}
-.title {
-  text-align: center;
-  margin-top: 20px;
-}
-.divider {
-  margin-top: 80px;
-}
-.table {
-  text-align: left;
-}
-.v-text-field {
-  padding: 0px;
-  margin: 0px;
-}
-.col {
-  padding-top: 0px;
-  padding-bottom: 0px;
-  margin: 0px;
-}
-p,
-b {
-  letter-spacing: 1px;
-  font-size: 14px;
-}
-h3,
-b {
-  letter-spacing: 1px;
-}
-.v-input__slot {
-  margin-bottom: 0px;
-}
-.date_picker {
-  height: 40px !important;
-}
-.v-text-field__slot {
-  height: 40px !important;
-}
-.v-application p {
-  margin-bottom: 0px;
+  height: 100%;
 }
 </style>

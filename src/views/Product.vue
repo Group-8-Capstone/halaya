@@ -45,9 +45,7 @@
         <v-row>
           <v-spacer></v-spacer>
           <ProductPdf
-            :headers="headers"
-            :records="records"
-            class="float-right mr-5"
+            :headers="headers" :records="records" class="float-right mr-5"
           ></ProductPdf>
         </v-row>
         <v-card-title>

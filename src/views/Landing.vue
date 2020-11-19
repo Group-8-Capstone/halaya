@@ -51,68 +51,17 @@
             </div>
           </v-row>
           <v-row>
-            <v-col sm="3">
+            <v-col sm="3" v-for="(item, i) in gallery" :key="i">
               <div>
                 <v-hover v-slot:default="{ hover }">
                   <v-card flat :elevation="8" data-aos="zoom-out">
-                    <v-img id="photo" max-height="auto" src="../assets/photos/jar.png">
+                    <v-img id="photo" height="315" :src="item.src">
                       <v-expand-transition>
                         <div
                           v-if="hover"
                           class="d-flex transition-fast-in-fast-out purple darken-2 v-card--reveal display-1 white--text"
                           style="height: 100%;"
-                        >Enjoyable snack</div>
-                      </v-expand-transition>
-                    </v-img>
-                  </v-card>
-                </v-hover>
-              </div>
-            </v-col>
-            <v-col sm="3">
-              <div>
-                <v-hover v-slot:default="{ hover }">
-                  <v-card flat :elevation="8" data-aos="zoom-out">
-                    <v-img id="photo" height="315" src="../assets/ube.jpg">
-                      <v-expand-transition>
-                        <div
-                          v-if="hover"
-                          class="d-flex transition-fast-in-fast-out purple darken-2 v-card--reveal display-1 white--text"
-                          style="height: 100%;"
-                        >Ubelicious spread</div>
-                      </v-expand-transition>
-                    </v-img>
-                  </v-card>
-                </v-hover>
-              </div>
-            </v-col>
-            <v-col sm="3">
-              <div>
-                <v-hover v-slot:default="{ hover }">
-                  <v-card flat :elevation="8" data-aos="zoom-out">
-                    <v-img id="photo" max-height="315" src="../assets/photos/ubechi.png">
-                      <v-expand-transition>
-                        <div
-                          v-if="hover"
-                          class="d-flex transition-fast-in-fast-out purple darken-2 v-card--reveal display-1 white--text"
-                          style="height: 100%;"
-                        >Ube-filled butchi</div>
-                      </v-expand-transition>
-                    </v-img>
-                  </v-card>
-                </v-hover>
-              </div>
-            </v-col>
-            <v-col sm="3">
-              <div>
-                <v-hover v-slot:default="{ hover }">
-                  <v-card flat :elevation="8" data-aos="zoom-out">
-                    <v-img id="photo" max-height="315" src="../assets/photos/ubecake.png">
-                      <v-expand-transition>
-                        <div
-                          v-if="hover"
-                          class="d-flex transition-fast-in-fast-out purple darken-2 v-card--reveal display-1 white--text"
-                          style="height: 100%;"
-                        >Ubelicious cake</div>
+                        >{{item.description}}</div>
                       </v-expand-transition>
                     </v-img>
                   </v-card>
@@ -131,6 +80,7 @@
             <v-col sm="4">
               <v-row>
                 <v-card
+                  shaped
                   id="infoCards"
                   light
                   max-width="400"
@@ -152,6 +102,7 @@
               <br>
               <v-row>
                 <v-card
+                  shaped
                   id="infoCards"
                   light
                   max-width="400"
@@ -180,6 +131,7 @@
                   <v-flex>
                     <v-col sm="12">
                       <v-card
+                        shaped
                         flat
                         id="infoCrd"
                         max-width="400"
@@ -216,7 +168,6 @@
               <v-row align="center" justify="center">
                 <div id="planHeader" class="text-center">
                   <h1 id="productsHeader">PRODUCTS</h1>
-                  <br>
                 </div>
               </v-row>
               <v-row>
@@ -245,11 +196,11 @@
                                 <div
                                   class="font-weight-light grey--text title mb-2"
                                 >Perfect Ubelicious treat</div>
-                                <h1 class="font-weight-light orange--text mb-2">Ube halaya in a tub</h1>
+                                <h1 class="font-weight-light orange--text mb-2">{{tubName}}</h1>
                                 <div
                                   id="price"
                                   class="font-weight-light grey--text title mb-2"
-                                >₱499.00</div>
+                                >₱{{tubPrice}}</div>
                               </center>
                             </v-card-text>
                           </v-card>
@@ -277,11 +228,11 @@
                                 <div
                                   class="font-weight-light grey--text title mb-2"
                                 >Perfect Ubelicious snack</div>
-                                <h1 class="font-weight-light orange--text mb-2">Ube halaya in a jar</h1>
+                                <h1 class="font-weight-light orange--text mb-2">{{jarName}}</h1>
                                 <div
                                   id="price"
                                   class="font-weight-light grey--text title mb-2"
-                                >₱150.00</div>
+                                >₱{{jarPrice}}</div>
                               </center>
                             </v-card-text>
                           </v-card>
@@ -327,12 +278,54 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "Home",
   data: () => ({
     menu: false,
-    model: null
-  })
+    model: null,
+    jarName: null,
+    tubName: null,
+    tubPrice: null,
+    jarPrice: null,
+    gallery: [
+      {
+        src: require("../assets/photos/jar.png"),
+        description: "Enjoyable snack"
+      },
+      {
+        src: require("../assets/ube.jpg"),
+        description: "Ubelicious spread"
+      },
+      {
+        src: require("../assets/photos/ubechi.png"),
+        description: "Ube-filled butchi"
+      },
+      {
+        src: require("../assets/photos/ubecake.png"),
+        description: "Ubelicious cake"
+      }
+    ]
+  }),
+  created() {
+    this.getHalayaTub(), this.getHalayaJar();
+  },
+  methods: {
+    getHalayaTub(item) {
+      axios.get(this.url + "/api/fetchHalayaTubLanding").then(response => {
+        this.tubName = response.data.product[0].product_name;
+        this.tubPrice = response.data.product[0].product_price;
+      });
+    },
+
+    getHalayaJar(item) {
+      axios.get(this.url + "/api/fetchHalayaJarLanding").then(response => {
+        console.log("responseeeeeeeeeeee", response.data);
+        this.jarName = response.data.product[0].product_name;
+        this.jarPrice = response.data.product[0].product_price;
+      });
+    }
+  }
 };
 </script>
 

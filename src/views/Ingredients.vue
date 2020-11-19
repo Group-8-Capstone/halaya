@@ -54,7 +54,7 @@
       <v-row>
         <v-spacer></v-spacer>
         <IngredientsPdf
-          :headers="headersIngredients"
+          :headersIngredients="headersIngredients"
           :displayIngredientsRecords="displayIngredientsRecords"
           class="float-right mr-5"
         ></IngredientsPdf>
