@@ -253,6 +253,7 @@ beforeCreate() {
       axios.get(this.url+"/api/fetchProfile/"+ id, this.config).then(response => {
         this.name = response.data.account[0].username;
         this.image=response.data.account[0].profile_url
+  
       });
     },
     logout(item) {

@@ -73,6 +73,9 @@
         :search="search"
       >
         <template #item.used_ingredients_amount="{ item }">{{ item.used_ingredients_amount }} {{ item.ingredients_unit }}</template>
+         <template v-slot:item.updated_at="{ item }">
+           <span>{{new Date(item.updated_at).toISOString().substring(0,10)}}</span>
+         </template>
         <template v-slot:item.action="{ item }">
           <v-icon normal title="Edit">mdi-table-edit</v-icon>
           <v-icon class="mr-3" color="red" normal title="Delete Product">mdi-delete</v-icon>
