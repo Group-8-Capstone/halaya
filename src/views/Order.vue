@@ -585,6 +585,7 @@ export default {
     fetchOrders() {
       axios.get(this.url + "/api/posts/order", this.config).then(response => {
         this.orders = response.data.data;
+        console.log("---->>>this.orders", this.orders);
         for (var i = 0; i < this.orders.length; i++) {
           var street = response.data.data[i].building_or_street;
           var barangay = response.data.data[i].barangay;
