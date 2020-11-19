@@ -16,6 +16,9 @@
       ></v-text-field>
     </v-card-title>
     <v-data-table :headers="headers" :items="deliveredOrder" :search="search">
+      <template v-slot:item.preferred_delivery_date="{ item }">
+           <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>
+         </template>
       <template v-slot:item.order_status="{ item }">
         <v-chip color="green">{{ item.order_status }}</v-chip>
       </template>
