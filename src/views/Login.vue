@@ -82,6 +82,13 @@
                     <br>
                   </span>
                 </div>
+                <v-progress-linear
+                  color="deep-purple accent-4"
+                  v-show="loading"
+                  indeterminate
+                  rounded
+                  height="6"
+                ></v-progress-linear>
             </v-card>
           </v-col>
         </v-row>
@@ -121,6 +128,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       user : '',
       pass : '',
       isAvailable: 0,
@@ -138,6 +146,7 @@ export default {
   },
   methods: {
     login() {
+      this.loading = true;
       let userAccount = {
         username: this.user,
         password: this.pass,
@@ -150,10 +159,13 @@ export default {
           localStorage.setItem("role", response.data.UserAccount[0].role);
           localStorage.setItem("id", response.data.UserAccount[0].id);
           if(response.data.UserAccount[0].role == 'admin'){
+            this.loading =  false;
             this.$router.push('/dashboard');
           } else if (response.data.UserAccount[0].role == 'customer') {
+            this.loading = false;
             this.$router.push('/customerHome');
           } else {
+            this.loading = false;
             this.$router.push('/delivery');
           }
         }else{
