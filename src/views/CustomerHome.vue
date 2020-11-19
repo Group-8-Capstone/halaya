@@ -212,7 +212,6 @@
     <template>
       <v-dialog v-model="addCardDialog" width="500px">
         <v-card>
-          <v-progress-linear color="deep-purple accent-4" v-show="loading" indeterminate rounded height="6"></v-progress-linear>
           <v-card-title class="align-center">
             <v-list-item-title
               class="d-flex align-center justify-center mx-auto headline black--text"
@@ -276,10 +275,15 @@
               outlined
               @click="addCardDialog=false , addOrderDialog=true"
             >CANCEL</v-btn>
-            <!-- <Loader> -->
             <v-btn class="ma-3" color="purple darken-2" outlined @click="placeOrder()">PLACE ORDER</v-btn>
-            <!-- </Loader> -->
           </v-card-actions>
+          <v-progress-linear
+            color="deep-purple accent-4"
+            v-show="loading"
+            indeterminate
+            rounded
+            height="6"
+          ></v-progress-linear>
         </v-card>
       </v-dialog>
     </template>
@@ -301,7 +305,6 @@
 </style>
 
 <script>
-// import Loader from "../components/Loader.vue";
 import OrderingInfo from "../components/OrderingInfo";
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -346,7 +349,6 @@ export default {
   },
   components: {
     OrderingInfo
-    // Loader
   },
   validations: {
     customerName: {
@@ -548,33 +550,6 @@ export default {
             });
         });
     },
-    // addCard() {
-    //   if (this.jarQuantity == "0" && this.tabQuantity == "0") {
-    //     console.log("date" +this.date)
-    //     Swal.fire({
-    //       position: "center",
-    //       icon: "warning",
-    //       title: "You haven't order",
-    //       showConfirmButton: false,
-    //       timer: 1500
-    //     });
-    //     this.addOrderDialog = true
-    //   }else if(this.date== null || this.customerName==null || this.customerStreet==null
-    //   || this.customerBarangay==null|| this.customerMunicipality==null || this.contactNumber==null
-    //   ||this.customerProvince==null ){
-    //           this.$v.$touch();
-
-    //   }
-    //    else {
-    //     this.addCardDialog = true;
-    //     this.addOrderDialog = false;
-    //     console.log(this.jarPrice);
-    //     console.log(this.jarQuantity);
-    //     console.log("date" +this.date)
-    //     this.totalPay =
-    //       this.jarQuantity * this.jarPrice + this.tabQuantity * this.tubPrice;
-    //   }
-    // },
     addCard() {
       var total_order_qty =
         parseInt(this.jarQuantity) + parseInt(this.tabQuantity) * 4;
@@ -597,7 +572,6 @@ export default {
           title:
             "Order cannot be carried in one delivery. Reduce order quantity and have two orders instead.",
           showConfirmButton: true
-          // timer: 5000
         });
         this.addOrderDialog = true;
       } else if (
