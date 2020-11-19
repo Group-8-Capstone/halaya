@@ -284,6 +284,7 @@ export default {
         .get(this.url + "/api/posts/delivery", this.config)
         .then(response => {
           var result = response.data.data;
+          console.log("---->>>>", result);
           let groupedOrders = {};
           result.forEach(data => {
             let { barangay } = data;
