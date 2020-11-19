@@ -17,6 +17,9 @@
             ></v-text-field>
           </v-card-title>
           <v-data-table :headers="headers" :items="onOrder" :search="search">
+              <template v-slot:item.preferred_delivery_date="{ item }">
+           <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>
+         </template>
             <template v-slot:item.order_status="{ item }">
               <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
             </template>
@@ -33,6 +36,9 @@
             ></v-text-field>
           </v-card-title>
           <v-data-table :headers="headers2" :items="deliveredOrder" :search="search">
+             <template v-slot:item.preferred_delivery_date="{ item }">
+           <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>
+         </template>
             <template v-slot:item.order_status="{ item }">
               <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
             </template>
@@ -96,7 +102,7 @@ export default {
     retrieveOnOrder() {
       let id = localStorage.getItem("id");
       axios
-        .get(this.url+"/api/fetchOnOrderStat/" + id, this.config)
+        .get(this.url+"/api/fetchOngoingOrder/" + id, this.config)
         .then(response => {
           this.onOrder = response.data.post;
           console.log(response.data.post);

@@ -61,6 +61,9 @@
         </v-card-title>
         <v-spacer></v-spacer>
         <v-data-table :headers="headers" :items="records" :search="search">
+           <template v-slot:item.created_at="{ item }">
+           <span>{{new Date(item.created_at).toISOString().substring(0,10)}}</span>
+         </template>
           <template v-slot:item.action="{ item }">
             <v-icon
               normal

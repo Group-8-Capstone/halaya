@@ -1,8 +1,8 @@
 <template>
   <div>
-     <v-card class="ma-5 mb-12 pa-5">
+    <v-card class="ma-5 mb-12 pa-5">
       <v-card-title>
-        THE BEST OF WAWEN'S UBE HALAYA 
+        THE BEST OF WAWEN'S UBE HALAYA
         <v-spacer></v-spacer>
         <v-list class="justify-sm-end justify-lg-end">
           <v-btn class="ma-5" color="purple darken-2" outlined dark @click="showDialog">
@@ -12,7 +12,7 @@
       </v-card-title>
       <OrderingInfo></OrderingInfo>
     </v-card>
-    <v-dialog v-model="addOrderDialog" style="height:auto;" width="500px" >
+    <v-dialog v-model="addOrderDialog" style="height:auto;" width="500px">
       <v-card class="ma-0 pa-0">
         <v-card-title class="align-center">
           <v-list-item-title
@@ -103,7 +103,7 @@
               <div id="price" class="font-weight-light grey--text title">{{tubPrice}}</div>
             </v-col>
           </v-row>
-          <v-row >
+          <v-row>
             <v-col cols="6" class="pl-5">
               <v-text-field min="0" type="number" label="Quantity" v-model="jarQuantity">
                 <template slot="prepend">
@@ -119,10 +119,7 @@
                 <template slot="prepend">
                   <div id="vue-counter">
                     <v-icon type="button" v-on:click="increaseTub">mdi-plus</v-icon>
-                    <v-icon
-                      type="button"
-                      v-on:click="decreaseTub"
-                    >mdi-minus</v-icon>
+                    <v-icon type="button" v-on:click="decreaseTub">mdi-minus</v-icon>
                   </div>
                 </template>
               </v-text-field>
@@ -222,31 +219,52 @@
           </v-card-title>
           <v-row>
             <v-col cols="5" class="pl-12">
-              <span><h4>Recievers Name: </h4>{{customerName}}</span>
+              <span>
+                <h4>Recievers Name:</h4>
+                {{customerName}}
+              </span>
             </v-col>
             <v-col cols="5" class="pl-12">
-              <span><h4>Reciever Number: </h4>{{contactNumber}}</span>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="5" class="pl-12">
-              <span><h4>Address: </h4>{{customerStreet}}, {{customerBarangay}}, {{customerMunicipality}}</span>
-            </v-col>
-            <v-col cols="5" class="pl-12">
-              <span><h4>Delivery: </h4>{{date}}</span>
+              <span>
+                <h4>Reciever Number:</h4>
+                {{contactNumber}}
+              </span>
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="5" class="pl-12">
-              <span><h4>Jar Quantity: </h4>{{jarQuantity}}</span>
+              <span>
+                <h4>Address:</h4>
+                {{customerStreet}}, {{customerBarangay}}, {{customerMunicipality}}
+              </span>
             </v-col>
             <v-col cols="5" class="pl-12">
-              <span><h4>Tub Quntity: </h4>{{tabQuantity}}</span>
+              <span>
+                <h4>Delivery:</h4>
+                {{date}}
+              </span>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="5" class="pl-12">
+              <span>
+                <h4>Jar Quantity:</h4>
+                {{jarQuantity}}
+              </span>
+            </v-col>
+            <v-col cols="5" class="pl-12">
+              <span>
+                <h4>Tub Quntity:</h4>
+                {{tabQuantity}}
+              </span>
             </v-col>
           </v-row>
 
           <v-col cols="5" class="pl-12">
-            <span><h4>Your total payment: </h4>{{totalPay}}</span>
+            <span>
+              <h4>Your total payment:</h4>
+              {{totalPay}}
+            </span>
           </v-col>
 
           <v-card-actions>
@@ -259,6 +277,13 @@
             >CANCEL</v-btn>
             <v-btn class="ma-3" color="purple darken-2" outlined @click="placeOrder()">PLACE ORDER</v-btn>
           </v-card-actions>
+          <v-progress-linear
+            color="deep-purple accent-4"
+            v-show="loading"
+            indeterminate
+            rounded
+            height="6"
+          ></v-progress-linear>
         </v-card>
       </v-dialog>
     </template>
@@ -272,7 +297,6 @@
   position: absolute;
   width: 100%;
 }
-
 
 .v-application--wrap {
   min-height: 100vh;
@@ -294,6 +318,7 @@ import {
 export default {
   data() {
     return {
+      loading: false,
       accessToken:
         "pk.eyJ1IjoiamllbnhpeWEiLCJhIjoiY2tlaTM3d2VrMWcxczJybjc0cmZkamk3eiJ9.JzrYlG2kZ08Pkk24hvKDJw",
       menu: false,
@@ -462,6 +487,7 @@ export default {
       }
     },
     placeOrder() {
+      this.loading = true;
       this.$v.$touch();
       var street = this.customerStreet;
       var barangay = this.customerBarangay;
@@ -508,6 +534,7 @@ export default {
           axios
             .post(this.url + "/api/post/createOrder", param, this.config)
             .then(response => {
+              this.loading = false;
               console.log("response.data: ", response.data);
               if (response.data == "success") {
                 Swal.fire({
@@ -524,8 +551,11 @@ export default {
         });
     },
     addCard() {
+      var total_order_qty =
+        parseInt(this.jarQuantity) + parseInt(this.tabQuantity) * 4;
+      var maximum_order_qty = 96;
       if (this.jarQuantity == "0" && this.tabQuantity == "0") {
-        console.log("date" +this.date)
+        console.log("date" + this.date);
         Swal.fire({
           position: "center",
           icon: "warning",
@@ -533,19 +563,33 @@ export default {
           showConfirmButton: false,
           timer: 1500
         });
-        this.addOrderDialog = true
-      }else if(this.date== null || this.customerName==null || this.customerStreet==null
-      || this.customerBarangay==null|| this.customerMunicipality==null || this.contactNumber==null 
-      ||this.customerProvince==null ){
-              this.$v.$touch();
-
-      }
-       else {
+        this.addOrderDialog = true;
+      } else if (total_order_qty > maximum_order_qty) {
+        console.log("--->>>", total_order_qty);
+        Swal.fire({
+          position: "center",
+          icon: "warning",
+          title:
+            "Order cannot be carried in one delivery. Reduce order quantity and have two orders instead.",
+          showConfirmButton: true
+        });
+        this.addOrderDialog = true;
+      } else if (
+        this.date == null ||
+        this.customerName == null ||
+        this.customerStreet == null ||
+        this.customerBarangay == null ||
+        this.customerMunicipality == null ||
+        this.contactNumber == null ||
+        this.customerProvince == null
+      ) {
+        this.$v.$touch();
+      } else {
         this.addCardDialog = true;
         this.addOrderDialog = false;
         console.log(this.jarPrice);
         console.log(this.jarQuantity);
-        console.log("date" +this.date)
+        console.log("date" + this.date);
         this.totalPay =
           this.jarQuantity * this.jarPrice + this.tabQuantity * this.tubPrice;
       }
