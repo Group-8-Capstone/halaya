@@ -96,7 +96,7 @@ export default {
     retrieveOnOrder() {
       let id = localStorage.getItem("id");
       axios
-        .get(this.url+"/api/fetchOnOrderStat/" + id, this.config)
+        .get(this.url+"/api/fetchOngoingOrder/" + id, this.config)
         .then(response => {
           this.onOrder = response.data.post;
           console.log(response.data.post);
