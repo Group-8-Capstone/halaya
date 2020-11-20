@@ -22,21 +22,32 @@
         <section class="pdf-item" justify="center">
           <center>
             <div>
+              <br>
               <img class="logo" width="50" :src="require('@/assets/wawens.png')">
             </div>
             <div>
               <h4>WAWEN'S UBE HALAYA</h4>
               <h6>RECORDED USED INGREDIENTS</h6>
+              <br>
             </div>
           </center>
-          <div style="margin:50px" class="pa-1">
-            <div class="border border-2 mx-auto p-1 rounded">
-                <v-data-table :headers="headersIngredients" :items="displayIngredientsRecords">
-                  <template v-slot:item.action="{ item }">
-                    <v-icon normal title="Edit">mdi-table-edit</v-icon>
-                    <v-icon class="mr-3" color="red" normal title="Delete Product">mdi-delete</v-icon>
-                  </template>
-                </v-data-table>
+          <div style="margin:1px" class="pa-0">
+            <div>
+              <v-data-table
+                :headers="headersIngredients"
+                :items="displayIngredientsRecords"
+              >
+                <template
+                  #item.used_ingredients_amount="{ item }"
+                >{{ item.used_ingredients_amount }} {{ item.ingredients_unit }}</template>
+                <template v-slot:item.updated_at="{ item }">
+                  <span>{{new Date(item.updated_at).toISOString().substring(0,10)}}</span>
+                </template>
+                <template v-slot:item.action="{ item }">
+                  <v-icon normal title="Edit">mdi-table-edit</v-icon>
+                  <v-icon class="mr-3" color="red" normal title="Delete Product">mdi-delete</v-icon>
+                </template>
+              </v-data-table>
             </div>
           </div>
         </section>
@@ -50,7 +61,7 @@
 <script>
 import VueHtml2pdf from "vue-html2pdf";
 export default {
-  name: "IngredientsPDf",
+  name: "IngredientsPdf",
   props: ["headersIngredients", "displayIngredientsRecords"],
   components: {
     VueHtml2pdf
@@ -73,6 +84,5 @@ export default {
 }
 v-data-table {
   width: 100%;
-  height: 100%;
 }
 </style>

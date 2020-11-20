@@ -22,16 +22,21 @@
         <section class="pdf-item" justify="center">
           <center>
             <div>
+              <br>
               <img class="logo" width="50" :src="require('@/assets/wawens.png')">
             </div>
             <div>
               <h4>WAWEN'S UBE HALAYA</h4>
               <h6>PRODUCT LOGS</h6>
+              <br>
             </div>
           </center>
-          <div style="margin:50px" class="pa-1">
-            <div class="border border-1 mx-auto p-1 rounded">
+          <div style="margin:1px" class="pa-0">
+            <div>
               <v-data-table :headers="headers" :items="records">
+                <template v-slot:item.created_at="{ item }">
+                  <span>{{new Date(item.created_at).toISOString().substring(0,10)}}</span>
+                </template>
                 <template v-slot:item.action="{ item }">
                   <v-icon
                     normal
@@ -61,7 +66,7 @@
 <script>
 import VueHtml2pdf from "vue-html2pdf";
 export default {
-  name: "ProductPdf",
+  name: "ProductsPdf",
   props: ["headers", "records"],
   components: {
     VueHtml2pdf
