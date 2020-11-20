@@ -8,7 +8,7 @@
           <v-list-item class="justify-center mt-5">
             <img src="../assets/ubeJar.jpg" alt width="100" height="100">
           </v-list-item>
-          <v-list-item class="justify-center">Remaining Quantity: {{halayaJarAvailability}} pcs</v-list-item>
+          <v-list-item class="justify-center">Remaining Quantity: {{halayaJarAvailability1}} pcs</v-list-item>
           <v-list-item class="justify-center">Price: {{jarPrice}} Pesos</v-list-item>
           <center>
             <v-chip :color="comparedJarAvailability()" dark>{{ jarStat }}</v-chip>
@@ -26,7 +26,7 @@
           <v-list-item class="justify-center mt-5">
             <img src="../assets/ubeTab.jpg" alt width="100" height="100">
           </v-list-item>
-          <v-list-item class="justify-center">Remaining Quantity: {{halayaTubAvailability}} pcs</v-list-item>
+          <v-list-item class="justify-center">Remaining Quantity: {{halayaTubAvailability1}} pcs</v-list-item>
           <v-list-item class="justify-center">Price: {{tubPrice}} Pesos</v-list-item>
           <center>
             <v-chip :color="comparedTubAvailability()" dark>{{ tubStat }}</v-chip>
@@ -182,8 +182,8 @@ export default {
       productId: null,
       totalJar: null,
       totalTub: null,
-      halayaTubAvailability: null,
-      halayaJarAvailability: null,
+      halayaTubAvailability: 0,
+      halayaJarAvailability: 0,
       tubPrice: null,
       jarPrice: null,
       tubId: null,
@@ -192,6 +192,8 @@ export default {
       tubStat: null,
       jarName: null,
       tubName: null,
+      halayaTubAvailability1:null,
+      halayaJarAvailability1:null,
       halayaTab: [],
       headers: [
         {
@@ -274,6 +276,7 @@ export default {
           this.tubPrice = response.data.product[0].product_price;
           this.halayaTubAvailability =
             response.data.product[0].product_availability - this.totalTub;
+          this.halayaTubAvailability1 = this.halayaTubAvailability < 1 ? 0 : this.halayaTubAvailability 
         });
     },
 
@@ -289,6 +292,7 @@ export default {
           this.jarPrice = response.data.product[0].product_price;
           this.halayaJarAvailability =
             response.data.product[0].product_availability - this.totalJar;
+          this.halayaJarAvailability1 = this.halayaJarAvailability < 1 ? 0 : this.halayaJarAvailability
         });
     },
 
@@ -328,26 +332,6 @@ export default {
           this.getHalayaJar();
         });
     },
-
-    //       comparedJarAvailability(){
-    //         if (this.totalJar<this.editedJarAvail){
-    //           this.jarStat='Enough'
-    //           return "green";
-    //         } else {
-    //           this.jarStat='Lacking'
-    //           return "red"
-    //         }
-
-    //        },
-    //       comparedTubAvailability(){
-    //         if (this.totalTub<this.editedTubAvail){
-    //           this.tubStat='Enough'
-    //           return "green";
-    //         } else{
-    //           this.tubStat='Lacking'
-    //           return "red"
-    //         }
-    // },
     comparedJarAvailability() {
       if (this.totalJar < this.halayaJarAvailability) {
         this.jarStat = "Enough";

@@ -109,7 +109,7 @@
             <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
           </template>
           <template v-slot:item.action="{ item }">
-            <div v-if="isCanceled(item) === true">
+            <div v-if="isCanceled(item) === true || isDelivered(item) === true">
               <v-icon
                 disabled
                 normal
@@ -136,6 +136,13 @@
             </div>
           </template>
         </v-data-table>
+        <v-progress-linear
+            color="deep-purple accent-4"
+            v-show="loading"
+            indeterminate
+            rounded
+            height="6"
+          ></v-progress-linear>
       </template>
     </v-dialog>
   </div>
@@ -152,6 +159,7 @@ export default {
   name: "Delivery",
   data() {
     return {
+      loading: false,
       delivery_range: [],
       detailsDialog: false,
       barangay_array: [],
@@ -216,6 +224,7 @@ export default {
       });
     },
     alertDelivered(item) {
+      this.loading = true;
       Swal.fire({
         title: "Are you sure item is being delivered?",
         icon: "warning",
@@ -228,6 +237,8 @@ export default {
       }).then(result => {
         if (result.value) {
           this.deliveredItem(item);
+        } else {
+          this.loading = false;
         }
       });
     },
@@ -236,6 +247,7 @@ export default {
         .post(this.url + "/api/post/updateStat/" + item.id, {}, this.config)
         .then(response => {
           console.log("-----------", response.data);
+          this.loading = false;
           Swal.fire({
             title: "Order is being delivered",
             icon: "success",
@@ -246,6 +258,7 @@ export default {
         });
     },
     alertCancel(item) {
+      this.loading = true;
       Swal.fire({
         title: "Are you sure?",
         icon: "warning",
@@ -265,6 +278,8 @@ export default {
             showConfirmButton: false,
             timer: 1500
           });
+        }else {
+          this.loading =  false;
         }
       });
     },
@@ -276,10 +291,12 @@ export default {
           this.config
         )
         .then(response => {
+          this.loading=false;
           this.dataGrouping();
         });
     },
     dataGrouping() {
+      this.loading = true;
       axios
         .get(this.url + "/api/posts/delivery", this.config)
         .then(response => {
@@ -330,10 +347,16 @@ export default {
 
             this.deliveriesByBrngy = deliveries;
           }
+          this.loading = false;
         });
     },
     isCanceled(item) {
       if (item.order_status == "Canceled") {
+        return true;
+      }
+    },
+    isDelivered(item) {
+      if (item.order_status == "Delivered") {
         return true;
       }
     },
