@@ -100,10 +100,14 @@ export default {
   },
   methods: {
     retrieveOnOrder() {
+      this.$vloading.show();
       let id = localStorage.getItem("id");
       axios
         .get(this.url+"/api/fetchOngoingOrder/" + id, this.config)
         .then(response => {
+           setTimeout(() => {
+            this.$vloading.hide()
+          },1000) 
           this.onOrder = response.data.post;
           console.log(response.data.post);
         });
@@ -114,10 +118,14 @@ export default {
       else return "blue";
     },
     retrieveDeliveredOrder() {
+       this.$vloading.show();
       let id = localStorage.getItem("id");
       axios
         .get(this.url+"/api/fetchDeliveredOrder/" + id, this.config)
         .then(response => {
+           setTimeout(() => {
+            this.$vloading.hide()
+          },1000) 
           this.deliveredOrder = response.data.post;
           console.log(response.data.post);
         });

@@ -59,13 +59,6 @@
               </template>
             </v-data-table>
           </v-row>
-          <!-- <v-progress-linear
-            color="deep-purple accent-4"
-            v-show="loading"
-            indeterminate
-            rounded
-            height="6"
-          ></v-progress-linear>-->
         </v-tab-item>
         <v-tab-item>
           <v-card-title>
@@ -96,13 +89,6 @@
               <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
             </template>
           </v-data-table>
-          <!-- <v-progress-linear
-            color="deep-purple accent-4"
-            v-show="loading"
-            indeterminate
-            rounded
-            height="6"
-          ></v-progress-linear>-->
         </v-tab-item>
         <v-tab-item>
           <Walkin/>
@@ -405,7 +391,6 @@ export default {
     console.log("this.config", this.config);
   },
   created() {
-    // this.orderedProduct();
     this.fetchPendingOrders();
     this.fetchOrders();
     setInterval(this.fetchOrders(), 3000);
@@ -427,8 +412,6 @@ export default {
         if (id == this.orders[i].id) {
           for (var j = 0; j < this.orders[i].products.length; j++) {
             this.orderedProducts.push(this.orders[i].products[j]);
-            // this.orderedProducts.push(this.orders[i].products[j].product_name)
-            // this.orderedProducts.push(this.orders[i].products[j].pivot.sub_quantity)
           }
         }
       }
@@ -439,16 +422,13 @@ export default {
       this.orderedProducts = [];
     },
     updateItem() {
-      this.loading = true;
       if (
         this.post.receiver_name === "" ||
         this.post.building_or_street === "" ||
         this.post.barangay === "" ||
         this.post.city_or_municipality === "" ||
         this.post.province === "" ||
-        this.post.ubehalayajar_qty === "" ||
-        this.post.preferred_delivery_date === "" ||
-        this.post.ubehalayatub_qty == ""
+        this.post.preferred_delivery_date === ""
       ) {
         Swal.fire({
           title: "Please fill in all required field",
@@ -457,6 +437,10 @@ export default {
         }),
           (this.editDialog = this.editDialog);
       } else {
+      
+        this.editDialog = false;
+        this.$vloading.show();
+        this.$vloading.hide()
         var place = this.post.building_or_street.concat(
           " ",
           this.post.barangay,
@@ -481,12 +465,9 @@ export default {
             var options = { units: "kilometers" };
             var dist = turf.distance(from_place, to_place, options);
             this.post.distance = dist;
-
             axios
               .post(this.url + "/api/post/update", this.post, this.config)
               .then(response => {
-                this.editDialog = false;
-                this.loading = false;
                 Swal.fire({
                   title: "Successfully Updated",
                   icon: "success",
@@ -528,11 +509,9 @@ export default {
         });
     },
     editItem(item) {
-      this.loading = true;
       axios
         .get(this.url + "/api/post/edit/" + item.id, this.config)
         .then(response => {
-          this.loading = false;
           this.post = response.data;
         });
     },
@@ -540,7 +519,6 @@ export default {
       this.orderDetails = true;
     },
     alertCancel(item) {
-      this.loading = true;
       Swal.fire({
         title: "Are you sure?",
         icon: "warning",
@@ -552,7 +530,9 @@ export default {
         reverseButtons: true
       }).then(result => {
         if (result.value) {
+          this.$vloading.show();
           this.deleteItem(item);
+          this.$vloading.hide()
           Swal.fire({
             title: "Canceled!",
             text: "Order is being canceled",
@@ -561,7 +541,6 @@ export default {
             timer: 1500
           });
         }else {
-          this.loading = false;
         }
       });
     },
@@ -592,7 +571,6 @@ export default {
         .catch(response => {
           console.log(response);
         });
-      // this.getCoordinates(this.address);
     },
     getHalayaJarQty(item) {
       let halayaJarQty = 0;
@@ -615,9 +593,12 @@ export default {
       return ubechiQty;
     },
     fetchOrders() {
+      this.$vloading.show();
       axios.get(this.url + "/api/posts/order", this.config).then(response => {
+        setTimeout(() => {
+        this.$vloading.hide()
+         },1000)  
         this.orders = response.data.data;
-        console.log("---->>>this.orders", this.orders);
         for (var i = 0; i < this.orders.length; i++) {
           var street = response.data.data[i].building_or_street;
           var barangay = response.data.data[i].barangay;
@@ -638,9 +619,13 @@ export default {
       });
     },
     fetchPendingOrders() {
+      this.$vloading.show();
       axios
         .get(this.url + "/api/fetch/pending-orders", this.config)
         .then(response => {
+           setTimeout(() => {
+        this.$vloading.hide()
+         },1000)   
           this.pendingOrders = response.data.data;
           for (var i = 0; i < this.pendingOrders.length; i++) {
             var street = response.data.data[i].building_or_street;
@@ -663,13 +648,11 @@ export default {
         });
     },
     confirmOrder(item) {
-      this.loading = true;
-      console.log("****hsdfnaiuerh*******", this.config);
+     this.$vloading.show();
       axios
         .post(this.url + "/api/post/confirm/" + item.id, {}, this.config)
         .then(response => {
-          this.loading = false;
-          console.log("***********", response.data);
+          this.$vloading.hide()
           Swal.fire({
             title: "Order is being confirmed",
             icon: "success",

@@ -39,7 +39,7 @@
             class="dropdownFilter"
           ></v-select>
           <v-select
-            label=" Date"
+            label="Year"
             v-model="filterByDate"
             @change="filtering"
             :items="Years"
@@ -86,7 +86,7 @@
             class="dropdownFilter"
           ></v-select>
           <v-select
-            label=" Date"
+            label="Year"
             v-model="filterByDateTubs"
             @change="filteringTubs"
             :items="Years"
@@ -169,19 +169,13 @@ export default {
       else return "green";
     },
     fetchIngredients() {
-      // console.log('test', this.config)
-      // axios({
-      //   method: "get",
-      //   url: "http://localhost:8000/api/fetch/stock",
-      //   headers: this.config.headers
-      // }).then(response => {
-      //   console.log(response.data)
-      // })
-
-      // http://localhost:8000/api/v1/auth/fetch/stock
+      this.$vloading.show();
       axios
         .get(this.url+"/api/fetch/stock", this.config)
         .then(response => {
+          setTimeout(() => {
+        this.$vloading.hide()
+         },1000) 
           let results = [];
           for (var i = 0; i < response.data.length; i++) {
             if (this.containsObject(results, response.data[i].id)) {
@@ -321,6 +315,8 @@ export default {
         month : this.pageTubs
       };
       axios.post(this.url+"/api/sales/dailyTubs", parameter, this.config).then(response=>{
+        setTimeout(() => {
+         },1000)   
         let category = [];
         let series = [];
 
@@ -591,7 +587,7 @@ export default {
     filterByYear() {
       axios
         .get(this.url+"/api/sales/filterYear", this.config)
-        .then(response => {
+        .then(response => { 
           let tempYears = [];
           response.data.forEach(element => {
             tempYears.push(element.years);

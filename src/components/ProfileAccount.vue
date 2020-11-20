@@ -143,7 +143,6 @@ import {
       'Access-Control-Allow-Origin':'*'
     };
     this.config = config;
-    console.log("this.config", this.config);
   },
    computed: {
     passwordConfirmationRule() {
@@ -192,6 +191,7 @@ import {
             this.imageURL = URL.createObjectURL(e.target.files[0])
         },
      formSubmit(e) {
+        this.$vloading.show();
             if(this.image !== null ){
                 e.preventDefault();
                 let currentObj = this;
@@ -203,9 +203,12 @@ import {
                 let id=localStorage.getItem('id')
                 formData.append('image', this.image)
                 axios.post(this.url+'/api/ProfilePicUpdate/'+id, formData, this.config).then(function (response) {
-                  console.log(formData)
                     currentObj.success = response.data.success
                     window.location.reload()
+                    setTimeout(() => {
+                    this.$vloading.hide()
+                  },1000)  
+                     
                 })
                 .catch(function (error) {
                     currentObj.output = error;
@@ -213,11 +216,18 @@ import {
             }else{
                 this.errorMessage = 'All fields are required!'
             }
+            setTimeout(() => {
+                    this.$vloading.hide()
+                  },1000)  
                
         },
       avatarRetrieve() {
+      this.$vloading.show();
       let id=localStorage.getItem('id')
       axios.get(this.url+"/api/fetchProfile/"+ id, this.config).then(response => {
+        setTimeout(() => {
+        this.$vloading.hide()
+         },1000)   
         this.username=response.data.account[0].username
         if(response.data.account[0].profile_url==null){
           this.imageURL=this.url+'/images/avatar.png'
@@ -231,12 +241,16 @@ import {
       if (this.userPassword ==null || this.confirmPassword ==null){
          this.$v.$touch();
       }else{
+      this.$vloading.show();
       let id=localStorage.getItem('id')
       let param={
         confirmPassword:this.confirmPassword
       }
       axios.post(this.url+'/api/passwordUpdate/'+id, param, this.config)
             .then(response => {
+              setTimeout(() => {
+              this.$vloading.hide()
+              },1000) 
                 Swal.fire({
                   position: "center",
                   icon: "success",

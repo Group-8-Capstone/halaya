@@ -11,12 +11,12 @@
                 <hr>
                 <v-row class="mx-auto text-center">
                   <v-list-item>
-                    Available Qty :
-                    <b>{{item.ingredients_remaining}} {{item.ingredients_unit}}</b>
+                    Available Quantity :
+                    <b>{{ item.ingredients_remaining}} {{item.ingredients_unit}}</b>
                   </v-list-item>
                   <v-list-item>
-                    Used Qty :
-                    <b>{{item.total}} {{item.ingredients_unit}}</b>
+                    Used Quantity :
+                    <b>{{ item.total}} {{item.ingredients_unit}}</b>
                   </v-list-item>
                   <v-list-item>
                     <v-chip
@@ -140,18 +140,6 @@
       </v-dialog>
     </template>
     <template>
-      <center>
-        <v-progress-circular
-          class="ma-5 mb-12 pa-5"
-          v-show="loading"
-          :size="70"
-          :width="7"
-          color="purple"
-          indeterminate
-        ></v-progress-circular>
-      </center>
-    </template>
-    <template>
       <v-dialog v-model="editDialog"  style="height:auto;" width="400px" >
         <v-card class="ma-0 pa-0">
           <v-spacer></v-spacer>
@@ -258,6 +246,9 @@ export default {
     this.getAllIngredientsName();
     this.retrieveUsedIngredients();
   },
+  props:{
+    color: "primary"
+  },
   computed: {
     ingredientsNameErrors() {
       const errors = [];
@@ -323,7 +314,11 @@ export default {
         });
     },
     retrieveUsedIngredients() {
+      this.$vloading.show();
       axios.get(this.url + "/api/fetchUsedIng", this.config).then(response => {
+      setTimeout(() => {
+            this.$vloading.hide()
+          },1000)   
         this.displayIngredientsRecords = response.data;
         console.log(response);
       });
@@ -429,4 +424,6 @@ export default {
   margin-right: 0px !important;
   margin-left: 0px !important;
 }
+
+
 </style>

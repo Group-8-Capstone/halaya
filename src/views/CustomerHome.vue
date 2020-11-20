@@ -266,7 +266,6 @@
               {{totalPay}}
             </span>
           </v-col>
-
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
@@ -487,13 +486,15 @@ export default {
       }
     },
     placeOrder() {
-      this.loading = true;
+      // this.loading = true;
       this.$v.$touch();
       var street = this.customerStreet;
       var barangay = this.customerBarangay;
       var municipality = this.customerMunicipality;
       var province = this.customerProvince;
-
+      this.addOrderDialog = false;
+      this.addCardDialog = false; 
+      this.$vloading.show();
       var place = street.concat(
         " ",
         barangay,
@@ -531,12 +532,20 @@ export default {
             orderStatus: this.getOrderStatus(this.jarQuantity),
             distance: dist
           };
+          
+            
           axios
             .post(this.url + "/api/post/createOrder", param, this.config)
             .then(response => {
-              this.loading = false;
+              // this.loading = false;
+               
+               setTimeout(() => {
+            this.$vloading.hide()
+          },1000)  
+          
               console.log("response.data: ", response.data);
               if (response.data == "success") {
+                 
                 Swal.fire({
                   position: "center",
                   icon: "success",
@@ -544,9 +553,9 @@ export default {
                   showConfirmButton: false,
                   timer: 1500
                 });
-                this.addOrderDialog = false;
-                this.addCardDialog = false;
+                
               }
+               
             });
         });
     },

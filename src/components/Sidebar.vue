@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-    <v-app-bar app  light lights-in height="70" color="white" dense dark elevation="40">
+    <v-app-bar app  light lights-in height="70" color="white" dense dark elevation="40" fixed>
       <v-btn color="grey" icon @click.stop="drawer = !drawer"  >
         <v-icon>mdi-menu</v-icon>
       </v-btn>

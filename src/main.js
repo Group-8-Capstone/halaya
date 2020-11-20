@@ -10,7 +10,8 @@ import { Form, HasError, AlertError } from 'vform'
 import '@turf/helpers';
 import Print from 'vue-printjs'
 import AOS from 'aos';
-import 'aos/dist/aos.css'
+import 'aos/dist/aos.css';
+import {LoadingPlugin} from "vuetify-loading-overlay"
 
 
 AOS.init();
@@ -24,13 +25,21 @@ Vue.component('profile-component', require('./components/ProfileAccount.vue').de
 
 
 Vue.config.productionTip = false;
-Vue.use
+Vue.use(LoadingPlugin, {
+  //props
+  spinnerProps: {
+    color: "#6A1B9A",
+    width:"5",
+    size: "50"
+  },
+  overlayProps: {},
+});
 
 Vue.mixin({
   data: function() {
     return {
-      // url:"http://localhost:8000"
-      url:"http://wawenshalaya.herokuapp.com"
+      url:"http://localhost:8000"
+      // url:"http://wawenshalaya.herokuapp.com"
     }
   }
 })
@@ -45,5 +54,6 @@ new Vue({
   vuetify,
   mapboxgl,
   turf,
+  
   render: h => h(App)
 }).$mount("#app");
