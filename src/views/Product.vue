@@ -44,11 +44,9 @@
       <v-card>
         <v-row>
           <v-spacer></v-spacer>
-          <ProductPdf
-            :headers="headers"
-            :records="records"
-            class="float-right mr-5"
-          ></ProductPdf>
+          <ProductsPdf
+            :headers="headers" :records="records" class="float-right mr-5"
+          ></ProductsPdf>
         </v-row>
         <v-card-title>
           Product Logs
@@ -157,7 +155,7 @@
 }
 </style>
 <script>
-import ProductPdf from "./ProductPdf.vue";
+import ProductsPdf from "./ProductPdf.vue";
 import {
   required,
   minLength,
@@ -168,7 +166,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 export default {
   name: "Delivery",
-  components: { ProductPdf },
+  components: { ProductsPdf },
   data() {
     return {
       records: [],

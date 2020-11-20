@@ -53,7 +53,11 @@
     <v-card id="cardtable" class="ma-5 mb-12 pa-5">
       <v-row>
         <v-spacer></v-spacer>
-        <IngredientsPdf :headers="headers" :displayIngredientsRecords="displayIngredientsRecords" class="float-right mr-5"></IngredientsPdf>
+        <IngredientsPdf
+          :headersIngredients="headersIngredients"
+          :displayIngredientsRecords="displayIngredientsRecords"
+          class="float-right mr-5"
+        ></IngredientsPdf>
       </v-row>
       <v-card-title>
         Recorded Used Ingredients

@@ -19,25 +19,28 @@
       ref="html2Pdf"
     >
       <section slot="pdf-content">
-        <section class="pdf-item">
-          <center style="margin:50px">
+        <section class="pdf-item" justify="center">
+          <center>
             <div>
+              <br>
               <img class="logo" width="50" :src="require('@/assets/wawens.png')">
             </div>
             <div>
               <h4>WAWEN'S UBE HALAYA</h4>
               <h6>DELIVERED ORDERS</h6>
+              <br>
             </div>
           </center>
-          <div style="margin:50px" class="pa-5">
-            <div class="border border-2 mx-auto p-3 rounded">
-              <div>
-                <v-data-table :headers="headers" :items="deliveredOrder">
-                  <template v-slot:item.order_status="{ item }">
-                    <v-chip color="green">{{ item.order_status }}</v-chip>
-                  </template>
-                </v-data-table>
-              </div>
+          <div style="margin:1px" class="pa-0">
+            <div>
+              <v-data-table :headers="headers" :items="deliveredOrder">
+                <template v-slot:item.preferred_delivery_date="{ item }">
+                  <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>
+                </template>
+                <template v-slot:item.order_status="{ item }">
+                  <v-chip color="green">{{ item.order_status }}</v-chip>
+                </template>
+              </v-data-table>
             </div>
           </div>
         </section>
@@ -71,5 +74,8 @@ export default {
   height: 10%;
   margin-left: auto;
   margin-right: auto;
+}
+v-data-table {
+  width: 100%;
 }
 </style>

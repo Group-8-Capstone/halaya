@@ -17,8 +17,8 @@
     </v-card-title>
     <v-data-table :headers="headers" :items="deliveredOrder" :search="search">
       <template v-slot:item.preferred_delivery_date="{ item }">
-           <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>
-         </template>
+        <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>
+      </template>
       <template v-slot:item.order_status="{ item }">
         <v-chip color="green">{{ item.order_status }}</v-chip>
       </template>
@@ -45,8 +45,16 @@ export default {
         },
         { text: "Address", value: "customer_address" },
         { text: "Distance", value: "distance" },
-        { text: "Ube Halaya Jar(Quantity)", value: "ubehalayajar_qty", sortable: false },
-        { text: "Ube Halaya Tub(Quantity)", value: "ubehalayatub_qty", sortable: false },
+        {
+          text: "Ube Halaya Jar(Quantity)",
+          value: "ubehalayajar_qty",
+          sortable: false
+        },
+        {
+          text: "Ube Halaya Tub(Quantity)",
+          value: "ubehalayatub_qty",
+          sortable: false
+        },
         { text: "Delivered Date", value: "preferred_delivery_date" },
         { text: "Order Status", value: "order_status" }
       ]
