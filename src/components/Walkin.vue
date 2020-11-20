@@ -241,9 +241,13 @@ export default {
     },
 
     placeOrder() {
-      this.loading = true;
+      // this.loading = true;
+      this.$vloading.show();
         if (this.jarQuantity=='0' && this.tabQuantity=='0' ){
-          this.loading = false;
+          // this.loading = false;
+            setTimeout(() => {
+        this.$vloading.hide()
+         },1000) 
          Swal.fire({
                   position: "center",
                   icon: "warning",
@@ -295,8 +299,10 @@ export default {
           axios
             .post(this.url+"/api/post/createOrder", param,this.config)
             .then(response => {
-              console.log("response.data: ", response.data);
-              this.loading = false;
+                setTimeout(() => {
+                this.$vloading.hide()
+                },1000) 
+              // this.loading = false;
               if (response.data == "success") {
                 Swal.fire({
                   position: "center",
@@ -319,16 +325,24 @@ export default {
       return deliveredDate >= new Date().toISOString().substr(0, 10);
     },
     getHalayaTub(item){
+        this.$vloading.show();
         axios.get(this.url+"/api/fetchHalayaTub", this.config)
         .then(response => {
+            setTimeout(() => {
+        this.$vloading.hide()
+         },1000) 
           this.tubName=response.data.product[0].product_name
           this.tubPrice=response.data.product[0].product_price
         });
     },
 
     getHalayaJar(item){
+        this.$vloading.show();
         axios.get(this.url+"/api/fetchHalayaJar", this.config)
         .then(response => {
+            setTimeout(() => {
+        this.$vloading.hide()
+         },1000) 
           this.jarName=response.data.product[0].product_name
           this.jarPrice=response.data.product[0].product_price
         });

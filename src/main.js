@@ -28,7 +28,9 @@ Vue.config.productionTip = false;
 Vue.use(LoadingPlugin, {
   //props
   spinnerProps: {
-    color: "purple"
+    color: "purple",
+    width:"5",
+    size: "50"
   },
   overlayProps: {},
 });

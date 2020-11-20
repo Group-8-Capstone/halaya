@@ -44,10 +44,10 @@
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
                 <v-toolbar-title>{{barangay_name}}</v-toolbar-title>
-                <v-spacer></v-spacer>
+                <!-- <v-spacer></v-spacer>
                 <v-toolbar-items>
                   <v-btn dark text @click="dialog = false">Export as PDF</v-btn>
-                </v-toolbar-items>
+                </v-toolbar-items> -->
               </v-toolbar>
               <v-divider></v-divider>
               <v-row>
@@ -207,7 +207,6 @@ export default {
     viewDetails(i) {
       this.delivery_batch = i;
       this.detailsDialog = true;
-      // console.log("iiiiiii", this.delivery_batch.orders);
       this.dataGrouping();
     },
     containsObject(arr, id) {
@@ -235,7 +234,6 @@ export default {
       axios
         .post(this.url + "/api/post/updateStat/" + item.id, {}, this.config)
         .then(response => {
-          console.log("-----------", response.data);
           Swal.fire({
             title: "Order is being delivered",
             icon: "success",
@@ -280,11 +278,14 @@ export default {
         });
     },
     dataGrouping() {
+      this.$vloading.show();
       axios
         .get(this.url + "/api/posts/delivery", this.config)
         .then(response => {
+          setTimeout(() => {
+        this.$vloading.hide()
+         },1000) 
           var result = response.data.data;
-          console.log("---->>>>", result);
           let groupedOrders = {};
           result.forEach(data => {
             let { barangay } = data;
