@@ -182,7 +182,7 @@ export default {
       },
       {
         icon: "mdi-clipboard-outline",
-        text: "view Orders",
+        text: "View Orders",
         subItem: [
           { icon: "mdi mdi-cart-plus", title: "Order", link: "/order" },
           {

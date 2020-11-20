@@ -73,7 +73,7 @@
    <v-col cols="12">
     <v-text-field
       color="purple"
-      label="Estimated Amount"
+      label="Needed estimatated Quantity"
       :error-messages="AddedIngredientsValueErrors"
       @input="$v.addedEstimatedAmount.$touch()"
       @blur="$v.addedEstimatedAmount.$touch()"
