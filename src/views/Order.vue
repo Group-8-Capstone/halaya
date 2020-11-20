@@ -25,8 +25,8 @@
           <v-row>
             <v-data-table :headers="headers" :items="orders" :search="search">
               <template v-slot:item.preferred_delivery_date="{ item }">
-           <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>
-         </template>
+                <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>
+              </template>
               <template v-slot:item.order_status="{ item }">
                 <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
               </template>
@@ -59,6 +59,13 @@
               </template>
             </v-data-table>
           </v-row>
+          <!-- <v-progress-linear
+            color="deep-purple accent-4"
+            v-show="loading"
+            indeterminate
+            rounded
+            height="6"
+          ></v-progress-linear>-->
         </v-tab-item>
         <v-tab-item>
           <v-card-title>
@@ -74,8 +81,8 @@
           </v-card-title>
           <v-data-table :headers="headers" :items="pendingOrders" :search="search1">
             <template v-slot:item.preferred_delivery_date="{ item }">
-           <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>
-         </template>
+              <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>
+            </template>
             <template v-slot:item.order_status="{ item }">
               <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
             </template>
@@ -89,6 +96,13 @@
               <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
             </template>
           </v-data-table>
+          <!-- <v-progress-linear
+            color="deep-purple accent-4"
+            v-show="loading"
+            indeterminate
+            rounded
+            height="6"
+          ></v-progress-linear>-->
         </v-tab-item>
         <v-tab-item>
           <Walkin/>
@@ -198,6 +212,13 @@
         </v-dialog>
       </template>
       <template></template>
+      <v-progress-linear
+        color="deep-purple accent-4"
+        v-show="loading"
+        indeterminate
+        rounded
+        height="6"
+      ></v-progress-linear>
     </v-card>
   </div>
 </template>
@@ -471,7 +492,7 @@ export default {
                   icon: "success",
                   timer: 3000
                 }),
-                 this.fetchOrders();
+                  this.fetchOrders();
               });
           });
       }
@@ -501,14 +522,17 @@ export default {
           this.config
         )
         .then(response => {
+          this.loading = false;
           this.fetchOrders();
           this.fetchPendingOrders();
         });
     },
     editItem(item) {
+      this.loading = true;
       axios
         .get(this.url + "/api/post/edit/" + item.id, this.config)
         .then(response => {
+          this.loading = false;
           this.post = response.data;
         });
     },
@@ -516,6 +540,7 @@ export default {
       this.orderDetails = true;
     },
     alertCancel(item) {
+      this.loading = true;
       Swal.fire({
         title: "Are you sure?",
         icon: "warning",
@@ -535,6 +560,8 @@ export default {
             showConfirmButton: false,
             timer: 1500
           });
+        }else {
+          this.loading = false;
         }
       });
     },
@@ -590,6 +617,7 @@ export default {
     fetchOrders() {
       axios.get(this.url + "/api/posts/order", this.config).then(response => {
         this.orders = response.data.data;
+        console.log("---->>>this.orders", this.orders);
         for (var i = 0; i < this.orders.length; i++) {
           var street = response.data.data[i].building_or_street;
           var barangay = response.data.data[i].barangay;
@@ -635,10 +663,12 @@ export default {
         });
     },
     confirmOrder(item) {
+      this.loading = true;
       console.log("****hsdfnaiuerh*******", this.config);
       axios
         .post(this.url + "/api/post/confirm/" + item.id, {}, this.config)
         .then(response => {
+          this.loading = false;
           console.log("***********", response.data);
           Swal.fire({
             title: "Order is being confirmed",

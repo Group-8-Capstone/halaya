@@ -73,6 +73,13 @@
           <v-spacer></v-spacer>
           <v-btn outlined color="purple darken-2" @click="placeOrder()">ADD ORDER</v-btn>
         </v-card-actions>
+        <v-progress-linear
+            color="deep-purple accent-4"
+            v-show="loading"
+            indeterminate
+            rounded
+            height="6"
+          ></v-progress-linear>
       </v-card>
       </center>
     </div>  
@@ -91,6 +98,7 @@ export default {
     name:"Walkin",
   data() {
     return {
+      loading: false,
       accessToken:
         "pk.eyJ1IjoiamllbnhpeWEiLCJhIjoiY2tlaTM3d2VrMWcxczJybjc0cmZkamk3eiJ9.JzrYlG2kZ08Pkk24hvKDJw",
       menu: false,
@@ -233,7 +241,9 @@ export default {
     },
 
     placeOrder() {
+      this.loading = true;
         if (this.jarQuantity=='0' && this.tabQuantity=='0' ){
+          this.loading = false;
          Swal.fire({
                   position: "center",
                   icon: "warning",
@@ -286,6 +296,7 @@ export default {
             .post(this.url+"/api/post/createOrder", param,this.config)
             .then(response => {
               console.log("response.data: ", response.data);
+              this.loading = false;
               if (response.data == "success") {
                 Swal.fire({
                   position: "center",
