@@ -10,7 +10,8 @@ import { Form, HasError, AlertError } from 'vform'
 import '@turf/helpers';
 import Print from 'vue-printjs'
 import AOS from 'aos';
-import 'aos/dist/aos.css'
+import 'aos/dist/aos.css';
+import {LoadingPlugin} from "vuetify-loading-overlay"
 
 
 AOS.init();
@@ -24,7 +25,13 @@ Vue.component('profile-component', require('./components/ProfileAccount.vue').de
 
 
 Vue.config.productionTip = false;
-Vue.use
+Vue.use(LoadingPlugin, {
+  //props
+  spinnerProps: {
+    color: "purple"
+  },
+  overlayProps: {},
+});
 
 Vue.mixin({
   data: function() {
@@ -45,5 +52,6 @@ new Vue({
   vuetify,
   mapboxgl,
   turf,
+  
   render: h => h(App)
 }).$mount("#app");

@@ -267,9 +267,13 @@ export default {
     },
 
     getHalayaTub(item) {
+      this.$vloading.show();
       axios
         .get(this.url + "/api/fetchHalayaTub", this.config)
         .then(response => {
+           setTimeout(() => {
+            this.$vloading.hide()
+          },1000)  
           console.log(response.data.product[0].id);
           this.tubId = response.data.product[0].id;
           this.tubName = response.data.product[0].product_name;
@@ -283,9 +287,13 @@ export default {
     },
 
     getHalayaJar(item) {
+         this.$vloading.show();
       axios
         .get(this.url + "/api/fetchHalayaJar", this.config)
         .then(response => {
+           setTimeout(() => {
+            this.$vloading.hide()
+          },1000)  
           console.log(response.data.product[0]);
           this.jarId = response.data.product[0].id;
           this.jarName = response.data.product[0].product_name;
@@ -354,6 +362,7 @@ export default {
     },
 
     recordProductJar() {
+         this.$vloading.show();
       let param = {
         product_name: this.jarName,
         remaining_quantity: this.halayaJarAvailability,
@@ -364,6 +373,7 @@ export default {
         .post(this.url + "/api/dailyRecords", param, this.config)
         .then(response => {
           if (response.data == "success") {
+             
             Swal.fire({
               position: "center",
               icon: "success",
@@ -382,10 +392,14 @@ export default {
               timer: 1500
             });
           }
+          setTimeout(() => {
+            this.$vloading.hide()
+          },1000)  
         });
     },
 
     recordProductTub() {
+        this.$vloading.show();
       let param = {
         product_name: this.tubName,
         remaining_quantity: this.halayaTubAvailability,
@@ -395,6 +409,9 @@ export default {
       axios
         .post(this.url + "/api/dailyRecords", param, this.config)
         .then(response => {
+           setTimeout(() => {
+            this.$vloading.hide()
+          },1000)  
           console.log(response.data);
           if (response.data == "success") {
             Swal.fire({
@@ -417,9 +434,13 @@ export default {
         });
     },
     fetchRecordedProduct() {
+      this.$vloading.show();
       axios
         .get(this.url + "/api/fetchRecordedProduct", this.config)
         .then(response => {
+           setTimeout(() => {
+            this.$vloading.hide()
+          },1000)  
           this.records = response.data.product;
         });
     }

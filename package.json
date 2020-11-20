@@ -34,7 +34,8 @@
     "vue-router": "^3.2.0",
     "vuejs-form": "^1.2.9",
     "vuelidate": "^0.7.5",
-    "vuetify": "^2.2.11"
+    "vuetify": "^2.2.11",
+    "vuetify-loading-overlay": "^1.0.4"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.0",

@@ -280,11 +280,14 @@ export default {
         });
     },
     dataGrouping() {
+        this.$vloading.show();
       axios
         .get(this.url + "/api/posts/delivery", this.config)
         .then(response => {
+           setTimeout(() => {
+        this.$vloading.hide()
+         },1000)  
           var result = response.data.data;
-          console.log("---->>>>", result);
           let groupedOrders = {};
           result.forEach(data => {
             let { barangay } = data;

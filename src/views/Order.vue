@@ -588,7 +588,11 @@ export default {
       return ubechiQty;
     },
     fetchOrders() {
+      this.$vloading.show();
       axios.get(this.url + "/api/posts/order", this.config).then(response => {
+        setTimeout(() => {
+        this.$vloading.hide()
+         },1000)  
         this.orders = response.data.data;
         for (var i = 0; i < this.orders.length; i++) {
           var street = response.data.data[i].building_or_street;
@@ -610,9 +614,13 @@ export default {
       });
     },
     fetchPendingOrders() {
+      this.$vloading.show();
       axios
         .get(this.url + "/api/fetch/pending-orders", this.config)
         .then(response => {
+           setTimeout(() => {
+        this.$vloading.hide()
+         },1000)   
           this.pendingOrders = response.data.data;
           for (var i = 0; i < this.pendingOrders.length; i++) {
             var street = response.data.data[i].building_or_street;

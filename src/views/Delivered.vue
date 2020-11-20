@@ -66,9 +66,13 @@ export default {
   },
   methods: {
     loadDelivered() {
+       this.$vloading.show();
       axios
         .get(this.url + "/api/posts/delivered", this.config)
         .then(response => {
+           setTimeout(() => {
+        this.$vloading.hide()
+         },1000)   
           this.deliveredOrder = response.data.data;
           for (var i = 0; i < this.deliveredOrder.length; i++) {
             var street = response.data.data[i].building_or_street;
