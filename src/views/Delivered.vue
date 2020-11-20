@@ -20,7 +20,7 @@
            <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>
          </template>
       <template v-slot:item.order_status="{ item }">
-        <v-chip color="green">{{ item.order_status }}</v-chip>
+        <v-chip color="green" text-color="white">{{ item.order_status }}</v-chip>
       </template>
     </v-data-table>
   </v-card>

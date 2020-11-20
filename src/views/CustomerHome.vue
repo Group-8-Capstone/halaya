@@ -266,7 +266,6 @@
               {{totalPay}}
             </span>
           </v-col>
-
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
@@ -542,7 +541,7 @@ export default {
                
                setTimeout(() => {
             this.$vloading.hide()
-          },5000)  
+          },1000)  
           
               console.log("response.data: ", response.data);
               if (response.data == "success") {

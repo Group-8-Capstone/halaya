@@ -39,7 +39,7 @@
             class="dropdownFilter"
           ></v-select>
           <v-select
-            label=" Date"
+            label="Year"
             v-model="filterByDate"
             @change="filtering"
             :items="Years"
@@ -86,7 +86,7 @@
             class="dropdownFilter"
           ></v-select>
           <v-select
-            label=" Date"
+            label="Year"
             v-model="filterByDateTubs"
             @change="filteringTubs"
             :items="Years"
@@ -310,14 +310,12 @@ export default {
 },
     
     dailyTubs(){
-        this.$vloading.show();
       let parameter = {
         year : this.filterByDateTubs,
         month : this.pageTubs
       };
       axios.post(this.url+"/api/sales/dailyTubs", parameter, this.config).then(response=>{
         setTimeout(() => {
-        this.$vloading.hide()
          },1000)   
         let category = [];
         let series = [];
@@ -351,7 +349,6 @@ export default {
       })
     },
     daily() {
-        this.$vloading.show();
       /**
        * get the necessary DAILY DATA on mounted
        */
@@ -363,9 +360,6 @@ export default {
       axios
         .post(this.url+"/api/sales/daily", parameter, this.config)
         .then(response => {
-          setTimeout(() => {
-        this.$vloading.hide()
-         },1000)   
           console.log("this is daily" + JSON.stringify(response.data))
           let category = [];
           let series = [];
@@ -591,13 +585,9 @@ export default {
         });
     },
     filterByYear() {
-      this.$vloading.show();
       axios
         .get(this.url+"/api/sales/filterYear", this.config)
-        .then(response => {
-          setTimeout(() => {
-        this.$vloading.hide()
-         },1000)   
+        .then(response => { 
           let tempYears = [];
           response.data.forEach(element => {
             tempYears.push(element.years);

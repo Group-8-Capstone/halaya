@@ -168,8 +168,7 @@ export default {
   mounted() {},
   methods: {
     signUp() {
-        this.$vloading.show();
-      // this.loading = true;
+      this.loading = true;
       let Reg = {
         uName: this.username,
         phone: this.contact,
@@ -178,23 +177,18 @@ export default {
         role: "customer"
       };
       axios.post(this.url + "/api/register", Reg).then(response => {
-        setTimeout(() => {
-        this.$vloading.hide()
-         },1000) 
-        
         // console.log("Successfully Registered: ", response.data.message.message);
         if (response.data.message.message == "success") {
           localStorage.setItem("token", response.data.token);
           localStorage.setItem("id", response.data.user.id);
           localStorage.setItem("role", response.data.user.role);
-          // this.loading = false;
+          this.loading = false;
           this.$router.push("/customerHome");
         } else if (response.data.message === "invalid_username") {
           this.isValid = true;
-       
+          console.log("invali");
         }
-      }
-      );
+      });
     }
   }
 };

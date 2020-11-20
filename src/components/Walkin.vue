@@ -6,7 +6,7 @@
         <v-card-title class="align-center">
           <v-list-item-title
             class="d-flex align-center justify-center mx-auto headline black--text"
-          >CREATE ORDER</v-list-item-title>
+          >ADD ORDER</v-list-item-title>
         </v-card-title>
         <v-container>
           <v-row>
