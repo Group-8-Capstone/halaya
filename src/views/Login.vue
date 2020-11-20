@@ -64,6 +64,11 @@
                   ></v-text-field>
                 </v-form>
               </v-card-text>
+               <div align="right" class="forgot">
+                <span>
+                  <a href="/forgotPassword" >Forgot Password?</a>
+                </span>
+                </div>
               <center>
                 <v-btn
                   id="btnLogin"
@@ -103,6 +108,12 @@
   border-color: purple !important;
   border-width: 2px !important;
   color: purple !important;
+}
+.forgot{
+  text-align:right;
+  margin-top:-20px;
+  margin-bottom:20px;
+  margin-right:3px;
 }
 .v-btn {
   width: 85%  !important;
