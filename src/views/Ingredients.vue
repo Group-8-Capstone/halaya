@@ -11,12 +11,12 @@
                 <hr>
                 <v-row class="mx-auto text-center">
                   <v-list-item>
-                    Available Qty :
-                    <b>{{item.ingredients_remaining}} {{item.ingredients_unit}}</b>
+                    Available Quantity :
+                    <b>{{ item.ingredients_remaining}} {{item.ingredients_unit}}</b>
                   </v-list-item>
                   <v-list-item>
-                    Used Qty :
-                    <b>{{item.total}} {{item.ingredients_unit}}</b>
+                    Used Quantity :
+                    <b>{{ item.total}} {{item.ingredients_unit}}</b>
                   </v-list-item>
                   <v-list-item>
                     <v-chip

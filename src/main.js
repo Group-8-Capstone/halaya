@@ -28,7 +28,7 @@ Vue.config.productionTip = false;
 Vue.use(LoadingPlugin, {
   //props
   spinnerProps: {
-    color: "purple",
+    color: "#6A1B9A",
     width:"5",
     size: "50"
   },

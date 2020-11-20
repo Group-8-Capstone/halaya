@@ -59,13 +59,6 @@
               </template>
             </v-data-table>
           </v-row>
-          <!-- <v-progress-linear
-            color="deep-purple accent-4"
-            v-show="loading"
-            indeterminate
-            rounded
-            height="6"
-          ></v-progress-linear>-->
         </v-tab-item>
         <v-tab-item>
           <v-card-title>
@@ -96,13 +89,6 @@
               <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
             </template>
           </v-data-table>
-          <!-- <v-progress-linear
-            color="deep-purple accent-4"
-            v-show="loading"
-            indeterminate
-            rounded
-            height="6"
-          ></v-progress-linear>-->
         </v-tab-item>
         <v-tab-item>
           <Walkin/>
@@ -405,7 +391,6 @@ export default {
     console.log("this.config", this.config);
   },
   created() {
-    // this.orderedProduct();
     this.fetchPendingOrders();
     this.fetchOrders();
     setInterval(this.fetchOrders(), 3000);
@@ -427,8 +412,6 @@ export default {
         if (id == this.orders[i].id) {
           for (var j = 0; j < this.orders[i].products.length; j++) {
             this.orderedProducts.push(this.orders[i].products[j]);
-            // this.orderedProducts.push(this.orders[i].products[j].product_name)
-            // this.orderedProducts.push(this.orders[i].products[j].pivot.sub_quantity)
           }
         }
       }
