@@ -17,6 +17,7 @@ import Landing from "../views/Landing.vue";
 import MyOrder from "../views/MyOrder.vue";
 import { verify } from "crypto";
 import axios from "axios";
+import ForgotPassword from "../views/ForgotPassword";
 
 
 
@@ -41,6 +42,11 @@ const router = new VueRouter({
       path: "/register",
       name: "Register",
       component: Register
+    },
+    {
+      path: "/forgotPassword",
+      name: "ForgotPassword",
+      component: ForgotPassword
     },
     {
       path: "/order",
