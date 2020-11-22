@@ -221,6 +221,7 @@ export default {
     back(n){
       if(n !== 0){
         this.curr = n
+        this.$router.push("/login")
       }
     },
     stepComplete(step) {

@@ -41,7 +41,7 @@
         </v-card>
       </v-layout>
     </v-row>
-       <v-list-item>Records is done once</v-list-item>
+       <!-- <v-list-item>Records is done once</v-list-item> -->
     <template>
       <v-card>
         <v-row>
