@@ -109,7 +109,7 @@
             <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
           </template>
           <template v-slot:item.action="{ item }">
-            <div v-if="isCanceled(item) === true">
+            <div v-if="isCanceled(item) === true || isAdmin() === true || isDelivered(item) === true ">
               <v-icon
                 disabled
                 normal
@@ -190,7 +190,7 @@ export default {
   },
   created() {
     this.dataGrouping();
-    setInterval(this.dataGrouping(), 3000);
+    // setInterval(this.dataGrouping(), 3000);
   },
 
   methods: {
@@ -200,11 +200,13 @@ export default {
       else return "green";
     },
     viewOrders(item) {
+      console.log("---item", item);
       this.orders = item;
       this.barangay_name = item.barangay_name;
       this.dataGrouping();
     },
     viewDetails(i) {
+      console.log("***i", i);
       this.delivery_batch = i;
       this.detailsDialog = true;
       this.dataGrouping();
@@ -227,6 +229,7 @@ export default {
       }).then(result => {
         if (result.value) {
           this.deliveredItem(item);
+          this.dataGrouping();
         }
       });
     },
@@ -239,8 +242,10 @@ export default {
             icon: "success",
             showConfirmButton: false,
             timer: 1500
-          }),
+          });
             this.dataGrouping();
+            this.detailsDialog = false;
+            this.dialog = false;
         });
     },
     alertCancel(item) {
@@ -256,13 +261,7 @@ export default {
       }).then(result => {
         if (result.value) {
           this.deleteItem(item);
-          Swal.fire({
-            title: "Canceled!",
-            text: "Order is being canceled",
-            icon: "success",
-            showConfirmButton: false,
-            timer: 1500
-          });
+          this.dataGrouping();
         }
       });
     },
@@ -274,9 +273,18 @@ export default {
           this.config
         )
         .then(response => {
+          Swal.fire({
+            title: "Canceled!",
+            text: "Order is being canceled",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500
+          });
           this.dataGrouping();
+          this.detailsDialog = false;
+          this.dialog = false;
         });
-    },
+    },  
     dataGrouping() {
       this.$vloading.show();
       axios
@@ -285,11 +293,11 @@ export default {
           setTimeout(() => {
         this.$vloading.hide()
          },1000) 
-          var result = response.data.data;
+          this.result = response.data.data;
           let groupedOrders = {};
-          result.forEach(data => {
+          this.result.forEach(data => {
             let { barangay } = data;
-            groupedOrders[barangay] = result.filter(
+            groupedOrders[barangay] = this.result.filter(
               order => order.barangay == barangay
             );
           });
@@ -328,13 +336,22 @@ export default {
           }
           for (const key in deliveries) {
             deliveries[key]["barangay_name"] = key;
-
             this.deliveriesByBrngy = deliveries;
           }
         });
     },
+    isAdmin(){
+      if(localStorage.getItem('role') === 'admin') {
+        return true;
+      }
+    },
     isCanceled(item) {
       if (item.order_status == "Canceled") {
+        return true;
+      }
+    },
+    isDelivered(item) {
+      if (item.order_status == "Delivered") {
         return true;
       }
     },
@@ -349,6 +366,7 @@ export default {
         }
       }
     },
+
     // isCanceled(item) {
     //   for (var i = 0; i < item.orders.length; i++) {
     //     if (item.orders[i].order_status === "Canceled") {
