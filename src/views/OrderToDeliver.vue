@@ -187,11 +187,10 @@ export default {
       "Access-Control-Allow-Origin": "*"
     };
     this.config = config;
-    console.log("this.config", this.config);
   },
   created() {
     this.dataGrouping();
-    // setInterval(this.dataGrouping(), 3000);
+    setInterval(this.dataGrouping(), 3000);
   },
 
   methods: {
@@ -201,13 +200,11 @@ export default {
       else return "green";
     },
     viewOrders(item) {
-      console.log("---item", item);
       this.orders = item;
       this.barangay_name = item.barangay_name;
       this.dataGrouping();
     },
     viewDetails(i) {
-      console.log("***i", i);
       this.delivery_batch = i;
       this.detailsDialog = true;
       this.dataGrouping();
