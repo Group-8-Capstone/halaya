@@ -97,7 +97,7 @@
         </v-row>
       </template>
     </v-card>
-    <v-dialog max-width="800" v-model="detailsDialog">
+    <v-dialog max-width="1000" v-model="detailsDialog">
       <template>
         <v-data-table
           :headers="headers"
@@ -174,6 +174,7 @@ export default {
         },
         { text: "Ube Halaya Tub Order Qty", value: "ubehalayatub_qty" },
         { text: "Ube Halaya Jar Order Qty", value: "ubehalayajar_qty" },
+        { text: "Total Payment", value: "total_payment" },
         { text: "Action", value: "action" },
         { text: "Status", value: "order_status" }
       ]
