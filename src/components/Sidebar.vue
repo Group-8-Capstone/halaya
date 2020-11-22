@@ -206,7 +206,7 @@ export default {
         text: "Profile Setting",
         link: "/profileSetting"
       },
-      { icon: "mdi-logout", text: "logout", link: "/login" },
+      { icon: "mdi-logout", text: "Logout", link: "/login" },
     ],
     customer: [
       { icon: "mdi-home-variant", text: "Home", link: "/customerHome" },
@@ -216,7 +216,7 @@ export default {
         text: "Profile Setting",
         link: "/profileSetting"
       },
-      { icon: "mdi-logout", text: "logout", link: "/login" }
+      { icon: "mdi-logout", text: "Logout", link: "/login" }
     ],
     driver: [
       { icon: "mdi-clipboard-outline", text: "To Deliver", link: "/delivery" },
@@ -226,7 +226,7 @@ export default {
         text: "Profile Setting",
         link: "/profileSetting"
       },
-      { icon: "mdi-logout", text: "logout", link: "/login" }
+      { icon: "mdi-logout", text: "Logout", link: "/login" }
     ]
   }),
 

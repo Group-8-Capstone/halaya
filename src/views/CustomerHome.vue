@@ -528,6 +528,7 @@ export default {
             contactNumber: this.contactNumber,
             jar_qty: this.jarQuantity,
             tub_qty: this.tabQuantity,
+            total_payment:this.totalPay,
             deliveryDate: this.date,
             orderStatus: this.getOrderStatus(this.jarQuantity),
             distance: dist
