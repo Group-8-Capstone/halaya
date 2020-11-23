@@ -17,6 +17,7 @@ import Landing from "../views/Landing.vue";
 import MyOrder from "../views/MyOrder.vue";
 import { verify } from "crypto";
 import axios from "axios";
+import ForgotPassword from "../views/ForgotPassword";
 
 
 
@@ -41,6 +42,11 @@ const router = new VueRouter({
       path: "/register",
       name: "Register",
       component: Register
+    },
+    {
+      path: "/forgotPassword",
+      name: "ForgotPassword",
+      component: ForgotPassword
     },
     {
       path: "/order",
@@ -178,8 +184,8 @@ router.beforeEach(async(to, from, next) => {
   next();
 });
 const verify_auth = () => {
-  // let url="http://localhost:8000"
-  let url="http://wawenshalaya.herokuapp.com"
+  let url="http://localhost:8000"
+  // let url="https://wawenshalaya.herokuapp.com"
   return new Promise((resolve, reject) => {
     if(localStorage.getItem("token") === null){
       resolve(false);

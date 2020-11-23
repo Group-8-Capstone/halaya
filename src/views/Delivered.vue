@@ -20,7 +20,7 @@
         <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>
       </template>
       <template v-slot:item.order_status="{ item }">
-        <v-chip color="green">{{ item.order_status }}</v-chip>
+        <v-chip color="green" text-color="white">{{ item.order_status }}</v-chip>
       </template>
     </v-data-table>
   </v-card>
@@ -74,9 +74,13 @@ export default {
   },
   methods: {
     loadDelivered() {
+       this.$vloading.show();
       axios
         .get(this.url + "/api/posts/delivered", this.config)
         .then(response => {
+           setTimeout(() => {
+        this.$vloading.hide()
+         },1000)   
           this.deliveredOrder = response.data.data;
           for (var i = 0; i < this.deliveredOrder.length; i++) {
             var street = response.data.data[i].building_or_street;

@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-    <v-app-bar app  light lights-in height="70" color="white" dense dark elevation="40">
+    <v-app-bar app  light lights-in height="70" color="white" dense dark elevation="40" fixed>
       <v-btn color="grey" icon @click.stop="drawer = !drawer"  >
         <v-icon>mdi-menu</v-icon>
       </v-btn>
@@ -182,7 +182,7 @@ export default {
       },
       {
         icon: "mdi-clipboard-outline",
-        text: "view Orders",
+        text: "View Orders",
         subItem: [
           { icon: "mdi mdi-cart-plus", title: "Order", link: "/order" },
           {
@@ -206,7 +206,7 @@ export default {
         text: "Profile Setting",
         link: "/profileSetting"
       },
-      { icon: "mdi-logout", text: "logout", link: "/login" },
+      { icon: "mdi-logout", text: "Logout", link: "/login" },
     ],
     customer: [
       { icon: "mdi-home-variant", text: "Home", link: "/customerHome" },
@@ -216,7 +216,7 @@ export default {
         text: "Profile Setting",
         link: "/profileSetting"
       },
-      { icon: "mdi-logout", text: "logout", link: "/login" }
+      { icon: "mdi-logout", text: "Logout", link: "/login" }
     ],
     driver: [
       { icon: "mdi-clipboard-outline", text: "To Deliver", link: "/delivery" },
@@ -226,7 +226,7 @@ export default {
         text: "Profile Setting",
         link: "/profileSetting"
       },
-      { icon: "mdi-logout", text: "logout", link: "/login" }
+      { icon: "mdi-logout", text: "Logout", link: "/login" }
     ]
   }),
 

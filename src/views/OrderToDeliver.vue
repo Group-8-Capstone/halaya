@@ -44,10 +44,10 @@
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
                 <v-toolbar-title>{{barangay_name}}</v-toolbar-title>
-                <v-spacer></v-spacer>
+                <!-- <v-spacer></v-spacer>
                 <v-toolbar-items>
                   <v-btn dark text @click="dialog = false">Export as PDF</v-btn>
-                </v-toolbar-items>
+                </v-toolbar-items> -->
               </v-toolbar>
               <v-divider></v-divider>
               <v-row>
@@ -97,7 +97,7 @@
         </v-row>
       </template>
     </v-card>
-    <v-dialog max-width="800" v-model="detailsDialog">
+    <v-dialog max-width="1000" v-model="detailsDialog">
       <template>
         <v-data-table
           :headers="headers"
@@ -109,7 +109,7 @@
             <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
           </template>
           <template v-slot:item.action="{ item }">
-            <div v-if="isCanceled(item) === true || isDelivered(item) === true">
+            <div v-if="isCanceled(item) === true || isAdmin() === true || isDelivered(item) === true ">
               <v-icon
                 disabled
                 normal
@@ -136,13 +136,6 @@
             </div>
           </template>
         </v-data-table>
-        <v-progress-linear
-            color="deep-purple accent-4"
-            v-show="loading"
-            indeterminate
-            rounded
-            height="6"
-          ></v-progress-linear>
       </template>
     </v-dialog>
   </div>
@@ -159,7 +152,6 @@ export default {
   name: "Delivery",
   data() {
     return {
-      loading: false,
       delivery_range: [],
       detailsDialog: false,
       barangay_array: [],
@@ -182,6 +174,7 @@ export default {
         },
         { text: "Ube Halaya Tub Order Qty", value: "ubehalayatub_qty" },
         { text: "Ube Halaya Jar Order Qty", value: "ubehalayajar_qty" },
+        { text: "Total Payment", value: "total_payment" },
         { text: "Action", value: "action" },
         { text: "Status", value: "order_status" }
       ]
@@ -194,7 +187,6 @@ export default {
       "Access-Control-Allow-Origin": "*"
     };
     this.config = config;
-    console.log("this.config", this.config);
   },
   created() {
     this.dataGrouping();
@@ -215,7 +207,6 @@ export default {
     viewDetails(i) {
       this.delivery_batch = i;
       this.detailsDialog = true;
-      // console.log("iiiiiii", this.delivery_batch.orders);
       this.dataGrouping();
     },
     containsObject(arr, id) {
@@ -224,7 +215,6 @@ export default {
       });
     },
     alertDelivered(item) {
-      this.loading = true;
       Swal.fire({
         title: "Are you sure item is being delivered?",
         icon: "warning",
@@ -237,8 +227,7 @@ export default {
       }).then(result => {
         if (result.value) {
           this.deliveredItem(item);
-        } else {
-          this.loading = false;
+          this.dataGrouping();
         }
       });
     },
@@ -246,19 +235,18 @@ export default {
       axios
         .post(this.url + "/api/post/updateStat/" + item.id, {}, this.config)
         .then(response => {
-          console.log("-----------", response.data);
-          this.loading = false;
           Swal.fire({
             title: "Order is being delivered",
             icon: "success",
             showConfirmButton: false,
             timer: 1500
-          }),
+          });
             this.dataGrouping();
+            this.detailsDialog = false;
+            this.dialog = false;
         });
     },
     alertCancel(item) {
-      this.loading = true;
       Swal.fire({
         title: "Are you sure?",
         icon: "warning",
@@ -271,15 +259,7 @@ export default {
       }).then(result => {
         if (result.value) {
           this.deleteItem(item);
-          Swal.fire({
-            title: "Canceled!",
-            text: "Order is being canceled",
-            icon: "success",
-            showConfirmButton: false,
-            timer: 1500
-          });
-        }else {
-          this.loading =  false;
+          this.dataGrouping();
         }
       });
     },
@@ -291,21 +271,31 @@ export default {
           this.config
         )
         .then(response => {
-          this.loading=false;
+          Swal.fire({
+            title: "Canceled!",
+            text: "Order is being canceled",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500
+          });
           this.dataGrouping();
+          this.detailsDialog = false;
+          this.dialog = false;
         });
-    },
+    },  
     dataGrouping() {
-      this.loading = true;
+      this.$vloading.show();
       axios
         .get(this.url + "/api/posts/delivery", this.config)
         .then(response => {
-          var result = response.data.data;
-          console.log("---->>>>", result);
+          setTimeout(() => {
+        this.$vloading.hide()
+         },1000) 
+          this.result = response.data.data;
           let groupedOrders = {};
-          result.forEach(data => {
+          this.result.forEach(data => {
             let { barangay } = data;
-            groupedOrders[barangay] = result.filter(
+            groupedOrders[barangay] = this.result.filter(
               order => order.barangay == barangay
             );
           });
@@ -344,11 +334,14 @@ export default {
           }
           for (const key in deliveries) {
             deliveries[key]["barangay_name"] = key;
-
             this.deliveriesByBrngy = deliveries;
           }
-          this.loading = false;
         });
+    },
+    isAdmin(){
+      if(localStorage.getItem('role') === 'admin') {
+        return true;
+      }
     },
     isCanceled(item) {
       if (item.order_status == "Canceled") {
@@ -371,6 +364,7 @@ export default {
         }
       }
     },
+
     // isCanceled(item) {
     //   for (var i = 0; i < item.orders.length; i++) {
     //     if (item.orders[i].order_status === "Canceled") {

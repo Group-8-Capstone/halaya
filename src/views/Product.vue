@@ -1,5 +1,6 @@
 <template>
   <div class="ma-5 mb-12 pa-5">
+ 
     <v-row>
       <v-layout wrap class="justify-center">
         <v-card class="card-container ma-5 productCard" style="max-width:500px;height:auto;">
@@ -40,6 +41,7 @@
         </v-card>
       </v-layout>
     </v-row>
+       <!-- <v-list-item>Records is done once</v-list-item> -->
     <template>
       <v-card>
         <v-row>
@@ -98,7 +100,7 @@
                 <v-text-field v-model="editedJarPrice" color="purple" outlined label="Price"></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field v-model="editedJarAvail" color="purple" outlined label="Make Product"></v-text-field>
+                <v-text-field v-model="editedJarAvail" color="purple" outlined label="Produced Quantity Products"></v-text-field>
               </v-col>
             </v-row>
           </v-container>
@@ -130,7 +132,7 @@
                   v-model="editedTubAvail"
                   color="purple"
                   outlined
-                  label="Make Product"
+                  label="Produced Quantity Products"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -284,6 +286,7 @@ export default {
       axios
         .get(this.url + "/api/fetchHalayaJar", this.config)
         .then(response => {
+    
           console.log(response.data.product[0]);
           this.jarId = response.data.product[0].id;
           this.jarName = response.data.product[0].product_name;
@@ -352,6 +355,7 @@ export default {
     },
 
     recordProductJar() {
+         this.$vloading.show();
       let param = {
         product_name: this.jarName,
         remaining_quantity: this.halayaJarAvailability,
@@ -362,6 +366,7 @@ export default {
         .post(this.url + "/api/dailyRecords", param, this.config)
         .then(response => {
           if (response.data == "success") {
+             
             Swal.fire({
               position: "center",
               icon: "success",
@@ -380,10 +385,14 @@ export default {
               timer: 1500
             });
           }
+          setTimeout(() => {
+            this.$vloading.hide()
+          },1000)  
         });
     },
 
     recordProductTub() {
+        this.$vloading.show();
       let param = {
         product_name: this.tubName,
         remaining_quantity: this.halayaTubAvailability,
@@ -393,6 +402,9 @@ export default {
       axios
         .post(this.url + "/api/dailyRecords", param, this.config)
         .then(response => {
+           setTimeout(() => {
+            this.$vloading.hide()
+          },1000)  
           console.log(response.data);
           if (response.data == "success") {
             Swal.fire({
@@ -415,9 +427,13 @@ export default {
         });
     },
     fetchRecordedProduct() {
+      this.$vloading.show();
       axios
         .get(this.url + "/api/fetchRecordedProduct", this.config)
         .then(response => {
+           setTimeout(() => {
+            this.$vloading.hide()
+          },1000)  
           this.records = response.data.product;
         });
     }

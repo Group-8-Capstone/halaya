@@ -73,7 +73,7 @@
    <v-col cols="12">
     <v-text-field
       color="purple"
-      label="Estimated Amount"
+      label="Needed estimatated Quantity"
       :error-messages="AddedIngredientsValueErrors"
       @input="$v.addedEstimatedAmount.$touch()"
       @blur="$v.addedEstimatedAmount.$touch()"
@@ -327,23 +327,23 @@ import Swal from "sweetalert2";
       },
 
       fetchEstimatedValue(){
-        this.loading=true
+         this.$vloading.show();
         axios.get(this.url+"/api/fetch/estimatedValue", this.config).then(response=>{
-          console.log(response)
-          this.loading=false
+          setTimeout(() => {
+        this.$vloading.hide()
+         },1000) 
           this.estimatedValue=response.data;
-          console.log(response.data);
         })
       },
 
       editEstimatedValue(item){
-        axios.get(this.url+"/api/post/updateEstimatedValue/"+item.id, this.config).then(response=>{
+        axios.get(this.url+"/api/post/updateEstimatedValue/"+item.id, this.config).then(response=>{  
           this.editValue = response.data
-          console.log(this.editValue)
         })
 
       },
        updateEstimatedValue(){
+         this.$vloading.show();
        if (this.editValue.ingredients_need_amount===""||this.editValue.ingredients_unit===""){
         Swal.fire({
         title: "Please fill in all required field",
@@ -361,8 +361,10 @@ import Swal from "sweetalert2";
         icon: "success",
         timer: 3000
       })
+      setTimeout(() => {
+        this.$vloading.hide()
+         },2000) 
       this.fetchEstimatedValue();
-        
         })
        }
     },
@@ -405,8 +407,8 @@ import Swal from "sweetalert2";
         title: "Are you sure?",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#CFD8D",
+        confirmButtonColor: "purple darken-285d6",
+        cancelButtonColor: "orange",
         cancelButtonText: "No",
         confirmButtonText: "Yes",
         reverseButtons: true
