@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <Header v-if="$route.name== 'Landing'" id="Header" />
+    <Header v-if="$route.name== 'Landing'" id="Header"/>
     <v-main>
       <Sidebar
         v-if="$route.name!= 'Login' && $route.name!= 'Landing' && $route.name!= 'Register'"

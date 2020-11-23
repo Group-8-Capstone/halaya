@@ -1,15 +1,15 @@
 <template>
-  <div>
+  <div sm="12">
     <template>
       <br>
       <v-footer id="footer" dark padless>
         <v-row id="footerContent" no-gutters>
-          <v-col cols="4" align="center">
+          <v-col col-lg-12 col-md-12 col-sm-12>
             <p>
               <v-icon small>mdi-copyright</v-icon>2020, Wawen's Ube Halaya. All Rights Reserved.
             </p>
           </v-col>
-          <v-col cols="8" align="center">
+          <v-col col-lg-12 col-md-12 col-sm-12  align="center">
             <v-row>
               <v-spacer></v-spacer>
               <h4 id="contactUs">Check us out here:</h4>
@@ -58,6 +58,7 @@
   justify-content: center;
   align-items: center;
   justify-items: center;
+  position: relative;
 }
 #footerContent {
   align-content: center;
