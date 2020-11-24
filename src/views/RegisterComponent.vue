@@ -177,7 +177,6 @@ export default {
         role: "customer"
       };
       axios.post(this.url + "/api/register", Reg).then(response => {
-        // console.log("Successfully Registered: ", response.data.message.message);
         if (response.data.message.message == "success") {
           localStorage.setItem("token", response.data.token);
           localStorage.setItem("id", response.data.user.id);
@@ -187,7 +186,6 @@ export default {
         } else if (response.data.message === "invalid_username") {
           this.isValid = true;
           this.$vloading.hide()
-          console.log("invali");
         }
       });
     }

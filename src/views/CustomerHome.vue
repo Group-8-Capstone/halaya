@@ -457,7 +457,6 @@ export default {
       "Access-Control-Allow-Origin": "*"
     };
     this.config = config;
-    console.log("this.config", this.config);
   },
   created() {
     this.getHalayaTub(), this.getHalayaJar();
@@ -486,7 +485,6 @@ export default {
       }
     },
     placeOrder() {
-      // this.loading = true;
       this.$v.$touch();
       var street = this.customerStreet;
       var barangay = this.customerBarangay;
@@ -538,13 +536,9 @@ export default {
           axios
             .post(this.url + "/api/post/createOrder", param, this.config)
             .then(response => {
-              // this.loading = false;
-               
                setTimeout(() => {
             this.$vloading.hide()
           },1000)  
-          
-              console.log("response.data: ", response.data);
               if (response.data == "success") {
                  
                 Swal.fire({
@@ -565,7 +559,6 @@ export default {
         parseInt(this.jarQuantity) + parseInt(this.tabQuantity) * 4;
       var maximum_order_qty = 96;
       if (this.jarQuantity == "0" && this.tabQuantity == "0") {
-        console.log("date" + this.date);
         Swal.fire({
           position: "center",
           icon: "warning",
@@ -575,7 +568,6 @@ export default {
         });
         this.addOrderDialog = true;
       } else if (total_order_qty > maximum_order_qty) {
-        console.log("--->>>", total_order_qty);
         Swal.fire({
           position: "center",
           icon: "warning",
@@ -597,9 +589,6 @@ export default {
       } else {
         this.addCardDialog = true;
         this.addOrderDialog = false;
-        console.log(this.jarPrice);
-        console.log(this.jarQuantity);
-        console.log("date" + this.date);
         this.totalPay =
           this.jarQuantity * this.jarPrice + this.tabQuantity * this.tubPrice;
       }

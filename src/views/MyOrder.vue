@@ -92,7 +92,6 @@ export default {
       "Access-Control-Allow-Origin": "*"
     };
     this.config = config;
-    console.log("this.config", this.config);
   },
   created() {
     this.retrieveOnOrder();
@@ -109,7 +108,6 @@ export default {
             this.$vloading.hide()
           },1000) 
           this.onOrder = response.data.post;
-          console.log(response.data.post);
         });
     },
     getColor(status) {
@@ -127,11 +125,9 @@ export default {
             this.$vloading.hide()
           },1000) 
           this.deliveredOrder = response.data.post;
-          console.log(response.data.post);
         });
     },
     details(item) {
-      console.log(item);
       this.ubeJar = item.ubehalayajar_qty;
       this.ubeTab = item.ubehalayatub_qty;
     }

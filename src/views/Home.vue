@@ -15,7 +15,7 @@
               <v-card-title class="deep-purple lighten-5" id="title">{{element.ingredients_name}}</v-card-title>
               <hr>
               <v-spacer/>
-              <v-card-text id="qty">{{element.ingredients_remaining + ' kg/cans'}}</v-card-text>
+              <v-card-text id="qty">{{element.ingredients_remaining}} {{element.ingredients_unit}}</v-card-text>
               <v-chip :color="getColor(element.ingredients_status)">{{element.ingredients_status}}</v-chip>
             </v-card>
           </v-col>
@@ -305,7 +305,6 @@ export default {
         weeks.push([(day+1), (Math.min(day+=7, last))]);
 
     }
-    console.log(JSON.stringify(weeks));
     return weeks;
 },
     
@@ -356,14 +355,11 @@ export default {
         year: this.filterByDate,
         month: this.page
       };
-      console.log("parameter", parameter);
       axios
         .post(this.url+"/api/sales/daily", parameter, this.config)
         .then(response => {
-          console.log("this is daily" + JSON.stringify(response.data))
           let category = [];
           let series = [];
-          console.log("daily data ", response.data);
           if (response.data.length > 0) {
             response.data.forEach(element => {
               category.push(element.preferred_delivery_date);
