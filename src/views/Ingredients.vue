@@ -289,7 +289,7 @@ export default {
       axios
         .get(this.url + "/api/getHalayaIngredients", this.config)
         .then(response => {
-          console.log(response);
+          console.log("--->>>",response);
           this.loading = false;
           let results = [];
           for (var i = 0; i < response.data.length; i++) {

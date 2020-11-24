@@ -505,13 +505,14 @@ export default {
       );
       axios
         .get(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${place}.json?limit=2&access_token=${
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${place}.json?country=ph&limit=2&access_token=${
             this.accessToken
           }`
         )
         .then(response => {
           let res = JSON.stringify(response.data);
           let result = JSON.parse(res);
+          // console.log("--->>>", result);
           var coordinates = result.features[0].geometry.coordinates;
           var from_place = turf.point([123.921969, 10.329892]);
           var to_place = turf.point(coordinates);
