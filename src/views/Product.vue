@@ -221,7 +221,6 @@ export default {
       "Access-Control-Allow-Origin": "*"
     };
     this.config = config;
-    console.log("this.config", this.config);
   },
   created() {
     this.getTotalJar();
@@ -254,13 +253,11 @@ export default {
     },
     getTotalJar(item) {
       axios.get(this.url + "/api/totalJar", this.config).then(response => {
-        console.log(response.data);
         this.totalJar = response.data;
       });
     },
     gettotalTub(item) {
       axios.get(this.url + "/api/totalTab", this.config).then(response => {
-        console.log(response.data);
 
         this.totalTub = response.data;
       });
@@ -270,7 +267,6 @@ export default {
       axios
         .get(this.url + "/api/fetchHalayaTub", this.config)
         .then(response => {
-          console.log(response.data.product[0].id);
           this.tubId = response.data.product[0].id;
           this.tubName = response.data.product[0].product_name;
           this.editedTubPrice = response.data.product[0].product_price;
@@ -286,8 +282,6 @@ export default {
       axios
         .get(this.url + "/api/fetchHalayaJar", this.config)
         .then(response => {
-    
-          console.log(response.data.product[0]);
           this.jarId = response.data.product[0].id;
           this.jarName = response.data.product[0].product_name;
           this.editedJarPrice = response.data.product[0].product_price;
@@ -318,7 +312,6 @@ export default {
     },
 
     editHalayaJar() {
-      console.log(this.tubId);
       let param = {
         product_price: this.editedJarPrice,
         product_availability: this.editedJarAvail
@@ -405,7 +398,6 @@ export default {
            setTimeout(() => {
             this.$vloading.hide()
           },1000)  
-          console.log(response.data);
           if (response.data == "success") {
             Swal.fire({
               position: "center",

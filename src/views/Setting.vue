@@ -277,7 +277,6 @@ import Swal from "sweetalert2";
       'Access-Control-Allow-Origin':'*'
     };
     this.config = config;
-    console.log("this.config", this.config);
   },
   created(){ 
     },
@@ -310,7 +309,7 @@ import Swal from "sweetalert2";
           ingredientsCategory:this.addedCategory
         }
         axios.post(this.url+"/api/post/neededValue",param, this.config).then(response=>{
-        console.log(param)
+        console.log(response)
         this.addDialog=false,
          Swal.fire({
         title: "Successfully Added",
@@ -354,7 +353,6 @@ import Swal from "sweetalert2";
        }
        else{
         axios.post(this.url+'/api/post/updateNewEstimatedValue', this.editValue, this.config).then(response => {
-        console.log(this.editValue)
         this.editDialog=false;
         Swal.fire({
         title: "Successfully Updated",

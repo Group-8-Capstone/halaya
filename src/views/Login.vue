@@ -197,7 +197,6 @@ export default {
           },1000) 
           this.error = true;
         }
-        // console.log('test ', response);
       });
     },
   //   checkUsername: function(){

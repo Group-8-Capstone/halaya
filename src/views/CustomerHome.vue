@@ -19,7 +19,7 @@
             class="d-flex align-center justify-center mx-auto headline black--text"
           >CREATE ORDER</v-list-item-title>
         </v-card-title>
-        <v-container>
+        <!-- <v-container>
           <v-row>
             <v-col cols="6">
               <v-text-field
@@ -82,12 +82,8 @@
             </v-col>
             <v-col cols="6">
               <v-text-field
-                v-model="customerProvince"
-                label="Province"
-                :error-messages="customerProvinceErrors"
-                @input="$v.customerProvince.$touch()"
-                @blur="$v.customerProvince.$touch()"
-                required
+                disabled
+                label="Cebu"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -152,8 +148,169 @@
               </v-menu>
             </v-col>
           </v-row>
+        </v-container>-->
+        <v-container>
+          <v-row>
+            <v-col cols="6">
+              <v-text-field
+                prepend-icon="mdi-account-outline"
+                label="Receiver Name"
+                v-model="customerName"
+                :error-messages="customerErrors"
+                @input="$v.customerName.$touch()"
+                @blur="$v.customerName.$touch()"
+                required
+              ></v-text-field>
+            </v-col>
+            <v-col cols="6">
+              <v-text-field
+                type="number"
+                prepend-icon="mdi-phone"
+                label="Mobile Number"
+                v-model="contactNumber"
+                :error-messages="contactNumberErrors"
+                @input="$v.contactNumber.$touch()"
+                @blur="$v.contactNumber.$touch()"
+                required
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-icon class="pl-5">mdi-map-marker</v-icon>
+          <label>Receiver Address</label>
+          <!-- <v-row class="pl-5">
+            <v-col cols="6">
+              <v-text-field
+                v-model="customerStreet"
+                label="Building Name/Street"
+                :error-messages="customerStreetErrors"
+                @input="$v.customerStreet.$touch()"
+                @blur="$v.customerStreet.$touch()"
+                required
+              ></v-text-field>
+            </v-col>
+            <v-col cols="6">
+              <v-text-field
+                v-model="customerBarangay"
+                label="Barangay"
+                :error-messages="customerBarangayErrors"
+                @input="$v.customerBarangay.$touch()"
+                @blur="$v.customerBarangay.$touch()"
+                required
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row class="pl-5">
+            <v-col cols="6">
+              <v-text-field
+                v-model="customerMunicipality"
+                label="Municipality/City"
+                :error-messages="customerMunicipalityErrors"
+                @input="$v.customerMunicipality.$touch()"
+                @blur="$v.customerMunicipality.$touch()"
+                required
+              ></v-text-field>
+            </v-col>
+            <v-col cols="6">
+              <v-text-field
+                disabled
+                label="Cebu"
+              ></v-text-field>
+            </v-col>
+          </v-row>-->
+
+          <v-row class="pl-5">
+            <v-col cols="6">
+              <v-text-field disabled label="CEBU"></v-text-field>
+            </v-col>
+            <v-col class="d-flex" cols="6">
+              <v-select v-model="customerMunicipality" :items="list_of_municipalities_names" label="City/Municipality"></v-select>
+            </v-col>
+          </v-row>
+          <div align="center" justify="center">
+            <v-btn outlined color="purple darken-2" v-show="isSubmit === false" @click="submit(customerMunicipality)" class="mb-5">Submit</v-btn>
+          </div>
+
+          <div v-show="isSubmit === true">
+          <v-row  class="pl-5">
+            <v-col cols="6">
+              <v-select v-model="customerBarangay" :items="barangays" label="Barangay"></v-select>
+            </v-col>
+            <v-col cols="6">
+              <v-text-field
+                v-model="customerStreet"
+                label="Building Name/Street"
+                :error-messages="customerStreetErrors"
+                @input="$v.customerStreet.$touch()"
+                @blur="$v.customerStreet.$touch()"
+                required
+              ></v-text-field>
+            </v-col>
+          </v-row>
+
+          <v-row>
+            <v-col cols="6" class="pl-5">
+              <v-img class="ml-5" width="250px" height="200px" src="../assets/halayaJar.jpg"></v-img>
+              <h6 class="display-1 font-weight-light orange--text ml-5">{{jarName}}</h6>
+              <div id="price" class="font-weight-light grey--text title ml-5">{{jarPrice}}</div>
+            </v-col>
+            <v-col cols="6" class="pl-5">
+              <v-img width="250px" height="200px" src="../assets/halayaTab.jpg"></v-img>
+              <h6 class="display-1 font-weight-light orange--text">{{tubName}}</h6>
+              <div id="price" class="font-weight-light grey--text title">{{tubPrice}}</div>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="6" class="pl-5">
+              <v-text-field min="0" type="number" label="Quantity" v-model="jarQuantity">
+                <template slot="prepend">
+                  <div id="vue-counter">
+                    <v-icon type="button" v-on:click="increaseJar">mdi-plus</v-icon>
+                    <v-icon type="button" v-on:click="decreaseJar">mdi-minus</v-icon>
+                  </div>
+                </template>
+              </v-text-field>
+            </v-col>
+            <v-col cols="6" class="pl-5">
+              <v-text-field min="0" type="number" label="Quantity" v-model="tabQuantity">
+                <template slot="prepend">
+                  <div id="vue-counter">
+                    <v-icon type="button" v-on:click="increaseTub">mdi-plus</v-icon>
+                    <v-icon type="button" v-on:click="decreaseTub">mdi-minus</v-icon>
+                  </div>
+                </template>
+              </v-text-field>
+            </v-col>
+          </v-row>
+          <v-row class="pl-5">
+            <v-col cols="12" sm="6" md="4">
+              <v-menu
+                v-model="menu"
+                :close-on-content-click="true"
+                transition="scale-transition"
+                offset-y
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-model="date"
+                    label="Preferred Delivery Date"
+                    prepend-icon="mdi-calendar"
+                    readonly
+                    v-bind="attrs"
+                    v-on="on"
+                    :error-messages="deliveryDateErrors"
+                    @input="$v.date.$touch()"
+                    @blur="$v.date.$touch()"
+                    required
+                  ></v-text-field>
+                </template>
+                <v-date-picker v-model="date" no-title scrollable :allowed-dates="notLessDate"></v-date-picker>
+              </v-menu>
+            </v-col>
+          </v-row>
+          </div>
         </v-container>
-        <v-card-actions>
+        <v-card-actions v-show="isSubmit === true">
           <v-spacer></v-spacer>
           <v-btn outlined color="orange" @click="addOrderDialog = false" class="mb-5">CANCEL</v-btn>
           <v-btn outlined color="purple darken-2" @click="addCard()" class="mb-5">CREATE</v-btn>
@@ -304,6 +461,7 @@
 </style>
 
 <script>
+import { address } from "addresspinas";
 import OrderingInfo from "../components/OrderingInfo";
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -325,7 +483,7 @@ export default {
       addOrderDialog: false,
       customerStreet: null,
       customerBarangay: null,
-      customerProvince: null,
+      customerProvince: "Cebu",
       customerName: null,
       contactNumber: null,
       orderQuantity: null,
@@ -343,7 +501,11 @@ export default {
       counterTub: 0,
       disableButton: false,
       addCardDialog: false,
-      totalPay: 0
+      totalPay: 0,
+      barangays: [],
+      municipalities: [],
+      list_of_municipalities_names: [],
+      isSubmit: false
     };
   },
   components: {
@@ -436,13 +598,13 @@ export default {
         errors.push("Municipality is required.");
       return errors;
     },
-    customerProvinceErrors() {
-      const errors = [];
-      if (!this.$v.customerProvince.$dirty) return errors;
-      !this.$v.customerProvince.required &&
-        errors.push("Province is required.");
-      return errors;
-    },
+    // customerProvinceErrors() {
+    //   const errors = [];
+    //   if (!this.$v.customerProvince.$dirty) return errors;
+    //   !this.$v.customerProvince.required &&
+    //     errors.push("Province is required.");
+    //   return errors;
+    // },
     deliveryDateErrors() {
       const errors = [];
       if (!this.$v.date.$dirty) return errors;
@@ -457,10 +619,11 @@ export default {
       "Access-Control-Allow-Origin": "*"
     };
     this.config = config;
-    console.log("this.config", this.config);
   },
   created() {
-    this.getHalayaTub(), this.getHalayaJar();
+    this.getHalayaTub(), 
+    this.getHalayaJar();
+    this.getMunicipalityCode();
   },
 
   methods: {
@@ -470,7 +633,7 @@ export default {
       this.customerStreet = null;
       this.customerBarangay = null;
       this.customerMunicipality = null;
-      this.customerProvince = null;
+      // this.customerProvince = null;
       this.customerName = null;
       this.contactNumber = null;
       this.jarQuantity = "0";
@@ -485,15 +648,36 @@ export default {
         return "Pending";
       }
     },
+    getMunicipalityCode() {
+      this.municipalities = address.getCityMunOfProvince("0722"); // province_code = 0722
+      var municipal_names = [];
+      this.municipalities.cityAndMun.forEach(function(item) {
+        municipal_names.push(item.name);
+      });
+      this.list_of_municipalities_names = municipal_names;
+    },     
+    submit(customer_municipality){
+      this.isSubmit = true;
+      var barangay_list = [];
+      var brgy_array = [];
+      this.municipalities.cityAndMun.forEach(function(item) {
+        if (item.name === customer_municipality) {
+          barangay_list = address.getBarangaysOfCityMun(item.mun_code);
+          barangay_list.barangays.forEach(function (brgy){
+            brgy_array.push(brgy.name);
+          })
+        }
+      });
+      this.barangays = brgy_array;
+    },                                              
     placeOrder() {
-      // this.loading = true;
       this.$v.$touch();
       var street = this.customerStreet;
       var barangay = this.customerBarangay;
       var municipality = this.customerMunicipality;
       var province = this.customerProvince;
       this.addOrderDialog = false;
-      this.addCardDialog = false; 
+      this.addCardDialog = false;
       this.$vloading.show();
       var place = street.concat(
         " ",
@@ -503,6 +687,7 @@ export default {
         " ",
         province
       );
+      console.log("place: ", place);
       axios
         .get(
           `https://api.mapbox.com/geocoding/v5/mapbox.places/${place}.json?country=ph&limit=2&access_token=${
@@ -529,25 +714,19 @@ export default {
             contactNumber: this.contactNumber,
             jar_qty: this.jarQuantity,
             tub_qty: this.tabQuantity,
-            total_payment:this.totalPay,
+            total_payment: this.totalPay,
             deliveryDate: this.date,
             orderStatus: this.getOrderStatus(this.jarQuantity),
             distance: dist
           };
-          
-            
+
           axios
             .post(this.url + "/api/post/createOrder", param, this.config)
             .then(response => {
-              // this.loading = false;
-               
-               setTimeout(() => {
-            this.$vloading.hide()
-          },1000)  
-          
-              console.log("response.data: ", response.data);
+              setTimeout(() => {
+                this.$vloading.hide();
+              }, 1000);
               if (response.data == "success") {
-                 
                 Swal.fire({
                   position: "center",
                   icon: "success",
@@ -555,9 +734,7 @@ export default {
                   showConfirmButton: false,
                   timer: 1500
                 });
-                
               }
-               
             });
         });
     },
@@ -566,7 +743,6 @@ export default {
         parseInt(this.jarQuantity) + parseInt(this.tabQuantity) * 4;
       var maximum_order_qty = 96;
       if (this.jarQuantity == "0" && this.tabQuantity == "0") {
-        console.log("date" + this.date);
         Swal.fire({
           position: "center",
           icon: "warning",
@@ -576,7 +752,6 @@ export default {
         });
         this.addOrderDialog = true;
       } else if (total_order_qty > maximum_order_qty) {
-        console.log("--->>>", total_order_qty);
         Swal.fire({
           position: "center",
           icon: "warning",
@@ -598,9 +773,6 @@ export default {
       } else {
         this.addCardDialog = true;
         this.addOrderDialog = false;
-        console.log(this.jarPrice);
-        console.log(this.jarQuantity);
-        console.log("date" + this.date);
         this.totalPay =
           this.jarQuantity * this.jarPrice + this.tabQuantity * this.tubPrice;
       }

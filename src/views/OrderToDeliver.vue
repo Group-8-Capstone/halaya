@@ -299,6 +299,8 @@ export default {
               order => order.barangay == barangay
             );
           });
+
+          console.log('groupedOrders: ', groupedOrders);
           let deliveries = {};
           const MAX_QUANTITY = 96;
 

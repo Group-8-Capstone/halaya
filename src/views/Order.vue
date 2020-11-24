@@ -250,6 +250,7 @@ import * as turf from "@turf/turf";
 import { connect } from "tls";
 import Walkin from "../components/Walkin.vue";
 import { constants } from "zlib";
+import Pusher from 'pusher-js' // import Pusher
 // import Order from "../components/Orders.vue";
 // import DefaultLocation from "../components/DefaultLocation.vue"
 
@@ -339,6 +340,20 @@ export default {
       required
     }
   },
+  mounted() {
+    let pusher = new Pusher('c31b45d58431fd307880', {
+        cluster: 'ap1',
+        encrypted: false
+      });
+
+      //Subscribe to the channel we specified 
+    let channel = pusher.subscribe('order-channel')
+
+    channel.bind('newOrder', data => {
+      console.log(data.order);
+      this.fetchOrders();
+    });
+  },
 
   computed: {
     addressErrors() {
@@ -392,7 +407,7 @@ export default {
   },
   created() {
     this.fetchPendingOrders();
-    this.fetchOrders();
+    // this.fetchOrders();
     setInterval(this.fetchOrders(), 3000);
   },
   methods: {
@@ -594,12 +609,16 @@ export default {
     },
     fetchOrders() {
       this.$vloading.show();
-      axios.get(this.url + "/api/posts/order", this.config).then(response => {
+        
+        axios.get(this.url + "/api/posts/order", this.config).then(response => {
         setTimeout(() => {
         this.$vloading.hide()
          },1000)  
-        this.orders = response.data.data;
-        for (var i = 0; i < this.orders.length; i++) {
+         //use your own credentials you get from Pusher
+         
+ 
+      this.orders = response.data.data;
+       for (var i = 0; i < this.orders.length; i++) {
           var street = response.data.data[i].building_or_street;
           var barangay = response.data.data[i].barangay;
           var city = response.data.data[i].city_or_municipality;
@@ -616,6 +635,9 @@ export default {
             );
           this.orders[i]["customer_address"] = place;
         }
+    // });
+       
+       
       });
     },
     fetchPendingOrders() {
