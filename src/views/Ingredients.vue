@@ -239,7 +239,6 @@ export default {
       "Access-Control-Allow-Origin": "*"
     };
     this.config = config;
-    console.log("this.config", this.config);
   },
   created() {
     this.getHalayaIngredients();
@@ -289,7 +288,6 @@ export default {
       axios
         .get(this.url + "/api/getHalayaIngredients", this.config)
         .then(response => {
-          console.log(response);
           this.loading = false;
           let results = [];
           for (var i = 0; i < response.data.length; i++) {
@@ -310,7 +308,6 @@ export default {
         )
         .then(response => {
           this.editValue = response.data;
-          console.log(this.editValue);
         });
     },
     retrieveUsedIngredients() {
@@ -320,7 +317,6 @@ export default {
             this.$vloading.hide()
           },1000)   
         this.displayIngredientsRecords = response.data;
-        console.log(response);
       });
     },
     getAllIngredientsName() {
@@ -330,7 +326,6 @@ export default {
         .then(response => {
           for (var i = 0; i < response.data.length; i++) {
             if (nameArray.includes(response.data[i].ingredients_name)) {
-              console.log("good");
             } else {
               nameArray.push(response.data[i].ingredients_name);
               this.itemSelect = nameArray;
@@ -368,7 +363,6 @@ export default {
           this.config
         )
         .then(response => {
-          console.log(response);
           this.getHalayaIngredients();
           this.retrieveUsedIngredients();
           this.editDialog = false;
@@ -399,7 +393,6 @@ export default {
             this.config
           )
           .then(response => {
-            console.log(response);
             this.reloadDataAddUsedAmount();
             this.retrieveUsedIngredients();
             this.addUsedStockDialog = false;

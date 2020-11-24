@@ -174,7 +174,6 @@ import {
         this.confirmPassword=null
       },
       editAmount(){
-        console.log('good')
         this.disabled= false
         this.btnDisabled=true
         this.isHidden=false
@@ -234,7 +233,6 @@ import {
         }else{
           this.imageURL=this.url+"/"+response.data.account[0].profile_url
         }
-        console.log(response.data.account[0].username)
       });
     },
     updatePassword(){

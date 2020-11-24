@@ -115,13 +115,6 @@
           </v-card-title>
           <v-container>
             <v-row class="mx-2">
-              <!-- <v-col cols="12">
-                <v-text-field
-                  v-model="editStockItem.ingredients_name"
-                  prepend-icon="mdi-map-marker"
-                  placeholder="ingredientsName"
-                >{{editStockItem.ingredients_name}}</v-text-field>
-              </v-col>-->
               <v-col cols="12">
                 <v-text-field
                   v-model="editStockItem.ingredients_remaining"
@@ -276,7 +269,6 @@ export default {
       'Access-Control-Allow-Origin':'*'
     };
     this.config = config;
-    console.log("this.config", this.config);
   },
   created() {
     this.fetchStock();
@@ -299,15 +291,12 @@ export default {
       this.addUsedStockDialog = !this.addUsedStockDialog;
     },
     updateIngredients() {
-      console.log("editSockItem: ", JSON.stringify(this.editStockItem));
       axios
         .post(this.url+"/api/post/updateStock", this.editStockItem, this.config)
         .then(response => {
-          console.log(response);
           this.fetchStock();
           this.editDialog = false;
         });
-      // console.log("testing..")
     },
     addIngredientsAmount() {
       this.$v.$touch();
@@ -321,14 +310,12 @@ export default {
           availableIngredients: this.availableIngredients,
           usedIngredientsAmount: this.usedIngredientsAmount
         };
-        console.log("used_amount", newAddedAmount);
         axios
           .post(
             this.url+"/api/post/usedIngredients",
             newAddedAmount, this.config
           )
           .then(response => {
-            console.log(response);
             this.reloadDataAddUsedAmount();
             this.addUsedStockDialog = false;
           });
@@ -340,7 +327,6 @@ export default {
         this.stocks = response.data;
         for (var i = 0; i < response.data.length; i++) {
           if (nameArray.includes(response.data[i].ingredients_name)) {
-            console.log("good");
           } else {
             nameArray.push(response.data[i].ingredients_name);
             this.itemSelect = nameArray;
@@ -351,7 +337,6 @@ export default {
         let results = [];
         for (var i = 0; i < response.data.length; i++) {
           if (this.containsObject(results, response.data[i].id)) {
-            console.log("good");
           } else {
             results.push(response.data[i]);
             this.IngredientsArray = results;
@@ -370,7 +355,6 @@ export default {
         .get(this.url+"/api/post/editStock/" + item.id, this.config)
         .then(response => {
           this.editStockItem = response.data;
-          console.log("edit stock item", JSON.stringify(this.editStockItem));
         });
     },
     reloadDataAddStock() {
@@ -399,7 +383,6 @@ export default {
           ingredientsUnit: this.ingredientsUnit,
           stockStatus: this.stockStatus
         };
-        console.log("NewStock: ", newStock);
         let headers = {
           "Access-Control-Allow-Origin": "*",
           "Content-Type": "application/json"
@@ -423,7 +406,6 @@ export default {
                 timer: 5000
               });
             }
-            console.log(response.data);
             this.stockDialog = false;
             this.reloadDataAddStock();
           });
