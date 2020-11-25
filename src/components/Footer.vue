@@ -1,51 +1,55 @@
 <template>
-  <div>
-    <template>
-      <br>
-      <v-footer id="footer" dark padless>
-        <v-row id="footerContent" no-gutters>
-          <v-col cols="4" align="center">
-            <p>
-              <v-icon small>mdi-copyright</v-icon>2020, Wawen's Ube Halaya. All Rights Reserved.
-            </p>
-          </v-col>
-          <v-col cols="8" align="center">
-            <v-row>
-              <v-spacer></v-spacer>
-              <h4 id="contactUs">Check us out here:</h4>
-              <div id="phone">
-                <v-icon id="callIcon">mdi-facebook</v-icon>
-              </div>
-              <div id="fbPage">
-                <p>
-                  <a
-                    href="https://www.facebook.com/ubehalayacebu/reviews/"
-                    target="_blank"
-                  >Wawen's Ube Halaya</a>
-                </p>
-              </div>
-              <h4 id="contactUs">Contact us:</h4>
-              <div id="phone">
-                <v-icon id="callIcon">mdi-phone</v-icon>
-              </div>
-              <div>0945 380 8056</div>
-              <div id="messenger">
-                <v-icon id="msgIcon" small>mdi-facebook-messenger</v-icon>
-              </div>
-              <div id="footerRight">
-                <p>
-                  <a
-                    href="https://www.messenger.com/t/ubehalayacebu"
-                    target="_blank"
-                  >Wawen's Ube Halaya</a>
-                </p>
-              </div>
-            </v-row>
-          </v-col>
-        </v-row>
-      </v-footer>
-    </template>
-  </div>
+  <v-footer id="footer" dark padless class="mt-2" no-gutters>
+    <div class="mt-2">
+      <!-- <v-row id="footerContent" no-gutters justify="center" align="center"> -->
+        <v-col cols="12">
+          <v-row>
+            <v-col lg="4" md="4" sm="4" xl="4" align="center" justify="center">
+              <p id="texts" class="ml-2">
+                <v-icon small>mdi-copyright</v-icon>2020, Wawen's Ube Halaya. All Rights Reserved.
+              </p>
+            </v-col>
+            <!-- <v-spacer></v-spacer> -->
+            <v-col lg="8" md="8" sm="8" xl="8" >
+              <v-row align="center" justify="center">
+                <!-- <v-spacer></v-spacer> -->
+                <p id="contactUs">Check us out here:</p>
+                <div id="phone">
+                  <v-icon id="callIcon" medium>mdi-facebook</v-icon>
+                </div>
+                <div id="fbPage">
+                  <p id="texts" prepend-inner-icon="mdi-facebook">
+                    <a
+                      href="https://www.facebook.com/ubehalayacebu/reviews/"
+                      target="_blank"
+                    >Wawen's Ube Halaya</a>
+                  </p>
+                </div>
+                <p id="contactUs">Contact us:</p>
+                <div id="phone">
+                  <v-icon id="callIcon">mdi-phone</v-icon>
+                </div>
+                <div>
+                  <p id="texts">0945 380 8056</p>
+                </div>
+                <div id="messenger">
+                  <v-icon id="msgIcon" medium>mdi-facebook-messenger</v-icon>
+                </div>
+                <div id="footerRight">
+                  <p id="texts">
+                    <a
+                      href="https://www.messenger.com/t/ubehalayacebu"
+                      target="_blank"
+                    >Wawen's Ube Halaya</a>
+                  </p>
+                </div>
+              </v-row>
+            </v-col>
+          </v-row>
+        </v-col>
+      <!-- </v-row> -->
+    </div>
+  </v-footer>
 </template>
 
 <style scoped>
@@ -53,42 +57,54 @@
   padding: 10px;
   height: 100px;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
-  font-size: 12px;
-  align-content: center;
+  /* align-content: center;
   justify-content: center;
   align-items: center;
-  justify-items: center;
+  justify-items: center; */
+  font-weight: normal !important;
 }
 #footerContent {
-  align-content: center;
+  /* align-content: center;
   justify-content: center;
   align-items: center;
-  justify-items: center;
+  justify-items: center; */
+  font-weight: normal !important;
+}
+#texts {
+  font-size: 12px;
 }
 #fbPage {
-  margin-right: 40px;
+  margin-right: 15px;
 }
 #contactUs {
-  margin-right: 20px;
+  margin-right: 10px;
+  font-size: 12px;
 }
 .v-btn {
   padding-left: 1px;
   padding-right: 1px;
 }
 #callIcon {
-  margin-right: 8px;
+  margin-right: 0px;
   text-decoration: none;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   font-size: 12px;
 }
 #msgIcon {
-  margin-right: 8px;
-  margin-left: 20px;
+  margin-right: 0px;
+  margin-left: 15px;
   text-decoration: none;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   font-size: 12px;
 }
-#footerRight {
-  margin-right: 30px;
+/* #footerRight {
+  margin-left: 0px;
+  margin-right: 0px;
+} */
+.v-footer{
+  display: inline !important;
+}
+p {
+  margin-bottom: 0 !important;
 }
 </style>
