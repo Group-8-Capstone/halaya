@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <v-app-bar app fixed light lights-in height="70" color="white" dense dark elevation="40">
+    <v-app-bar id="inspire">
       <v-list-item-avatar size="60">
         <img src="../assets/wawens.png">
       </v-list-item-avatar>
@@ -13,7 +12,6 @@
         <v-btn id="signIn" color="purple darken-2" text>Login</v-btn>
       </router-link>
     </v-app-bar>
-  </div>
 </template>
 
 <style scoped>
