@@ -16,9 +16,7 @@
                 <v-list-item class="d-flex align-center justify-center pa-6 mx-auto">
                   <img alt="wawen's ube halaya" src="../assets/wawens.png" height="154">
                 </v-list-item>
-
                 <v-spacer></v-spacer>
-
                 <v-card-text>
                   <v-form autocomplete="off">
                     <v-text-field
@@ -33,13 +31,30 @@
                       outlined
                       dense
                     ></v-text-field>
-                    <v-snackbar v-model="isValid" color="deep-purple accent-4" elevation="24">
+                    <v-snackbar v-model="dialog" color="deep-purple accent-4" elevation="24">
                       Username already exists
                       <template v-slot:action="{ attrs }">
                         <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">Close</v-btn>
                       </template>
                     </v-snackbar>
-
+                       <!-- <v-dialog class="modal"  v-model="dialog">
+                          <v-card>
+                            <v-card-text>
+                             Username is already exists. Try a new one
+                            </v-card-text>
+                            <v-divider></v-divider>
+                            <v-card-actions>
+                              <v-spacer></v-spacer>
+                              <v-btn
+                                color="primary"
+                                text
+                                @click="dialog = false"
+                              >
+                                Okay
+                              </v-btn>
+                            </v-card-actions>
+                          </v-card>
+                       </v-dialog> -->
                     <v-text-field
                       id="contact"
                       label="Phone"
@@ -52,6 +67,12 @@
                       outlined
                       dense
                     ></v-text-field>
+                    <v-snackbar v-model="isValidContact" color="deep-purple accent-4" elevation="24">
+                      Phone number is not available
+                      <template v-slot:action="{ attrs }">
+                        <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">Close</v-btn>
+                      </template>
+                    </v-snackbar>
                     <v-text-field
                       autocomplete="current-password"
                       :value="userPassword"
@@ -131,11 +152,13 @@ export default {
     loading: false,
     valid: false,
     username: "",
-    isValid: false,
+    dialog: false,
+    isValidContact: false,
     showPassword: false,
     nameRules: [
       v => !!v || "Username is required",
-      v => v.length <= 10 || "Username must be less than 10 characters"
+      v => v.length >= 5 || "Username must be atleast 5 characters",
+      v => /^[a-zA-Z0-9.\-_$@*!]{5,30}$/.test(v) || "Invalid Username"
     ],
     contact: "",
     contactRules: [
@@ -184,7 +207,10 @@ export default {
         this.$vloading.hide()
           this.$router.push("/customerHome");
         } else if (response.data.message === "invalid_username") {
-          this.isValid = true;
+          this.dialog = true;
+          this.$vloading.hide()
+        } else if (response.date.message === "Phone_not_available"){
+          this.isValidContact = true;
           this.$vloading.hide()
         }
       });

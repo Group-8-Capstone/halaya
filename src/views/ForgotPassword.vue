@@ -15,6 +15,9 @@
         </v-stepper-header>
         <v-stepper-content v-for="(step,n) in steps" :step="n+1" :key="n">
           {{ step.label }}
+          <div style="padding-top: 15px; padding-bottom: 15px;" v-if="curr === 2">
+            {{step.label2}}
+          </div>
           <br>
           <br>
           <v-card class="mb-12" height="200px">
@@ -136,9 +139,10 @@ export default {
       },
       {
         name: "Step 2",
-        rules: [v => !!v || "Required."],
+        rules: [v => !!v || "Valid code is required"],
         valid: true,
-        label: "Code",
+        label: "Code" ,
+        label2:"Vonage will send you a code",
         placeholder: " Enter code"
       },
       {
@@ -170,7 +174,11 @@ export default {
     }
   },
   methods: {
+    // continue() {
+    //   this.$vloading.show();
+    // },
     submit() {
+       this.$vloading.show();
       return new Promise((resolve, reject) => {
         switch (this.curr) {
           case 1:
@@ -182,6 +190,9 @@ export default {
               .then(response => {
                 console.log(response.data);
                 resolve(true);
+                    setTimeout(() => {
+                      this.$vloading.hide()
+                    },1000) 
               });
             break;
           case 2:
@@ -191,6 +202,9 @@ export default {
             axios
               .post(this.url + "/api/forgotPassword/code", phoneCode)
               .then(response => {
+                setTimeout(() => {
+                      this.$vloading.hide()
+                    },1000) 
                 if (response.data.message === "valid_code") {
                   resolve(true);
                 } else {
@@ -208,6 +222,9 @@ export default {
           };
           console.log("----"+this.forgotPassData[1])
           axios.post(this.url+"/api/forgotPassword/newPassword",newPassword).then(response=>{
+            setTimeout(() => {
+                      this.$vloading.hide()
+                    },1000) 
             console.log(response.data.message);
             if(response.data.message === "successfully_password_changed"){
               resolve(true);
@@ -248,7 +265,11 @@ export default {
       }
     },
     done() {
+       this.$vloading.show();
       this.$router.push("/login")
+       setTimeout(() => {
+            this.$vloading.hide()
+          },1000) 
     }
   }
 };

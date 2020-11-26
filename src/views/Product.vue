@@ -406,6 +406,7 @@ export default {
               showConfirmButton: false,
               timer: 1500
             });
+            this.fetchRecordedProduct();
           } else {
             Swal.fire({
               position: "center",

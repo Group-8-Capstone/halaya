@@ -91,7 +91,7 @@
           </v-row>
           <v-row>
             <v-col cols="6" class="pl-5">
-              <v-text-field min="0" type="number" label="Quantity" v-model="jarQuantity">
+              <v-text-field min=0 type="number" label="Quantity" v-model="jarQuantity">
                 <template slot="prepend">
                   <div id="vue-counter">
                     <v-icon type="button" v-on:click="increaseJar">mdi-plus</v-icon>
@@ -101,7 +101,7 @@
               </v-text-field>
             </v-col>
             <v-col cols="6" class="pl-5">
-              <v-text-field min="0" type="number" label="Quantity" v-model="tabQuantity">
+              <v-text-field min=0 type="number" label="Quantity" v-model="tabQuantity">
                 <template slot="prepend">
                   <div id="vue-counter">
                     <v-icon type="button" v-on:click="increaseTub">mdi-plus</v-icon>
@@ -142,7 +142,7 @@
         </v-container>
         <v-card-actions v-show="isSubmit === true">
           <v-spacer></v-spacer>
-          <v-btn outlined color="orange" @click="addOrderDialog = false" class="mb-5">CANCEL</v-btn>
+          <v-btn outlined color="orange" @click="addOrderDialog = false, isSubmit=false" class="mb-5">CANCEL</v-btn>
           <v-btn outlined color="purple darken-2" @click="addCard()" class="mb-5">CREATE</v-btn>
         </v-card-actions>
       </v-card>
@@ -320,8 +320,8 @@ export default {
       customerMunicipality: null,
       orderStatus: "",
       date: null,
-      jarQuantity: "0",
-      tabQuantity: "0",
+      jarQuantity: 0,
+      tabQuantity: 0,
       distance: 0,
       jarName: null,
       tubName: null,
@@ -466,8 +466,8 @@ export default {
       // this.customerProvince = null;
       this.customerName = null;
       this.contactNumber = null;
-      this.jarQuantity = "0";
-      this.tabQuantity = "0";
+      this.jarQuantity = 0;
+      this.tabQuantity = 0;
       this.orderQuantity = null;
       this.date = null;
     },
@@ -504,7 +504,10 @@ export default {
       this.$v.$touch();
       var street = this.customerStreet;
       var barangay = this.customerBarangay;
-      var municipality = this.customerMunicipality;
+      var municipality = 
+      // this.customerMunicipality;
+         this.customerMunicipality.charAt(0).toUpperCase() +
+          this.customerMunicipality.slice(1).toLowerCase();
       var province = this.customerProvince;
       this.addOrderDialog = false;
       this.addCardDialog = false;
@@ -565,6 +568,7 @@ export default {
                   timer: 1500
                 });
               }
+              this.isSubmit=false
             });
         });
     },
@@ -572,7 +576,7 @@ export default {
       var total_order_qty =
         parseInt(this.jarQuantity) + parseInt(this.tabQuantity) * 4;
       var maximum_order_qty = 96;
-      if (this.jarQuantity == "0" && this.tabQuantity == "0") {
+      if (this.jarQuantity == 0 && this.tabQuantity == 0) {
         Swal.fire({
           position: "center",
           icon: "warning",
@@ -581,7 +585,18 @@ export default {
           timer: 1500
         });
         this.addOrderDialog = true;
-      } else if (total_order_qty > maximum_order_qty) {
+      } else if(this.jarQuantity <0 ||this.tabQuantity <0){
+         Swal.fire({
+          position: "center",
+          icon: "warning",
+          title: "Your quantity must not be less than 0",
+          showConfirmButton: false,
+          timer: 1500
+        });
+        this.addOrderDialog = true;
+
+      }
+      else if (total_order_qty > maximum_order_qty) {
         Swal.fire({
           position: "center",
           icon: "warning",
