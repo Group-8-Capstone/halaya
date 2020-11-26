@@ -10,14 +10,14 @@
           <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
             <template v-slot:activator="{ on, attrs }">
               <v-row>
-                <v-col v-for="(item, i) in deliveriesByBrngy" :key="i">
+                <v-col id="batchCards" v-for="(item, i) in deliveriesByBrngy" :key="i">
                   <v-card
                     id="cards"
                     class="text-center"
-                    min-height="220"
+                    min-height="240"
                     max-height="240"
-                    min-width="200"
-                    max-width="230"
+                    min-width="300"
+                    max-width="300"
                   >
                     <v-card-title class="deep-purple lighten-5" id="title">{{item.barangay_name}}</v-card-title>
                     <hr>
@@ -47,7 +47,7 @@
                 <!-- <v-spacer></v-spacer>
                 <v-toolbar-items>
                   <v-btn dark text @click="dialog = false">Export as PDF</v-btn>
-                </v-toolbar-items> -->
+                </v-toolbar-items>-->
               </v-toolbar>
               <v-divider></v-divider>
               <v-row>
@@ -85,7 +85,7 @@
                             <v-icon dark right>mdi-checkbox-marked-circle</v-icon>
                           </v-btn>
                         </v-badge>
-                      </div> -->
+                      </div>-->
                     </v-card-text>
                     <v-btn outlined @click="viewDetails(i)" color="purple">View Details</v-btn>
                     <br>
@@ -109,7 +109,9 @@
             <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
           </template>
           <template v-slot:item.action="{ item }">
-            <div v-if="isCanceled(item) === true || isAdmin() === true || isDelivered(item) === true ">
+            <div
+              v-if="isCanceled(item) === true || isAdmin() === true || isDelivered(item) === true "
+            >
               <v-icon
                 disabled
                 normal
@@ -241,9 +243,9 @@ export default {
             showConfirmButton: false,
             timer: 1500
           });
-            this.dataGrouping();
-            this.detailsDialog = false;
-            this.dialog = false;
+          this.dataGrouping();
+          this.detailsDialog = false;
+          this.dialog = false;
         });
     },
     alertCancel(item) {
@@ -282,25 +284,42 @@ export default {
           this.detailsDialog = false;
           this.dialog = false;
         });
-    },  
+    },
+    // test(array, ){
+
+    // },
     dataGrouping() {
       this.$vloading.show();
       axios
         .get(this.url + "/api/posts/delivery", this.config)
         .then(response => {
           setTimeout(() => {
-        this.$vloading.hide()
-         },1000) 
-          this.result = response.data.data;
+            this.$vloading.hide();
+          }, 1000);
+          var result = response.data.data;
+          // console.log("-->>result: ", this.result);
+          let groupByMunicipality = {};
           let groupedOrders = {};
-          this.result.forEach(data => {
-            let { barangay } = data;
-            groupedOrders[barangay] = this.result.filter(
-              order => order.barangay == barangay
+          result.forEach(municipyo => {
+            let { city_or_municipality } = municipyo;
+            groupByMunicipality[city_or_municipality] = result.filter(
+              order => order.city_or_municipality == city_or_municipality
             );
-          });
+            groupByMunicipality[city_or_municipality].forEach(data => {
+              let { barangay } = data;
+              groupByMunicipality[city_or_municipality][
+                barangay
+              ] = groupByMunicipality[city_or_municipality].filter(order => order.barangay == barangay);
+              
+            // console.log("###3", groupByMunicipality[city_or_municipality].length)
+              
+            });
+            groupByMunicipality[city_or_municipality].splice(groupByMunicipality[city_or_municipality], groupByMunicipality[city_or_municipality].length);
+              // groupByMunicipality[city_or_municipality].splice(index, 1);
 
-          console.log('groupedOrders: ', groupedOrders);
+          });
+          console.log("====: ", groupByMunicipality);
+
           let deliveries = {};
           const MAX_QUANTITY = 96;
 
@@ -309,7 +328,7 @@ export default {
             let arr = [];
             barangayOrders.forEach((order, idx) => {
               let { ubehalayajar_qty, ubehalayatub_qty } = order;
-              let total = ubehalayajar_qty + (ubehalayatub_qty * 4);
+              let total = ubehalayajar_qty + ubehalayatub_qty * 4;
               if (total + currentAmount <= MAX_QUANTITY) {
                 arr.push(order);
                 currentAmount += total;
@@ -322,26 +341,46 @@ export default {
             }
           };
 
-          for (const barangayOrders in groupedOrders) {
-            createBatches(groupedOrders[barangayOrders], (batch, total) => {
-              if (!deliveries.hasOwnProperty(barangayOrders)) {
-                deliveries[barangayOrders] = [];
-              }
-              deliveries[barangayOrders].push({
-                batchNo: deliveries[barangayOrders].length + 1,
-                total,
-                orders: batch
+          // for (const barangayOrders in groupByMunicipality) {
+          //   console.log("brgy_orders", groupByMunicipality[barangayOrders]);
+          //   createBatches(groupByMunicipality, (batch, total) => {
+          //     if (!deliveries.hasOwnProperty(barangayOrders)) {
+          //       deliveries[barangayOrders] = [];
+          //     }
+          //     deliveries[barangayOrders].push({
+          //       batchNo: deliveries[barangayOrders].length + 1,
+          //       total,
+          //       orders: batch
+          //     });
+          //   });
+          // }
+
+          for (const city_mun in groupByMunicipality) {
+            for (const byBrgy in groupByMunicipality[city_mun]) {
+              console.log('-----', groupByMunicipality[city_mun][byBrgy]);
+              createBatches(groupByMunicipality[city_mun][byBrgy], (batch, total) => {
+                var brgy_city_name = byBrgy + ", " + city_mun;
+                if (!deliveries.hasOwnProperty(brgy_city_name)) {
+                  deliveries[brgy_city_name] = [];
+                }
+                deliveries[brgy_city_name].push({
+                  batchNo: deliveries[brgy_city_name].length + 1,
+                  total,
+                  orders: batch
+                });
               });
-            });
+            }
           }
+        
+              console.log("deliveries", deliveries);
           for (const key in deliveries) {
             deliveries[key]["barangay_name"] = key;
             this.deliveriesByBrngy = deliveries;
           }
         });
     },
-    isAdmin(){
-      if(localStorage.getItem('role') === 'admin') {
+    isAdmin() {
+      if (localStorage.getItem("role") === "admin") {
         return true;
       }
     },
@@ -358,14 +397,15 @@ export default {
     isComplete(item) {
       for (var i = 0; i < item.orders.length; i++) {
         if (
-          item.orders[i].order_status === "On order" || item.orders[i].order_status === "Canceled"
+          item.orders[i].order_status === "On order" ||
+          item.orders[i].order_status === "Canceled"
         ) {
           return false;
         } else {
           return true;
         }
       }
-    },
+    }
 
     // isCanceled(item) {
     //   for (var i = 0; i < item.orders.length; i++) {
@@ -381,5 +421,8 @@ export default {
 <style>
 #batchCards {
   flex-grow: 0 !important;
+}
+#title{
+  font-size: 17px;
 }
 </style>
