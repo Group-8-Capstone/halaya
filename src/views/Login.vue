@@ -14,25 +14,23 @@
             sm="8"
             md="4"
           >
-            <v-card class="elevation-12">
+            <v-card >
               <v-list-item
                 id="cardHeader"
                 size="150"
               >
                 <v-list-item-content>
-                  <v-list-item-title class="d-flex align-center justify-center pa-6 mx-auto headline">L O G I N</v-list-item-title>
+                  <v-list-item-title class="d-flex align-center justify-center pa-3 mx-auto headline">L O G I N</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item class="d-flex align-center justify-center pa-6 mx-auto">
                 <img
                   alt="wawen's ube halaya"
                   src="../assets/wawens.png"
-                  height="154"
+                  height="140"
                 >
               </v-list-item>
-
               <v-spacer></v-spacer>
-
               <v-card-text>
                 <v-form>
                   <p v-if="error" class="notif"> Incorrect Username and Password </p>
@@ -64,9 +62,12 @@
                   ></v-text-field>
                 </v-form>
               </v-card-text>
-               <div align="right" class="forgot">
+              <!-- <div class="remember ml-9">
+              <input type="checkbox" value="lsRememberMe" id="rememberMe" > <label for="rememberMe">Remember me</label>
+               </div> -->
+               <div align="left" class="forgot mr-5">
                 <span>
-                  <a href="/forgotPassword" >Forgot Password?</a>
+                  <a href="/forgotPassword" >Forgot Password</a>
                 </span>
                 </div>
               <center>
@@ -75,7 +76,6 @@
                   class="mb-5"
                   block
                   outlined
-                  rounded
                   @click="login"
                 >Log In</v-btn>
               </center>
@@ -110,10 +110,13 @@
   color: purple !important;
 }
 .forgot{
-  text-align:right;
-  margin-top:-22px;
+  /* text-align:right; */
+  margin-top:-30px;
   margin-bottom:20px;
-  margin-right: 15px;
+  margin-left: 50px;
+}
+.remember{
+    margin-right: 15px;
 }
 .v-btn {
   width: 85%  !important;
@@ -169,7 +172,7 @@ export default {
             this.$vloading.hide()
           },1000) 
           localStorage.setItem("token", response.data.token);
-          // localStorage.setItem("username", response.data.UserAccount[0].username);
+          localStorage.setItem("username", response.data.UserAccount[0].username);
           localStorage.setItem("role", response.data.UserAccount[0].role);
           localStorage.setItem("id", response.data.UserAccount[0].id);
           if(response.data.UserAccount[0].role == 'admin'){

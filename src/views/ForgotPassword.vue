@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <v-container class="change_pass_container">
-      <!-- <h4 class="mb-0">Password Verification</h4> -->
       <v-stepper v-model="curr" color="green">
         <v-stepper-header class="overflow-x-auto steps">
           <v-stepper-step
@@ -52,63 +51,19 @@
             </v-card-text>
           </v-card>
           <v-btn
+            outlined
             v-if="n+1 < lastStep"
-            color="primary"
+            color="purple"
             @click="validate(n)"
             :disabled="!step.valid"
           >Continue</v-btn>
           <v-btn v-else color="success" @click="done()">Done</v-btn>
-          <v-btn text @click="back(n)">Back</v-btn>
+          <v-btn outlined class="mt-3" color="orange" @click="back(n)">Back</v-btn>
         </v-stepper-content>
       </v-stepper>
     </v-container>
   </div>
-  <!-- <v-form v-model="valid">
-    <v-app id="inspire">
-      <v-main>
-        <v-container class="fill-height" fluid>
-          <v-row align="center" justify="center">
-            <v-col cols="12" sm="8" md="4">
-              <v-card class="elevation-12">
-                <v-list-item id="cardHeader" size="150">
-                  <v-list-item-content>
-                    <v-list-item-title
-                      class="d-flex align-center justify-center pa-6 mx-auto headline"
-                    >Sign Up</v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-                <v-list-item class="d-flex align-center justify-center pa-6 mx-auto">
-                  <img alt="wawen's ube halaya" src="../assets/wawens.png" height="154">
-                </v-list-item>
-
-                <v-spacer></v-spacer>
-
-                <v-card-text>
-                  <v-form autocomplete="off">
-                    <v-text-field
-                      id="contact"
-                      label="Phone"
-                      name="contact"
-                      prepend-icon="mdi-phone"
-                      type="text"
-                      v-model="contact"
-                      :rules="contactRules"
-                      class="border-design"
-                      outlined
-                      dense
-                    ></v-text-field>
-                  </v-form>
-                </v-card-text>
-                <center>
-                  <v-btn id="btnLogin" class="mb-5" block outlined rounded @click="submit">Submit</v-btn>
-                </center>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-main>
-    </v-app>
-  </v-form>-->
+  
 </template>
 
 <script>
@@ -142,7 +97,7 @@ export default {
         rules: [v => !!v || "Valid code is required"],
         valid: true,
         label: "Code" ,
-        label2:"Vonage will send you a code",
+        label2:"Check sent code",
         placeholder: " Enter code"
       },
       {
@@ -174,9 +129,6 @@ export default {
     }
   },
   methods: {
-    // continue() {
-    //   this.$vloading.show();
-    // },
     submit() {
        this.$vloading.show();
       return new Promise((resolve, reject) => {
@@ -220,12 +172,10 @@ export default {
             pass:this.forgotPassData[2],
             code: this.forgotPassData[1]
           };
-          console.log("----"+this.forgotPassData[1])
           axios.post(this.url+"/api/forgotPassword/newPassword",newPassword).then(response=>{
             setTimeout(() => {
                       this.$vloading.hide()
                     },1000) 
-            console.log(response.data.message);
             if(response.data.message === "successfully_password_changed"){
               resolve(true);
             }else{
@@ -238,7 +188,8 @@ export default {
     back(n){
       if(n !== 0){
         this.curr = n
-        this.$router.push("/login")
+      }else{
+         this.$router.push("/login")
       }
     },
     stepComplete(step) {
