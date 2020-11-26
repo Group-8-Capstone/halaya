@@ -44,7 +44,7 @@
     <v-col cols="12">
     <v-text-field
       color="purple"
-      label="Added Ingredients"
+      label="Ingredients"
       :error-messages="AddedIngredientsNameErrors"
       @input="$v.addedIngredientsName.$touch()"
       @blur="$v.addedIngredientsName.$touch()"
@@ -54,7 +54,20 @@
       outlined>
     </v-text-field>
    </v-col>
-   <br>
+      <br>
+   <v-col cols="12">
+    <v-text-field
+      color="purple"
+      label="Needed Estimated Quantity"
+      :error-messages="AddedIngredientsValueErrors"
+      @input="$v.addedEstimatedAmount.$touch()"
+      @blur="$v.addedEstimatedAmount.$touch()"
+      required
+      hide-details="auto"
+      v-model="addedEstimatedAmount"
+      outlined></v-text-field>
+   </v-col>
+    <br>
    <v-col cols="12">
     <v-select
       color="purple"
@@ -68,19 +81,6 @@
       outlined
       :items="items">
     </v-select>
-   </v-col>
-      <br>
-   <v-col cols="12">
-    <v-text-field
-      color="purple"
-      label="Needed estimatated Quantity"
-      :error-messages="AddedIngredientsValueErrors"
-      @input="$v.addedEstimatedAmount.$touch()"
-      @blur="$v.addedEstimatedAmount.$touch()"
-      required
-      hide-details="auto"
-      v-model="addedEstimatedAmount"
-      outlined></v-text-field>
    </v-col>
       </v-container>
        <v-divider></v-divider>
@@ -261,7 +261,7 @@ import Swal from "sweetalert2";
     addedIngredientsUnitErrors(){
       const errors = []
       if (!this.$v.addedIngredientsUnit.$dirty) return errors
-      !this.$v.addedIngredientsUnit.required && errors.push('Ingredients unit is required.')
+      !this.$v.addedIngredientsUnit.required && errors.push('Unit is required.')
       return errors
 
     }
@@ -287,8 +287,9 @@ import Swal from "sweetalert2";
         this.isHidden=false
       },
        reloadData(){
-        this.addedIngredientsName="",
-        this.addedEstimatedAmount="",
+        this.addedIngredientsName=null,
+        this.addedEstimatedAmount=null,
+        this.addedIngredientsUnit=null,
         this.$v.$reset();
     },
 
@@ -296,9 +297,11 @@ import Swal from "sweetalert2";
         this.productName=null,
         this.imageURL= null
     },
-
     addEstimatedValue(){
-         this.$v.$touch();
+         if(this.addedIngredientsName==null || this.addedEstimatedAmount==null ||this.addedIngredientsUnit==null){
+           this.addDialog=true
+          this.$v.$touch();
+         }else{
          var upperIngredientsName =
           this.addedIngredientsName.charAt(0).toUpperCase() +
           this.addedIngredientsName.slice(1).toLowerCase();
@@ -316,9 +319,12 @@ import Swal from "sweetalert2";
         icon: "success",
         timer: 3000
       })
+    
       this.fetchEstimatedValue()
     
         })
+        }
+
       },
       showDialog(){
         this.addDialog=true

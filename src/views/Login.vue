@@ -111,9 +111,9 @@
 }
 .forgot{
   text-align:right;
-  margin-top:-20px;
+  margin-top:-22px;
   margin-bottom:20px;
-  margin-right:3px;
+  margin-right: 15px;
 }
 .v-btn {
   width: 85%  !important;
