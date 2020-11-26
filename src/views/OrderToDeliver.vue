@@ -297,7 +297,6 @@ export default {
             this.$vloading.hide();
           }, 1000);
           var result = response.data.data;
-          // console.log("-->>result: ", this.result);
           let groupByMunicipality = {};
           let groupedOrders = {};
           result.forEach(municipyo => {
@@ -310,15 +309,9 @@ export default {
               groupByMunicipality[city_or_municipality][
                 barangay
               ] = groupByMunicipality[city_or_municipality].filter(order => order.barangay == barangay);
-              
-            // console.log("###3", groupByMunicipality[city_or_municipality].length)
-              
             });
             groupByMunicipality[city_or_municipality].splice(groupByMunicipality[city_or_municipality], groupByMunicipality[city_or_municipality].length);
-              // groupByMunicipality[city_or_municipality].splice(index, 1);
-
           });
-          console.log("====: ", groupByMunicipality);
 
           let deliveries = {};
           const MAX_QUANTITY = 96;
@@ -341,23 +334,8 @@ export default {
             }
           };
 
-          // for (const barangayOrders in groupByMunicipality) {
-          //   console.log("brgy_orders", groupByMunicipality[barangayOrders]);
-          //   createBatches(groupByMunicipality, (batch, total) => {
-          //     if (!deliveries.hasOwnProperty(barangayOrders)) {
-          //       deliveries[barangayOrders] = [];
-          //     }
-          //     deliveries[barangayOrders].push({
-          //       batchNo: deliveries[barangayOrders].length + 1,
-          //       total,
-          //       orders: batch
-          //     });
-          //   });
-          // }
-
           for (const city_mun in groupByMunicipality) {
             for (const byBrgy in groupByMunicipality[city_mun]) {
-              console.log('-----', groupByMunicipality[city_mun][byBrgy]);
               createBatches(groupByMunicipality[city_mun][byBrgy], (batch, total) => {
                 var brgy_city_name = byBrgy + ", " + city_mun;
                 if (!deliveries.hasOwnProperty(brgy_city_name)) {
@@ -371,8 +349,7 @@ export default {
               });
             }
           }
-        
-              console.log("deliveries", deliveries);
+
           for (const key in deliveries) {
             deliveries[key]["barangay_name"] = key;
             this.deliveriesByBrngy = deliveries;
