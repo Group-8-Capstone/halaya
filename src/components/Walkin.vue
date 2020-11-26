@@ -157,7 +157,7 @@ export default {
       Authorization: 'Bearer ' + localStorage.getItem('token')
     }
     this.config = config
-    console.log(this.config)
+    // console.log(this.config)
   },
 
   computed: {
@@ -247,7 +247,7 @@ export default {
           // this.loading = false;
             setTimeout(() => {
         this.$vloading.hide()
-         },1000) 
+         }, 1000) 
          Swal.fire({
                   position: "center",
                   icon: "warning",
@@ -295,13 +295,14 @@ export default {
             orderStatus: 'Delivered',
             distance: dist
           };
-          console.log(this.date)
+          // console.log(this.date)
           axios
             .post(this.url+"/api/post/createOrder", param,this.config)
             .then(response => {
                 setTimeout(() => {
                 this.$vloading.hide()
                 },1000) 
+                // console.log("--->>", response.data)
               // this.loading = false;
               if (response.data == "success") {
                 Swal.fire({

@@ -285,9 +285,6 @@ export default {
           this.dialog = false;
         });
     },
-    // test(array, ){
-
-    // },
     dataGrouping() {
       this.$vloading.show();
       axios
@@ -298,7 +295,7 @@ export default {
           }, 1000);
           var result = response.data.data;
           let groupByMunicipality = {};
-          let groupedOrders = {};
+          // let groupedOrders = {};
           result.forEach(municipyo => {
             let { city_or_municipality } = municipyo;
             groupByMunicipality[city_or_municipality] = result.filter(
@@ -321,8 +318,8 @@ export default {
             let arr = [];
             barangayOrders.forEach((order, idx) => {
               let { ubehalayajar_qty, ubehalayatub_qty } = order;
-              let total = ubehalayajar_qty + ubehalayatub_qty * 4;
-              if (total + currentAmount <= MAX_QUANTITY) {
+              let total = ubehalayajar_qty + (ubehalayatub_qty * 4);
+              if ((total + currentAmount) <= MAX_QUANTITY) {
                 arr.push(order);
                 currentAmount += total;
                 barangayOrders.splice(idx, 1);
