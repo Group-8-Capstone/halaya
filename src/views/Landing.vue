@@ -26,9 +26,7 @@
           </router-link>
         </div>
       </div>
-      <!-- <v-col sm="12"> -->
       <div>
-        <!-- <v-row> -->
         <v-col class="text-center" cols="12" id="text">
           <h2
             id="ourStory"
@@ -53,10 +51,8 @@
             </v-col>
           </v-row>
         </v-col>
-        <!-- </v-row> -->
       </div>
       <div>
-        <!-- <v-row> -->
         <v-card flat class="pa-1 mt-1">
           <v-row align="center" justify="center" class="mt-1">
             <div id="planHeader" class="text-center">
@@ -87,13 +83,10 @@
           </v-row>
           <br>
         </v-card>
-        <!-- </v-row> -->
       </div>
       <div>
         <v-row>
           <v-col cols="12">
-            <!-- <br> -->
-            <!-- <div> -->
               <v-row id="infos" align="center" justify="center">
                 <v-col sm="12" md="4" lg="4" xl="4">
                   <!-- <v-row> -->
@@ -180,21 +173,15 @@
                       </v-col>
                     </v-flex>
                   </v-layout>
-                  <!-- </v-row> -->
                 </v-col>
 
                 <v-col sm="12" md="8" lg="8" xl="8">
-                  <!-- <v-row justify="center"> -->
                   <div justify="center" id="planHeader" class="text-center mt-0">
                     <h1
                       id="productsHeader"
                       class="font-weight-bold text-h6 [1] text-sm-h5 [1] text-md-h5 [2] text-lg-h4 [2] text-xl-h4 [2]"
                     >PRODUCTS</h1>
                   </div>
-                  <!-- </v-row> -->
-                  <!-- <v-row> -->
-                  <!-- <div> -->
-                  <!-- <v-col sm="12"> -->
                   <v-row align="center" justify="center">
                     <v-col sm="12" md="6" lg="6" xl="6">
                       <v-hover id="products" v-slot:default="{ hover }">
@@ -277,11 +264,8 @@
                       class="mb-1 font-weight-bold text-h6 [1] text-sm-h5 [1] text-md-h5 [2] text-lg-h4 [2] text-xl-h4 [2]"
                     >Eyes here!</h1>
                   </div>
-                  <!-- </v-row> -->
-
-                  <!-- <v-row align="center" justify="center"> -->
                     <div>
-                      <!-- <v-card flat> -->
+                
                       <v-col cols="12" sm="12">
                         <v-row align="center" justify="center">
                           <v-col sm="6">

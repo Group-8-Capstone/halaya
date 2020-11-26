@@ -30,9 +30,7 @@
                   height="140"
                 >
               </v-list-item>
-
               <v-spacer></v-spacer>
-
               <v-card-text>
                 <v-form>
                   <p v-if="error" class="notif"> Incorrect Username and Password </p>

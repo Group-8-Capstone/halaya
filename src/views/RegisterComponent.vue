@@ -16,9 +16,7 @@
                 <v-list-item class="d-flex align-center justify-center pa-6 mx-auto">
                   <img alt="wawen's ube halaya" src="../assets/wawens.png" height="140">
                 </v-list-item>
-
                 <v-spacer></v-spacer>
-
                 <v-card-text>
                   <v-form autocomplete="off">
                     <v-text-field
