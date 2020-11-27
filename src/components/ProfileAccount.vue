@@ -9,13 +9,13 @@
                                   <center>
                                     <img style="max-width:100%;height:auto;" class="addOnsImage" :src="imageURL"><br>
                                      <h4 class=" gray--text">{{username}}</h4>
-                                    <input type="file" class="fileStyle deep-purple--text" v-on:change="onImageChange">
+                                    <input type="file" class="fileStyle deep-purple--text" id="imageUpload"  v-on:change="onImageChange">
                                     
                             </center>
                             </v-container>
                     <v-card-actions>
                       <v-spacer></v-spacer>
-                      <v-btn small type="submit" class="ma-3" color="purple darken-2" outlined>UPDATE PROFILE</v-btn>
+                      <v-btn small type="submit"  for="imageUpload" class="ma-3" color="purple darken-2" outlined>UPDATE PROFILE</v-btn>
                       </v-card-actions>
                         </form>
                   </div>
