@@ -55,12 +55,6 @@
                       outlined
                       dense
                     ></v-text-field>
-                    <v-snackbar v-model="isValidContact" color="deep-purple accent-4" elevation="24">
-                      Phone number is not available
-                      <template v-slot:action="{ attrs }">
-                        <v-btn color="white" text v-bind="attrs" @click="isValidContact = false">Close</v-btn>
-                      </template>
-                    </v-snackbar>
                     <v-text-field
                       autocomplete="current-password"
                       :value="userPassword"
@@ -142,7 +136,6 @@ export default {
     username: "",
     dialog: false,
     allFieldDialog:false,
-    isValidContact: false,
     showPassword: false,
     nameRules: [
       v => !!v || "Username is required",
@@ -202,9 +195,6 @@ export default {
         else if (this.username===''|| this.contact ===''|| this.userPassword===''||this.cPassword===''){
           this.$vloading.hide()
           this.allFieldDialog = true;
-        } else if (JSON.parse(response.data).hasOwnProperty('phone')){
-          this.$vloading.hide()
-          this.isValidContact = true;
         }
       });
     }

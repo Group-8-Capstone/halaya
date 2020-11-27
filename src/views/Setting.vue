@@ -312,13 +312,23 @@ import Swal from "sweetalert2";
           ingredientsCategory:this.addedCategory
         }
         axios.post(this.url+"/api/post/neededValue",param, this.config).then(response=>{
-        console.log(response)
+        console.log(response.data)
+        if (response.data=="existed"){
+        this.addDialog=true,
+        Swal.fire({
+        title: "Existed Ingredients!",
+        text:"Check list of ingredients",
+        icon: "warning",
+        timer: 3000
+      })
+        }else{
         this.addDialog=false,
-         Swal.fire({
+        Swal.fire({
         title: "Successfully Added",
         icon: "success",
         timer: 3000
       })
+      }
     
       this.fetchEstimatedValue()
     
@@ -411,7 +421,7 @@ import Swal from "sweetalert2";
         title: "Are you sure?",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: "purple darken-285d6",
+        confirmButtonColor: "purple",
         cancelButtonColor: "orange",
         cancelButtonText: "No",
         confirmButtonText: "Yes",
