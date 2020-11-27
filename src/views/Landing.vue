@@ -26,9 +26,7 @@
           </router-link>
         </div>
       </div>
-      <!-- <v-col sm="12"> -->
       <div>
-        <!-- <v-row> -->
         <v-col class="text-center" cols="12" id="text">
           <h2
             id="ourStory"
@@ -53,10 +51,8 @@
             </v-col>
           </v-row>
         </v-col>
-        <!-- </v-row> -->
       </div>
       <div>
-        <!-- <v-row> -->
         <v-card flat class="pa-1 mt-1">
           <v-row align="center" justify="center" class="mt-1">
             <div id="planHeader" class="text-center">
@@ -87,13 +83,10 @@
           </v-row>
           <br>
         </v-card>
-        <!-- </v-row> -->
       </div>
       <div>
         <v-row>
           <v-col cols="12">
-            <!-- <br> -->
-            <!-- <div> -->
               <v-row id="infos" align="center" justify="center">
                 <v-col sm="12" md="4" lg="4" xl="4">
                   <!-- <v-row> -->
@@ -116,9 +109,7 @@
                       </v-card-text>
                     </v-card-title>
                   </v-card>
-                  <!-- </v-row> -->
                   <br>
-                  <!-- <v-row> -->
                   <v-card
                     shaped
                     id="infoCards"
@@ -142,9 +133,7 @@
                       </v-card-text>
                     </v-card-title>
                   </v-card>
-                  <!-- </v-row> -->
                   <br>
-                  <!-- <v-row> -->
                   <v-layout wrap>
                     <v-flex>
                       <v-col sm="12" class="pl-0">
@@ -180,21 +169,14 @@
                       </v-col>
                     </v-flex>
                   </v-layout>
-                  <!-- </v-row> -->
                 </v-col>
-
                 <v-col sm="12" md="8" lg="8" xl="8">
-                  <!-- <v-row justify="center"> -->
                   <div justify="center" id="planHeader" class="text-center mt-0">
                     <h1
                       id="productsHeader"
                       class="font-weight-bold text-h6 [1] text-sm-h5 [1] text-md-h5 [2] text-lg-h4 [2] text-xl-h4 [2]"
                     >PRODUCTS</h1>
                   </div>
-                  <!-- </v-row> -->
-                  <!-- <v-row> -->
-                  <!-- <div> -->
-                  <!-- <v-col sm="12"> -->
                   <v-row align="center" justify="center">
                     <v-col sm="12" md="6" lg="6" xl="6">
                       <v-hover id="products" v-slot:default="{ hover }">
@@ -229,7 +211,6 @@
                         </v-card>
                       </v-hover>
                     </v-col>
-
                     <v-col sm="12" md="6" lg="6" xl="6">
                       <v-hover id="products" v-slot:default="{ hover }">
                         <v-card
@@ -239,7 +220,6 @@
                           :elevation="8"
                           data-aos="flip-right"
                         >
-                          <!-- :aspect-ratio="16/9" -->
                           <v-img width="310" height="220" src="../assets/halayaJar.jpg">
                             <v-expand-transition>
                               <div
@@ -265,10 +245,6 @@
                       </v-hover>
                     </v-col>
                   </v-row>
-                  <!-- </v-col> -->
-                  <!-- </div> -->
-                  <!-- </v-row> -->
-                  <!-- <v-row align="center" justify="center"> -->
                   <div align="center" justify="center" id="planHeader" class="text-center">
                     <br>
                     <br>
@@ -277,11 +253,7 @@
                       class="mb-1 font-weight-bold text-h6 [1] text-sm-h5 [1] text-md-h5 [2] text-lg-h4 [2] text-xl-h4 [2]"
                     >Eyes here!</h1>
                   </div>
-                  <!-- </v-row> -->
-
-                  <!-- <v-row align="center" justify="center"> -->
                     <div>
-                      <!-- <v-card flat> -->
                       <v-col cols="12" sm="12">
                         <v-row align="center" justify="center">
                           <v-col sm="6">
@@ -289,7 +261,6 @@
                               <v-img src="../assets/ad1.png"></v-img>
                             </v-card>
                           </v-col>
-
                           <v-col sm="6">
                             <v-card width="310" flat :elevation="8" data-aos="fade-left">
                               <v-img src="../assets/ad2.png"></v-img>
@@ -297,16 +268,12 @@
                           </v-col>
                         </v-row>
                       </v-col>
-                      <!-- </v-card> -->
                     </div>
-                  <!-- </v-row> -->
                 </v-col>
               </v-row>
-            <!-- </div> -->
           </v-col>
         </v-row>
       </div>
-      <!-- </v-col> -->
     </div>
   </div>
 </template>
@@ -445,10 +412,6 @@ export default {
 }
 #infos {
   margin-top: 40px;
-  /* justify-content: center;
-  align-content: center;
-  justify-items: center;
-  align-items: center; */
 }
 #photo {
   width: 100%;
@@ -464,11 +427,6 @@ export default {
   align-content: center;
   font-size: 2em;
 }
-/* #imgUbe {
-  display: block;
-  width: auto;
-  height: auto;
-} */
 #productsHeader {
   align-content: center;
   font-size: 2.5em;
@@ -480,7 +438,6 @@ export default {
   text-transform: uppercase;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  /* font-family: "Lucida Console", Courier, monospace; */
   background-image: linear-gradient(45deg, #7794ff, #44107a, #ff1361, #fff800);
   animation: 0.8s shake infinite alternate;
 }
@@ -504,8 +461,4 @@ export default {
     transform: skewX(0deg);
   }
 }
-/* #products {
-  width: 400px;
-  height: 400px;
-} */
 </style>
