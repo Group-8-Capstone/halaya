@@ -182,13 +182,17 @@ export default {
         role: "customer"
       };
       axios.post(this.url + "/api/register", Reg).then(response => {
-        if (response.data.message == "success") {
+        console.log(response.data)
+
+        if (response.data.message === "success") {
           localStorage.setItem("token", response.data.token);
+          console.log(response.data.user.id)
           localStorage.setItem("id", response.data.user.id);
           localStorage.setItem("role", response.data.user.role);
           this.$router.push("/customerHome");
           this.$vloading.hide()
         } else if (response.data.message === "invalid_username") {
+            console.log(response.data.message)
             this.$vloading.hide()
             this.dialog = true;
         }

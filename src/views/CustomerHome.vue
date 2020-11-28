@@ -255,7 +255,7 @@
             </v-col>
             <v-col cols="5" class="pl-12">
               <span>
-                <h4>Tub Quntity:</h4>
+                <h4>Tub Quantity:</h4>
                 {{tabQuantity}}
               </span>
             </v-col>
