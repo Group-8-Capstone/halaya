@@ -36,9 +36,9 @@
             ></v-text-field>
           </v-card-title>
           <v-data-table :headers="headers2" :items="deliveredOrder" :search="search">
-             <template v-slot:item.preferred_delivery_date="{ item }">
-           <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>
-         </template>
+            <template v-slot:item.preferred_delivery_date="{ item }">
+              <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>
+            </template>
             <template v-slot:item.order_status="{ item }">
               <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
             </template>
@@ -49,6 +49,9 @@
   </div>
 </template>
 <style>
+.v-data-table {
+  overflow-x: auto !important;
+}
 </style>
 <script>
 import {
@@ -62,6 +65,7 @@ import Swal from "sweetalert2";
 export default {
   name: "MyOrder",
   data: () => ({
+    scrollHorizontal: true,
     search: "",
     deliveredOrder: [],
     dialogOnOrder: false,
@@ -102,11 +106,11 @@ export default {
       this.$vloading.show();
       let id = localStorage.getItem("id");
       axios
-        .get(this.url+"/api/fetchOngoingOrder/" + id, this.config)
+        .get(this.url + "/api/fetchOngoingOrder/" + id, this.config)
         .then(response => {
-           setTimeout(() => {
-            this.$vloading.hide()
-          },1000) 
+          setTimeout(() => {
+            this.$vloading.hide();
+          }, 1000);
           this.onOrder = response.data.post;
         });
     },
@@ -116,14 +120,14 @@ export default {
       else return "blue";
     },
     retrieveDeliveredOrder() {
-       this.$vloading.show();
+      this.$vloading.show();
       let id = localStorage.getItem("id");
       axios
-        .get(this.url+"/api/fetchDeliveredOrder/" + id, this.config)
+        .get(this.url + "/api/fetchDeliveredOrder/" + id, this.config)
         .then(response => {
-           setTimeout(() => {
-            this.$vloading.hide()
-          },1000) 
+          setTimeout(() => {
+            this.$vloading.hide();
+          }, 1000);
           this.deliveredOrder = response.data.post;
         });
     },

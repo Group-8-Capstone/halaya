@@ -50,6 +50,10 @@
                 </v-toolbar-items>-->
               </v-toolbar>
               <v-divider></v-divider>
+              <div>
+                <SortLocation/>
+              </div>
+              <v-divider></v-divider>
               <v-row>
                 <v-col id="batchCards" v-for="i in orders" :key="i.id">
                   <v-card
@@ -150,8 +154,10 @@ import * as turf from "@turf/turf";
 import { setInterval } from "timers";
 import Swal from "sweetalert2";
 import { constants } from "os";
+import SortLocation from "../components/SortLocation.vue"
 export default {
   name: "Delivery",
+  components: { SortLocation },
   data() {
     return {
       delivery_range: [],

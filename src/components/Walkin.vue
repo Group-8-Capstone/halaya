@@ -27,6 +27,7 @@
                 prepend-icon="mdi-phone"
                 label="Mobile Number"
                 v-model="contactNumber"
+                :rules="contactRules"
                 :error-messages="contactNumberErrors"
                 @input="$v.contactNumber.$touch()"
                 @blur="$v.contactNumber.$touch()"
@@ -104,8 +105,8 @@ export default {
       menu: false,
       btnDisable: true,
       addOrderDialog: false,
-      customerStreet: "Shambala Veterinary Clinic",
-      customerBarangay: "Hernan Cortes Street",
+      customerStreet: "Shambala Veterinary Clinic Hernan Cortes Street",
+      customerBarangay: "Bakilid",
       customerCity: "Mandaue City",
       customerProvince: "Cebu",
       customerName: null,
@@ -119,8 +120,12 @@ export default {
       date:  new Date().toISOString().substr(0, 10),
       jarQuantity: "0",
       tabQuantity: "0",
-      totalPay:null,
-      distance: 0
+      totalPay:0,
+      distance: 0,
+      contactRules: [
+      v => !!v || "Phone number is required",
+      v => /^(09|\+639)\d{9}$/.test(v) || "Input valid phone number"
+    ],
     };
   },
   validations: {
@@ -241,23 +246,37 @@ export default {
     },
 
     placeOrder() {
-      // this.loading = true;
       this.$vloading.show();
-        if (this.jarQuantity=='0' && this.tabQuantity=='0' ){
-          // this.loading = false;
+      if (this.jarQuantity=='0' && this.tabQuantity=='0' ){
             setTimeout(() => {
         this.$vloading.hide()
          }, 1000) 
          Swal.fire({
-                  position: "center",
-                  icon: "warning",
-                  title: "No order",
-                  showConfirmButton: false,
-                  timer: 1500
-                });
-         this.$v.$touch();
+        position: "center",
+        icon: "warning",
+        title: "No order",
+        showConfirmButton: false,
+        timer: 1500
+      });
+      } else if(this.jarQuantity <0 ||this.tabQuantity <0){
+        this.$vloading.hide()
+        Swal.fire({
+          position: "center",
+          icon: "warning",
+          title: "Your quantity must not be less than 0",
+          showConfirmButton: false,
+          timer: 1500
+        });
+      }
+      else if(this.customerName == null ||
+      this.contactNumber == null){
+          this.$v.$touch();
+           this.$vloading.hide()
         
-      }else{
+      }
+      else{
+          this.totalPay =
+          this.jarQuantity * this.jarPrice + this.tabQuantity * this.tubPrice
       var place = this.customerStreet.concat(
         " ",
         this.customerBarangay,
@@ -291,19 +310,19 @@ export default {
             contactNumber: this.contactNumber,
             jar_qty: this.jarQuantity,
             tub_qty: this.tabQuantity,
+            total_payment: this.totalPay,
             deliveryDate: this.date,
             orderStatus: 'Delivered',
             distance: dist
           };
-          // console.log(this.date)
+         
           axios
             .post(this.url+"/api/post/createOrder", param,this.config)
             .then(response => {
+              //  console.log(response)
                 setTimeout(() => {
                 this.$vloading.hide()
                 },1000) 
-                // console.log("--->>", response.data)
-              // this.loading = false;
               if (response.data == "success") {
                 Swal.fire({
                   position: "center",
@@ -312,7 +331,7 @@ export default {
                   showConfirmButton: false,
                   timer: 1500
                 });
-                this.showDialog()
+              this.showDialog();
               }
             });
         });

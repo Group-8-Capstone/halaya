@@ -20,6 +20,7 @@
           >CREATE ORDER</v-list-item-title>
         </v-card-title>
         <v-container>
+          <div v-show="isSubmit === false">
           <v-row>
             <v-col cols="6">
               <v-text-field
@@ -38,6 +39,7 @@
                 prepend-icon="mdi-phone"
                 label="Mobile Number"
                 v-model="contactNumber"
+                :rules="contactRules"
                 :error-messages="contactNumberErrors"
                 @input="$v.contactNumber.$touch()"
                 @blur="$v.contactNumber.$touch()"
@@ -53,17 +55,25 @@
               <v-text-field disabled label="CEBU"></v-text-field>
             </v-col>
             <v-col class="d-flex" cols="6">
-              <v-select v-model="customerMunicipality" :items="list_of_municipalities_names" label="City/Municipality"></v-select>
+              <v-select :error-messages="customerMunicipalityErrors"
+                @input="$v.customerMunicipality.$touch()"
+                @blur="$v.customerMunicipality.$touch()" v-model="customerMunicipality" :items="list_of_municipalities_names" label="City/Municipality" id="customerMunicipality"></v-select>
             </v-col>
           </v-row>
-          <div align="center" justify="center">
-            <v-btn outlined color="purple darken-2" v-show="isSubmit === false" @click="submit(customerMunicipality)" class="mb-5">Submit</v-btn>
+          <div align="right" justify="right">
+            <v-btn  small outlined color="purple darken-2"  @click="submit(customerMunicipality)" class="mb-5">Next</v-btn>
           </div>
+        </div>
 
           <div v-show="isSubmit === true">
+          <div>
+            <v-btn small outlined color="purple darken-2"  @click="back()" class="mb-5">Back</v-btn>
+          </div>
           <v-row  class="pl-5">
             <v-col cols="6">
-              <v-select v-model="customerBarangay" :items="barangays" label="Barangay"></v-select>
+              <v-select v-model="customerBarangay"      :error-messages="customerBarangayErrors"
+                @input="$v.customerBarangay.$touch()"
+                @blur="$v.customerBarangay.$touch()" :items="barangays" label="Barangay"></v-select>
             </v-col>
             <v-col cols="6">
               <v-text-field
@@ -91,7 +101,7 @@
           </v-row>
           <v-row>
             <v-col cols="6" class="pl-5">
-              <v-text-field min="0" type="number" label="Quantity" v-model="jarQuantity">
+              <v-text-field min=0 type="number" label="Quantity" v-model="jarQuantity">
                 <template slot="prepend">
                   <div id="vue-counter">
                     <v-icon type="button" v-on:click="increaseJar">mdi-plus</v-icon>
@@ -101,7 +111,7 @@
               </v-text-field>
             </v-col>
             <v-col cols="6" class="pl-5">
-              <v-text-field min="0" type="number" label="Quantity" v-model="tabQuantity">
+              <v-text-field min=0 type="number" label="Quantity" v-model="tabQuantity">
                 <template slot="prepend">
                   <div id="vue-counter">
                     <v-icon type="button" v-on:click="increaseTub">mdi-plus</v-icon>
@@ -142,7 +152,7 @@
         </v-container>
         <v-card-actions v-show="isSubmit === true">
           <v-spacer></v-spacer>
-          <v-btn outlined color="orange" @click="addOrderDialog = false" class="mb-5">CANCEL</v-btn>
+          <v-btn outlined color="orange" @click="addOrderDialog = false, isSubmit=false" class="mb-5">CANCEL</v-btn>
           <v-btn outlined color="purple darken-2" @click="addCard()" class="mb-5">CREATE</v-btn>
         </v-card-actions>
       </v-card>
@@ -288,6 +298,7 @@
   min-height: 100vh;
   justify-content: center;
 }
+
 </style>
 
 <script>
@@ -320,8 +331,8 @@ export default {
       customerMunicipality: null,
       orderStatus: "",
       date: null,
-      jarQuantity: "0",
-      tabQuantity: "0",
+      jarQuantity: 0,
+      tabQuantity: 0,
       distance: 0,
       jarName: null,
       tubName: null,
@@ -332,9 +343,12 @@ export default {
       disableButton: false,
       addCardDialog: false,
       totalPay: 0,
-      barangays: [],
-      municipalities: [],
-      list_of_municipalities_names: [],
+      barangays:[], 
+      contactRules: [
+      v => !!v || "Phone number is required",
+      v => /^(09|\+639)\d{9}$/.test(v) || "Input valid phone number"
+    ],
+      list_of_municipalities_names: ["CEBU CITY (CAPITAL)", "MANDAUE CITY"],
       isSubmit: false
     };
   },
@@ -428,13 +442,6 @@ export default {
         errors.push("Municipality is required.");
       return errors;
     },
-    // customerProvinceErrors() {
-    //   const errors = [];
-    //   if (!this.$v.customerProvince.$dirty) return errors;
-    //   !this.$v.customerProvince.required &&
-    //     errors.push("Province is required.");
-    //   return errors;
-    // },
     deliveryDateErrors() {
       const errors = [];
       if (!this.$v.date.$dirty) return errors;
@@ -453,9 +460,7 @@ export default {
   created() {
     this.getHalayaTub(), 
     this.getHalayaJar();
-    this.getMunicipalityCode();
   },
-
   methods: {
     showDialog() {
       this.$v.$reset();
@@ -466,10 +471,30 @@ export default {
       // this.customerProvince = null;
       this.customerName = null;
       this.contactNumber = null;
-      this.jarQuantity = "0";
-      this.tabQuantity = "0";
+      this.jarQuantity = 0;
+      this.tabQuantity = 0;
       this.orderQuantity = null;
       this.date = null;
+    },   
+    submit(customer_municipality){
+      this.isSubmit = true;
+      var barangay_list = [];
+      var brgy_array = [];
+        if (customer_municipality === "MANDAUE CITY") {
+          barangay_list = address.getBarangaysOfCityMun("072230");
+          barangay_list.barangays.forEach(function (brgy){
+            brgy_array.push(brgy.name);
+          })
+        }else {
+          barangay_list = address.getBarangaysOfCityMun("072217");
+          barangay_list.barangays.forEach(function (brgy){
+            brgy_array.push(brgy.name);
+          })
+        }
+      this.barangays = brgy_array;
+    }, 
+    back(){
+      this.isSubmit = false;
     },
     getOrderStatus(qty) {
       if (qty <= 9) {
@@ -478,33 +503,14 @@ export default {
         return "Pending";
       }
     },
-    getMunicipalityCode() {
-      this.municipalities = address.getCityMunOfProvince("0722"); // province_code = 0722
-      var municipal_names = [];
-      this.municipalities.cityAndMun.forEach(function(item) {
-        municipal_names.push(item.name);
-      });
-      this.list_of_municipalities_names = municipal_names;
-    },     
-    submit(customer_municipality){
-      this.isSubmit = true;
-      var barangay_list = [];
-      var brgy_array = [];
-      this.municipalities.cityAndMun.forEach(function(item) {
-        if (item.name === customer_municipality) {
-          barangay_list = address.getBarangaysOfCityMun(item.mun_code);
-          barangay_list.barangays.forEach(function (brgy){
-            brgy_array.push(brgy.name);
-          })
-        }
-      });
-      this.barangays = brgy_array;
-    },                                              
     placeOrder() {
       this.$v.$touch();
       var street = this.customerStreet;
       var barangay = this.customerBarangay;
-      var municipality = this.customerMunicipality;
+      var municipality = 
+      // this.customerMunicipality;
+         this.customerMunicipality.charAt(0).toUpperCase() +
+          this.customerMunicipality.slice(1).toLowerCase();
       var province = this.customerProvince;
       this.addOrderDialog = false;
       this.addCardDialog = false;
@@ -565,6 +571,7 @@ export default {
                   timer: 1500
                 });
               }
+              this.isSubmit=false
             });
         });
     },
@@ -572,7 +579,7 @@ export default {
       var total_order_qty =
         parseInt(this.jarQuantity) + parseInt(this.tabQuantity) * 4;
       var maximum_order_qty = 96;
-      if (this.jarQuantity == "0" && this.tabQuantity == "0") {
+      if (this.jarQuantity == 0 && this.tabQuantity == 0) {
         Swal.fire({
           position: "center",
           icon: "warning",
@@ -581,7 +588,18 @@ export default {
           timer: 1500
         });
         this.addOrderDialog = true;
-      } else if (total_order_qty > maximum_order_qty) {
+      } else if(this.jarQuantity <0 ||this.tabQuantity <0){
+         Swal.fire({
+          position: "center",
+          icon: "warning",
+          title: "Your quantity must not be less than 0",
+          showConfirmButton: false,
+          timer: 1500
+        });
+        this.addOrderDialog = true;
+
+      }
+      else if (total_order_qty > maximum_order_qty) {
         Swal.fire({
           position: "center",
           icon: "warning",
