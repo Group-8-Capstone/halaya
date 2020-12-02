@@ -27,6 +27,7 @@
                 prepend-icon="mdi-phone"
                 label="Mobile Number"
                 v-model="contactNumber"
+                :rules="contactRules"
                 :error-messages="contactNumberErrors"
                 @input="$v.contactNumber.$touch()"
                 @blur="$v.contactNumber.$touch()"
@@ -119,8 +120,12 @@ export default {
       date:  new Date().toISOString().substr(0, 10),
       jarQuantity: "0",
       tabQuantity: "0",
-      totalPay:null,
-      distance: 0
+      totalPay:0,
+      distance: 0,
+      contactRules: [
+      v => !!v || "Phone number is required",
+      v => /^(09|\+639)\d{9}$/.test(v) || "Input valid phone number"
+    ],
     };
   },
   validations: {
@@ -253,13 +258,25 @@ export default {
         showConfirmButton: false,
         timer: 1500
       });
-      }else if(this.customerName == null ||
+      } else if(this.jarQuantity <0 ||this.tabQuantity <0){
+        this.$vloading.hide()
+        Swal.fire({
+          position: "center",
+          icon: "warning",
+          title: "Your quantity must not be less than 0",
+          showConfirmButton: false,
+          timer: 1500
+        });
+      }
+      else if(this.customerName == null ||
       this.contactNumber == null){
           this.$v.$touch();
            this.$vloading.hide()
         
       }
       else{
+          this.totalPay =
+          this.jarQuantity * this.jarPrice + this.tabQuantity * this.tubPrice
       var place = this.customerStreet.concat(
         " ",
         this.customerBarangay,
@@ -293,6 +310,7 @@ export default {
             contactNumber: this.contactNumber,
             jar_qty: this.jarQuantity,
             tub_qty: this.tabQuantity,
+            total_payment: this.totalPay,
             deliveryDate: this.date,
             orderStatus: 'Delivered',
             distance: dist

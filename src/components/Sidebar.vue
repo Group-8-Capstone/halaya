@@ -257,7 +257,7 @@ beforeCreate() {
       });
     },
     logout(item) {
-      if (item.text == "logout") {
+      if (item.text == "Logout") {
         localStorage.clear();
       }
     },

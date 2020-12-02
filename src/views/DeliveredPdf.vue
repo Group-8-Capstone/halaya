@@ -28,12 +28,18 @@
             <div>
               <h4>WAWEN'S UBE HALAYA</h4>
               <h6>DELIVERED ORDERS</h6>
+              <h6></h6>
               <br>
             </div>
           </center>
           <div style="margin:1px" class="pa-0">
             <div>
-              <v-data-table :headers="headers" :items="deliveredOrder">
+              <v-data-table
+                :headers="headers"
+                :items="deliveredOrder"
+                hide-default-footer
+                disable-pagination
+              >
                 <template v-slot:item.preferred_delivery_date="{ item }">
                   <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>
                 </template>
@@ -41,6 +47,7 @@
                   <v-chip color="green">{{ item.order_status }}</v-chip>
                 </template>
               </v-data-table>
+              <br>
             </div>
           </div>
         </section>

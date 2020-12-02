@@ -9,12 +9,12 @@
                 <v-list-item id="cardHeader" size="150">
                   <v-list-item-content>
                     <v-list-item-title
-                      class="d-flex align-center justify-center pa-6 mx-auto headline"
+                      class="d-flex align-center justify-center pa-3 mx-auto headline"
                     >Sign Up</v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
                 <v-list-item class="d-flex align-center justify-center pa-6 mx-auto">
-                  <img alt="wawen's ube halaya" src="../assets/wawens.png" height="154">
+                  <img alt="wawen's ube halaya" src="../assets/wawens.png" height="140">
                 </v-list-item>
                 <v-spacer></v-spacer>
                 <v-card-text>
@@ -34,27 +34,15 @@
                     <v-snackbar v-model="dialog" color="deep-purple accent-4" elevation="24">
                       Username already exists
                       <template v-slot:action="{ attrs }">
-                        <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">Close</v-btn>
+                        <v-btn color="white" text v-bind="attrs" @click="dialog = false">Close</v-btn>
                       </template>
                     </v-snackbar>
-                       <!-- <v-dialog class="modal"  v-model="dialog">
-                          <v-card>
-                            <v-card-text>
-                             Username is already exists. Try a new one
-                            </v-card-text>
-                            <v-divider></v-divider>
-                            <v-card-actions>
-                              <v-spacer></v-spacer>
-                              <v-btn
-                                color="primary"
-                                text
-                                @click="dialog = false"
-                              >
-                                Okay
-                              </v-btn>
-                            </v-card-actions>
-                          </v-card>
-                       </v-dialog> -->
+                      <v-snackbar v-model="allFieldDialog" color="deep-purple accent-4" elevation="24">
+                      All field is required
+                      <template v-slot:action="{ attrs }">
+                        <v-btn color="white" text v-bind="attrs" @click="allFieldDialog = false">Close</v-btn>
+                      </template>
+                    </v-snackbar>
                     <v-text-field
                       id="contact"
                       label="Phone"
@@ -70,7 +58,7 @@
                     <v-snackbar v-model="isValidContact" color="deep-purple accent-4" elevation="24">
                       Phone number is not available
                       <template v-slot:action="{ attrs }">
-                        <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">Close</v-btn>
+                        <v-btn color="white" text v-bind="attrs" @click="isValidContact = false">Close</v-btn>
                       </template>
                     </v-snackbar>
                     <v-text-field
@@ -103,7 +91,7 @@
                   </v-form>
                 </v-card-text>
                 <center>
-                  <v-btn id="btnLogin" class="mb-5" block outlined rounded @click="signUp">Sign Up</v-btn>
+                  <v-btn id="btnLogin" class="mb-5" block outlined @click="signUp">Sign Up</v-btn>
                 </center>
                 <div align="center" justify="center">
                   <span>
@@ -153,6 +141,7 @@ export default {
     valid: false,
     username: "",
     dialog: false,
+    allFieldDialog:false,
     isValidContact: false,
     showPassword: false,
     nameRules: [
@@ -191,7 +180,7 @@ export default {
   mounted() {},
   methods: {
     signUp() {
-        this.$vloading.show();
+      this.$vloading.show();
       let Reg = {
         uName: this.username,
         phone: this.contact,
@@ -200,18 +189,22 @@ export default {
         role: "customer"
       };
       axios.post(this.url + "/api/register", Reg).then(response => {
-        if (response.data.message.message == "success") {
+        if (response.data.message == "success") {
           localStorage.setItem("token", response.data.token);
           localStorage.setItem("id", response.data.user.id);
           localStorage.setItem("role", response.data.user.role);
-        this.$vloading.hide()
           this.$router.push("/customerHome");
+          this.$vloading.hide()
         } else if (response.data.message === "invalid_username") {
-          this.dialog = true;
+            this.$vloading.hide()
+            this.dialog = true;
+        }
+        else if (this.username===''|| this.contact ===''|| this.userPassword===''||this.cPassword===''){
           this.$vloading.hide()
-        } else if (response.date.message === "Phone_not_available"){
+          this.allFieldDialog = true;
+        } else if (JSON.parse(response.data).hasOwnProperty('phone')){
+          this.$vloading.hide()
           this.isValidContact = true;
-          this.$vloading.hide()
         }
       });
     }
