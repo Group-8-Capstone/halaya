@@ -28,7 +28,7 @@
             <v-col cols="6">
               <v-text-field
                 prepend-icon="mdi-account-outline"
-                label="Receiver Name"
+                label="Receiver's Name"
                 v-model="customerName"
                 :error-messages="customerErrors"
                 @input="$v.customerName.$touch()"
@@ -70,7 +70,7 @@
 
           <div v-show="isSubmit === true">
           <div>
-            <v-btn small outlined color="purple darken-2"  @click="back()" class="mb-5">Back</v-btn>
+            <v-btn small outlined color="purple darken-2"  @click="back()" class="mb--5 ml-5">Back</v-btn>
           </div>
           <v-row  class="pl-5">
             <v-col cols="6">
@@ -389,6 +389,7 @@ export default {
       required
     }
   },
+  
 
   computed: {
     isDisabled() {
@@ -481,6 +482,13 @@ export default {
       this.date = null;
     },   
     submit(customer_municipality){
+      if( this.customerName == null ||
+        this.contactNumber==null ||
+        this.customerMunicipality == null){
+        this.$v.$touch();
+        this.isSubmit = false;
+        }else{
+       this.$v.$reset();
       this.isSubmit = true;
       var barangay_list = [];
       var brgy_array = [];
@@ -496,6 +504,7 @@ export default {
           })
         }
       this.barangays = brgy_array;
+      }
     }, 
     back(){
       this.isSubmit = false;

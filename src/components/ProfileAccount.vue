@@ -9,7 +9,8 @@
                                   <center>
                                     <img style="max-width:100%;height:auto;" class="addOnsImage" :src="imageURL"><br>
                                      <h4 class=" gray--text">{{username}}</h4>
-                                    <input type="file" class="fileStyle deep-purple--text" id="imageUpload"  v-on:change="onImageChange">
+                                     <p class=" gray--text">Edit Profile Picture</p>
+                                    <input type="file" class="fileStyle deep-purple--text"  accept="image/jpeg, image/png, image/gif" id="imageUpload"  v-on:change="onImageChange">
                                     
                             </center>
                             </v-container>
@@ -24,7 +25,6 @@
                     <span id="message"></span>
                   <v-row>
                     <v-col cols="12">  <v-text-field
-                      
                       v-model="userPassword"
                       prepend-icon="mdi-lock"
                       label="Enter password"
@@ -204,9 +204,9 @@ import {
                 axios.post(this.url+'/api/ProfilePicUpdate/'+id, formData, this.config).then(function (response) {
                     currentObj.success = response.data.success
                     window.location.reload()
-                    setTimeout(() => {
+                  
                     this.$vloading.hide()
-                  },1000)  
+               
                      
                 })
                 .catch(function (error) {
@@ -215,9 +215,8 @@ import {
             }else{
                 this.errorMessage = 'All fields are required!'
             }
-            setTimeout(() => {
-                    this.$vloading.hide()
-                  },1000)  
+           this.$vloading.hide()
+                 
                
         },
       avatarRetrieve() {
@@ -238,7 +237,16 @@ import {
     updatePassword(){
       if (this.userPassword ==null || this.confirmPassword ==null){
          this.$v.$touch();
-      }else{
+      }else if(this.userPassword != this.confirmPassword){
+          Swal.fire({
+                  position: "center",
+                  icon: "warning",
+                  text: "Mismatch password!",
+                  showConfirmButton: false,
+                  timer: 1500
+          });
+      }
+      else{
       this.$vloading.show();
       let id=localStorage.getItem('id')
       let param={
@@ -246,9 +254,7 @@ import {
       }
       axios.post(this.url+'/api/passwordUpdate/'+id, param, this.config)
             .then(response => {
-              setTimeout(() => {
               this.$vloading.hide()
-              },1000) 
                 Swal.fire({
                   position: "center",
                   icon: "success",
@@ -257,7 +263,6 @@ import {
                   timer: 1500
                 });
               })
-        // this.reloadPassword();
         this.$v.$reset();
       
     }

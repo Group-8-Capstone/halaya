@@ -18,7 +18,7 @@
                 </v-list-item>
                 <v-spacer></v-spacer>
                 <v-card-text>
-                  <v-form autocomplete="off">
+                  <v-form autocomplete="off"  v-model="isFormValid">
                     <v-text-field
                       ref="username"
                       label="Username"
@@ -85,7 +85,7 @@
                   </v-form>
                 </v-card-text>
                 <center>
-                  <v-btn id="btnLogin" class="mb-5" block outlined @click="signUp">Sign Up</v-btn>
+                  <v-btn id="btnLogin" class="mb-5" block outlined @click="signUp" :disabled="!isFormValid">Sign Up</v-btn>
                 </center>
                 <div align="center" justify="center">
                   <span>
@@ -131,6 +131,7 @@
 import axios from "axios";
 export default {
   data: () => ({
+    isFormValid: false,
     loading: false,
     valid: false,
     username: "",
@@ -169,7 +170,6 @@ export default {
         this.userPassword === this.cPassword || "Password does not match";
     }
   },
-
   mounted() {},
   methods: {
     signUp() {

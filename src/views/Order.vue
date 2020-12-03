@@ -27,6 +27,9 @@
               <template v-slot:item.preferred_delivery_date="{ item }">
                 <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>
               </template>
+               <template v-slot:item.contact_number="{ item }">
+              <span>{{'0'+item.contact_number}}</span>
+            </template>
               <template v-slot:item.order_status="{ item }">
                 <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
               </template>
@@ -75,6 +78,9 @@
           <v-data-table :headers="headers" :items="pendingOrders" :search="search1">
             <template v-slot:item.preferred_delivery_date="{ item }">
               <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>
+            </template>
+            <template v-slot:item.contact_number="{ item }">
+              <span>{{'0'+item.contact_number}}</span>
             </template>
             <template v-slot:item.order_status="{ item }">
               <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
@@ -203,11 +209,9 @@
         </v-dialog>
           </v-form>
       </template>
-      
     </v-card>
   </div>
 </template>
-
 <style>
 .mr-2:hover {
   color: purple;
@@ -303,6 +307,7 @@ export default {
           value: "receiver_name"
         },
         { text: "Address", value: "customer_address", sortable: false },
+        { text: "Mobile Number", value: "contact_number", sortable: false },
         { text: "Distance", value: "distance" },
         {
           text: "Delivery Date",
@@ -377,6 +382,7 @@ export default {
     channel.bind('newOrder', data => {
       console.log(data.order);
       this.fetchOrders();
+      this.fetchPendingOrders();
     });
   },
 
@@ -704,6 +710,7 @@ export default {
       axios
         .post(this.url + "/api/post/confirm/" + item.id, {}, this.config)
         .then(response => {
+          console.log(response.data)
           this.$vloading.hide()
           Swal.fire({
             title: "Order is being confirmed",

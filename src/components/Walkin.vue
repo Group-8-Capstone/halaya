@@ -96,6 +96,7 @@ export default {
     name:"Walkin",
   data() {
     return {
+      valid: true,
       loading: false,
       accessToken:
         "pk.eyJ1IjoiamllbnhpeWEiLCJhIjoiY2tlaTM3d2VrMWcxczJybjc0cmZkamk3eiJ9.JzrYlG2kZ08Pkk24hvKDJw",
@@ -104,7 +105,7 @@ export default {
       addOrderDialog: false,
       customerStreet: "Shambala Veterinary Clinic Hernan Cortes Street",
       customerBarangay: "Bakilid",
-      customerCity: "Mandaue City",
+      customerCity: "Mandaue city",
       customerProvince: "Cebu",
       customerName: null,
       contactNumber: null,
