@@ -22,7 +22,14 @@ export default {
       }
     };
   },
-  created() {},
+  beforeCreate() {
+    let config = {};
+    config.headers = {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+      "Access-Control-Allow-Origin": "*"
+    };
+    this.config = config;
+  },
   mounted() {
     mapboxgl.accessToken = this.accessToken;
     var map = new mapboxgl.Map({
@@ -32,53 +39,67 @@ export default {
       zoom: 12
     });
 
-    axios
-      .get(this.url+"/api/orders/confirmed")
-      .then(response => {
-        let Data = response.data;
-        let address = [];
-        console.log("Data: ", Data);
-        for (var i = 0; i < Data.length; i++) {
-          address.push(Data[i].delivery_address);
-          console.log('delivery_Address: ', address);
-          axios
-            .get(
-              `https://api.mapbox.com/geocoding/v5/mapbox.places/${
-                Data[i].delivery_address
-              }.json?limit=2&access_token=${mapboxgl.accessToken}`
-            )
-            .then(response => {
-              let result = response.data;
+    axios.get(this.url + "/api/posts/delivery", this.config).then(response => {
+      setTimeout(() => {
+        this.$vloading.hide();
+      }, 1000);
+      var result = response.data.data;
+      result.forEach(element => {
+        let {
+          building_or_street,
+          barangay,
+          city_or_municipality,
+          province
+        } = element;
 
-              //getting the distance
-              var from_place = turf.point([123.921969, 10.329892]);
-              var to_place = turf.point(result.features[0].geometry.coordinates);
-              var options = { units: "kilometers" };
-              var distance = turf.distance(from_place, to_place, options);
-              
-              // add markers to map
-              var el = document.createElement("div");
-              el.className = "marker";
+        let full_address = building_or_street.concat(
+          " ",
+          barangay,
+          " ",
+          city_or_municipality,
+          " ",
+          province
+        );
 
-              // make a marker for each feature and add to the map
-              new mapboxgl.Marker()
-                .setLngLat(result.features[0].geometry.coordinates)
-                .setPopup(
-                  new mapboxgl.Popup() // add popups
-                    .setHTML(
-                      "<h3>" +
-                        result.features.place_name +
-                        "</h3><p>" +
-                        distance +
-                        " kilometers away from your location</p>"
-                    )
-                )
-                .addTo(map);
-            });
-        }
+        axios
+          .get(
+            `https://api.mapbox.com/geocoding/v5/mapbox.places/${full_address}.json?country=ph&limit=2&access_token=${
+              this.accessToken
+            }`
+          )
+          .then(response => {
+
+            let res = response.data;
+
+            //getting the distance
+            var from_place = turf.point([123.921969, 10.329892]);
+            var to_place = turf.point(res.features[0].geometry.coordinates);
+            var options = { units: "kilometers" };
+            var distance = turf.distance(from_place, to_place, options);
+
+            // add markers to map
+            var el = document.createElement("div");
+            el.className = "marker";
+
+            // make a marker for each feature and add to the map
+            new mapboxgl.Marker()
+              .setLngLat(res.features[0].geometry.coordinates)
+              .setPopup(
+                new mapboxgl.Popup() // add popups
+                  .setHTML(
+                    "<h3>" +
+                      res.features[0].place_name +
+                      "</h3><p>" +
+                      Math.round((distance + Number.EPSILON) * 100) / 100 +
+                      " kilometers away from your location</p>"
+                  )
+              )
+              .addTo(map);
+          });
       });
+    });
   },
-  methods: {},
+  methods: {}
 };
 </script>
 

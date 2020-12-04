@@ -260,6 +260,7 @@ export default {
     model: 1,
     mini: true,
     count: 0,
+    sound:'http://soundbible.com/mp3/Elevator Ding-SoundBible.com-685385892.mp3',
     admin: [
       { icon: "mdi-view-dashboard", text: "Dashboard", link: "/dashboard" },
       {
@@ -352,6 +353,10 @@ export default {
     this.isAdmin();
   },
   methods: {
+    playSound () {
+        var audio = new Audio(this.sound);
+        audio.play();
+    },
 
      getOrder(item, event) {
        this.$router.push('/order').catch(err => {});
@@ -376,13 +381,13 @@ export default {
     },
     retrieve(){
       axios.get(this.url + "/api/fetchProcessOrder", this.config).then(response => {
-        console.log(response.data.data)
-        this.storeData = response.data.data
+        this.storeData = response.data.data;
+        this.playSound();
       axios
         .get(this.url+"/api/unreadAdminOrder" , this.config)
         .then(response => {
-          console.log(response.data.post)
         this.count =  response.data.post.length
+      
         });
       })
     },
@@ -393,6 +398,7 @@ export default {
         .get(this.url+"/api/fetchOngoingOrder/" + id, this.config)
         .then(response => {
           this.storeConfirm = response.data.post;
+          this.playSound();
         });
       axios
         .get(this.url+"/api/unReadOrder/" + id, this.config)

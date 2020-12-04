@@ -302,6 +302,7 @@
   min-height: 100vh;
   justify-content: center;
 }
+
 </style>
 
 <script>
@@ -537,7 +538,7 @@ export default {
         " ",
         province
       );
-      console.log("place: ", place);
+      
       axios
         .get(
           `https://api.mapbox.com/geocoding/v5/mapbox.places/${place}.json?country=ph&limit=2&access_token=${
@@ -547,7 +548,7 @@ export default {
         .then(response => {
           let res = JSON.stringify(response.data);
           let result = JSON.parse(res);
-          // console.log("--->>>", result);
+          
           var coordinates = result.features[0].geometry.coordinates;
           var from_place = turf.point([123.921969, 10.329892]);
           var to_place = turf.point(coordinates);
@@ -567,7 +568,7 @@ export default {
             total_payment: this.totalPay,
             deliveryDate: this.date,
             orderStatus: this.getOrderStatus(this.jarQuantity),
-            distance: dist
+            distance: Math.round((dist + Number.EPSILON) * 100) / 100
           };
 
           axios

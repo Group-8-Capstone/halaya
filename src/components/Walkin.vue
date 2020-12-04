@@ -160,7 +160,6 @@ export default {
       Authorization: 'Bearer ' + localStorage.getItem('token')
     }
     this.config = config
-    console.log(this.config)
   },
 
   computed: {
@@ -249,7 +248,7 @@ export default {
       if (this.jarQuantity=='0' && this.tabQuantity=='0' ){
             setTimeout(() => {
         this.$vloading.hide()
-         },1000) 
+         }, 1000) 
          Swal.fire({
         position: "center",
         icon: "warning",
@@ -312,16 +311,16 @@ export default {
             total_payment: this.totalPay,
             deliveryDate: this.date,
             orderStatus: 'Delivered',
-            distance: dist
+            distance: Math.round((dist + Number.EPSILON) * 100) / 100
           };
          
           axios
             .post(this.url+"/api/post/createOrder", param,this.config)
             .then(response => {
-               console.log(response)
                 setTimeout(() => {
                 this.$vloading.hide()
                 },1000) 
+              if (response.data == "success") {
                 Swal.fire({
                   position: "center",
                   icon: "success",
@@ -329,8 +328,8 @@ export default {
                   showConfirmButton: false,
                   timer: 1500
                 });
-              this.showDialog()
-              
+              this.showDialog();
+              }
             });
         });
         } 

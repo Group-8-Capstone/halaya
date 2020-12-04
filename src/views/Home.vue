@@ -450,6 +450,7 @@ export default {
               }
             });
             this.initializeData(weeklyCategory, weeklySeries);
+            console.log("Weekly Sales"+weeklySeries)
           }
         });
     },
