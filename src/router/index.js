@@ -174,8 +174,10 @@ router.beforeEach(async(to, from, next) => {
   //   next('/login')
   // }
   // next();
+  // console.log(to)
   if(requiresAuth){
-    if(authenticated){
+    if(authenticated ){
+      // console.log(from.path)
       next();
     }else{
       next('/login')

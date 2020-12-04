@@ -8,6 +8,87 @@
         <img src="../assets/wawens.png">
       </v-list-item-avatar>
       <v-toolbar-title class="deep-purple--text">WAWEN'S UBE HALAYA</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <!-- <v-app-bar-items name="theitem" class="hidden-sm-and-down" app> -->
+         <template v-if="isAdmin() === true">
+        <div>
+          <v-menu offset-y>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn v-bind="attrs" v-on="on" icon>
+                <v-icon medium color="black" right>mdi-bell-ring</v-icon>
+                <span style="background-color: red; color: white; border-radius: 50%; font-size: 15px; margin-left: -5%; margin-top: -25%; z-index: 9999">{{count > 0 ? '&nbsp;&nbsp;' + count + '&nbsp;&nbsp;' : ''}}</span>
+              </v-btn>
+            </template>
+              <v-list
+              v-if="storeData.length > 0"
+              style="max-height: 300px; max-width: 300px"
+              class="overflow-y-auto notifDropdown"
+            >
+          
+              <v-list-item
+                v-for="(item, index) in storeData"
+                :key="index"
+                @click="getOrder(item, $event)"
+              >
+                <v-card class="cardNotif" >
+                <v-list-item-title style="font-size:12px" v-bind:class='{ "read": item.mark_adminstatus == "Read", "unread": item.mark_adminstatus == "Unread" }'>{{notif(item)}}</v-list-item-title>
+                </v-card> 
+
+              </v-list-item>
+             
+            </v-list>
+        
+            <v-list
+              v-if="storeData.length <= 0"
+              style="max-height: 300px; max-width: 300px"
+              class="overflow-y-auto notifDropdown"
+            >
+              <v-list-item>
+                <v-list-item-title style="font-size:12px">- - - - No Order - - - -</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </div>
+         </template>
+
+            <template v-if="isCustomer() === true">
+        <div>
+          <v-menu offset-y>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn v-bind="attrs" v-on="on" icon>
+                <v-icon medium color="black" right>mdi-bell-ring</v-icon>
+                <span style="background-color: red; color: white; border-radius: 50%; font-size: 15px; margin-left: -5%; margin-top: -25%; z-index: 9999">{{countPending > 0 ? '&nbsp;&nbsp;' + countPending + '&nbsp;&nbsp;' : ''}}</span>
+              </v-btn>
+            </template>
+              <v-list
+              v-if="storeConfirm.length > 0"
+              style="max-height: 300px; max-width: 300px"
+              class="overflow-y-auto notifDropdown"
+            >
+            <v-list-item
+                v-for="(item, index) in storeConfirm"
+                :key="index"
+                @click="customerOrder(item, $event)"
+              >
+              <v-card class="cardNotif" >
+                <v-list-item-title style="font-size:12px" v-bind:class='{ "read": item.mark_status == "Read", "unread": item.mark_status == "Unread" }'>{{notifCustomerOrder(item)}}</v-list-item-title>
+                </v-card>
+              </v-list-item>
+
+            </v-list>
+            <v-list
+              v-if="storeConfirm.length <= 0"
+              style="max-height: 300px; max-width: 300px"
+              class="overflow-y-auto notifDropdown"
+            >
+              <v-list-item>
+                <v-list-item-title style="font-size:12px">- - - - No Order - - - -</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </div>
+         </template>
+      <!-- </v-app-bar-items> -->
     </v-app-bar>
     <v-navigation-drawer
       v-model="drawer"
@@ -150,14 +231,26 @@
 .sub_title {
   font-size: 15px;
 }
+.unread{
+  background-color: plum;
+  padding: 2%
+}
+.cardNotif{
+  padding: 10px;
+  font-size: 15px;
+}
 </style>
 <script>
 import axios from "axios";
 import { forestgreen } from "color-name";
+import moment from 'moment';
 export default {
   name: "Sidebar",
   props: {},
   data: () => ({
+    storeData: [],
+    countPending:0,
+    storeConfirm:[],
     avatarSrc:'https://wawenshalaya.herokuapp.com/images/avatar.png',
     image: null,
     name: null,
@@ -166,6 +259,8 @@ export default {
     drawer: true,
     model: 1,
     mini: true,
+    count: 0,
+    sound:'http://soundbible.com/mp3/Elevator Ding-SoundBible.com-685385892.mp3',
     admin: [
       { icon: "mdi-view-dashboard", text: "Dashboard", link: "/dashboard" },
       {
@@ -229,8 +324,22 @@ export default {
       { icon: "mdi-logout", text: "Logout", link: "/login" }
     ]
   }),
+  mounted(){
+    this.confirmPending()
+    this.retrieve()
+    let pusher = new Pusher('c31b45d58431fd307880', {
+      cluster: 'ap1',
+      encrypted: false
+    });
+    let channel = pusher.subscribe('order-channel')
+    channel.bind('newOrder', data => {
+      this.retrieve(),
+      this.confirmPending(),
+      this.notifCustomerOrder()
+    });
+  },
 
-beforeCreate() {
+  beforeCreate() {
     let config = {};
     config.headers = {
       Authorization: "Bearer " + localStorage.getItem("token"),
@@ -244,6 +353,59 @@ beforeCreate() {
     this.isAdmin();
   },
   methods: {
+    playSound () {
+        var audio = new Audio(this.sound);
+        audio.play();
+    },
+
+     getOrder(item, event) {
+       this.$router.push('/order').catch(err => {});
+       axios.post(this.url + "/api/updateadminStatus/" + item.id, {}, this.config)
+        .then(response => {
+        });
+    },
+     notif(item){
+      let date = moment(item.created_at).format('MM/DD/YYYY HH:mm');
+      return item.receiver_name + ' '+'place an order on'+' '+ date
+    },
+    customerOrder(item, event) {
+       this.$router.push('/myorder').catch(err => {});
+      axios.post(this.url + "/api/updateMarkStatus/" + item.id, {}, this.config)
+        .then(response => {
+        });
+  
+    },
+  notifCustomerOrder(item){
+      let date = moment(item.created_at).format('MM/DD/YYYY');
+      return item.receiver_name +' '+'ordered ube halaya'+' ' + date
+    },
+    retrieve(){
+      axios.get(this.url + "/api/fetchProcessOrder", this.config).then(response => {
+        this.storeData = response.data.data;
+        this.playSound();
+      axios
+        .get(this.url+"/api/unreadAdminOrder" , this.config)
+        .then(response => {
+        this.count =  response.data.post.length
+      
+        });
+      })
+    },
+    
+    confirmPending(){
+      let id = localStorage.getItem("id");
+      axios
+        .get(this.url+"/api/fetchOngoingOrder/" + id, this.config)
+        .then(response => {
+          this.storeConfirm = response.data.post;
+          this.playSound();
+        });
+      axios
+        .get(this.url+"/api/unReadOrder/" + id, this.config)
+        .then(response => {
+           this.countPending =  response.data.post.length
+        });
+    },
     goTo(route) {
       alert(route);
       this.$router.push(route);
@@ -253,7 +415,6 @@ beforeCreate() {
       axios.get(this.url+"/api/fetchProfile/"+ id, this.config).then(response => {
         this.name = response.data.account[0].username;
         this.image=response.data.account[0].profile_url
-  
       });
     },
     logout(item) {

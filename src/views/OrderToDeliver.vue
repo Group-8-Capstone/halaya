@@ -202,6 +202,21 @@ export default {
     };
     this.config = config;
   },
+   mounted(){
+    let pusher = new Pusher('c31b45d58431fd307880', {
+        cluster: 'ap1',
+        encrypted: false
+      });
+
+      //Subscribe to the channel we specified 
+    let channel = pusher.subscribe('order-channel')
+
+    channel.bind('newOrder', data => {
+      this.dataGrouping();
+     
+    
+    });
+  },
   created() {
     this.dataGrouping();
     setInterval(this.dataGrouping(), 3000);

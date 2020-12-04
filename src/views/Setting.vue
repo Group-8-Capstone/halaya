@@ -430,7 +430,7 @@ export default {
         title: "Are you sure?",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: "purple darken-285d6",
+        confirmButtonColor: "purple",
         cancelButtonColor: "orange",
         cancelButtonText: "No",
         confirmButtonText: "Yes",

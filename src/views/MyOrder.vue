@@ -101,6 +101,20 @@ export default {
     this.retrieveOnOrder();
     this.retrieveDeliveredOrder();
   },
+  mounted(){
+    let pusher = new Pusher('c31b45d58431fd307880', {
+        cluster: 'ap1',
+        encrypted: false
+      });
+
+    //Subscribe to the channel we specified 
+    let channel = pusher.subscribe('order-channel')
+    channel.bind('newOrder', data => {
+      this.retrieveDeliveredOrder();
+      this.retrieveOnOrder()
+    
+    });
+  },
   methods: {
     retrieveOnOrder() {
       this.$vloading.show();
@@ -108,9 +122,7 @@ export default {
       axios
         .get(this.url + "/api/fetchOngoingOrder/" + id, this.config)
         .then(response => {
-          setTimeout(() => {
-            this.$vloading.hide();
-          }, 1000);
+            this.$vloading.hide()
           this.onOrder = response.data.post;
         });
     },
@@ -125,9 +137,7 @@ export default {
       axios
         .get(this.url + "/api/fetchDeliveredOrder/" + id, this.config)
         .then(response => {
-          setTimeout(() => {
-            this.$vloading.hide();
-          }, 1000);
+            this.$vloading.hide()
           this.deliveredOrder = response.data.post;
         });
     },
