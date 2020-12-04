@@ -77,7 +77,7 @@
                   block
                   outlined
                   @click="login"
-                >Log In</v-btn>
+                >Login</v-btn>
               </center>
               <div align="center" justify="center">
                   <span>

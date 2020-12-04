@@ -73,24 +73,24 @@ export default {
     valuePass: true,
     valid: false,
     value: true,
-    contact: "",
+    username: "",
     forgotPassData: [], // [contact number, code, new password, confirmed new password]
-    contactRules: [
-      v => !!v || "Phone number is required",
-      v => /^(09|\+639)\d{9}$/.test(v) || "Input valid phone number"
-    ],
+    // contactRules: [
+    //   v => !!v || "Phone number is required",
+    //   v => /^(09|\+639)\d{9}$/.test(v) || "Input valid phone number"
+    // ],
     curr: 1 ,
     lastStep: 4,
     steps: [
       {
         name: "Start",
         rules: [
-          v => !!v || "Contact number is required",
-          v => /^(09|\+639)\d{9}$/.test(v) || "Input valid phone number"
+           v => !!v || "Username is required",
+           v => /^[a-zA-Z0-9.\-_$@*!]{5,30}$/.test(v) || "Invalid Username",
         ],
         valid: true,
-        label: "Contact Number",
-        placeholder: " Enter contact number"
+        label: "Username",
+        placeholder: " Enter username"
       },
       {
         name: "Step 2",
@@ -134,11 +134,11 @@ export default {
       return new Promise((resolve, reject) => {
         switch (this.curr) {
           case 1:
-            let contactInfo = {
-              contacts: this.forgotPassData[0]
+            let userInfo = {
+              username: this.forgotPassData[0]
             };
             axios
-              .post(this.url + "/api/forgotPassword", contactInfo)
+              .post(this.url + "/api/forgotPassword", userInfo)
               .then(response => {
                 console.log(response.data);
                 resolve(true);

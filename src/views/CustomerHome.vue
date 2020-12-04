@@ -12,6 +12,9 @@
       </v-card-title>
       <OrderingInfo></OrderingInfo>
     </v-card>
+     <v-form ref="form"
+    v-model="valid"
+    lazy-validation>
     <v-dialog v-model="addOrderDialog" style="height:auto;" width="500px">
       <v-card class="ma-0 pa-0">
         <v-card-title class="align-center">
@@ -19,13 +22,13 @@
             class="d-flex align-center justify-center mx-auto headline black--text"
           >CREATE ORDER</v-list-item-title>
         </v-card-title>
-        <v-container>
+          <v-container>
           <div v-show="isSubmit === false">
           <v-row>
             <v-col cols="6">
               <v-text-field
                 prepend-icon="mdi-account-outline"
-                label="Receiver Name"
+                label="Receiver's Name"
                 v-model="customerName"
                 :error-messages="customerErrors"
                 @input="$v.customerName.$touch()"
@@ -67,7 +70,7 @@
 
           <div v-show="isSubmit === true">
           <div>
-            <v-btn small outlined color="purple darken-2"  @click="back()" class="mb-5">Back</v-btn>
+            <v-btn small outlined color="purple darken-2"  @click="back()" class="mb--5 ml-5">Back</v-btn>
           </div>
           <v-row  class="pl-5">
             <v-col cols="6">
@@ -149,7 +152,7 @@
             </v-col>
           </v-row>
           </div>
-        </v-container>
+          </v-container>
         <v-card-actions v-show="isSubmit === true">
           <v-spacer></v-spacer>
           <v-btn outlined color="orange" @click="addOrderDialog = false, isSubmit=false" class="mb-5">CANCEL</v-btn>
@@ -157,6 +160,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+     </v-form>
     <template>
       <v-row align="center" justify="center">
         <v-col sm="12" md="6" lg="6" xl="6">
@@ -251,7 +255,7 @@
             </v-col>
             <v-col cols="5" class="pl-12">
               <span>
-                <h4>Tub Quntity:</h4>
+                <h4>Tub Quantity:</h4>
                 {{tabQuantity}}
               </span>
             </v-col>
@@ -298,6 +302,7 @@
   min-height: 100vh;
   justify-content: center;
 }
+
 </style>
 
 <script>
@@ -315,6 +320,7 @@ import {
 export default {
   data() {
     return {
+      valid: true,
       loading: false,
       accessToken:
         "pk.eyJ1IjoiamllbnhpeWEiLCJhIjoiY2tlaTM3d2VrMWcxczJybjc0cmZkamk3eiJ9.JzrYlG2kZ08Pkk24hvKDJw",
@@ -344,7 +350,6 @@ export default {
       totalPay: 0,
       barangays:[], 
       contactRules: [
-      v => !!v || "Phone number is required",
       v => /^(09|\+639)\d{9}$/.test(v) || "Input valid phone number"
     ],
       list_of_municipalities_names: ["CEBU CITY (CAPITAL)", "MANDAUE CITY"],
@@ -385,6 +390,7 @@ export default {
       required
     }
   },
+  
 
   computed: {
     isDisabled() {
@@ -462,6 +468,7 @@ export default {
   },
   methods: {
     showDialog() {
+      this.$refs.form.reset()
       this.$v.$reset();
       this.addOrderDialog = true;
       this.customerStreet = null;
@@ -476,6 +483,13 @@ export default {
       this.date = null;
     },   
     submit(customer_municipality){
+      if( this.customerName == null ||
+        this.contactNumber==null ||
+        this.customerMunicipality == null){
+        this.$v.$touch();
+        this.isSubmit = false;
+        }else{
+       this.$v.$reset();
       this.isSubmit = true;
       var barangay_list = [];
       var brgy_array = [];
@@ -491,6 +505,7 @@ export default {
           })
         }
       this.barangays = brgy_array;
+      }
     }, 
     back(){
       this.isSubmit = false;
@@ -502,7 +517,15 @@ export default {
         return "Pending";
       }
     },
+    getPostalCode(city){
+      if(city == "Mandaue city"){
+        return 6014;
+      } else {
+        return 6000;
+      }
+    },
     placeOrder() {
+      this.$refs.form.validate()
       this.$v.$touch();
       var street = this.customerStreet;
       var barangay = this.customerBarangay;
@@ -522,7 +545,7 @@ export default {
         " ",
         province
       );
-      console.log("place: ", place);
+      
       axios
         .get(
           `https://api.mapbox.com/geocoding/v5/mapbox.places/${place}.json?country=ph&limit=2&access_token=${
@@ -532,7 +555,7 @@ export default {
         .then(response => {
           let res = JSON.stringify(response.data);
           let result = JSON.parse(res);
-          // console.log("--->>>", result);
+          
           var coordinates = result.features[0].geometry.coordinates;
           var from_place = turf.point([123.921969, 10.329892]);
           var to_place = turf.point(coordinates);
@@ -552,12 +575,16 @@ export default {
             total_payment: this.totalPay,
             deliveryDate: this.date,
             orderStatus: this.getOrderStatus(this.jarQuantity),
-            distance: dist
+            distance: Math.round((dist + Number.EPSILON) * 100) / 100,
+            longitude: result.features[0].geometry.coordinates[0],
+            latitude: result.features[0].geometry.coordinates[1],
+            postcode: this.getPostalCode(municipality)
           };
-
+          console.log('----', param)
           axios
             .post(this.url + "/api/post/createOrder", param, this.config)
             .then(response => {
+              console.log('>>>', response.data)
               setTimeout(() => {
                 this.$vloading.hide();
               }, 1000);
@@ -574,6 +601,9 @@ export default {
             });
         });
     },
+    reset () {
+        this.$refs.form.reset()
+      },
     addCard() {
       var total_order_qty =
         parseInt(this.jarQuantity) + parseInt(this.tabQuantity) * 4;

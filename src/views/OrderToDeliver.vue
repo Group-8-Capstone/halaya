@@ -5,6 +5,12 @@
         Deliveries for TODAY
         <v-spacer></v-spacer>
       </v-card-title>
+
+      <v-divider></v-divider>
+      <div>
+        <SortLocation/>
+        <!-- <div id="mapContainer" ref="mapContainer" class="basemap"></div> -->
+      </div>
       <template>
         <v-row justify="center">
           <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
@@ -144,16 +150,22 @@
 </template>
 
 <script>
+import mapboxgl from "mapbox-gl";
+import * as turf from "@turf/turf";
 import axios from "axios";
 import { connect } from "tls";
-import * as turf from "@turf/turf";
 import { setInterval } from "timers";
 import Swal from "sweetalert2";
 import { constants } from "os";
+import { stringify } from "querystring";
+import SortLocation from "../components/SortLocation.vue";
 export default {
   name: "Delivery",
+  components: { SortLocation },
   data() {
     return {
+      accessToken:
+        "pk.eyJ1IjoiamllbnhpeWEiLCJhIjoiY2tlaTM3d2VrMWcxczJybjc0cmZkamk3eiJ9.JzrYlG2kZ08Pkk24hvKDJw",
       delivery_range: [],
       detailsDialog: false,
       barangay_array: [],
@@ -190,6 +202,21 @@ export default {
     };
     this.config = config;
   },
+   mounted(){
+    let pusher = new Pusher('c31b45d58431fd307880', {
+        cluster: 'ap1',
+        encrypted: false
+      });
+
+      //Subscribe to the channel we specified 
+    let channel = pusher.subscribe('order-channel')
+
+    channel.bind('newOrder', data => {
+      this.dataGrouping();
+     
+    
+    });
+  },
   created() {
     this.dataGrouping();
     setInterval(this.dataGrouping(), 3000);
@@ -204,6 +231,7 @@ export default {
     viewOrders(item) {
       this.orders = item;
       this.barangay_name = item.barangay_name;
+      this.dialog = true;
       this.dataGrouping();
     },
     viewDetails(i) {
@@ -285,9 +313,6 @@ export default {
           this.dialog = false;
         });
     },
-    // test(array, ){
-
-    // },
     dataGrouping() {
       this.$vloading.show();
       axios
@@ -298,7 +323,7 @@ export default {
           }, 1000);
           var result = response.data.data;
           let groupByMunicipality = {};
-          let groupedOrders = {};
+          // let groupedOrders = {};
           result.forEach(municipyo => {
             let { city_or_municipality } = municipyo;
             groupByMunicipality[city_or_municipality] = result.filter(
@@ -308,9 +333,14 @@ export default {
               let { barangay } = data;
               groupByMunicipality[city_or_municipality][
                 barangay
-              ] = groupByMunicipality[city_or_municipality].filter(order => order.barangay == barangay);
+              ] = groupByMunicipality[city_or_municipality].filter(
+                order => order.barangay == barangay
+              );
             });
-            groupByMunicipality[city_or_municipality].splice(groupByMunicipality[city_or_municipality], groupByMunicipality[city_or_municipality].length);
+            groupByMunicipality[city_or_municipality].splice(
+              groupByMunicipality[city_or_municipality],
+              groupByMunicipality[city_or_municipality].length
+            );
           });
 
           let deliveries = {};
@@ -336,17 +366,20 @@ export default {
 
           for (const city_mun in groupByMunicipality) {
             for (const byBrgy in groupByMunicipality[city_mun]) {
-              createBatches(groupByMunicipality[city_mun][byBrgy], (batch, total) => {
-                var brgy_city_name = byBrgy + ", " + city_mun;
-                if (!deliveries.hasOwnProperty(brgy_city_name)) {
-                  deliveries[brgy_city_name] = [];
+              createBatches(
+                groupByMunicipality[city_mun][byBrgy],
+                (batch, total) => {
+                  var brgy_city_name = byBrgy + ", " + city_mun;
+                  if (!deliveries.hasOwnProperty(brgy_city_name)) {
+                    deliveries[brgy_city_name] = [];
+                  }
+                  deliveries[brgy_city_name].push({
+                    batchNo: deliveries[brgy_city_name].length + 1,
+                    total,
+                    orders: batch
+                  });
                 }
-                deliveries[brgy_city_name].push({
-                  batchNo: deliveries[brgy_city_name].length + 1,
-                  total,
-                  orders: batch
-                });
-              });
+              );
             }
           }
 
@@ -356,6 +389,80 @@ export default {
           }
         });
     },
+    // getLocation(item) {
+    //   if (this.dialog == false) {
+    //     item = [];
+    //   } else {
+    //     mapboxgl.accessToken = this.accessToken;
+    //     // let mapContainer = "mapContainer";
+    //     var map = new mapboxgl.Map({
+    //       container: "mapContainer",
+    //       style: "mapbox://styles/mapbox/streets-v11",
+    //       center: [123.921969, 10.329892],
+    //       zoom: 12
+    //     });
+
+    //     for (var i = 0; i < item.length; i++) {
+    //       let orders = item[i].orders;
+    //       // console.log("--->>>", item[i].orders);
+    //       orders.forEach(order => {
+    //         let {
+    //           building_or_street,
+    //           barangay,
+    //           city_or_municipality,
+    //           province
+    //         } = order;
+    //         let full_address = building_or_street.concat(
+    //           " ",
+    //           barangay,
+    //           " ",
+    //           city_or_municipality,
+    //           " ",
+    //           province
+    //         );
+    //         // console.log("full adress: ", full_address);
+
+    //         axios
+    //           .get(
+    //             `https://api.mapbox.com/geocoding/v5/mapbox.places/${full_address}.json?country=ph&limit=2&access_token=${
+    //               this.accessToken
+    //             }`
+    //           )
+    //           .then(response => {
+    //             console.log("full_address: ", full_address);
+    //             console.log("mapbox response: ", response);
+
+    //             let res = response.data;
+
+    //             //getting the distance
+    //             var from_place = turf.point([123.921969, 10.329892]);
+    //             var to_place = turf.point(res.features[0].geometry.coordinates);
+    //             var options = { units: "kilometers" };
+    //             var distance = turf.distance(from_place, to_place, options);
+
+    //             // add markers to map
+    //             var el = document.createElement("div");
+    //             el.className = "marker";
+
+    //             // make a marker for each feature and add to the map
+    //             new mapboxgl.Marker()
+    //               .setLngLat(res.features[0].geometry.coordinates)
+    //               .setPopup(
+    //                 new mapboxgl.Popup() // add popups
+    //                   .setHTML(
+    //                     "<h3>" +
+    //                       res.features[0].place_name +
+    //                       "</h3><p>" +
+    //                       Math.round((distance + Number.EPSILON) * 100) / 100 +
+    //                       " kilometers away from your location</p>"
+    //                   )
+    //               )
+    //               .addTo(map);
+    //           });
+    //       });
+    //     }
+    //   }
+    // },
     isAdmin() {
       if (localStorage.getItem("role") === "admin") {
         return true;
@@ -399,7 +506,7 @@ export default {
 #batchCards {
   flex-grow: 0 !important;
 }
-#title{
+#title {
   font-size: 17px;
 }
 </style>
