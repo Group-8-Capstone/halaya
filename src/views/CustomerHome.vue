@@ -503,6 +503,13 @@ export default {
         return "Pending";
       }
     },
+    getPostalCode(city){
+      if(city == "Mandaue city"){
+        return 6014;
+      } else {
+        return 6000;
+      }
+    },
     placeOrder() {
       this.$v.$touch();
       var street = this.customerStreet;
@@ -553,12 +560,16 @@ export default {
             total_payment: this.totalPay,
             deliveryDate: this.date,
             orderStatus: this.getOrderStatus(this.jarQuantity),
-            distance: Math.round((dist + Number.EPSILON) * 100) / 100
+            distance: Math.round((dist + Number.EPSILON) * 100) / 100,
+            longitude: result.features[0].geometry.coordinates[0],
+            latitude: result.features[0].geometry.coordinates[1],
+            postcode: this.getPostalCode(municipality)
           };
-
+          console.log('----', param)
           axios
             .post(this.url + "/api/post/createOrder", param, this.config)
             .then(response => {
+              console.log('>>>', response.data)
               setTimeout(() => {
                 this.$vloading.hide();
               }, 1000);
