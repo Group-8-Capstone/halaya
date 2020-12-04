@@ -305,11 +305,9 @@ export default {
           ingredientsUnit: this.addedIngredientsUnit,
           ingredientsCategory: this.addedCategory
         };
-        // console.log("param: ", param)
         axios
           .post(this.url + "/api/post/neededValue", param, this.config)
           .then(response => {
-            console.log("--->>", response.data);
             this.addDialog = false;
             if (response.data == "existed") {
               Swal.fire({

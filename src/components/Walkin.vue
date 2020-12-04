@@ -162,7 +162,6 @@ export default {
       Authorization: 'Bearer ' + localStorage.getItem('token')
     }
     this.config = config
-    // console.log(this.config)
   },
 
   computed: {
@@ -313,13 +312,12 @@ export default {
             total_payment: this.totalPay,
             deliveryDate: this.date,
             orderStatus: 'Delivered',
-            distance: dist
+            distance: Math.round((dist + Number.EPSILON) * 100) / 100
           };
          
           axios
             .post(this.url+"/api/post/createOrder", param,this.config)
             .then(response => {
-              //  console.log(response)
                 setTimeout(() => {
                 this.$vloading.hide()
                 },1000) 
