@@ -12,7 +12,7 @@
       </v-card-title>
       <OrderingInfo></OrderingInfo>
     </v-card>
-    <v-dialog v-model="addOrderDialog" style="height:auto;" width="500px">
+    <v-dialog persistent v-model="addOrderDialog" style="height:auto;" width="500px">
       <v-card class="ma-0 pa-0">
         <v-card-title class="align-center">
           <v-list-item-title
@@ -510,6 +510,15 @@ export default {
         return 6000;
       }
     },
+    getProximity(city){
+      if(city == "Mandaue city"){
+        proximity = [123.933334, 10.333333]
+        return proximity ;
+      } else {
+        proximity = [123.8999964, 10.2833322]
+        return proximity ;
+      }
+    },
     placeOrder() {
       this.$v.$touch();
       var street = this.customerStreet;
@@ -533,11 +542,12 @@ export default {
       
       axios
         .get(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${place}.json?country=ph&limit=2&access_token=${
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${place}.json?country=ph&proximity=${this.getProximity()}&limit=2&access_token=${
             this.accessToken
           }`
         )
         .then(response => {
+          console.log("-----", response.data);
           let res = JSON.stringify(response.data);
           let result = JSON.parse(res);
           
