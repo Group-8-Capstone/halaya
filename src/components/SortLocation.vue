@@ -61,9 +61,16 @@ export default {
           province
         );
 
+      let postal_code = '';
+        if(city_or_municipality == 'Mandaue city'){
+          postal_code = "6014";
+        } else {
+          postal_code = "6000";
+        }
+
         axios
           .get(
-            `https://api.mapbox.com/geocoding/v5/mapbox.places/${full_address}.json?country=ph&limit=2&access_token=${
+            `https://api.mapbox.com/geocoding/v5/mapbox.places/${full_address}.json?&limit=2&access_token=${
               this.accessToken
             }`
           )
