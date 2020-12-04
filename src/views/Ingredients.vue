@@ -60,7 +60,7 @@
         ></IngredientsPdf>
       </v-row>
       <v-card-title>
-        Recorded Used Ingredients
+        Ingredients Logs
         <v-spacer></v-spacer>
         <v-text-field
           v-model="search"
@@ -153,6 +153,7 @@
             <v-row class="mx-2">
               <v-col cols="12">
                 <v-text-field
+                 type="number"
                   color="purple"
                   v-model="editStockItem.ingredients_remaining"
                   label="Available Quantity"
@@ -212,7 +213,7 @@ export default {
           sortable: false,
           value: "ingredients_name"
         },
-
+        { text: "Available Quantity", value: "ingredients_remaining" },
         { text: "Used Quantity", value: "used_ingredients_amount" },
         { text: "Recorded Date", value: "updated_at" }
       ]
