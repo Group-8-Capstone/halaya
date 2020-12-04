@@ -162,8 +162,8 @@
     </v-dialog>
      </v-form>
     <template>
-      <v-row>
-        <v-col>
+      <v-row align="center" justify="center">
+        <v-col sm="12" md="6" lg="6" xl="6">
           <v-hover v-slot:default="{ hover }">
             <v-card class="mx-auto mr-5" color="grey lighten-4" width="80%">
               <v-img :aspect-ratio="16/8" src="../assets/halayaTab.jpg">
@@ -185,7 +185,7 @@
             </v-card>
           </v-hover>
         </v-col>
-        <v-col>
+        <v-col sm="12" md="6" lg="6" xl="6">
           <v-hover v-slot:default="{ hover }">
             <v-card class="mx-auto ml-5" color="grey lighten-4" width="80%">
               <v-img class="justify-center" :aspect-ratio="16/8" src="../assets/halayaJar.jpg">

@@ -1,7 +1,6 @@
 <template>
   <v-footer id="footer" dark padless class="mt-2" no-gutters>
     <div class="mt-2">
-      <!-- <v-row id="footerContent" no-gutters justify="center" align="center"> -->
         <v-col cols="12">
           <v-row>
             <v-col lg="4" md="4" sm="4" xl="4" align="center" justify="center">
@@ -9,10 +8,8 @@
                 <v-icon small>mdi-copyright</v-icon>2020, Wawen's Ube Halaya. All Rights Reserved.
               </p>
             </v-col>
-            <!-- <v-spacer></v-spacer> -->
             <v-col lg="8" md="8" sm="8" xl="8" >
               <v-row align="center" justify="center">
-                <!-- <v-spacer></v-spacer> -->
                 <p id="contactUs">Check us out here:</p>
                 <div id="phone">
                   <v-icon id="callIcon" medium>mdi-facebook</v-icon>
@@ -47,7 +44,6 @@
             </v-col>
           </v-row>
         </v-col>
-      <!-- </v-row> -->
     </div>
   </v-footer>
 </template>
@@ -57,17 +53,9 @@
   padding: 10px;
   height: 100px;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
-  /* align-content: center;
-  justify-content: center;
-  align-items: center;
-  justify-items: center; */
   font-weight: normal !important;
 }
 #footerContent {
-  /* align-content: center;
-  justify-content: center;
-  align-items: center;
-  justify-items: center; */
   font-weight: normal !important;
 }
 #texts {
@@ -97,10 +85,6 @@
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   font-size: 12px;
 }
-/* #footerRight {
-  margin-left: 0px;
-  margin-right: 0px;
-} */
 .v-footer{
   display: inline !important;
 }
