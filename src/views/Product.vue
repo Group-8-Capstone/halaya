@@ -100,7 +100,7 @@
                 <v-text-field v-model="editedJarPrice" color="purple" outlined label="Price"></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field v-model="editedJarAvail" color="purple" outlined label="Produced Quantity Products"></v-text-field>
+                <v-text-field v-model="editedJarAvail" color="purple" outlined label="Produced Products Quantity"></v-text-field>
               </v-col>
             </v-row>
           </v-container>
@@ -132,7 +132,7 @@
                   v-model="editedTubAvail"
                   color="purple"
                   outlined
-                  label="Produced Quantity Products"
+                  label="Produced Products Quantity"
                 ></v-text-field>
               </v-col>
             </v-row>

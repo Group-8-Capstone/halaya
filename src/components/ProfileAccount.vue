@@ -9,14 +9,14 @@
                                   <center>
                                     <img style="max-width:100%;height:auto;" class="addOnsImage" :src="imageURL"><br>
                                      <h4 class=" gray--text">{{username}}</h4>
-                                     <p class=" gray--text">Edit Profile Picture</p>
-                                    <input type="file" class="fileStyle deep-purple--text"  accept="image/jpeg, image/png, image/gif" id="imageUpload"  v-on:change="onImageChange">
-                                    
+                                     <br>
+                                     <p class=" gray--text">Update Profile Picture</p>
+                                    <input type="file" class="fileStyle deep-purple--text"  accept="image/jpeg, image/png, image/gif" id="imageUpload"  v-on:change="onImageChange">     
                             </center>
                             </v-container>
                     <v-card-actions>
                       <v-spacer></v-spacer>
-                      <v-btn small type="submit"  for="imageUpload" class="ma-3" color="purple darken-2" outlined>UPDATE PROFILE</v-btn>
+                      <v-btn small type="submit"  for="imageUpload" class="ma-3" color="purple darken-2" outlined>UPLOAD PICTURE</v-btn>
                       </v-card-actions>
                         </form>
                   </div>
@@ -27,7 +27,7 @@
                     <v-col cols="12">  <v-text-field
                       v-model="userPassword"
                       prepend-icon="mdi-lock"
-                      label="Enter password"
+                      label="Enter New password"
                       :append-icon="value ? 'mdi-eye-off' : 'mdi-eye'"
                       @click:append="() => (value = !value)"
                       :type="value ? 'password' : 'text'"
@@ -41,7 +41,7 @@
                     ></v-text-field>
                     <v-text-field
                      
-                      label="Confirm Password"
+                      label="Confirm New Password"
                       :append-icon="valuePass ? 'mdi-eye-off' : 'mdi-eye'"
                       @click:append="() => (valuePass = !valuePass)"
                       :type="valuePass ? 'password' : 'text'"
