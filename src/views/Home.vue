@@ -60,7 +60,7 @@
               :length="12"
               :total-visible="7"
               circle
-              v-if="filterBy !== 'Yearly' && filterBy !== 'Monthly'"
+              v-if="filterBy !== 'Yearly' && filterBy !== 'Monthly'  && filterBy !== 'Weekly'"
               @input="pageChange"
             ></v-pagination>
           </div>
@@ -101,13 +101,15 @@
           </v-card>
         </v-col>
         <v-col>
-          <div class="text-center">                                                           
+          <div class="text-center">                                                       
             <v-pagination
               v-model="pageTubs"
               :length="12"
               :total-visible="7"
+              data-toggle="tooltip" 
+              data-placement="bottom"
               circle
-              v-if="filterByTubs !== 'Yearly' && filterByTubs !== 'Monthly'"
+              v-if="filterByTubs !== 'Yearly' && filterByTubs !== 'Monthly' && filterByTubs !== 'Weekly'" 
               @input="pageChangeTubs"
             ></v-pagination>
           </div>
@@ -321,7 +323,7 @@ export default {
 
         if(response.data.length > 0){
           response.data.forEach(element =>{
-            category.push(element.preferred_delivery_date);
+            category.push((new Date(element.preferred_delivery_date)).toISOString().split('T')[0]);
             series.push(element.total);
           });
           this.initializeDataTubs(category, series);
@@ -362,7 +364,8 @@ export default {
           let series = [];
           if (response.data.length > 0) {
             response.data.forEach(element => {
-              category.push(element.preferred_delivery_date);
+              // (new Date(element.preferred_delivery_date)).toISOString().split('T')[0]
+              category.push((new Date(element.preferred_delivery_date)).toISOString().split('T')[0]);
               series.push(element.total);
             });
             this.initializeData(category, series);
@@ -439,6 +442,7 @@ export default {
           let weeklyCategory = [];
           let weeklySeries = [];
           let data = response.data;
+          console.log(response.data);
           if (data.length > 0) {
             data.forEach((element, index) => {
               if (element[0].totals === null) {
@@ -561,6 +565,7 @@ export default {
 
             });
             this.initializeData(yearlyCategory, yearlySeries);
+
           }
         });
     },
