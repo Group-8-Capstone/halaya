@@ -109,9 +109,7 @@
                       </v-card-text>
                     </v-card-title>
                   </v-card>
-                  <!-- </v-row> -->
                   <br>
-                  <!-- <v-row> -->
                   <v-card
                     shaped
                     id="infoCards"
@@ -135,9 +133,7 @@
                       </v-card-text>
                     </v-card-title>
                   </v-card>
-                  <!-- </v-row> -->
                   <br>
-                  <!-- <v-row> -->
                   <v-layout wrap>
                     <v-flex>
                       <v-col sm="12" class="pl-0">
@@ -174,7 +170,6 @@
                     </v-flex>
                   </v-layout>
                 </v-col>
-
                 <v-col sm="12" md="8" lg="8" xl="8">
                   <div justify="center" id="planHeader" class="text-center mt-0">
                     <h1
@@ -216,7 +211,6 @@
                         </v-card>
                       </v-hover>
                     </v-col>
-
                     <v-col sm="12" md="6" lg="6" xl="6">
                       <v-hover id="products" v-slot:default="{ hover }">
                         <v-card
@@ -226,7 +220,6 @@
                           :elevation="8"
                           data-aos="flip-right"
                         >
-                          <!-- :aspect-ratio="16/9" -->
                           <v-img width="310" height="220" src="../assets/halayaJar.jpg">
                             <v-expand-transition>
                               <div
@@ -252,10 +245,6 @@
                       </v-hover>
                     </v-col>
                   </v-row>
-                  <!-- </v-col> -->
-                  <!-- </div> -->
-                  <!-- </v-row> -->
-                  <!-- <v-row align="center" justify="center"> -->
                   <div align="center" justify="center" id="planHeader" class="text-center">
                     <br>
                     <br>
@@ -265,7 +254,6 @@
                     >Eyes here!</h1>
                   </div>
                     <div>
-                
                       <v-col cols="12" sm="12">
                         <v-row align="center" justify="center">
                           <v-col sm="6">
@@ -273,7 +261,6 @@
                               <v-img src="../assets/ad1.png"></v-img>
                             </v-card>
                           </v-col>
-
                           <v-col sm="6">
                             <v-card width="310" flat :elevation="8" data-aos="fade-left">
                               <v-img src="../assets/ad2.png"></v-img>
@@ -281,16 +268,12 @@
                           </v-col>
                         </v-row>
                       </v-col>
-                      <!-- </v-card> -->
                     </div>
-                  <!-- </v-row> -->
                 </v-col>
               </v-row>
-            <!-- </div> -->
           </v-col>
         </v-row>
       </div>
-      <!-- </v-col> -->
     </div>
   </div>
 </template>
@@ -429,10 +412,6 @@ export default {
 }
 #infos {
   margin-top: 40px;
-  /* justify-content: center;
-  align-content: center;
-  justify-items: center;
-  align-items: center; */
 }
 #photo {
   width: 100%;
@@ -448,11 +427,6 @@ export default {
   align-content: center;
   font-size: 2em;
 }
-/* #imgUbe {
-  display: block;
-  width: auto;
-  height: auto;
-} */
 #productsHeader {
   align-content: center;
   font-size: 2.5em;
@@ -464,7 +438,6 @@ export default {
   text-transform: uppercase;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  /* font-family: "Lucida Console", Courier, monospace; */
   background-image: linear-gradient(45deg, #7794ff, #44107a, #ff1361, #fff800);
   animation: 0.8s shake infinite alternate;
 }
@@ -488,8 +461,4 @@ export default {
     transform: skewX(0deg);
   }
 }
-/* #products {
-  width: 400px;
-  height: 400px;
-} */
 </style>
