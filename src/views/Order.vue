@@ -301,7 +301,7 @@ export default {
       disabled: true,
       headers: [
         {
-          text: "Customer's Name",
+          text: "Receiver Name",
           align: "start",
           sortable: false,
           value: "receiver_name"
@@ -322,6 +322,11 @@ export default {
         {
           text: "Ube Halaya Tub(Quantity)",
           value: "ubehalayatub_qty",
+          sortable: false
+        },
+        {
+          text: "Total Payment",
+          value: "total_payment",
           sortable: false
         },
         { text: "Actions", value: "action", sortable: false },

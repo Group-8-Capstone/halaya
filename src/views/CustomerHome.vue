@@ -15,7 +15,7 @@
      <v-form ref="form"
     v-model="valid"
     lazy-validation>
-    <v-dialog v-model="addOrderDialog" style="height:auto;" width="500px">
+    <v-dialog persistent v-model="addOrderDialog" style="height:auto;" width="600px">
       <v-card class="ma-0 pa-0">
         <v-card-title class="align-center">
           <v-list-item-title
@@ -50,14 +50,14 @@
               ></v-text-field>
             </v-col>
           </v-row>
-          <v-icon class="pl-5">mdi-map-marker</v-icon>
+          <v-icon class="pl-3">mdi-map-marker</v-icon>
           <label>Receiver Address</label>
         
-          <v-row class="pl-5">
+          <v-row class="pl-3">
             <v-col cols="6">
               <v-text-field disabled label="CEBU"></v-text-field>
             </v-col>
-            <v-col class="d-flex" cols="6">
+            <v-col  cols="6">
               <v-select :error-messages="customerMunicipalityErrors"
                 @input="$v.customerMunicipality.$touch()"
                 @blur="$v.customerMunicipality.$touch()" v-model="customerMunicipality" :items="list_of_municipalities_names" label="City/Municipality" id="customerMunicipality"></v-select>
@@ -72,9 +72,9 @@
           <div>
             <v-btn small outlined color="purple darken-2"  @click="back()" class="mb--5 ml-5">Back</v-btn>
           </div>
-          <v-row  class="pl-5">
+          <v-row>
             <v-col cols="6">
-              <v-select v-model="customerBarangay"      :error-messages="customerBarangayErrors"
+              <v-select v-model="customerBarangay" :error-messages="customerBarangayErrors"
                 @input="$v.customerBarangay.$touch()"
                 @blur="$v.customerBarangay.$touch()" :items="barangays" label="Barangay"></v-select>
             </v-col>
@@ -90,20 +90,20 @@
             </v-col>
           </v-row>
 
-          <v-row>
-            <v-col cols="6" class="pl-5">
-              <v-img class="ml-5" width="250px" height="200px" src="../assets/halayaJar.jpg"></v-img>
-              <h6 class="display-1 font-weight-light orange--text ml-5">{{jarName}}</h6>
-              <div id="price" class="font-weight-light grey--text title ml-5">{{jarPrice}}</div>
+          <v-row align="center" justify="center">
+            <v-col cols="6">
+              <v-img width="300px" height="200px" src="../assets/halayaJar.jpg"></v-img>
+              <h6 class="text-center font-weight-light orange--text text-h6 [1] text-sm-h5 [1] text-md-h4 [1] text-lg-h4 [1] text-xl-h3[1] text-truncate">{{jarName}}</h6>
+              <div id="price" class=" text-center font-weight-light grey--text title">{{jarPrice}}</div>
             </v-col>
-            <v-col cols="6" class="pl-5">
-              <v-img width="250px" height="200px" src="../assets/halayaTab.jpg"></v-img>
-              <h6 class="display-1 font-weight-light orange--text">{{tubName}}</h6>
-              <div id="price" class="font-weight-light grey--text title">{{tubPrice}}</div>
+            <v-col cols="6">
+              <v-img width="300px" height="200px" src="../assets/halayaTab.jpg"></v-img>
+              <h6 class="text-center font-weight-light orange--text text-h6 [1] text-sm-h5 [1] text-md-h4 [1] text-lg-h4 [1] text-xl-h3[1] text-truncate">{{tubName}}</h6>
+              <div id="price" class="text-center font-weight-light grey--text title">{{tubPrice}}</div>
             </v-col>
           </v-row>
           <v-row>
-            <v-col cols="6" class="pl-5">
+            <v-col cols="6">
               <v-text-field min=0 type="number" label="Quantity" v-model="jarQuantity">
                 <template slot="prepend">
                   <div id="vue-counter">
@@ -113,7 +113,7 @@
                 </template>
               </v-text-field>
             </v-col>
-            <v-col cols="6" class="pl-5">
+            <v-col cols="6">
               <v-text-field min=0 type="number" label="Quantity" v-model="tabQuantity">
                 <template slot="prepend">
                   <div id="vue-counter">
@@ -124,8 +124,8 @@
               </v-text-field>
             </v-col>
           </v-row>
-          <v-row class="pl-5">
-            <v-col cols="12" sm="6" md="4">
+          <v-row>
+            <v-col cols="12" sm="6" md="6">
               <v-menu
                 v-model="menu"
                 :close-on-content-click="true"
@@ -165,7 +165,7 @@
       <v-row align="center" justify="center">
         <v-col sm="12" md="6" lg="6" xl="6">
           <v-hover v-slot:default="{ hover }">
-            <v-card class="mx-auto mr-5" color="grey lighten-4" width="80%">
+            <v-card class="mx-auto " color="grey lighten-4" width="80%">
               <v-img :aspect-ratio="16/8" src="../assets/halayaTab.jpg">
                 <v-expand-transition>
                   <div
@@ -187,7 +187,7 @@
         </v-col>
         <v-col sm="12" md="6" lg="6" xl="6">
           <v-hover v-slot:default="{ hover }">
-            <v-card class="mx-auto ml-5" color="grey lighten-4" width="80%">
+            <v-card class="mx-auto" color="grey lighten-4" width="80%">
               <v-img class="justify-center" :aspect-ratio="16/8" src="../assets/halayaJar.jpg">
                 <v-expand-transition>
                   <div
@@ -218,55 +218,57 @@
               class="d-flex align-center justify-center mx-auto headline black--text"
             >SUMMARY OF ORDER</v-list-item-title>
           </v-card-title>
-          <v-row>
-            <v-col cols="5" class="pl-12">
+          <v-row class="pl-5">
+            <v-col md="6" lg="6" sm="12">
               <span>
                 <h4>Receiver's Name:</h4>
                 {{customerName}}
               </span>
             </v-col>
-            <v-col cols="5" class="pl-12">
+            <v-col md="6" lg="6" sm="12">
               <span>
                 <h4>Receiver's Number:</h4>
                 {{contactNumber}}
               </span>
             </v-col>
           </v-row>
-          <v-row>
-            <v-col cols="5" class="pl-12">
+          <v-row class="pl-5">
+            <v-col md="6" lg="6" sm="12">
               <span>
                 <h4>Address:</h4>
                 {{customerStreet}}, {{customerBarangay}}, {{customerMunicipality}}
               </span>
             </v-col>
-            <v-col cols="5" class="pl-12">
+            <v-col md="6" lg="6" sm="12">
               <span>
                 <h4>Delivery:</h4>
                 {{date}}
               </span>
             </v-col>
           </v-row>
-          <v-row>
-            <v-col cols="5" class="pl-12">
+          <v-row class="pl-5">
+            <v-col md="6" lg="6" sm="12">
               <span>
                 <h4>Jar Quantity:</h4>
                 {{jarQuantity}}
               </span>
             </v-col>
-            <v-col cols="5" class="pl-12">
+            <v-col md="6" lg="6" sm="12">
               <span>
                 <h4>Tub Quantity:</h4>
                 {{tabQuantity}}
               </span>
             </v-col>
           </v-row>
-
-          <v-col cols="5" class="pl-12">
+          <v-row class="pl-5">
+          <v-col md="6" lg="6" sm="12">
             <span>
               <h4>Your total payment:</h4>
               {{totalPay}}
             </span>
           </v-col>
+          <v-col cols="6"></v-col>
+          </v-row>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
@@ -301,6 +303,17 @@
 .v-application--wrap {
   min-height: 100vh;
   justify-content: center;
+}
+.v-application .text-h6 {
+    font-size: 1.25rem !important;
+    font-weight: 500;
+    line-height: 2rem;
+    letter-spacing: inherit !important;
+    font-family: "Roboto", sans-serif !important;
+}
+
+.col{
+  flex-basis: auto !important;
 }
 
 </style>
@@ -524,6 +537,15 @@ export default {
         return 6000;
       }
     },
+    getProximity(city){
+      if(city == "Mandaue city"){
+        let proximity = "123.933334, 10.333333"
+        return proximity ;
+      } else {
+        let proximity = "123.8999964, 10.2833322"
+        return proximity ;
+      }
+    },
     placeOrder() {
       this.$refs.form.validate()
       this.$v.$touch();
@@ -545,14 +567,17 @@ export default {
         " ",
         province
       );
+
+      console.log("proximity", this.getProximity(municipality));
       
       axios
         .get(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${place}.json?country=ph&limit=2&access_token=${
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${place}.json?country=ph&proximity=${this.getProximity(municipality)}&limit=2&access_token=${
             this.accessToken
           }`
         )
         .then(response => {
+          console.log("-----", response.data);
           let res = JSON.stringify(response.data);
           let result = JSON.parse(res);
           

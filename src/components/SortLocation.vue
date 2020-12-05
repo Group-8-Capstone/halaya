@@ -44,12 +44,16 @@ export default {
         this.$vloading.hide();
       }, 1000);
       var result = response.data.data;
+      console.log("=====", result);
       result.forEach(element => {
         let {
           building_or_street,
           barangay,
           city_or_municipality,
-          province
+          province,
+          latitude,
+          longitude,
+          distance,
         } = element;
 
         let full_address = building_or_street.concat(
@@ -61,28 +65,23 @@ export default {
           province
         );
 
-      let postal_code = '';
-        if(city_or_municipality == 'Mandaue city'){
-          postal_code = "6014";
-        } else {
-          postal_code = "6000";
-        }
+        
 
-        axios
-          .get(
-            `https://api.mapbox.com/geocoding/v5/mapbox.places/${full_address}.json?&limit=2&access_token=${
-              this.accessToken
-            }`
-          )
-          .then(response => {
+        // axios
+        //   .get(
+        //     `https://api.mapbox.com/geocoding/v5/mapbox.places/${full_address}.json?&limit=2&access_token=${
+        //       this.accessToken
+        //     }`
+        //   )
+        //   .then(response => {
 
-            let res = response.data;
+        //     let res = response.data;
 
-            //getting the distance
-            var from_place = turf.point([123.921969, 10.329892]);
-            var to_place = turf.point(res.features[0].geometry.coordinates);
-            var options = { units: "kilometers" };
-            var distance = turf.distance(from_place, to_place, options);
+        //     //getting the distance
+        //     var from_place = turf.point([123.921969, 10.329892]);
+        //     var to_place = turf.point(res.features[0].geometry.coordinates);
+        //     var options = { units: "kilometers" };
+        //     var distance = turf.distance(from_place, to_place, options);
 
             // add markers to map
             var el = document.createElement("div");
@@ -90,19 +89,19 @@ export default {
 
             // make a marker for each feature and add to the map
             new mapboxgl.Marker()
-              .setLngLat(res.features[0].geometry.coordinates)
+              .setLngLat([longitude,latitude])
               .setPopup(
                 new mapboxgl.Popup() // add popups
                   .setHTML(
                     "<h3>" +
-                      res.features[0].place_name +
+                      full_address +
                       "</h3><p>" +
-                      Math.round((distance + Number.EPSILON) * 100) / 100 +
+                      distance +
                       " kilometers away from your location</p>"
                   )
               )
               .addTo(map);
-          });
+        //   });
       });
     });
   },
