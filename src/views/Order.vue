@@ -12,7 +12,7 @@
       <v-tabs-items v-model="tabs">
         <v-tab-item>
           <v-card-title>
-            Recieved Orders
+            Received Orders
             <v-spacer></v-spacer>
             <v-text-field
               v-model="search"
@@ -159,7 +159,7 @@
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
                         v-model="post.preferred_delivery_date"
-                        label="Picker in menu"
+                        label="Preferred Delivey Date"
                         prepend-icon="mdi-calendar"
                         readonly
                         v-bind="attrs"
@@ -301,7 +301,7 @@ export default {
       disabled: true,
       headers: [
         {
-          text: "Customer's Name",
+          text: "Receiver Name",
           align: "start",
           sortable: false,
           value: "receiver_name"
@@ -322,6 +322,11 @@ export default {
         {
           text: "Ube Halaya Tub(Quantity)",
           value: "ubehalayatub_qty",
+          sortable: false
+        },
+        {
+          text: "Total Payment",
+          value: "total_payment",
           sortable: false
         },
         { text: "Actions", value: "action", sortable: false },

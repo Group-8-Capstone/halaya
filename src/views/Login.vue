@@ -20,7 +20,7 @@
                 size="150"
               >
                 <v-list-item-content>
-                  <v-list-item-title class="d-flex align-center justify-center pa-3 mx-auto headline">L O G I N</v-list-item-title>
+                  <v-list-item-title class="d-flex align-center justify-center pa-3 mx-auto headline">S I G N  I N</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item class="d-flex align-center justify-center pa-6 mx-auto">
@@ -77,7 +77,7 @@
                   block
                   outlined
                   @click="login"
-                >Login</v-btn>
+                >Sign in</v-btn>
               </center>
               <div align="center" justify="center">
                   <span>

@@ -79,6 +79,7 @@ export default {
       { text: "Prefered Delivery Date", value: "preferred_delivery_date" },
       { text: "Halaya Jar Quantity", value: "ubehalayajar_qty" },
       { text: "Halaya Tub Quantity", value: "ubehalayatub_qty" },
+      { text: "Total Payment", value: "total_payment" },
       { text: "Status", value: "order_status" }
     ],
     headers2: [
@@ -127,9 +128,9 @@ export default {
         });
     },
     getColor(status) {
-      if (status === "On order") return "green";
-      else if (status === "Pending") return "orange";
-      else return "blue";
+      if (status === "Canceled") return "orange";
+      else if (status === "On order") return "blue";
+      else return "green";
     },
     retrieveDeliveredOrder() {
       this.$vloading.show();

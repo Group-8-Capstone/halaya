@@ -12,11 +12,11 @@
                 <v-row class="mx-auto text-center">
                   <v-list-item>
                     Available Quantity :
-                    <b>{{ item.ingredients_remaining}} {{item.ingredients_unit}}</b>
+                    <b>{{ item.ingredients_remaining}} {{item.ingredients_unit}}/s</b>
                   </v-list-item>
                   <v-list-item>
                     Used Quantity :
-                    <b>{{ item.total}} {{item.ingredients_unit}}</b>
+                    <b>{{ item.total}} {{item.ingredients_unit}}/s</b>
                   </v-list-item>
                   <v-list-item>
                     <v-chip
@@ -93,7 +93,7 @@
           <v-card-title class=" align-center">
             <v-list-item-title
               class="deep-purple--text d-flex align-center justify-center mx-auto headline"
-            >QUANTITY BEING USED</v-list-item-title>
+            >USED QUANTITY</v-list-item-title>
           </v-card-title>
           <v-divider></v-divider>
           <v-container>
@@ -146,7 +146,7 @@
           <v-card-title class="deep-purple--text align-center">
             <v-list-item-title
               class="deep-purple--text d-flex align-center justify-center mx-auto headline"
-            >UPDATE AMOUNT</v-list-item-title>
+            >Number of Products Produced</v-list-item-title>
           </v-card-title>
           <v-divider></v-divider>
           <v-container>

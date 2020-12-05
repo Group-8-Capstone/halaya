@@ -21,20 +21,20 @@
         ></v-text-field>
         <v-btn small class="ma-5" color="purple darken-2" outlined dark @click="showDialog">
           <!-- <v-icon>mdi-plus</v-icon> -->
-          <v-toolbar-title>ADD ESTIMATED VALUE</v-toolbar-title>
+          <v-toolbar-title>ADD INGREDIENT</v-toolbar-title>
         </v-btn>
       </v-card-title>
       <template>
         <v-dialog v-model="addDialog" style="height:auto;" width="400px">
           <v-card class="ma-0 pa-0">
-            <v-card-title class="deep-purple--text">ESTIMATED INGREDIENTS VALUE</v-card-title>
+            <v-card-title class="deep-purple--text">INGREDIENT DETAILS</v-card-title>
             <v-card-subtitle>Please fill in the required information</v-card-subtitle>
             <v-divider></v-divider>
             <v-container>
               <v-col cols="12">
                 <v-text-field
                   color="purple"
-                  label="Ingredients"
+                  label="Ingredient's Name"
                   :error-messages="AddedIngredientsNameErrors"
                   @input="$v.addedIngredientsName.$touch()"
                   @blur="$v.addedIngredientsName.$touch()"
@@ -48,7 +48,7 @@
               <v-col cols="12">
                 <v-text-field
                   color="purple"
-                  label="Needed Estimated Quantity"
+                  label="Stock Level Basis Qty"
                   :error-messages="AddedIngredientsValueErrors"
                   @input="$v.addedEstimatedAmount.$touch()"
                   @blur="$v.addedEstimatedAmount.$touch()"
@@ -62,7 +62,7 @@
               <v-col cols="12">
                 <v-select
                   color="purple"
-                  label="Ingredients Unit"
+                  label="Ingredient's Unit"
                   :error-messages="addedIngredientsUnitErrors"
                   @input="$v.addedIngredientsUnit.$touch()"
                   @blur="$v.addedIngredientsUnit.$touch()"
@@ -86,7 +86,7 @@
       <v-data-table :headers="headersIngredients" :items="estimatedValue" :search="search">
         <template
           #item.ingredients_amount="{ item }"
-        >{{ item.ingredients_need_amount }} {{ item.ingredients_unit }}</template>
+        >{{ item.ingredients_need_amount }} {{ item.ingredients_unit }}/s</template>
         <template v-slot:item.action="{ item }">
           <v-icon
             @click="editDialog = !editDialog, editEstimatedValue(item) "
@@ -98,7 +98,7 @@
             color="red"
             @click="alertDeleteIngredients(item)"
             normal
-            title="Delete Product"
+            title="Delete Ingredient"
           >mdi-delete</v-icon>
         </template>
       </v-data-table>
@@ -107,7 +107,7 @@
     <template>
       <v-dialog v-model="editDialog" style="height:auto;" width="400px">
         <v-card class="ma-0 pa-0">
-          <v-card-title class="deep-purple--text">UPDATE ESTIMATED VALUE</v-card-title>
+          <v-card-title class="deep-purple--text">UPDATE INGREDIENT DETAILS</v-card-title>
           <v-card-subtitle>Please fill in the required information</v-card-subtitle>
           <v-divider></v-divider>
           <v-container>
@@ -122,7 +122,7 @@
               </v-col>
               <v-col cols="12">
                 <v-select
-                  label="Ingredients Unit"
+                  label="Ingredient''s Unit"
                   outlined
                   v-model="editValue.ingredients_unit"
                   :items="items"
@@ -130,7 +130,7 @@
               </v-col>
               <v-col cols="12">
                 <v-text-field
-                  label="Estimated Amount"
+                  label="Stock Level Basis Qty"
                   color="purple"
                   v-model="editValue.ingredients_need_amount"
                   outlined
@@ -234,14 +234,14 @@ export default {
       const errors = [];
       if (!this.$v.addedIngredientsName.$dirty) return errors;
       !this.$v.addedIngredientsName.required &&
-        errors.push("Ingredients name is required.");
+        errors.push("Ingredient's name is required.");
       return errors;
     },
     AddedIngredientsValueErrors() {
       const errors = [];
       if (!this.$v.addedEstimatedAmount.$dirty) return errors;
       !this.$v.addedEstimatedAmount.required &&
-        errors.push("Estimated value is required.");
+        errors.push("Stock Level Basis Qty is required.");
       return errors;
     },
     addedCategoryErrors() {
@@ -311,7 +311,7 @@ export default {
             this.addDialog = false;
             if (response.data == "existed") {
               Swal.fire({
-                title: "Ingredients Already Exist!",
+                title: "Ingredient Already Exists!",
                 icon: "warning",
                 timer: 3000
               });
@@ -417,7 +417,7 @@ export default {
           this.deleteStockProduct(item);
           Swal.fire({
             title: "Deleted!",
-            text: "Product is being deleted",
+            text: "Ingredient has been deleted.",
             icon: "success",
             showConfirmButton: false,
             timer: 1500
@@ -441,7 +441,7 @@ export default {
           this.deleteStockIngredients(item);
           Swal.fire({
             title: "Deleted!",
-            text: "Product is being deleted",
+            text: "Ingredient has been deleted",
             icon: "success",
             showConfirmButton: false,
             timer: 1500

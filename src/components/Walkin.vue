@@ -107,6 +107,9 @@ export default {
       customerBarangay: "Bakilid",
       customerCity: "Mandaue city",
       customerProvince: "Cebu",
+      longitude: 123.921969,
+      latitude: 10.329892,
+      postcode: 6014,
       customerName: null,
       contactNumber: null,
       orderQuantity: null,
@@ -311,7 +314,10 @@ export default {
             total_payment: this.totalPay,
             deliveryDate: this.date,
             orderStatus: 'Delivered',
-            distance: Math.round((dist + Number.EPSILON) * 100) / 100
+            distance: Math.round((dist + Number.EPSILON) * 100) / 100,
+            longitude: this.longitude,
+            latitude: this.latitude,
+            postcode: this.postcode
           };
          
           axios
