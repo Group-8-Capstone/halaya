@@ -32,7 +32,7 @@
           </center>
           <div style="margin:1px" class="pa-0">
             <div>
-              <v-data-table :headers="headers" :items="records">
+              <v-data-table :headers="headers" :items="records" :hide-default-footer="true">
                 <template v-slot:item.created_at="{ item }">
                   <span>{{new Date(item.created_at).toISOString().substring(0,10)}}</span>
                 </template>

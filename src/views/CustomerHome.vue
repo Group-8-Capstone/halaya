@@ -81,7 +81,7 @@
             <v-col cols="6">
               <v-text-field
                 v-model="customerStreet"
-                label="Building Name/Street"
+                label="Landmark"
                 :error-messages="customerStreetErrors"
                 @input="$v.customerStreet.$touch()"
                 @blur="$v.customerStreet.$touch()"
@@ -221,13 +221,13 @@
           <v-row>
             <v-col cols="5" class="pl-12">
               <span>
-                <h4>Recievers Name:</h4>
+                <h4>Receiver's Name:</h4>
                 {{customerName}}
               </span>
             </v-col>
             <v-col cols="5" class="pl-12">
               <span>
-                <h4>Reciever Number:</h4>
+                <h4>Receiver's Number:</h4>
                 {{contactNumber}}
               </span>
             </v-col>

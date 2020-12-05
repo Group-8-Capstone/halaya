@@ -246,7 +246,7 @@ export default {
     },
     alertDelivered(item) {
       Swal.fire({
-        title: "Are you sure item is being delivered?",
+        title: "Are you sure item has been delivered?",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
@@ -266,7 +266,7 @@ export default {
         .post(this.url + "/api/post/updateStat/" + item.id, {}, this.config)
         .then(response => {
           Swal.fire({
-            title: "Order is being delivered",
+            title: "Order has been delivered",
             icon: "success",
             showConfirmButton: false,
             timer: 1500
@@ -303,7 +303,7 @@ export default {
         .then(response => {
           Swal.fire({
             title: "Canceled!",
-            text: "Order is being canceled",
+            text: "Order has been canceled",
             icon: "success",
             showConfirmButton: false,
             timer: 1500

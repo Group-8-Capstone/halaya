@@ -20,7 +20,7 @@
                 size="150"
               >
                 <v-list-item-content>
-                  <v-list-item-title class="d-flex align-center justify-center pa-3 mx-auto headline">S I G N  I N</v-list-item-title>
+                  <v-list-item-title class="d-flex align-center justify-center pa-3 mx-auto headline">Sign In</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item class="d-flex align-center justify-center pa-6 mx-auto">

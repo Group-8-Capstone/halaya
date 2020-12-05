@@ -36,6 +36,7 @@
               <v-data-table
                 :headers="headersIngredients"
                 :items="displayIngredientsRecords"
+                :hide-default-footer="true"
               >
                 <template
                   #item.used_ingredients_amount="{ item }"
