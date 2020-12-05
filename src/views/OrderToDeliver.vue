@@ -78,12 +78,12 @@
                         &nbsp;{{i.orders.length}}
                       </span>
                       <br>
-                      <div v-show="isComplete(i) === true">
+                      <!-- <div v-show="isComplete(i) === true">
                         <v-btn rounded class="white--text" color="success" depressed>
                           Completed
                           <v-icon dark right>mdi-checkbox-marked-circle</v-icon>
                         </v-btn>
-                      </div>
+                      </div>-->
                       <!-- <div v-if="isCanceled(i) === true">
                         <v-badge bordered color="warning" dot overlap>
                           <v-btn rounded class="white--text" color="success" depressed>
@@ -116,31 +116,49 @@
           </template>
           <template v-slot:item.action="{ item }">
             <div
-              v-if="isCanceled(item) === true || isAdmin() === true || isDelivered(item) === true "
+              v-if="isAdmin() === true"
             >
-              <v-icon
-                disabled
-                normal
-                class="mr-2"
-                title="Delivered"
-                @click="alertDelivered(item)"
-              >mdi-truck-check-outline</v-icon>
-              <v-icon
-                disabled
-                @click="alertCancel(item)"
-                normal
-                class="mr-2"
-                title="Cancel"
-              >mdi-cancel</v-icon>
+              <div v-if="isCanceled(item) === true || isDelivered(item) === true">
+                <v-icon
+                  disabled
+                  normal
+                  class="mr-2"
+                  title="Delivered"
+                  @click="alertDelivered(item)"
+                >mdi-truck-check-outline</v-icon>
+                <v-icon disabled @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+              </div>
+              <div v-else>
+                <v-icon
+                  disabled
+                  normal
+                  class="mr-2"
+                  title="Delivered"
+                  @click="alertDelivered(item)"
+                >mdi-truck-check-outline</v-icon>
+                <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+              </div>
             </div>
-            <div v-else>
-              <v-icon
-                normal
-                class="mr-2"
-                title="Delivered"
-                @click="alertDelivered(item)"
-              >mdi-truck-check-outline</v-icon>
-              <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+            <div v-if="isRider() === true">
+              <div v-if="isCanceled(item) === true || isDelivered(item) === true">
+                <v-icon
+                  disabled
+                  normal
+                  class="mr-2"
+                  title="Delivered"
+                  @click="alertDelivered(item)"
+                >mdi-truck-check-outline</v-icon>
+                <v-icon disabled @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+              </div>
+              <div v-else>
+                <v-icon
+                  normal
+                  class="mr-2"
+                  title="Delivered"
+                  @click="alertDelivered(item)"
+                >mdi-truck-check-outline</v-icon>
+                <v-icon disabled @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+              </div>
             </div>
           </template>
         </v-data-table>
@@ -186,6 +204,9 @@ export default {
           sortable: false,
           value: "receiver_name"
         },
+        { text: "Address", value: "customer_address", sortable: false },
+        { text: "Mobile Number", value: "contact_number", sortable: false },
+        { text: "Distance", value: "distance" },
         { text: "Ube Halaya Tub Order Qty", value: "ubehalayatub_qty" },
         { text: "Ube Halaya Jar Order Qty", value: "ubehalayajar_qty" },
         { text: "Total Payment", value: "total_payment" },
@@ -202,19 +223,17 @@ export default {
     };
     this.config = config;
   },
-   mounted(){
-    let pusher = new Pusher('c31b45d58431fd307880', {
-        cluster: 'ap1',
-        encrypted: false
-      });
+  mounted() {
+    let pusher = new Pusher("c31b45d58431fd307880", {
+      cluster: "ap1",
+      encrypted: false
+    });
 
-      //Subscribe to the channel we specified 
-    let channel = pusher.subscribe('order-channel')
+    //Subscribe to the channel we specified
+    let channel = pusher.subscribe("order-channel");
 
-    channel.bind('newOrder', data => {
+    channel.bind("newOrder", data => {
       this.dataGrouping();
-     
-    
     });
   },
   created() {
@@ -236,6 +255,18 @@ export default {
     },
     viewDetails(i) {
       this.delivery_batch = i;
+      this.delivery_batch.orders.forEach((order, index) => {
+        let {
+          building_or_street,
+          barangay,
+          city_or_municipality,
+          province
+        } = order;
+        var place = building_or_street
+          .toString()
+          .concat(" ", barangay, " ", city_or_municipality, " ", province);
+        this.delivery_batch.orders[index]["customer_address"] = place;
+      });
       this.detailsDialog = true;
       this.dataGrouping();
     },
@@ -465,6 +496,11 @@ export default {
     // },
     isAdmin() {
       if (localStorage.getItem("role") === "admin") {
+        return true;
+      }
+    },
+    isRider() {
+      if (localStorage.getItem("role") === "driver") {
         return true;
       }
     },
