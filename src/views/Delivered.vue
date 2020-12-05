@@ -38,12 +38,13 @@ export default {
       search: "",
       headers: [
         {
-          text: "Name",
+          text: "Receiver Name",
           align: "start",
           sortable: false,
           value: "receiver_name"
         },
         { text: "Address", value: "customer_address" },
+        { text: "Mobile Number", value: "contact_number", sortable: false },
         { text: "Distance", value: "distance" },
         {
           text: "Ube Halaya Jar(Quantity)",
@@ -53,6 +54,11 @@ export default {
         {
           text: "Ube Halaya Tub(Quantity)",
           value: "ubehalayatub_qty",
+          sortable: false
+        },
+        {
+          text: "Total Payment",
+          value: "total_payment",
           sortable: false
         },
         { text: "Delivered Date", value: "preferred_delivery_date" },

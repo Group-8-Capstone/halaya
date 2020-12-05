@@ -1,6 +1,9 @@
 <template>
 <div>
   <center>
+    <v-form ref="form"
+    v-model="valid"
+    lazy-validation>
      <v-card style="max-width:800px;height:auto;" class="mb-12" >
         <v-spacer></v-spacer>
         <v-card-title class="align-center">
@@ -74,14 +77,8 @@
           <v-spacer></v-spacer>
           <v-btn outlined color="purple darken-2" @click="placeOrder()">ADD ORDER</v-btn>
         </v-card-actions>
-        <v-progress-linear
-            color="deep-purple accent-4"
-            v-show="loading"
-            indeterminate
-            rounded
-            height="6"
-          ></v-progress-linear>
       </v-card>
+      </v-form>
       </center>
     </div>  
 </template>
@@ -99,6 +96,7 @@ export default {
     name:"Walkin",
   data() {
     return {
+      valid: true,
       loading: false,
       accessToken:
         "pk.eyJ1IjoiamllbnhpeWEiLCJhIjoiY2tlaTM3d2VrMWcxczJybjc0cmZkamk3eiJ9.JzrYlG2kZ08Pkk24hvKDJw",
@@ -107,8 +105,11 @@ export default {
       addOrderDialog: false,
       customerStreet: "Shambala Veterinary Clinic Hernan Cortes Street",
       customerBarangay: "Bakilid",
-      customerCity: "Mandaue City",
+      customerCity: "Mandaue city",
       customerProvince: "Cebu",
+      longitude: 123.921969,
+      latitude: 10.329892,
+      postcode: 6014,
       customerName: null,
       contactNumber: null,
       orderQuantity: null,
@@ -232,6 +233,7 @@ export default {
 
   methods: {
     showDialog() {
+      this.$refs.form.reset();
       this.$v.$reset();
       this.customerStreet = null
       this.customerBarangay = null
@@ -312,7 +314,10 @@ export default {
             total_payment: this.totalPay,
             deliveryDate: this.date,
             orderStatus: 'Delivered',
-            distance: Math.round((dist + Number.EPSILON) * 100) / 100
+            distance: Math.round((dist + Number.EPSILON) * 100) / 100,
+            longitude: this.longitude,
+            latitude: this.latitude,
+            postcode: this.postcode
           };
          
           axios

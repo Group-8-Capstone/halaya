@@ -79,6 +79,7 @@ export default {
       { text: "Prefered Delivery Date", value: "preferred_delivery_date" },
       { text: "Halaya Jar Quantity", value: "ubehalayajar_qty" },
       { text: "Halaya Tub Quantity", value: "ubehalayatub_qty" },
+      { text: "Total Payment", value: "total_payment" },
       { text: "Status", value: "order_status" }
     ],
     headers2: [
@@ -101,6 +102,20 @@ export default {
     this.retrieveOnOrder();
     this.retrieveDeliveredOrder();
   },
+  mounted(){
+    let pusher = new Pusher('c31b45d58431fd307880', {
+        cluster: 'ap1',
+        encrypted: false
+      });
+
+    //Subscribe to the channel we specified 
+    let channel = pusher.subscribe('order-channel')
+    channel.bind('newOrder', data => {
+      this.retrieveDeliveredOrder();
+      this.retrieveOnOrder()
+    
+    });
+  },
   methods: {
     retrieveOnOrder() {
       this.$vloading.show();
@@ -108,16 +123,14 @@ export default {
       axios
         .get(this.url + "/api/fetchOngoingOrder/" + id, this.config)
         .then(response => {
-          setTimeout(() => {
-            this.$vloading.hide();
-          }, 1000);
+            this.$vloading.hide()
           this.onOrder = response.data.post;
         });
     },
     getColor(status) {
-      if (status === "On order") return "green";
-      else if (status === "Pending") return "orange";
-      else return "blue";
+      if (status === "Canceled") return "orange";
+      else if (status === "On order") return "blue";
+      else return "green";
     },
     retrieveDeliveredOrder() {
       this.$vloading.show();
@@ -125,9 +138,7 @@ export default {
       axios
         .get(this.url + "/api/fetchDeliveredOrder/" + id, this.config)
         .then(response => {
-          setTimeout(() => {
-            this.$vloading.hide();
-          }, 1000);
+            this.$vloading.hide()
           this.deliveredOrder = response.data.post;
         });
     },

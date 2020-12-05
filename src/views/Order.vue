@@ -27,6 +27,9 @@
               <template v-slot:item.preferred_delivery_date="{ item }">
                 <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>
               </template>
+               <template v-slot:item.contact_number="{ item }">
+              <span>{{'0'+item.contact_number}}</span>
+            </template>
               <template v-slot:item.order_status="{ item }">
                 <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
               </template>
@@ -76,6 +79,9 @@
             <template v-slot:item.preferred_delivery_date="{ item }">
               <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>
             </template>
+            <template v-slot:item.contact_number="{ item }">
+              <span>{{'0'+item.contact_number}}</span>
+            </template>
             <template v-slot:item.order_status="{ item }">
               <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
             </template>
@@ -95,6 +101,9 @@
         </v-tab-item>
       </v-tabs-items>
       <template>
+          <v-form ref="form"
+          v-model="valid"
+          lazy-validation>
         <v-dialog v-model="editDialog" style="height:auto;" width="400px">
           <v-card>
             <v-spacer></v-spacer>
@@ -108,6 +117,8 @@
                     <v-text-field
                       prepend-icon="mdi-account-outline"
                       label="Receiver's Name"
+                       :rules="nameRules"
+                       required
                       v-model="post.receiver_name"
                     ></v-text-field>
                   </v-row>
@@ -116,18 +127,23 @@
                 <label>Receiver Address</label>
                 <v-row class="pl-5">
                   <v-col cols="6">
-                    <v-text-field v-model="post.building_or_street" label="Building Name/Street"></v-text-field>
+                    <v-text-field v-model="post.building_or_street" label="Building Name/Street" :rules="streetRules"
+                       required></v-text-field>
                   </v-col>
                   <v-col cols="6">
-                    <v-text-field v-model="post.barangay" label="Barangay"></v-text-field>
+                    <v-text-field v-model="post.barangay" label="Barangay" :rules="barangayRules"
+                       required></v-text-field>
                   </v-col>
                 </v-row>
                 <v-row class="pl-5">
                   <v-col cols="6">
-                    <v-text-field v-model="post.city_or_municipality" label="Municipality/City"></v-text-field>
+                    <v-text-field v-model="post.city_or_municipality" label="Municipality/City"
+                    :rules="municipalityRules"
+                       required></v-text-field>
                   </v-col>
                   <v-col cols="6">
-                    <v-text-field v-model="post.province" label="Province"></v-text-field>
+                    <v-text-field v-model="post.province" label="Province" :rules="provinceRules"
+                       required></v-text-field>
                   </v-col>
                 </v-row>
                 <v-col cols="12">
@@ -148,10 +164,12 @@
                         readonly
                         v-bind="attrs"
                         v-on="on"
+                        :rules="deliveryRules"
+                       required
                       ></v-text-field>
                     </template>
                     <v-date-picker
-                      v-model="post.preferred_delivery_date"
+                      v-model="post.preferred_delivery_date "
                       color="deep-purple lighten-1"
                       no-title
                       scrollable
@@ -184,27 +202,13 @@
             </v-container>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn small outlined color="orange" @click="editDialog = false">CANCEL</v-btn>
+              <v-btn small outlined color="orange" @click="editDialog = false,cancel()">CANCEL</v-btn>
               <v-btn small outlined color="purple darken-2" @click=" updateItem()">UPDATE</v-btn>
             </v-card-actions>
-            <v-progress-linear
-              color="deep-purple accent-4"
-              v-show="loading"
-              indeterminate
-              rounded
-              height="6"
-            ></v-progress-linear>
           </v-card>
         </v-dialog>
+          </v-form>
       </template>
-      <template></template>
-      <v-progress-linear
-        color="deep-purple accent-4"
-        v-show="loading"
-        indeterminate
-        rounded
-        height="6"
-      ></v-progress-linear>
     </v-card>
   </div>
 </template>
@@ -263,7 +267,7 @@ export default {
   },
   data() {
     return {
-      loading: false,
+    valid:true,
       accessToken:
         "pk.eyJ1IjoiamllbnhpeWEiLCJhIjoiY2tlaTM3d2VrMWcxczJybjc0cmZkamk3eiJ9.JzrYlG2kZ08Pkk24hvKDJw",
       deliveryDate: new Date().toISOString().substr(0, 10),
@@ -297,12 +301,13 @@ export default {
       disabled: true,
       headers: [
         {
-          text: "Customer's Name",
+          text: "Receiver Name",
           align: "start",
           sortable: false,
           value: "receiver_name"
         },
         { text: "Address", value: "customer_address", sortable: false },
+        { text: "Mobile Number", value: "contact_number", sortable: false },
         { text: "Distance", value: "distance" },
         {
           text: "Delivery Date",
@@ -319,9 +324,39 @@ export default {
           value: "ubehalayatub_qty",
           sortable: false
         },
+        {
+          text: "Total Payment",
+          value: "total_payment",
+          sortable: false
+        },
         { text: "Actions", value: "action", sortable: false },
         { text: "Status", value: "order_status" }
-      ]
+      ],
+      nameRules: [
+        v => !!v || 'Name is required',
+      ],
+      provinceRules: [
+        v => !!v || 'Province is required',
+
+      ],
+      barangayRules: [
+        v => !!v || 'Barangay is required',
+      ],
+      streetRules: [
+        v => !!v || 'Street is required',
+      ],
+      municipalityRules: [
+        v => !!v || 'Municipality is required',
+
+      ],
+      contactRules: [
+      v => !!v || 'Mobile number is required',
+      v => /^(09|\+639)\d{9}$/.test(v) || "Input valid phone number"
+    ],
+    deliveryRules: [
+        v => !!v || 'Delivery Date is required',
+
+      ],
     };
   },
   validations: {
@@ -352,6 +387,7 @@ export default {
     channel.bind('newOrder', data => {
       console.log(data.order);
       this.fetchOrders();
+      this.fetchPendingOrders();
     });
   },
 
@@ -437,6 +473,7 @@ export default {
       this.orderedProducts = [];
     },
     updateItem() {
+       
       if (
         this.post.receiver_name === "" ||
         this.post.building_or_street === "" ||
@@ -455,7 +492,7 @@ export default {
       
         this.editDialog = false;
         this.$vloading.show();
-        this.$vloading.hide()
+       
         var place = this.post.building_or_street.concat(
           " ",
           this.post.barangay,
@@ -483,6 +520,7 @@ export default {
             axios
               .post(this.url + "/api/post/update", this.post, this.config)
               .then(response => {
+                this.$vloading.hide()
                 Swal.fire({
                   title: "Successfully Updated",
                   icon: "success",
@@ -492,6 +530,9 @@ export default {
               });
           });
       }
+    },
+    cancel(){
+      this.$refs.form.reset()
     },
     reloadData() {
       (this.customerName = ""),
@@ -674,6 +715,7 @@ export default {
       axios
         .post(this.url + "/api/post/confirm/" + item.id, {}, this.config)
         .then(response => {
+          console.log(response.data)
           this.$vloading.hide()
           Swal.fire({
             title: "Order is being confirmed",

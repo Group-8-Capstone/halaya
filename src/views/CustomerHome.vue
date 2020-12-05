@@ -12,20 +12,23 @@
       </v-card-title>
       <OrderingInfo></OrderingInfo>
     </v-card>
-    <v-dialog persistent v-model="addOrderDialog" style="height:auto;" width="500px">
+     <v-form ref="form"
+    v-model="valid"
+    lazy-validation>
+    <v-dialog persistent v-model="addOrderDialog" style="height:auto;" width="600px">
       <v-card class="ma-0 pa-0">
         <v-card-title class="align-center">
           <v-list-item-title
             class="d-flex align-center justify-center mx-auto headline black--text"
           >CREATE ORDER</v-list-item-title>
         </v-card-title>
-        <v-container>
+          <v-container>
           <div v-show="isSubmit === false">
           <v-row>
             <v-col cols="6">
               <v-text-field
                 prepend-icon="mdi-account-outline"
-                label="Receiver Name"
+                label="Receiver's Name"
                 v-model="customerName"
                 :error-messages="customerErrors"
                 @input="$v.customerName.$touch()"
@@ -47,14 +50,14 @@
               ></v-text-field>
             </v-col>
           </v-row>
-          <v-icon class="pl-5">mdi-map-marker</v-icon>
+          <v-icon class="pl-3">mdi-map-marker</v-icon>
           <label>Receiver Address</label>
         
-          <v-row class="pl-5">
+          <v-row class="pl-3">
             <v-col cols="6">
               <v-text-field disabled label="CEBU"></v-text-field>
             </v-col>
-            <v-col class="d-flex" cols="6">
+            <v-col  cols="6">
               <v-select :error-messages="customerMunicipalityErrors"
                 @input="$v.customerMunicipality.$touch()"
                 @blur="$v.customerMunicipality.$touch()" v-model="customerMunicipality" :items="list_of_municipalities_names" label="City/Municipality" id="customerMunicipality"></v-select>
@@ -67,11 +70,11 @@
 
           <div v-show="isSubmit === true">
           <div>
-            <v-btn small outlined color="purple darken-2"  @click="back()" class="mb-5">Back</v-btn>
+            <v-btn small outlined color="purple darken-2"  @click="back()" class="mb--5 ml-5">Back</v-btn>
           </div>
-          <v-row  class="pl-5">
+          <v-row>
             <v-col cols="6">
-              <v-select v-model="customerBarangay"      :error-messages="customerBarangayErrors"
+              <v-select v-model="customerBarangay" :error-messages="customerBarangayErrors"
                 @input="$v.customerBarangay.$touch()"
                 @blur="$v.customerBarangay.$touch()" :items="barangays" label="Barangay"></v-select>
             </v-col>
@@ -87,20 +90,20 @@
             </v-col>
           </v-row>
 
-          <v-row>
-            <v-col cols="6" class="pl-5">
-              <v-img class="ml-5" width="250px" height="200px" src="../assets/halayaJar.jpg"></v-img>
-              <h6 class="display-1 font-weight-light orange--text ml-5">{{jarName}}</h6>
-              <div id="price" class="font-weight-light grey--text title ml-5">{{jarPrice}}</div>
+          <v-row align="center" justify="center">
+            <v-col cols="6">
+              <v-img width="300px" height="200px" src="../assets/halayaJar.jpg"></v-img>
+              <h6 class="text-center font-weight-light orange--text text-h6 [1] text-sm-h5 [1] text-md-h4 [1] text-lg-h4 [1] text-xl-h3[1] text-truncate">{{jarName}}</h6>
+              <div id="price" class=" text-center font-weight-light grey--text title">{{jarPrice}}</div>
             </v-col>
-            <v-col cols="6" class="pl-5">
-              <v-img width="250px" height="200px" src="../assets/halayaTab.jpg"></v-img>
-              <h6 class="display-1 font-weight-light orange--text">{{tubName}}</h6>
-              <div id="price" class="font-weight-light grey--text title">{{tubPrice}}</div>
+            <v-col cols="6">
+              <v-img width="300px" height="200px" src="../assets/halayaTab.jpg"></v-img>
+              <h6 class="text-center font-weight-light orange--text text-h6 [1] text-sm-h5 [1] text-md-h4 [1] text-lg-h4 [1] text-xl-h3[1] text-truncate">{{tubName}}</h6>
+              <div id="price" class="text-center font-weight-light grey--text title">{{tubPrice}}</div>
             </v-col>
           </v-row>
           <v-row>
-            <v-col cols="6" class="pl-5">
+            <v-col cols="6">
               <v-text-field min=0 type="number" label="Quantity" v-model="jarQuantity">
                 <template slot="prepend">
                   <div id="vue-counter">
@@ -110,7 +113,7 @@
                 </template>
               </v-text-field>
             </v-col>
-            <v-col cols="6" class="pl-5">
+            <v-col cols="6">
               <v-text-field min=0 type="number" label="Quantity" v-model="tabQuantity">
                 <template slot="prepend">
                   <div id="vue-counter">
@@ -121,8 +124,8 @@
               </v-text-field>
             </v-col>
           </v-row>
-          <v-row class="pl-5">
-            <v-col cols="12" sm="6" md="4">
+          <v-row>
+            <v-col cols="12" sm="6" md="6">
               <v-menu
                 v-model="menu"
                 :close-on-content-click="true"
@@ -149,7 +152,7 @@
             </v-col>
           </v-row>
           </div>
-        </v-container>
+          </v-container>
         <v-card-actions v-show="isSubmit === true">
           <v-spacer></v-spacer>
           <v-btn outlined color="orange" @click="addOrderDialog = false, isSubmit=false" class="mb-5">CANCEL</v-btn>
@@ -157,11 +160,12 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+     </v-form>
     <template>
-      <v-row>
-        <v-col>
+      <v-row align="center" justify="center">
+        <v-col sm="12" md="6" lg="6" xl="6">
           <v-hover v-slot:default="{ hover }">
-            <v-card class="mx-auto mr-5" color="grey lighten-4" width="80%">
+            <v-card class="mx-auto " color="grey lighten-4" width="80%">
               <v-img :aspect-ratio="16/8" src="../assets/halayaTab.jpg">
                 <v-expand-transition>
                   <div
@@ -181,9 +185,9 @@
             </v-card>
           </v-hover>
         </v-col>
-        <v-col>
+        <v-col sm="12" md="6" lg="6" xl="6">
           <v-hover v-slot:default="{ hover }">
-            <v-card class="mx-auto ml-5" color="grey lighten-4" width="80%">
+            <v-card class="mx-auto" color="grey lighten-4" width="80%">
               <v-img class="justify-center" :aspect-ratio="16/8" src="../assets/halayaJar.jpg">
                 <v-expand-transition>
                   <div
@@ -214,55 +218,57 @@
               class="d-flex align-center justify-center mx-auto headline black--text"
             >SUMMARY OF ORDER</v-list-item-title>
           </v-card-title>
-          <v-row>
-            <v-col cols="5" class="pl-12">
+          <v-row class="pl-5">
+            <v-col md="6" lg="6" sm="12">
               <span>
                 <h4>Recievers Name:</h4>
                 {{customerName}}
               </span>
             </v-col>
-            <v-col cols="5" class="pl-12">
+            <v-col md="6" lg="6" sm="12">
               <span>
                 <h4>Reciever Number:</h4>
                 {{contactNumber}}
               </span>
             </v-col>
           </v-row>
-          <v-row>
-            <v-col cols="5" class="pl-12">
+          <v-row class="pl-5">
+            <v-col md="6" lg="6" sm="12">
               <span>
                 <h4>Address:</h4>
                 {{customerStreet}}, {{customerBarangay}}, {{customerMunicipality}}
               </span>
             </v-col>
-            <v-col cols="5" class="pl-12">
+            <v-col md="6" lg="6" sm="12">
               <span>
                 <h4>Delivery:</h4>
                 {{date}}
               </span>
             </v-col>
           </v-row>
-          <v-row>
-            <v-col cols="5" class="pl-12">
+          <v-row class="pl-5">
+            <v-col md="6" lg="6" sm="12">
               <span>
                 <h4>Jar Quantity:</h4>
                 {{jarQuantity}}
               </span>
             </v-col>
-            <v-col cols="5" class="pl-12">
+            <v-col md="6" lg="6" sm="12">
               <span>
-                <h4>Tub Quntity:</h4>
+                <h4>Tub Quantity:</h4>
                 {{tabQuantity}}
               </span>
             </v-col>
           </v-row>
-
-          <v-col cols="5" class="pl-12">
+          <v-row class="pl-5">
+          <v-col md="6" lg="6" sm="12">
             <span>
               <h4>Your total payment:</h4>
               {{totalPay}}
             </span>
           </v-col>
+          <v-col cols="6"></v-col>
+          </v-row>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
@@ -298,6 +304,17 @@
   min-height: 100vh;
   justify-content: center;
 }
+.v-application .text-h6 {
+    font-size: 1.25rem !important;
+    font-weight: 500;
+    line-height: 2rem;
+    letter-spacing: inherit !important;
+    font-family: "Roboto", sans-serif !important;
+}
+
+.col{
+  flex-basis: auto !important;
+}
 
 </style>
 
@@ -316,6 +333,7 @@ import {
 export default {
   data() {
     return {
+      valid: true,
       loading: false,
       accessToken:
         "pk.eyJ1IjoiamllbnhpeWEiLCJhIjoiY2tlaTM3d2VrMWcxczJybjc0cmZkamk3eiJ9.JzrYlG2kZ08Pkk24hvKDJw",
@@ -345,7 +363,6 @@ export default {
       totalPay: 0,
       barangays:[], 
       contactRules: [
-      v => !!v || "Phone number is required",
       v => /^(09|\+639)\d{9}$/.test(v) || "Input valid phone number"
     ],
       list_of_municipalities_names: ["CEBU CITY (CAPITAL)", "MANDAUE CITY"],
@@ -386,6 +403,7 @@ export default {
       required
     }
   },
+  
 
   computed: {
     isDisabled() {
@@ -463,6 +481,7 @@ export default {
   },
   methods: {
     showDialog() {
+      this.$refs.form.reset()
       this.$v.$reset();
       this.addOrderDialog = true;
       this.customerStreet = null;
@@ -477,6 +496,13 @@ export default {
       this.date = null;
     },   
     submit(customer_municipality){
+      if( this.customerName == null ||
+        this.contactNumber==null ||
+        this.customerMunicipality == null){
+        this.$v.$touch();
+        this.isSubmit = false;
+        }else{
+       this.$v.$reset();
       this.isSubmit = true;
       var barangay_list = [];
       var brgy_array = [];
@@ -492,6 +518,7 @@ export default {
           })
         }
       this.barangays = brgy_array;
+      }
     }, 
     back(){
       this.isSubmit = false;
@@ -512,14 +539,15 @@ export default {
     },
     getProximity(city){
       if(city == "Mandaue city"){
-        proximity = [123.933334, 10.333333]
+        let proximity = "123.933334, 10.333333"
         return proximity ;
       } else {
-        proximity = [123.8999964, 10.2833322]
+        let proximity = "123.8999964, 10.2833322"
         return proximity ;
       }
     },
     placeOrder() {
+      this.$refs.form.validate()
       this.$v.$touch();
       var street = this.customerStreet;
       var barangay = this.customerBarangay;
@@ -539,10 +567,12 @@ export default {
         " ",
         province
       );
+
+      console.log("proximity", this.getProximity(municipality));
       
       axios
         .get(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${place}.json?country=ph&proximity=${this.getProximity()}&limit=2&access_token=${
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${place}.json?country=ph&proximity=${this.getProximity(municipality)}&limit=2&access_token=${
             this.accessToken
           }`
         )
@@ -596,6 +626,9 @@ export default {
             });
         });
     },
+    reset () {
+        this.$refs.form.reset()
+      },
     addCard() {
       var total_order_qty =
         parseInt(this.jarQuantity) + parseInt(this.tabQuantity) * 4;
