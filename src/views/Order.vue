@@ -486,7 +486,7 @@ export default {
         this.post.preferred_delivery_date === ""
       ) {
         Swal.fire({
-          title: "Please fill in all required field",
+          title: "Please fill in all required fields",
           icon: "warning",
           timer: 3000
         }),
@@ -721,7 +721,7 @@ export default {
           console.log(response.data)
           this.$vloading.hide()
           Swal.fire({
-            title: "Order is being confirmed",
+            title: "Order has been confirmed",
             icon: "success",
             showConfirmButton: false,
             timer: 1500

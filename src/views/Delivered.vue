@@ -1,9 +1,22 @@
 <template>
   <v-card class="ma-5 mb-12 pa-5">
-    <v-row>
-      <v-spacer></v-spacer>
-      <DeliveredPdf :headers="headers" :deliveredOrder="deliveredOrder" class="float-right mr-5"></DeliveredPdf>
-    </v-row>
+    <div>
+      <v-menu offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn outlined small color="purple" v-bind="attrs" v-on="on">
+            <v-icon>mdi-download</v-icon>Export
+          </v-btn>
+        </template>
+        <v-list>
+          <v-col>
+            <DeliveredPdf :headers="headers" :records="deliveredOrder"></DeliveredPdf>
+            <div>
+              <v-btn class="float-right mr-5" text small>Export as CSV</v-btn>
+            </div>
+          </v-col>
+        </v-list>
+      </v-menu>
+    </div>
     <v-card-title>
       Delivered Orders
       <v-spacer></v-spacer>
@@ -80,13 +93,13 @@ export default {
   },
   methods: {
     loadDelivered() {
-       this.$vloading.show();
+      this.$vloading.show();
       axios
         .get(this.url + "/api/posts/delivered", this.config)
         .then(response => {
-           setTimeout(() => {
-        this.$vloading.hide()
-         },1000)   
+          setTimeout(() => {
+            this.$vloading.hide();
+          }, 1000);
           this.deliveredOrder = response.data.data;
           for (var i = 0; i < this.deliveredOrder.length; i++) {
             var street = response.data.data[i].building_or_street;

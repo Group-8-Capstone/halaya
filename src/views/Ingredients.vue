@@ -82,7 +82,7 @@
          </template>
         <template v-slot:item.action="{ item }">
           <v-icon normal title="Edit">mdi-table-edit</v-icon>
-          <v-icon class="mr-3" color="red" normal title="Delete Product">mdi-delete</v-icon>
+          <v-icon class="mr-3" color="red" normal title="Delete Ingredient">mdi-delete</v-icon>
         </template>
       </v-data-table>
     </v-card>
@@ -101,8 +101,7 @@
               <v-col cols="12">
                 <v-text-field
                   color="purple"
-             
-                  label="Ingredients Name"
+                  label="Ingredient's Name"
                   v-model="editValue.ingredients_name"
                   v-bind:disabled="disabled"
                 ></v-text-field>
@@ -124,7 +123,6 @@
                 <v-text-field
                   color="purple"
                   label="Unit"
-                
                   v-model="editValue.ingredients_unit"
                   v-bind:disabled="disabled"
                 ></v-text-field>
@@ -146,7 +144,7 @@
           <v-card-title class="deep-purple--text align-center">
             <v-list-item-title
               class="deep-purple--text d-flex align-center justify-center mx-auto headline"
-            >Number of Products Produced</v-list-item-title>
+            >Purchased Quantity</v-list-item-title>
           </v-card-title>
           <v-divider></v-divider>
           <v-container>

@@ -1,6 +1,5 @@
 <template>
   <div class="ma-5 mb-12 pa-5">
- 
     <v-row>
       <v-layout wrap class="justify-center">
         <v-card class="card-container ma-5 productCard" style="max-width:500px;height:auto;">
@@ -41,7 +40,6 @@
         </v-card>
       </v-layout>
     </v-row>
-       <!-- <v-list-item>Records is done once</v-list-item> -->
     <template>
       <v-card>
         <v-row>
@@ -210,7 +208,7 @@ export default {
       ],
       products: [
         { title: "Ube Halaya in Jar", image: require("@/assets/ubeJar.jpg") },
-        { title: "Ube Halaya in Tab", image: require("@/assets/ubeTab.jpg") }
+        { title: "Ube Halaya in Tub", image: require("@/assets/ubeTab.jpg") }
       ]
     };
   },

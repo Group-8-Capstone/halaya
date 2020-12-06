@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mt-5">
     <v-spacer></v-spacer>
     <v-btn class="mr-5" text float-right small @click="generateReport">
       Export as PDF
@@ -10,7 +10,7 @@
       :enable-download="true"
       :preview-modal="false"
       :paginate-elements-by-height="5000"
-      :filename="'Product Logs'"
+      :filename="'Orders To Deliver'"
       :pdf-quality="2"
       :manual-pagination="false"
       pdf-format="a4"
@@ -27,30 +27,25 @@
             </div>
             <div>
               <h4>WAWEN'S UBE HALAYA</h4>
-              <h6>PRODUCTS' LOGS</h6>
+              <h6>ORDERS TO DELIVER</h6>
               <br>
             </div>
           </center>
           <div style="margin:1px" class="pa-0">
             <div>
-              <v-data-table :headers="headers" :items="records" :hide-default-footer="true">
-                <template v-slot:item.created_at="{ item }">
-                  <span>{{new Date(item.created_at).toISOString().substring(0,10)}}</span>
+              <v-data-table
+                :headers="headers"
+                :items="todelivered"
+                :hide-default-footer="true"
+              >
+                <template v-slot:item.preferred_delivery_date="{ item }">
+                  <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>
                 </template>
-                <template v-slot:item.action="{ item }">
-                  <v-icon
-                    normal
-                    class="mr-2"
-                    title="Delivered"
-                    @click="alertDelivered(item)"
-                  >mdi-truck-check-outline</v-icon>
-                  <v-icon
-                    @click="editDialog = !editDialog, editItem(item) "
-                    class="mr-2"
-                    normal
-                    title="Edit"
-                  >mdi-table-edit</v-icon>
-                  <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+                <template v-slot:item.contact_number="{ item }">
+                  <span>{{'0'+item.contact_number}}</span>
+                </template>
+                <template v-slot:item.order_status="{ item }">
+                  <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
                 </template>
               </v-data-table>
             </div>
@@ -65,8 +60,8 @@
 <script>
 import VueHtml2pdf from "vue-html2pdf";
 export default {
-  name: "ProductsPdf",
-  props: ["headers", "records"],
+  name: "OrderToDeliverPdf",
+  props: ["headers", "todelivered"],
   components: {
     VueHtml2pdf
   },
