@@ -30,6 +30,9 @@
                <template v-slot:item.contact_number="{ item }">
               <span>{{'0'+item.contact_number}}</span>
             </template>
+             <template v-slot:item.distance="{ item }">
+              <span>{{item.distance+'km'}}</span>
+            </template>
               <template v-slot:item.order_status="{ item }">
                 <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
               </template>
