@@ -267,6 +267,7 @@ export default {
         icon: "mdi-history",
         text: "Stock",
         subItem: [
+          { icon: "mdi-cogs", title: "Stock Settings", link: "/setting" },
           { icon: "mdi-stocking", title: "Ingredients", link: "/ingredients" },
           {
             icon: "mdi-package-variant",
@@ -295,7 +296,7 @@ export default {
         
       },
 
-      { icon: "mdi-cogs", text: "Business Settings", link: "/setting" },
+     
       {
         icon: "mdi-account-settings",
         text: "Profile Setting",
