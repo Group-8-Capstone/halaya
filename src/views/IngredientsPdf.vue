@@ -10,7 +10,7 @@
       :enable-download="true"
       :preview-modal="false"
       :paginate-elements-by-height="5000"
-      :filename="'Used Ingredients'"
+      :filename="'Ingredients Log'"
       :pdf-quality="2"
       :manual-pagination="false"
       pdf-format="a4"
@@ -27,7 +27,7 @@
             </div>
             <div>
               <h4>WAWEN'S UBE HALAYA</h4>
-              <h6>RECORDED USED INGREDIENTS</h6>
+              <h6>INGREDIENTS' LOG</h6>
               <br>
             </div>
           </center>

@@ -1,172 +1,193 @@
 <template>
   <div>
-    <v-card id="cardtable" class="ma-5 mb-12 pa-5">
+    <v-card class="ma-5 mb-12 pa-5">
       <v-tabs v-model="tabs" right color="deep-purple accent-4">
         <v-tab>Products</v-tab>
-        <v-tab>Products' Logs</v-tab>
+        <v-tab>Products' Log</v-tab>
       </v-tabs>
       <v-tabs-items v-model="tabs">
         <v-tab-item>
-          <v-row>
-            <v-layout wrap class="justify-center">
-              <v-card class="card-container ma-5 productCard" style="max-width:500px;height:auto;">
-                <v-card-title class="justify-center productName">{{jarName}}</v-card-title>
-                <v-divider></v-divider>
-                <v-list-item class="justify-center mt-5">
-                  <img src="../assets/ubeJar.jpg" alt width="100" height="100">
-                </v-list-item>
-                <v-list-item
-                  class="justify-center"
-                >Remaining Quantity: {{halayaJarAvailability1}} pcs</v-list-item>
-                <v-list-item class="justify-center">Price: {{jarPrice}} Pesos</v-list-item>
-                <center>
-                  <v-chip :color="comparedJarAvailability()" dark>{{ jarStat }}</v-chip>
-                </center>
-                <v-list-item class="justify-center">Ordered Quantity: {{totalJar}} pcs</v-list-item>
-                <v-divider></v-divider>
-                <v-card-actions class="justify-end">
-                  <v-btn small outlined color="primary" @click="JarDialog=true">EDIT</v-btn>
-                  <v-btn small outlined color="purple darken-2" @click="recordProductJar">RECORD</v-btn>
-                </v-card-actions>
-              </v-card>
-              <v-card class="card-container ma-5 productCard" style="max-width:500px;height:auto;">
-                <v-card-title class="justify-center productName">{{tubName}}</v-card-title>
-                <v-divider></v-divider>
-                <v-list-item class="justify-center mt-5">
-                  <img src="../assets/ubeTab.jpg" alt width="100" height="100">
-                </v-list-item>
-                <v-list-item
-                  class="justify-center"
-                >Remaining Quantity: {{halayaTubAvailability1}} pcs</v-list-item>
-                <v-list-item class="justify-center">Price: {{tubPrice}} Pesos</v-list-item>
-                <center>
-                  <v-chip :color="comparedTubAvailability()" dark>{{ tubStat }}</v-chip>
-                  <v-list-item class="justify-center">Ordered Quantity: {{totalTub}} pcs</v-list-item>
-                </center>
-                <v-divider></v-divider>
-                <v-card-actions class="justify-end">
-                  <v-btn small outlined color="primary" @click="TubDialog=true">EDIT</v-btn>
-                  <v-btn small outlined color="purple darken-2" @click="recordProductTub">RECORD</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-layout>
-          </v-row>
-          <template>
-            <v-dialog v-model="JarDialog" width="350px">
-              <v-card class="ma-0 pa-0">
-                <v-spacer></v-spacer>
-                <v-card-title class="align-center">
-                  <v-list-item-title
-                    class="deep-purple--text d-flex align-center justify-center mx-auto headline"
-                  >Update Jar Info</v-list-item-title>
-                </v-card-title>
-                <v-divider></v-divider>
-                <v-container>
-                  <v-row class="mx-2">
-                    <v-col cols="12">
-                      <v-text-field v-model="editedJarPrice" color="purple" outlined label="Price"></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="editedJarAvail"
-                        color="purple"
-                        outlined
-                        label="Produced Products Quantity"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
-                <v-card-actions>
+          <div>
+            <v-row>
+              <v-layout wrap class="justify-center">
+                <v-card
+                  class="card-container ma-5 productCard"
+                  style="max-width:500px;height:auto;"
+                >
+                  <v-card-title class="justify-center productName">{{jarName}}</v-card-title>
+                  <v-divider></v-divider>
+                  <v-list-item class="justify-center mt-5">
+                    <img src="../assets/ubeJar.jpg" alt width="100" height="100">
+                  </v-list-item>
+                  <v-list-item
+                    class="justify-center"
+                  >Remaining Quantity: {{halayaJarAvailability1}} pcs</v-list-item>
+                  <v-list-item class="justify-center">Price: {{jarPrice}} Pesos</v-list-item>
+                  <center>
+                    <v-chip :color="comparedJarAvailability()" dark>{{ jarStat }}</v-chip>
+                  </center>
+                  <v-list-item class="justify-center">Ordered Quantity: {{totalJar}} pcs</v-list-item>
+                  <v-divider></v-divider>
+                  <v-card-actions class="justify-end">
+                    <v-btn small outlined color="primary" @click="JarDialog=true">EDIT</v-btn>
+                    <v-btn small outlined color="purple darken-2" @click="recordProductJar">RECORD</v-btn>
+                  </v-card-actions>
+                </v-card>
+                <v-card
+                  class="card-container ma-5 productCard"
+                  style="max-width:500px;height:auto;"
+                >
+                  <v-card-title class="justify-center productName">{{tubName}}</v-card-title>
+                  <v-divider></v-divider>
+                  <v-list-item class="justify-center mt-5">
+                    <img src="../assets/ubeTab.jpg" alt width="100" height="100">
+                  </v-list-item>
+                  <v-list-item
+                    class="justify-center"
+                  >Remaining Quantity: {{halayaTubAvailability1}} pcs</v-list-item>
+                  <v-list-item class="justify-center">Price: {{tubPrice}} Pesos</v-list-item>
+                  <center>
+                    <v-chip :color="comparedTubAvailability()" dark>{{ tubStat }}</v-chip>
+                    <v-list-item class="justify-center">Ordered Quantity: {{totalTub}} pcs</v-list-item>
+                  </center>
+                  <v-divider></v-divider>
+                  <v-card-actions class="justify-end">
+                    <v-btn small outlined color="primary" @click="TubDialog=true">EDIT</v-btn>
+                    <v-btn small outlined color="purple darken-2" @click="recordProductTub">RECORD</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-layout>
+            </v-row>
+            <template>
+              <v-dialog v-model="JarDialog" width="350px">
+                <v-card class="ma-0 pa-0">
                   <v-spacer></v-spacer>
-                  <v-btn
-                    small
-                    outlined
-                    color="orange"
-                    @click="JarDialog=false,getHalayaJar()"
-                  >CANCEL</v-btn>
-                  <v-btn small outlined color="purple darken-2" @click="editHalayaJar()">UPDATE</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </template>
-          <template>
-            <v-dialog v-model="TubDialog" width="350px">
-              <v-card class="ma-0 pa-0">
-                <v-spacer></v-spacer>
-                <v-card-title class="align-center">
-                  <v-list-item-title
-                    class="deep-purple--text d-flex align-center justify-center mx-auto headline"
-                  >Update Tub Info</v-list-item-title>
-                </v-card-title>
-                <v-divider></v-divider>
-                <v-container>
-                  <v-row class="mx-2">
-                    <v-col cols="12">
-                      <v-text-field v-model="editedTubPrice" color="purple" outlined label="Price"></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="editedTubAvail"
-                        color="purple"
-                        outlined
-                        label="Produced Products Quantity"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
-                <v-card-actions>
+                  <v-card-title class="align-center">
+                    <v-list-item-title
+                      class="deep-purple--text d-flex align-center justify-center mx-auto headline"
+                    >Update Jar Info</v-list-item-title>
+                  </v-card-title>
+                  <v-divider></v-divider>
+                  <v-container>
+                    <v-row class="mx-2">
+                      <v-col cols="12">
+                        <v-text-field
+                          v-model="editedJarPrice"
+                          color="purple"
+                          outlined
+                          label="Price"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12">
+                        <v-text-field
+                          v-model="editedJarAvail"
+                          color="purple"
+                          outlined
+                          label="Produced Products Quantity"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      small
+                      outlined
+                      color="orange"
+                      @click="JarDialog=false,getHalayaJar()"
+                    >CANCEL</v-btn>
+                    <v-btn small outlined color="purple darken-2" @click="editHalayaJar()">UPDATE</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </template>
+            <template>
+              <v-dialog v-model="TubDialog" width="350px">
+                <v-card class="ma-0 pa-0">
                   <v-spacer></v-spacer>
-                  <v-btn
-                    small
-                    outlined
-                    color="orange"
-                    @click="TubDialog=false,getHalayaTub()"
-                  >CANCEL</v-btn>
-                  <v-btn small outlined color="purple darken-2" @click="editHalayaTub()">UPDATE</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </template>
+                  <v-card-title class="align-center">
+                    <v-list-item-title
+                      class="deep-purple--text d-flex align-center justify-center mx-auto headline"
+                    >Update Tub Info</v-list-item-title>
+                  </v-card-title>
+                  <v-divider></v-divider>
+                  <v-container>
+                    <v-row class="mx-2">
+                      <v-col cols="12">
+                        <v-text-field
+                          v-model="editedTubPrice"
+                          color="purple"
+                          outlined
+                          label="Price"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12">
+                        <v-text-field
+                          v-model="editedTubAvail"
+                          color="purple"
+                          outlined
+                          label="Produced Products Quantity"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      small
+                      outlined
+                      color="orange"
+                      @click="TubDialog=false,getHalayaTub()"
+                    >CANCEL</v-btn>
+                    <v-btn small outlined color="purple darken-2" @click="editHalayaTub()">UPDATE</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </template>
+          </div>
         </v-tab-item>
         <v-tab-item>
-          <v-card>
-            <v-row>
+          <div>
+            <v-card class="ma-5 mb-12 pa-5">
+              <v-row>
+                <v-spacer></v-spacer>
+                <ProductsPdf :headers="headers" :records="records" class="float-right mr-5"></ProductsPdf>
+                <ProductsExcel ></ProductsExcel>
+              </v-row>
+              <v-card-title>
+                Products' Log
+                <v-spacer></v-spacer>
+                <v-text-field
+                  v-model="search"
+                  append-icon="mdi-magnify"
+                  label="Search"
+                  single-line
+                  hide-details
+                ></v-text-field>
+              </v-card-title>
               <v-spacer></v-spacer>
-              <ProductsPdf :headers="headers" :records="records" class="float-right mr-5"></ProductsPdf>
-            </v-row>
-            <v-card-title>
-              Product Logs
-              <v-spacer></v-spacer>
-              <v-text-field
-                v-model="search"
-                append-icon="mdi-magnify"
-                label="Search"
-                single-line
-                hide-details
-              ></v-text-field>
-            </v-card-title>
-            <v-spacer></v-spacer>
-            <v-data-table :headers="headers" :items="records" :search="search">
-              <template v-slot:item.created_at="{ item }">
-                <span>{{new Date(item.created_at).toISOString().substring(0,10)}}</span>
-              </template>
-              <template v-slot:item.action="{ item }">
-                <v-icon
-                  normal
-                  class="mr-2"
-                  title="Delivered"
-                  @click="alertDelivered(item)"
-                >mdi-truck-check-outline</v-icon>
-                <v-icon
-                  @click="editDialog = !editDialog, editItem(item) "
-                  class="mr-2"
-                  normal
-                  title="Edit"
-                >mdi-table-edit</v-icon>
-                <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
-              </template>
-            </v-data-table>
-          </v-card>
+              <v-data-table :headers="headers" :items="records" :search="search">
+                <template v-slot:item.created_at="{ item }">
+                  <span>{{new Date(item.created_at).toISOString().substring(0,10)}}</span>
+                </template>
+                <template v-slot:item.action="{ item }">
+                  <v-icon
+                    normal
+                    class="mr-2"
+                    title="Delivered"
+                    @click="alertDelivered(item)"
+                  >mdi-truck-check-outline</v-icon>
+                  <v-icon
+                    @click="editDialog = !editDialog, editItem(item) "
+                    class="mr-2"
+                    normal
+                    title="Edit"
+                  >mdi-table-edit</v-icon>
+                  <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+                </template>
+              </v-data-table>
+            </v-card>
+          </div>
         </v-tab-item>
       </v-tabs-items>
     </v-card>
@@ -178,12 +199,12 @@
   background-color: #ffffff !important;
 }
 .productName {
-  /* background-color: rgb(79, 53, 122) !important; */
   color: rgb(79, 53, 122);
 }
 </style>
 <script>
 import ProductsPdf from "./ProductPdf.vue";
+import ProductsExcel from "./ProductsExcel.vue";
 import {
   required,
   minLength,
@@ -194,7 +215,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 export default {
   name: "Delivery",
-  components: { ProductsPdf },
+  components: { ProductsPdf, ProductsExcel },
   data() {
     return {
       records: [],
@@ -222,6 +243,7 @@ export default {
       tubName: null,
       halayaTubAvailability1: null,
       halayaJarAvailability1: null,
+      tabs: null,
       halayaTab: [],
       headers: [
         {
@@ -236,7 +258,7 @@ export default {
       ],
       products: [
         { title: "Ube Halaya in Jar", image: require("@/assets/ubeJar.jpg") },
-        { title: "Ube Halaya in Tab", image: require("@/assets/ubeTab.jpg") }
+        { title: "Ube Halaya in Tub", image: require("@/assets/ubeTab.jpg") }
       ]
     };
   },
@@ -399,7 +421,7 @@ export default {
               position: "center",
               icon: "warning",
               titleText: "Recorded",
-              text: "See below Record",
+              text: "See Record on Products' Log",
               showConfirmButton: false,
               timer: 1500
             });
@@ -438,7 +460,7 @@ export default {
               position: "center",
               icon: "warning",
               titleText: "Recorded",
-              text: "See below Record",
+              text: "See Record on Products' Log",
               showConfirmButton: false,
               timer: 1500
             });

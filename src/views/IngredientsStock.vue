@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card id="cardtable" class="ma-5 mb-12 pa-5">
+    <v-card class="ma-5 mb-12 pa-5">
       <v-tabs v-model="tabs" right color="deep-purple accent-4">
         <v-tab>Ingredients</v-tab>
         <v-tab>Ingredients' Log</v-tab>
@@ -144,7 +144,7 @@
           </template>
         </v-tab-item>
         <v-tab-item>
-          <v-card id="cardtable" class="ma-5 mb-12 pa-5">
+          <v-card class="ma-5 mb-12 pa-5">
             <v-row>
               <v-spacer></v-spacer>
               <IngredientsPdf

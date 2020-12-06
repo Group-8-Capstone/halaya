@@ -22,11 +22,12 @@
         <section class="pdf-item" justify="center">
           <center>
             <div>
+              <br>
               <img class="logo" width="50" :src="require('@/assets/wawens.png')">
             </div>
             <div>
               <h4>WAWEN'S UBE HALAYA</h4>
-              <h6>PRODUCT LOGS</h6>
+              <h6>PRODUCTS' LOGS</h6>
               <br>
             </div>
           </center>
