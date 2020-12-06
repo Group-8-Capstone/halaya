@@ -10,7 +10,7 @@
       </div>
       <br>
       <v-tabs v-model="tabs" right color="deep-purple accent-4">
-        <v-tab>Batch</v-tab>
+        <v-tab>Grouped</v-tab>
         <v-tab>Tabulated</v-tab>
       </v-tabs>
       <v-tabs-items v-model="tabs">
