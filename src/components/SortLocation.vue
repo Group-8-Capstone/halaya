@@ -1,14 +1,38 @@
 <template>
-  <div id="parent">
-    <div id="mapContainer" class="basemap"></div>
+  <div>
+    <br/>
+    <div id="label">
+      <h3 class="ml-2">Color Coding Label</h3>
+      <v-row>
+        <v-col cols="3">
+          <v-btn color="purple" style="height:13px;"></v-btn> &nbsp; Wawen's Store
+        </v-col>
+        <v-col cols="3">
+          <v-btn color="blue" style="height:13px;"></v-btn>&nbsp; Ongoing Order
+        </v-col>
+        <v-col cols="3">
+          <v-btn color="green" style="height:13px;"></v-btn>&nbsp; Delivered Order
+        </v-col>
+        <v-col cols="3">
+          <v-btn color="orange" style="height:13px;"></v-btn> &nbsp; Canceled Order
+        </v-col>
+      </v-row>
+    </div>
+    <br>
+    <div id="parent">
+      <div id="mapContainer" class="basemap"></div>
+    </div>
   </div>
 </template>
+<style scoped>
+</style>
 
 <script>
 import mapboxgl from "mapbox-gl";
 import * as turf from "@turf/turf";
 import axios from "axios";
 import { connect } from "tls";
+import { orange } from "color-name";
 
 export default {
   name: "SortLocation",
@@ -39,6 +63,14 @@ export default {
       zoom: 12
     });
 
+    new mapboxgl.Marker({ color: "purple" })
+      .setLngLat([123.921969, 10.329892])
+      .setPopup(
+        new mapboxgl.Popup() // add popups
+          .setHTML("<h3>Wawen's Ube Halaya Store</h3>")
+      )
+      .addTo(map); //default marker sa place ni sir clark
+
     axios.get(this.url + "/api/posts/delivery", this.config).then(response => {
       setTimeout(() => {
         this.$vloading.hide();
@@ -53,7 +85,8 @@ export default {
           province,
           latitude,
           longitude,
-          distance,
+          order_status,
+          distance
         } = element;
 
         let full_address = building_or_street.concat(
@@ -65,43 +98,56 @@ export default {
           province
         );
 
-        
+        // add markers to map
+        var el = document.createElement("div");
+        el.className = "marker";
 
-        // axios
-        //   .get(
-        //     `https://api.mapbox.com/geocoding/v5/mapbox.places/${full_address}.json?&limit=2&access_token=${
-        //       this.accessToken
-        //     }`
-        //   )
-        //   .then(response => {
-
-        //     let res = response.data;
-
-        //     //getting the distance
-        //     var from_place = turf.point([123.921969, 10.329892]);
-        //     var to_place = turf.point(res.features[0].geometry.coordinates);
-        //     var options = { units: "kilometers" };
-        //     var distance = turf.distance(from_place, to_place, options);
-
-            // add markers to map
-            var el = document.createElement("div");
-            el.className = "marker";
-
-            // make a marker for each feature and add to the map
-            new mapboxgl.Marker()
-              .setLngLat([longitude,latitude])
-              .setPopup(
-                new mapboxgl.Popup() // add popups
-                  .setHTML(
-                    "<h3>" +
-                      full_address +
-                      "</h3><p>" +
-                      distance +
-                      " kilometers away from your location</p>"
-                  )
-              )
-              .addTo(map);
-        //   });
+        if (order_status == "Delivered") {
+          // make a marker for each feature and add to the map
+          new mapboxgl.Marker({ color: "green" })
+            .setLngLat([longitude, latitude])
+            .setPopup(
+              new mapboxgl.Popup() // add popups
+                .setHTML(
+                  "<h3>" +
+                    full_address +
+                    "</h3><p>" +
+                    distance +
+                    " kilometers away from your location</p>"
+                )
+            )
+            .addTo(map);
+        } else if (order_status == "Canceled") {
+          // make a marker for each feature and add to the map
+          new mapboxgl.Marker({ color: "orange" })
+            .setLngLat([longitude, latitude])
+            .setPopup(
+              new mapboxgl.Popup() // add popups
+                .setHTML(
+                  "<h3>" +
+                    full_address +
+                    "</h3><p>" +
+                    distance +
+                    " kilometers away from your location</p>"
+                )
+            )
+            .addTo(map);
+        } else {
+          // make a marker for each feature and add to the map
+          new mapboxgl.Marker()
+            .setLngLat([longitude, latitude])
+            .setPopup(
+              new mapboxgl.Popup() // add popups
+                .setHTML(
+                  "<h3>" +
+                    full_address +
+                    "</h3><p>" +
+                    distance +
+                    " kilometers away from your location</p>"
+                )
+            )
+            .addTo(map);
+        }
       });
     });
   },
