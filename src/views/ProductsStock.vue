@@ -149,11 +149,31 @@
         <v-tab-item>
           <div>
             <v-card class="ma-5 mb-12 pa-5">
-              <v-row>
+              <!-- <v-row>
                 <v-spacer></v-spacer>
                 <ProductsPdf :headers="headers" :records="records" class="float-right mr-5"></ProductsPdf>
                 <ProductsExcel ></ProductsExcel>
-              </v-row>
+              </v-row>-->
+              <div>
+                <v-menu offset-y>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn outlined small color="purple" v-bind="attrs" v-on="on">
+                      <v-icon>mdi-download</v-icon>Export
+                    </v-btn>
+                  </template>
+                  <v-list>
+                    <v-col>
+                      <ProductsPdf
+                        :headers="headers"
+                        :records="records"
+                      ></ProductsPdf>
+                      <div>
+                        <v-btn class="float-right mr-5" text small>Export as CSV</v-btn>
+                      </div>
+                    </v-col>
+                  </v-list>
+                </v-menu>
+              </div>
               <v-card-title>
                 Products' Log
                 <v-spacer></v-spacer>

@@ -81,7 +81,7 @@
             <v-col cols="6">
               <v-text-field
                 v-model="customerStreet"
-                label="Landmark"
+                label="Nearest Landmark"
                 :error-messages="customerStreetErrors"
                 @input="$v.customerStreet.$touch()"
                 @blur="$v.customerStreet.$touch()"
@@ -199,7 +199,7 @@
               </v-img>
               <v-card-text class="pt-6">
                 <center>
-                  <div class="font-weight-light grey--text title mb-2">Perfect Ubelicious snack</div>
+                  <div class="font-weight-light grey--text title mb-2">Best Ubelicious snack</div>
                   <h1 class="font-weight-light orange--text mb-2">Ube halaya in a jar</h1>
                   <div id="price" class="font-weight-light grey--text title mb-2">₱150.00</div>
                 </center>
@@ -263,10 +263,11 @@
           <v-row class="pl-5">
           <v-col md="6" lg="6" sm="12">
             <span>
-              <h4>Your total payment:</h4>
-              {{totalPay}}
+              <h4>Your Total Payment:</h4>
+              {{totalPay}} + delivery fee
             </span>
           </v-col>
+          <p style="font-size: 15px;"><i>*Note: Delivery fee will be determined after an order confirmation call and delivery charges may vary for different locations.</i></p>
           <v-col cols="6"></v-col>
           </v-row>
           <v-card-actions>
@@ -567,12 +568,10 @@ export default {
         " ",
         province
       );
-
-      console.log("proximity", this.getProximity(municipality));
       
       axios
         .get(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${place}.json?country=ph&proximity=${this.getProximity(municipality)}&limit=2&access_token=${
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${place}.json?country=ph&types=poi&proximity=${this.getProximity(municipality)}&limit=2&access_token=${
             this.accessToken
           }`
         )
@@ -617,9 +616,9 @@ export default {
                 Swal.fire({
                   position: "center",
                   icon: "success",
-                  title: "Your order has been sent",
-                  showConfirmButton: false,
-                  timer: 1500
+                  title: "Order sent. We will call you to confirm.",
+                  showConfirmButton: true,
+                  // timer: 2000
                 });
               }
               this.isSubmit=false

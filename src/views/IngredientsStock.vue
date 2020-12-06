@@ -145,14 +145,26 @@
         </v-tab-item>
         <v-tab-item>
           <v-card class="ma-5 mb-12 pa-5">
-            <v-row>
-              <v-spacer></v-spacer>
-              <IngredientsPdf
-                :headersIngredients="headersIngredients"
-                :displayIngredientsRecords="displayIngredientsRecords"
-                class="float-right mr-5"
-              ></IngredientsPdf>
-            </v-row>
+            <div>
+              <v-menu offset-y>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn outlined small color="purple" v-bind="attrs" v-on="on">
+                    <v-icon>mdi-download</v-icon>Export
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-col>
+                    <IngredientsPdf
+                      :headersIngredients="headersIngredients"
+                      :displayIngredientsRecords="displayIngredientsRecords"
+                    ></IngredientsPdf>
+                    <div>
+                      <v-btn class="float-right mr-5" text small>Export as CSV</v-btn>
+                    </div>
+                  </v-col>
+                </v-list>
+              </v-menu>
+            </div>
             <v-card-title>
               Ingredients' Logs
               <v-spacer></v-spacer>
@@ -206,6 +218,7 @@ export default {
     return {
       loading: true,
       displayIngredientsRecords: [],
+      dropdown: [{ title: "Download as PDF" }, { title: "Download as CSV" }],
       stockDialog: false,
       editDialog: false,
       addUsedStockDialog: false,

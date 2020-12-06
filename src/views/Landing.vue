@@ -173,7 +173,7 @@
                 </v-layout>
               </v-col>
               <v-col sm="12" md="8" lg="8" xl="8">
-                <div justify="center" id="planHeader" class="text-center mt-0">
+                <div align="center" id="planHeader" class="text-center mt-0">
                   <h1
                     id="productsHeader"
                     class="font-weight-bold text-h6 [1] text-sm-h5 [1] text-md-h5 [2] text-lg-h4 [2] text-xl-h4 [2]"

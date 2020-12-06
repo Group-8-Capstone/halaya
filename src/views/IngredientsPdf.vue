@@ -1,8 +1,8 @@
 <template>
-  <div class="mt-5">
+  <div>
     <v-spacer></v-spacer>
-    <v-btn class="mr-5" outlined float-right small color="purple" @click="generateReport">
-      <v-icon>mdi-download</v-icon>Export as PDF
+    <v-btn class="mr-5" text float-right small @click="generateReport">
+      Export as PDF
     </v-btn>
     <vue-html2pdf
       :show-layout="false"
