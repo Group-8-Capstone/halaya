@@ -1,8 +1,8 @@
 <template>
-  <div class="mt-5">
+  <div>
     <v-spacer></v-spacer>
-    <v-btn class="mr-5" outlined float-right small color="purple" @click="generateReport">
-      <v-icon>mdi-download</v-icon>Export as PDF
+    <v-btn class="mr-5" text float-right small @click="generateReport">
+      Export as PDF
     </v-btn>
     <vue-html2pdf
       :show-layout="false"
@@ -10,7 +10,7 @@
       :enable-download="true"
       :preview-modal="false"
       :paginate-elements-by-height="5000"
-      :filename="'Used Ingredients'"
+      :filename="'Ingredients Log'"
       :pdf-quality="2"
       :manual-pagination="false"
       pdf-format="a4"
@@ -27,7 +27,7 @@
             </div>
             <div>
               <h4>WAWEN'S UBE HALAYA</h4>
-              <h6>RECORDED USED INGREDIENTS</h6>
+              <h6>INGREDIENTS' LOG</h6>
               <br>
             </div>
           </center>
@@ -36,6 +36,7 @@
               <v-data-table
                 :headers="headersIngredients"
                 :items="displayIngredientsRecords"
+                :hide-default-footer="true"
               >
                 <template
                   #item.used_ingredients_amount="{ item }"

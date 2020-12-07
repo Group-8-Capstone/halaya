@@ -1,36 +1,16 @@
 <template>
-  <div>
+  <div class="mt-5">
     <v-spacer></v-spacer>
-    <!-- <v-btn class="mr-5" outlined float-right small color="purple" @click="generateReport">
-      <v-icon>mdi-download</v-icon>Export as PDF
-    </v-btn>-->
-
-    <div>
-      <v-menu offset-y>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn outlined small color="purple" v-bind="attrs" v-on="on">
-            <v-icon>mdi-download</v-icon>Export
-          </v-btn>
-        </template>
-        <v-list>
-          <v-btn class="mr-5" text float-right small @click="generateReport">
-            Export as PDF
-          </v-btn>
-          <br>
-          <v-list-item v-for="(item, index) in dropdown" :key="index">
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-    </div>
-
+    <v-btn class="mr-5" text float-right small @click="generateReport">
+      Export as PDF
+    </v-btn>
     <vue-html2pdf
       :show-layout="false"
       :float-layout="true"
       :enable-download="true"
       :preview-modal="false"
       :paginate-elements-by-height="5000"
-      :filename="'Delivered Orders'"
+      :filename="'Orders To Deliver'"
       :pdf-quality="2"
       :manual-pagination="false"
       pdf-format="a4"
@@ -47,8 +27,7 @@
             </div>
             <div>
               <h4>WAWEN'S UBE HALAYA</h4>
-              <h6>DELIVERED ORDERS</h6>
-              <h6></h6>
+              <h6>ORDERS TO DELIVER</h6>
               <br>
             </div>
           </center>
@@ -56,18 +35,19 @@
             <div>
               <v-data-table
                 :headers="headers"
-                :items="deliveredOrder"
-                hide-default-footer
-                disable-pagination
+                :items="todelivered"
+                :hide-default-footer="true"
               >
                 <template v-slot:item.preferred_delivery_date="{ item }">
                   <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>
                 </template>
+                <template v-slot:item.contact_number="{ item }">
+                  <span>{{'0'+item.contact_number}}</span>
+                </template>
                 <template v-slot:item.order_status="{ item }">
-                  <v-chip color="green">{{ item.order_status }}</v-chip>
+                  <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
                 </template>
               </v-data-table>
-              <br>
             </div>
           </div>
         </section>
@@ -75,20 +55,15 @@
     </vue-html2pdf>
   </div>
 </template>
-<script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>  
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/0.9.0rc1/jspdf.min.js"></script>
 <script>
 import VueHtml2pdf from "vue-html2pdf";
 export default {
-  name: "DeliveredPdf",
-  props: ["headers", "deliveredOrder"],
+  name: "OrderToDeliverPdf",
+  props: ["headers", "todelivered"],
   components: {
     VueHtml2pdf
-  },
-  data() {
-    return {
-      dropdown: [{ title: "Export as PDF" }, { title: "Export as CSV" }]
-    };
   },
   methods: {
     generateReport() {

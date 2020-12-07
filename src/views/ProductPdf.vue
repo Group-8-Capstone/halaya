@@ -1,8 +1,8 @@
 <template>
-  <div class="mt-5">
+  <div>
     <v-spacer></v-spacer>
-    <v-btn class="mr-5" outlined float-right small color="purple" @click="generateReport">
-      <v-icon>mdi-download</v-icon>Export as PDF
+    <v-btn class="mr-5" text float-right small @click="generateReport">
+      Export as PDF
     </v-btn>
     <vue-html2pdf
       :show-layout="false"
@@ -22,17 +22,18 @@
         <section class="pdf-item" justify="center">
           <center>
             <div>
+              <br>
               <img class="logo" width="50" :src="require('@/assets/wawens.png')">
             </div>
             <div>
               <h4>WAWEN'S UBE HALAYA</h4>
-              <h6>PRODUCT LOGS</h6>
+              <h6>PRODUCTS' LOGS</h6>
               <br>
             </div>
           </center>
           <div style="margin:1px" class="pa-0">
             <div>
-              <v-data-table :headers="headers" :items="records">
+              <v-data-table :headers="headers" :items="records" :hide-default-footer="true">
                 <template v-slot:item.created_at="{ item }">
                   <span>{{new Date(item.created_at).toISOString().substring(0,10)}}</span>
                 </template>

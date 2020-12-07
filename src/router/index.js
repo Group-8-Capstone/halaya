@@ -7,8 +7,8 @@ import Login from "../views/Login.vue"
 import Delivered from "../views/Delivered.vue";
 import Home from "../views/Home.vue";
 import Setting from "../views/Setting.vue";
-import Ingredients from "../views/Ingredients.vue";
-import Product from "../views/Product.vue";
+import Ingredients from "../views/IngredientsStock.vue";
+import Product from "../views/ProductsStock.vue";
 import AccountSetting from "../components/ProfileAccount.vue";
 import Register from "../views/RegisterComponent.vue";
 import Logs from "../views/Logs.vue";

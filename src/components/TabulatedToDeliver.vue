@@ -7,13 +7,18 @@
     <div>
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn outlined small color="purple" v-bind="attrs" v-on="on"> <v-icon>mdi-download</v-icon> Download</v-btn>
+          <v-btn outlined small color="purple" v-bind="attrs" v-on="on">
+            <v-icon>mdi-download</v-icon>Export
+          </v-btn>
         </template>
         <v-list>
-          <v-list-item v-for="(item, index) in dropdown" :key="index">
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item>
-        </v-list> 
+          <v-col>
+            <OrderToDeliverPdf :headers="headers" :records="todelivered"></OrderToDeliverPdf>
+            <div>
+              <v-btn class="float-right mr-5" text small>Export as CSV</v-btn>
+            </div>
+          </v-col>
+        </v-list>
       </v-menu>
     </div>
 
@@ -68,14 +73,13 @@
 
 <script>
 import axios from "axios";
+import OrderToDeliverPdf from "./OrderToDeliverPdf.vue";
 export default {
+  components: { OrderToDeliverPdf },
   data() {
     return {
       todelivered: [],
-      dropdown: [
-        { title: 'Download as PDF' },
-        { title: 'Download as CSV' }
-      ],
+      dropdown: [{ title: "Download as PDF" }, { title: "Download as CSV" }],
       headers: [
         {
           text: "Receiver Name",
