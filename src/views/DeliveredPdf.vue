@@ -3,18 +3,20 @@
     <v-spacer></v-spacer>
     <!-- <v-btn class="mr-5" outlined float-right small color="purple" @click="generateReport">
       <v-icon>mdi-download</v-icon>Export as PDF
-    </v-btn> -->
+    </v-btn>-->
 
-  <div>
+    <div>
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn outlined small color="purple" v-bind="attrs" v-on="on"> <v-icon>mdi-download</v-icon> Download</v-btn>
+          <v-btn outlined small color="purple" v-bind="attrs" v-on="on">
+            <v-icon>mdi-download</v-icon>EXPORT
+          </v-btn>
         </template>
         <v-list>
           <v-list-item v-for="(item, index) in dropdown" :key="index">
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item>
-        </v-list> 
+        </v-list>
       </v-menu>
     </div>
 
@@ -81,11 +83,8 @@ export default {
   },
   data() {
     return {
-      dropdown: [
-        { title: 'Download as PDF' },
-        { title: 'Download as CSV' }
-      ],
-    }
+      dropdown: [{ title: "Export as PDF" }, { title: "Export as CSV" }]
+    };
   },
   methods: {
     generateReport() {

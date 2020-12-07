@@ -18,15 +18,6 @@
       </v-tabs>
       <v-tabs-items v-model="tabs">
         <v-tab-item>
-          <!-- <v-card-title>
-            <v-text-field
-              v-model="search"
-              append-icon="mdi-magnify"
-              label="Search"
-              single-line
-              hide-details
-            ></v-text-field>
-          </v-card-title> -->
           <v-data-table :headers="headers" :items="onOrder" :search="search">
               <template v-slot:item.preferred_delivery_date="{ item }">
            <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>
@@ -37,15 +28,6 @@
           </v-data-table>
         </v-tab-item>
         <v-tab-item>
-          <!-- <v-card-title>
-            <v-text-field
-              v-model="search"
-              append-icon="mdi-magnify"
-              label="Search"
-              single-line
-              hide-details
-            ></v-text-field>
-          </v-card-title> -->
           <v-data-table :headers="headers2" :items="deliveredOrder" :search="search">
             <template v-slot:item.preferred_delivery_date="{ item }">
               <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>
