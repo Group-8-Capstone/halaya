@@ -1,29 +1,9 @@
 <template>
   <div>
     <v-spacer></v-spacer>
-    <!-- <v-btn class="mr-5" outlined float-right small color="purple" @click="generateReport">
+    <v-btn class="mr-5" text float-right small @click="generateReport">
       <v-icon>mdi-download</v-icon>Export as PDF
-    </v-btn>-->
-
-    <div>
-      <v-menu offset-y>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn outlined small color="purple" v-bind="attrs" v-on="on">
-            <v-icon>mdi-download</v-icon>Export
-          </v-btn>
-        </template>
-        <v-list>
-          <v-btn class="mr-5" text float-right small @click="generateReport">
-            Export as PDF
-          </v-btn>
-          <br>
-          <v-list-item v-for="(item, index) in dropdown" :key="index">
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-    </div>
-
+    </v-btn>
     <vue-html2pdf
       :show-layout="false"
       :float-layout="true"
