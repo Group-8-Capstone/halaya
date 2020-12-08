@@ -1,11 +1,11 @@
 <template>
   <div>
     <v-spacer></v-spacer>
-    <!-- <v-btn class="mr-5" outlined float-right small color="purple" @click="generateReport">
+    <v-btn class="float-right mr-5" text small @click="generateReport">
       <v-icon>mdi-download</v-icon>Export as PDF
-    </v-btn>-->
+    </v-btn>
 
-    <div>
+    <!-- <div>
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn outlined small color="purple" v-bind="attrs" v-on="on">
@@ -22,6 +22,26 @@
           </v-list-item>
         </v-list>
       </v-menu>
+    </div>-->
+
+    <div>
+      <v-card elevation="2">
+      <h4>Filter</h4>
+        <v-row>
+          <v-col cols="5">
+            <v-text-field label="Month" ></v-text-field>
+          </v-col>
+          <v-col cols="5">
+            <v-text-field label="Year"></v-text-field>
+          </v-col>
+          <v-col cols="1">
+            <v-btn outlined small color="color">Apply</v-btn>
+          </v-col>
+          <v-col cols="1">
+            <v-btn outlined small color="color">Clear</v-btn>
+          </v-col>
+        </v-row>
+      </v-card>
     </div>
 
     <vue-html2pdf

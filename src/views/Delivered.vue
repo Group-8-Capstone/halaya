@@ -1,6 +1,6 @@
 <template>
   <v-card class="ma-5 mb-12 pa-5">
-    <div>
+    <!-- <div>
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn outlined small color="purple" v-bind="attrs" v-on="on">
@@ -8,15 +8,31 @@
           </v-btn>
         </template>
         <v-list>
-          <v-col>
+          <v-col> -->
             <DeliveredPdf :headers="headers" :records="deliveredOrder"></DeliveredPdf>
-            <div>
+            <!-- <div>
               <v-btn class="float-right mr-5" text small>Export as CSV</v-btn>
             </div>
           </v-col>
         </v-list>
       </v-menu>
-    </div>
+    </div> -->
+
+ <!-- <div>
+      <v-menu offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn outlined small color="purple" v-bind="attrs" v-on="on">
+            <v-icon>mdi-download</v-icon>Export
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item v-for="(item, index) in dropdown" :key="index">
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </div> -->
+
     <v-card-title>
       Delivered Orders
       <v-spacer></v-spacer>
@@ -49,6 +65,7 @@ export default {
     return {
       deliveredOrder: [],
       search: "",
+      dropdown: [{ title: "Export as PDF" }, { title: "Export as CSV" }],
       headers: [
         {
           text: "Receiver Name",
