@@ -168,7 +168,8 @@
                         :records="records"
                       ></ProductsPdf>
                       <div>
-                        <v-btn class="float-right mr-5" text small>Export as CSV</v-btn>
+                        <!-- <v-btn class="float-right mr-5" text small>Export as CSV</v-btn> -->
+                        <ProductsExcel :dataSource="records"></ProductsExcel>
                       </div>
                     </v-col>
                   </v-list>

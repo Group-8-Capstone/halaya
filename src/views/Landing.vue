@@ -93,49 +93,51 @@
           <v-col cols="12">
             <v-row id="infos" align="center" justify="center">
               <v-col sm="12" md="4" lg="4" xl="4">
-                <v-card
-                  shaped
-                  id="infoCards"
-                  light
-                  max-width="315"
-                  height="auto"
-                  :elevation="8"
-                  data-aos="fade-right"
-                >
-                  <v-card-title>
-                    <v-icon large left>mdi-bullhorn</v-icon>Suwayi na!
-                    <v-card-text class="text-wrap" id="textAreas">
-                      "Ube Halaya na lami, apan dili bidli. Basta matilwan,
-                      dili na gyud mabinlan. Matud pa nila, maablihan
-                      na gani ang botelya sa Wawen's Ube Halaya - dili
-                      na gyud katugpa sa lamesa."
-                    </v-card-text>
-                  </v-card-title>
-                </v-card>
-                <br>
-                <v-card
-                  shaped
-                  id="infoCards"
-                  light
-                  max-width="315"
-                  height="auto"
-                  :elevation="8"
-                  data-aos="fade-right"
-                >
-                  <v-card-title>
-                    <v-icon large left>mdi-truck</v-icon>Delivery
-                    <v-card-text class="text-wrap">
-                      <v-icon>mdi-clock</v-icon>3:00 PM onwards
-                    </v-card-text>
-                    <v-card-text class="text-wrap">
-                      <v-icon>mdi-calendar</v-icon>Monday - Saturday
-                    </v-card-text>
-                    <v-card-text class="text-wrap">
-                      <v-icon>mdi-cart</v-icon>For orders of 10 jars or more, order a day ahead.
-                    </v-card-text>
-                  </v-card-title>
-                </v-card>
-                <br>
+                <v-col sm="12" class="pl-0">
+                  <v-card
+                    shaped
+                    id="infoCards"
+                    light
+                    max-width="315"
+                    height="auto"
+                    :elevation="8"
+                    data-aos="fade-right"
+                  >
+                    <v-card-title>
+                      <v-icon large left>mdi-bullhorn</v-icon>Suwayi na!
+                      <v-card-text class="text-wrap" id="textAreas">
+                        "Ube Halaya na lami, apan dili bidli. Basta matilwan,
+                        dili na gyud mabinlan. Matud pa nila, maablihan
+                        na gani ang botelya sa Wawen's Ube Halaya - dili
+                        na gyud katugpa sa lamesa."
+                      </v-card-text>
+                    </v-card-title>
+                  </v-card>
+                  <br>
+                  <v-card
+                    shaped
+                    id="infoCards"
+                    light
+                    max-width="315"
+                    height="auto"
+                    :elevation="8"
+                    data-aos="fade-right"
+                  >
+                    <v-card-title>
+                      <v-icon large left>mdi-truck</v-icon>Delivery
+                      <v-card-text class="text-wrap">
+                        <v-icon>mdi-clock</v-icon>3:00 PM onwards
+                      </v-card-text>
+                      <v-card-text class="text-wrap">
+                        <v-icon>mdi-calendar</v-icon>Monday - Saturday
+                      </v-card-text>
+                      <v-card-text class="text-wrap">
+                        <v-icon>mdi-cart</v-icon>For orders of 10 jars or more, order a day ahead.
+                      </v-card-text>
+                    </v-card-title>
+                  </v-card>
+                  <br>
+                </v-col>
                 <v-layout wrap>
                   <v-flex>
                     <v-col sm="12" class="pl-0">
@@ -173,81 +175,98 @@
                 </v-layout>
               </v-col>
               <v-col sm="12" md="8" lg="8" xl="8">
-                <div align="center" id="planHeader" class="text-center mt-0">
-                  <h1
-                    id="productsHeader"
-                    class="font-weight-bold text-h6 [1] text-sm-h5 [1] text-md-h5 [2] text-lg-h4 [2] text-xl-h4 [2]"
-                  >RETAIL</h1>
-                  <br>
-                </div>
-                <v-row align="center" justify="center">
-                  <v-col sm="12" md="6" lg="6" xl="6">
-                    <v-hover id="products" v-slot:default="{ hover }">
-                      <v-card height="auto" width="310" color="grey lighten-4" :elevation="8">
-                        <v-img width="310" height="220" src="../assets/halayaTab.jpg">
-                        </v-img>
-                        <v-card-text class="pt-6">
-                          <center>
-                            <div
-                              class="font-weight-light grey--text title mb-2"
-                            >Perfect for Bakers and Cake Makers</div>
-                            <h1 class="font-weight-light orange--text mb-2">{{tubName}}</h1>
-                            <p>1000g (1kg)</p>
-                            <div
-                              id="price"
-                              class="font-weight-light grey--text title mb-2"
-                            >₱{{tubPrice}}</div>
-                          </center>
-                        </v-card-text>
-                      </v-card>
-                    </v-hover>
-                  </v-col>
-                  <v-col sm="12" md="6" lg="6" xl="6">
-                    <v-hover id="products" v-slot:default="{ hover }">
-                      <v-card height="auto" width="310" color="grey lighten-4" :elevation="8">
-                        <v-img width="310" height="220" src="../assets/halayaJar.jpg">
-                        </v-img>
-                        <v-card-text class="pt-6">
-                          <center>
-                            <div
-                              class="font-weight-light grey--text title mb-2"
-                            >Best for Snack</div>
-                            <h1 class="font-weight-light orange--text mb-2">{{jarName}}</h1>
-                            <p>230g</p>
-                            <div
-                              id="price"
-                              class="font-weight-light grey--text title mb-2"
-                            >₱{{jarPrice}}</div>
-                          </center>
-                        </v-card-text>
-                      </v-card>
-                    </v-hover>
-                  </v-col>
-                </v-row>
-                <div align="center" justify="center" id="planHeader" class="text-center">
-                  <br>
-                  <br>
-                  <h1
-                    id="adHeader"
-                    class="mb-1 font-weight-bold text-h6 [1] text-sm-h5 [1] text-md-h5 [2] text-lg-h4 [2] text-xl-h4 [2]"
-                  >WHOLESALE</h1>
-                </div>
-                <div>
-                  <v-col cols="12" sm="12">
-                    <v-row align="center" justify="center">
-                      <v-col sm="6">
-                        <v-card width="310" flat :elevation="8">
-                          <v-img src="../assets/ad1.png"></v-img>
+                <v-card flat id="mainContent">
+                  <div align="center" id="planHeader" class="text-center mt-0">
+                    <h1
+                      id="productsHeader"
+                      class="font-weight-bold text-h6 [1] text-sm-h5 [1] text-md-h5 [2] text-lg-h4 [2] text-xl-h4 [2]"
+                    >RETAIL</h1>
+                    <br>
+                  </div>
+                  <v-row align="center" justify="center">
+                    <v-col sm="12" md="6" lg="6" xl="6">
+                      <v-hover id="productsTub" v-slot:default="{ hover }">
+                        <v-card
+                          height="auto"
+                          width="310"
+                          color="grey lighten-4"
+                          :elevation="8"
+                          @click="dialog = true"
+                        >
+                          <v-img width="310" height="220" src="../assets/halayaTab.jpg">
+                            <v-expand-transition>
+                              <div
+                                v-if="hover"
+                                align="center"
+                                justify="center"
+                                class="d-flex transition-fast-in-fast-out purple darken-2 v-card--reveal display-1 white--text"
+                                style="height: 100%;"
+                              >Click To See Tub Promo</div>
+                            </v-expand-transition>
+                          </v-img>
+                          <v-card-text class="pt-6">
+                            <center>
+                              <div
+                                class="font-weight-light grey--text title mb-2"
+                              >Best for Bakers & Cake Makers</div>
+                              <h1 class="font-weight-light orange--text mb-2">{{tubName}}</h1>
+                              <p>1000g (1kg)</p>
+                              <div
+                                id="price"
+                                class="font-weight-light grey--text title mb-2"
+                              >₱{{tubPrice}}</div>
+                            </center>
+                          </v-card-text>
+                          <v-dialog v-model="dialog" width="500px">
+                            <v-img
+                              justify="center"
+                              align="center"
+                              width="500px"
+                              src="../assets/ad1.png"
+                            ></v-img>
+                          </v-dialog>
                         </v-card>
-                      </v-col>
-                      <v-col sm="6">
-                        <v-card width="310" flat :elevation="8">
-                          <v-img src="../assets/ad2.png"></v-img>
+                      </v-hover>
+                    </v-col>
+                    <v-col sm="12" md="6" lg="6" xl="6">
+                      <v-hover id="productsJar" v-slot:default="{ hover }">
+                        <v-card height="auto" width="310" color="grey lighten-4" :elevation="8">
+                          <v-img width="310" height="220" src="../assets/halayaJar.jpg"></v-img>
+                          <v-card-text class="pt-6">
+                            <center>
+                              <div class="font-weight-light grey--text title mb-2">Perfect for Snack</div>
+                              <h1 class="font-weight-light orange--text mb-2">{{jarName}}</h1>
+                              <p>230g</p>
+                              <div
+                                id="price"
+                                class="font-weight-light grey--text title mb-2"
+                              >₱{{jarPrice}}</div>
+                            </center>
+                          </v-card-text>
                         </v-card>
-                      </v-col>
-                    </v-row>
-                  </v-col>
-                </div>
+                      </v-hover>
+                    </v-col>
+                  </v-row>
+                  <div align="center" justify="center" id="planHeader" class="text-center">
+                    <br>
+                    <br>
+                    <h1
+                      id="adHeader"
+                      class="mb-1 font-weight-bold text-h6 [1] text-sm-h5 [1] text-md-h5 [2] text-lg-h4 [2] text-xl-h4 [2]"
+                    >WHOLESALE</h1>
+                  </div>
+                  <div>
+                    <v-col cols="12" sm="12">
+                      <v-row align="center" justify="center">
+                        <v-col sm="6">
+                          <v-card width="330" flat :elevation="8">
+                            <v-img src="../assets/ad2.png"></v-img>
+                          </v-card>
+                        </v-col>
+                      </v-row>
+                    </v-col>
+                  </div>
+                </v-card>
               </v-col>
             </v-row>
           </v-col>
@@ -263,6 +282,7 @@ import axios from "axios";
 export default {
   name: "Home",
   data: () => ({
+    dialog: false,
     menu: false,
     model: null,
     jarName: null,
@@ -391,6 +411,8 @@ export default {
 }
 #infos {
   margin-top: 40px;
+  margin-left: 2px;
+  justify-content: center;
 }
 #textAreas {
   word-wrap: initial;
@@ -417,11 +439,19 @@ export default {
   align-content: center;
   font-size: 2em;
 }
-#productsHeader {
+/* #productsHeader {
   align-content: center;
   font-size: 2.5em;
+} */
+#mainContent {
+  max-width: 85% !important;
 }
-#adHeader {
+#productsJar {
+  margin-right: 0px;
+  margin-left: 53px;
+}
+#adHeader,
+#productsHeader {
   align-content: center;
   color: white;
   font-size: 2.5em;
