@@ -116,7 +116,7 @@
             <v-container>
               <v-row class="mx-2">
                 <v-col class="align-center justify-space-between" cols="12">
-                  <v-row align="center" class="mr-0">
+                  <v-row align="center" class="mr-0 pl-4">
                     <v-text-field
                       prepend-icon="mdi-account-outline"
                       label="Receiver's Name"
@@ -127,10 +127,10 @@
                   </v-row>
                 </v-col>
                 <v-icon class="pl-4">mdi-map-marker</v-icon>
-                <label>Receiver Address</label>
+                <label>Receiver's Address</label>
                 <v-row class="pl-5">
                   <v-col cols="6">
-                    <v-text-field v-model="post.building_or_street" label="Building Name/Street" :rules="streetRules"
+                    <v-text-field v-model="post.building_or_street" label="Landmark" :rules="streetRules"
                        required></v-text-field>
                   </v-col>
                   <v-col cols="6">
@@ -161,7 +161,7 @@
                   >
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
-                        v-model="post.preferred_delivery_date"
+                        v-model="dateNew"
                         label="Preferred Delivey Date"
                         prepend-icon="mdi-calendar"
                         readonly
@@ -172,7 +172,7 @@
                       ></v-text-field>
                     </template>
                     <v-date-picker
-                      v-model="post.preferred_delivery_date "
+                      v-model="dateNew"
                       color="deep-purple lighten-1"
                       no-title
                       scrollable
@@ -302,6 +302,7 @@ export default {
       search: "",
       dialog: false,
       disabled: true,
+      dateNew:true,
       headers: [
         {
           text: "Receiver Name",
@@ -520,6 +521,7 @@ export default {
             var options = { units: "kilometers" };
             var dist = turf.distance(from_place, to_place, options);
             this.post.distance = dist;
+            this.post.preferred_delivery_date= this.dateNew
             axios
               .post(this.url + "/api/post/update", this.post, this.config)
               .then(response => {
@@ -571,7 +573,9 @@ export default {
       axios
         .get(this.url + "/api/post/edit/" + item.id, this.config)
         .then(response => {
+          this.dateNew=new Date(response.data.preferred_delivery_date).toISOString().substr(0, 10);
           this.post = response.data;
+          // this.post.preferred_delivery_date
         });
     },
     orderDetail() {
