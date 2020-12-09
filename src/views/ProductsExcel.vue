@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <v-spacer></v-spacer>
+    <!-- <v-spacer></v-spacer>
     <v-btn class="mr-5" outlined float-right small color="purple" @click="toolbarClick">
       <v-icon>mdi-download</v-icon>Export as CSV
-    </v-btn>
+    </v-btn> -->
     <ejs-grid
       ref="grid"
       id="Grid"
@@ -32,14 +32,8 @@ Vue.use(GridPlugin);
 
 export default {
   data() {
-    // let SERVICE_URI =
-    //   "https://js.syncfusion.com/demos/ejServices/Wcf/Northwind.svc/Orders?$top=7";
     return {
       data: [],
-      //   data: new DataManager({
-      //     url: SERVICE_URI,
-      //     adaptor: new ODataAdaptor()
-      //   }),
       toolbarOptions: ["ExcelExport"]
     };
   },
@@ -66,7 +60,6 @@ export default {
       axios
         .get(this.url + "/api/fetchRecordedProduct", this.config)
         .then(response => {
-          // console.log("-->>", response.data.product);
           setTimeout(() => {
             this.$vloading.hide();
           }, 1000);
