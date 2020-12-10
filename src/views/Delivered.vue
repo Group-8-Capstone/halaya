@@ -9,7 +9,7 @@
         </template>
         <v-list>
           <v-col>
-            <DeliveredPdf :headers="headers" :records="deliveredOrder"></DeliveredPdf>
+            <DeliveredPdf :headers="headers" :deliveredOrder="deliveredOrder"></DeliveredPdf>
             <div>
               <v-btn class="float-right mr-5" text small>Export as CSV</v-btn>
             </div>
