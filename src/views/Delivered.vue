@@ -76,7 +76,7 @@ export default {
       deliveredOrder: [],
       search: "",
       month: "",
-      year: "",
+      year: " ",
       is_empty: false,
       months: [
         "All",
@@ -207,14 +207,21 @@ export default {
       if (month == "All") {
         this.year = " ";
         this.loadDelivered();
+      } else if (this.year == " ") {
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          title: "Year cannot be empty",
+          showConfirmButton: true
+        });
       } else {
         let month_number = this.getMonthNumber(month);
         axios
           .post(
-            this.url + "/api/filter/" + month_number + "/" + year,
-            this.config
+            this.url + `/api/filter/${month_number}/${year}`, {}, this.config
           )
           .then(response => {
+            console.log("-->>", response.data)
             if (response.data.data.length == 0) {
               this.is_empty = true;
               this.deliveredOrder = response.data.data;
