@@ -1,21 +1,23 @@
 <template>
   <div>
     <v-card id="cardtable" class="ma-5 mb-12 pa-5">
+      <v-card-title>
+      Transaction History
+      <v-spacer></v-spacer>
+      <v-text-field
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="Search"
+        single-line
+        hide-details
+      ></v-text-field>
+    </v-card-title>
       <v-tabs v-model="tabs" right color="deep-purple accent-4">
         <v-tab>On going</v-tab>
         <v-tab>Delivered</v-tab>
       </v-tabs>
       <v-tabs-items v-model="tabs">
         <v-tab-item>
-          <v-card-title>
-            <v-text-field
-              v-model="search"
-              append-icon="mdi-magnify"
-              label="Search"
-              single-line
-              hide-details
-            ></v-text-field>
-          </v-card-title>
           <v-data-table :headers="headers" :items="onOrder" :search="search">
               <template v-slot:item.preferred_delivery_date="{ item }">
            <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>
@@ -26,15 +28,6 @@
           </v-data-table>
         </v-tab-item>
         <v-tab-item>
-          <v-card-title>
-            <v-text-field
-              v-model="search"
-              append-icon="mdi-magnify"
-              label="Search"
-              single-line
-              hide-details
-            ></v-text-field>
-          </v-card-title>
           <v-data-table :headers="headers2" :items="deliveredOrder" :search="search">
             <template v-slot:item.preferred_delivery_date="{ item }">
               <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>

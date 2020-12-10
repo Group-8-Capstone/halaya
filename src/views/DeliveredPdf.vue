@@ -1,6 +1,5 @@
 <template>
   <div>
-    <v-spacer></v-spacer>
     <v-btn class="mr-5" text float-right small @click="generateReport">Export as PDF</v-btn>
     <center>
       <vue-html2pdf
@@ -67,7 +66,6 @@ export default {
   },
   data() {
     return {
-      dropdown: [{ title: "Download as PDF" }, { title: "Download as CSV" }]
     };
   },
   methods: {

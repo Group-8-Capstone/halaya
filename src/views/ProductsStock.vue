@@ -149,46 +149,52 @@
         <v-tab-item>
           <div>
             <v-card class="ma-5 mb-12 pa-5">
-              <!-- <v-row>
-                <v-spacer></v-spacer>
-                <ProductsPdf :headers="headers" :records="records" class="float-right mr-5"></ProductsPdf>
-                <ProductsExcel ></ProductsExcel>
-              </v-row>-->
               <div>
-                <v-menu offset-y>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn outlined small color="purple" v-bind="attrs" v-on="on">
-                      <v-icon>mdi-download</v-icon>Export
-                    </v-btn>
-                  </template>
-                  <v-list>
-                    <v-col>
-                      <ProductsPdf :headers="headers" :records="records"></ProductsPdf>
+                <v-card class="pa-5" flat>
+                  <h4>Filter</h4>
+                  <v-row>
+                    <v-col cols="3">
+                      <v-select v-model="month" label="Month" :items="months"></v-select>
+                    </v-col>
+                    <v-col cols="3">
+                      <v-text-field v-model="year" label="Year"></v-text-field>
+                    </v-col>
+                    <v-col cols="2">
+                      <v-btn @click="filter(month,year)" outlined medium color="purple">Apply</v-btn>
+                    </v-col>
+                    <v-spacer></v-spacer>
+                    <v-col cols="2">
                       <div>
-                        <v-dialog v-model="dialog" width="500">
+                        <v-menu offset-y>
                           <template v-slot:activator="{ on, attrs }">
-                            <v-btn class="float-right mr-5" text small v-bind="attrs" v-on="on">Export as CSV</v-btn>
+                            <div>
+                              <v-btn
+                                @click="isEmpty(records)"
+                                class="float-right"
+                                outlined
+                                color="purple"
+                                v-bind="attrs"
+                                v-on="on"
+                              >
+                                <v-icon>mdi-download</v-icon>Export
+                              </v-btn>
+                            </div>
                           </template>
-
-                          <v-card>
-                            <v-card-title class="headline grey lighten-1">Privacy Policy</v-card-title>
-
-                            <v-card-text>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</v-card-text>
-
-                            <v-divider></v-divider>
-
-                            <v-card-actions>
-                              <v-spacer></v-spacer>
-                              <v-btn text @click="dialog = false">Close</v-btn>
-                            </v-card-actions>
-                          </v-card>
-                        </v-dialog>
-                        <!-- <v-btn class="float-right mr-5" text small>Export as CSV</v-btn> -->
-                        <!-- <ProductsExcel :dataSource="records"></ProductsExcel> -->
+                          <v-list v-show="is_empty === false">
+                            <v-col>
+                              <ProductsPdf :headers="headers" :records="records"></ProductsPdf>
+                              <div>
+                                <download-csv :data="records" name="Delivered.csv">
+                                  <v-btn text small>Export as CSV</v-btn>
+                                </download-csv>
+                              </div>
+                            </v-col>
+                          </v-list>
+                        </v-menu>
                       </div>
                     </v-col>
-                  </v-list>
-                </v-menu>
+                  </v-row>
+                </v-card>
               </div>
               <v-card-title>
                 Products' Log
@@ -239,6 +245,7 @@
 }
 </style>
 <script>
+import JsonCSV from "vue-json-csv";
 import ProductsPdf from "./ProductPdf.vue";
 import ProductsExcel from "./ProductsExcel.vue";
 import {
@@ -256,7 +263,24 @@ export default {
     return {
       dialog: false,
       records: [],
-      deliveredOrder: [],
+      month: "",
+      year: "",
+      is_empty: false,
+      months: [
+        "All",
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+      ],
       TubDialog: false,
       JarDialog: false,
       product: [],
@@ -514,6 +538,79 @@ export default {
           }, 1000);
           this.records = response.data.product;
         });
+    },
+    getMonthNumber(month) {
+      switch (month) {
+        case "January":
+          return "01";
+          break;
+        case "February":
+          return "02";
+          break;
+        case "March":
+          return "03";
+          break;
+        case "April":
+          return "04";
+          break;
+        case "May":
+          return "05";
+          break;
+        case "June":
+          return "06";
+          break;
+        case "July":
+          return "07";
+          break;
+        case "August":
+          return "08";
+          break;
+        case "September":
+          return "09";
+          break;
+        case "October":
+          return "10";
+          break;
+        case "November":
+          return "11";
+          break;
+        case "December":
+          return "12";
+      }
+    },
+    filter(month, year) {
+      if (month == "All") {
+        this.year = " ";
+        this.loadDelivered();
+      } else {
+        let month_number = this.getMonthNumber(month);
+        axios
+          .post(
+            this.url + "/api/filter/" + month_number + "/" + year,
+            this.config
+          )
+          .then(response => {
+            if (response.data.data.length == 0) {
+              this.is_empty = true;
+              this.records = response.data.data;
+            } else {
+              this.is_empty = false;
+              this.records = response.data.data;
+            }
+          });
+      }
+    },
+    isEmpty(records) {
+      if (records.length == 0) {
+        Swal.fire({
+          position: "center",
+          icon: "warning",
+          title: "Cannot be Downloaded. No Data Available",
+          showConfirmButton: true
+        });
+      } else {
+        this.is_empty = false;
+      }
     }
   }
 };
