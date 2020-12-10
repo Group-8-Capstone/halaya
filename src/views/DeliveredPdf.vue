@@ -1,9 +1,6 @@
 <template>
   <div>
-    <v-spacer></v-spacer>
-    <v-btn class="mr-5" text float-right small @click="generateReport">
-      <v-icon>mdi-download</v-icon>Export as PDF
-    </v-btn>
+    <div class="btn btn-default pa-2" @click="generateReport">Export as PDF</div>
     <vue-html2pdf
       :show-layout="false"
       :float-layout="true"
@@ -34,17 +31,12 @@
           </center>
           <div style="margin:1px" class="pa-0">
             <div>
-              <v-data-table
-                :headers="headers"
-                :items="deliveredOrder"
-                hide-default-footer
-                disable-pagination
-              >
+              <v-data-table :headers="headers" :items="deliveredOrder">
                 <template v-slot:item.preferred_delivery_date="{ item }">
                   <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>
                 </template>
                 <template v-slot:item.order_status="{ item }">
-                  <v-chip color="green">{{ item.order_status }}</v-chip>
+                  <v-chip color="green" text-color="white">{{ item.order_status }}</v-chip>
                 </template>
               </v-data-table>
               <br>
@@ -67,7 +59,6 @@ export default {
   },
   data() {
     return {
-      dropdown: [{ title: "Download as PDF" }, { title: "Download as CSV" }]
     };
   },
   methods: {

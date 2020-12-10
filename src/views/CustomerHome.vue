@@ -6,7 +6,7 @@
         <v-spacer></v-spacer>
         <v-list class="justify-sm-end justify-lg-end">
           <v-btn class="ma-5" color="purple darken-2" outlined dark @click="showDialog">
-            <v-toolbar-title>Create Order</v-toolbar-title>
+            <v-toolbar-title>Order</v-toolbar-title>
           </v-btn>
         </v-list>
       </v-card-title>
@@ -167,18 +167,18 @@
           <v-hover v-slot:default="{ hover }">
             <v-card class="mx-auto " color="grey lighten-4" width="80%">
               <v-img :aspect-ratio="16/8" src="../assets/halayaTab.jpg">
-                <v-expand-transition>
+                <!-- <v-expand-transition>
                   <div
                     v-if="hover"
                     class="d-flex transition-fast-in-fast-out purple darken-2 v-card--reveal display-1 white--text"
                     style="height: 100%;"
                   >Take a try</div>
-                </v-expand-transition>
+                </v-expand-transition> -->
               </v-img>
               <v-card-text class="pt-6">
                 <center>
-                  <div class="font-weight-light grey--text title mb-2">Perfect Ubelicious treat</div>
-                  <h1 class="font-weight-light orange--text mb-2">Ube halaya in a tub</h1>
+                  <div class="font-weight-light grey--text title mb-2">Best for Bakers & Cake Makers</div>
+                  <h1 class="font-weight-light orange--text mb-2">Ube Halaya in a Tub</h1>
                   <div id="price" class="font-weight-light grey--text title mb-2">₱499.00</div>
                 </center>
               </v-card-text>
@@ -189,18 +189,18 @@
           <v-hover v-slot:default="{ hover }">
             <v-card class="mx-auto" color="grey lighten-4" width="80%">
               <v-img class="justify-center" :aspect-ratio="16/8" src="../assets/halayaJar.jpg">
-                <v-expand-transition>
+                <!-- <v-expand-transition>
                   <div
                     v-if="hover"
                     class="d-flex transition-fast-in-fast-out purple darken-2 v-card--reveal display-1 white--text"
                     style="height: 100%;"
                   >Have a taste</div>
-                </v-expand-transition>
+                </v-expand-transition> -->
               </v-img>
               <v-card-text class="pt-6">
                 <center>
-                  <div class="font-weight-light grey--text title mb-2">Best Ubelicious snack</div>
-                  <h1 class="font-weight-light orange--text mb-2">Ube halaya in a jar</h1>
+                  <div class="font-weight-light grey--text title mb-2">Perfect for Snack</div>
+                  <h1 class="font-weight-light orange--text mb-2">Ube Halaya in a Jar</h1>
                   <div id="price" class="font-weight-light grey--text title mb-2">₱150.00</div>
                 </center>
               </v-card-text>

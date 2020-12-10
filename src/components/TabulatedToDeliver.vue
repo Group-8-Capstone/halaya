@@ -1,25 +1,44 @@
 <template>
   <div>
-    <!-- <v-btn outlined float-right small color="purple">
-        <v-icon>mdi-download</v-icon>Export as PDF
-    </v-btn>-->
-
     <div>
-      <v-menu offset-y>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn outlined small color="purple" v-bind="attrs" v-on="on">
-            <v-icon>mdi-download</v-icon>Export
-          </v-btn>
-        </template>
-        <v-list>
+      <v-card class="pa-5" flat>
+        <h4>Filter</h4>
+        <v-row>
+          <v-spacer></v-spacer>
           <v-col>
-            <OrderToDeliverPdf :headers="headers" :records="todelivered"></OrderToDeliverPdf>
             <div>
-              <v-btn class="float-right mr-5" text small>Export as CSV</v-btn>
+              <v-menu offset-y>
+                <template v-slot:activator="{ on, attrs }">
+                  <div>
+                    <v-btn
+                      @click="isEmpty(todelivered)"
+                      class="float-right"
+                      outlined
+                      color="purple"
+                      v-bind="attrs"
+                      v-on="on"
+                    >
+                      <v-icon>mdi-download</v-icon>Export
+                    </v-btn>
+                  </div>
+                </template>
+                <v-list v-show="is_empty === false">
+                  <v-col>
+                    <OrderToDeliverPdf :headers="headers" :records="todelivered"></OrderToDeliverPdf>
+                    <div>
+                      <download-csv
+                        class="btn btn-default pa-2"
+                        :data="todelivered"
+                        name="Deliveries.csv"
+                      >Export as CSV</download-csv>
+                    </div>
+                  </v-col>
+                </v-list>
+              </v-menu>
             </div>
           </v-col>
-        </v-list>
-      </v-menu>
+        </v-row>
+      </v-card>
     </div>
 
     <v-card flat>
@@ -72,14 +91,20 @@
 </template>
 
 <script>
+import Vue from "vue";
+import JsonCSV from "vue-json-csv";
 import axios from "axios";
+import Swal from "sweetalert2";
 import OrderToDeliverPdf from "./OrderToDeliverPdf.vue";
+
+Vue.component("downloadCsv", JsonCSV);
+
 export default {
   components: { OrderToDeliverPdf },
   data() {
     return {
       todelivered: [],
-      dropdown: [{ title: "Download as PDF" }, { title: "Download as CSV" }],
+      is_empty: false,
       headers: [
         {
           text: "Receiver Name",
@@ -169,6 +194,19 @@ export default {
     isDelivered(item) {
       if (item.order_status == "Delivered") {
         return true;
+      }
+    },
+    isEmpty(todelivered) {
+      if (todelivered.length == 0) {
+        this.is_empty = true;
+        Swal.fire({
+          position: "center",
+          icon: "warning",
+          title: "Cannot be Downloaded. No Data Available",
+          showConfirmButton: true
+        });
+      } else {
+        this.is_empty = false;
       }
     }
   }

@@ -302,7 +302,7 @@ export default {
         text: "Profile Setting",
         link: "/profileSetting"
       },
-      { icon: "mdi-logout", text: "Logout", link: "/login" },
+      { icon: "mdi-logout", text: "Sign out", link: "/login" },
     ],
     customer: [
       { icon: "mdi-home-variant", text: "Home", link: "/customerHome" },
@@ -312,7 +312,7 @@ export default {
         text: "Profile Setting",
         link: "/profileSetting"
       },
-      { icon: "mdi-logout", text: "Logout", link: "/login" }
+      { icon: "mdi-logout", text: "Sign out", link: "/login" }
     ],
     driver: [
       { icon: "mdi-clipboard-outline", text: "To Deliver", link: "/delivery" },
@@ -322,7 +322,7 @@ export default {
         text: "Profile Setting",
         link: "/profileSetting"
       },
-      { icon: "mdi-logout", text: "Logout", link: "/login" }
+      { icon: "mdi-logout", text: "Sign out", link: "/login" }
     ]
   }),
   mounted(){
@@ -419,7 +419,7 @@ export default {
       });
     },
     logout(item) {
-      if (item.text == "Logout") {
+      if (item.text == "Sign out") {
         localStorage.clear();
       }
     },

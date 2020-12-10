@@ -1,33 +1,55 @@
 <template>
   <v-card class="ma-5 mb-12 pa-5">
+    <v-card-title>Delivered Orders</v-card-title>
     <div>
-      <v-menu offset-y>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn outlined small color="purple" v-bind="attrs" v-on="on">
-            <v-icon>mdi-download</v-icon>Export
-          </v-btn>
-        </template>
-        <v-list>
-          <v-col>
-            <DeliveredPdf :headers="headers" :records="deliveredOrder"></DeliveredPdf>
+      <v-card class="pa-5" flat>
+        <h4>Filter</h4>
+        <v-row>
+          <v-col cols="3">
+            <v-select v-model="month" label="Month" :items="months"></v-select>
+          </v-col>
+          <v-col cols="3">
+            <v-text-field v-model="year" label="Year"></v-text-field>
+          </v-col>
+          <v-col cols="2">
+            <v-btn @click="filter(month,year)" outlined medium color="purple">Apply</v-btn>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="2">
             <div>
-              <v-btn class="float-right mr-5" text small>Export as CSV</v-btn>
+              <v-menu offset-y>
+                <template v-slot:activator="{ on, attrs }">
+                  <div>
+                    <v-btn
+                      @click="isEmpty(deliveredOrder)"
+                      class="float-right"
+                      outlined
+                      color="purple"
+                      v-bind="attrs"
+                      v-on="on"
+                    >
+                      <v-icon>mdi-download</v-icon>Export
+                    </v-btn>
+                  </div>
+                </template>
+                <v-list v-show="is_empty === false">
+                  <v-col>
+                    <DeliveredPdf :headers="headers" :deliveredOrder="deliveredOrder"></DeliveredPdf>
+                    <div>
+                      <download-csv
+                        class="btn btn-default pa-2"
+                        :data="deliveredOrder"
+                        name="Delivered.csv"
+                      >Export as CSV</download-csv>
+                    </div>
+                  </v-col>
+                </v-list>
+              </v-menu>
             </div>
           </v-col>
-        </v-list>
-      </v-menu>
+        </v-row>
+      </v-card>
     </div>
-    <v-card-title>
-      Delivered Orders
-      <v-spacer></v-spacer>
-      <v-text-field
-        v-model="search"
-        append-icon="mdi-magnify"
-        label="Search"
-        single-line
-        hide-details
-      ></v-text-field>
-    </v-card-title>
     <v-data-table :headers="headers" :items="deliveredOrder" :search="search">
       <template v-slot:item.preferred_delivery_date="{ item }">
         <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>
@@ -40,8 +62,13 @@
 </template>
 
 <script>
+import Vue from "vue";
+import JsonCSV from "vue-json-csv";
 import DeliveredPdf from "./DeliveredPdf.vue";
 import axios from "axios";
+import Swal from "sweetalert2";
+
+Vue.component("downloadCsv", JsonCSV);
 export default {
   name: "Delivery",
   components: { DeliveredPdf },
@@ -49,6 +76,24 @@ export default {
     return {
       deliveredOrder: [],
       search: "",
+      month: "",
+      year: "",
+      is_empty: false,
+      months: [
+        "All",
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+      ],
       headers: [
         {
           text: "Receiver Name",
@@ -119,6 +164,79 @@ export default {
             this.deliveredOrder[i]["customer_address"] = place;
           }
         });
+    },
+    getMonthNumber(month) {
+      switch (month) {
+        case "January":
+          return "01";
+          break;
+        case "February":
+          return "02";
+          break;
+        case "March":
+          return "03";
+          break;
+        case "April":
+          return "04";
+          break;
+        case "May":
+          return "05";
+          break;
+        case "June":
+          return "06";
+          break;
+        case "July":
+          return "07";
+          break;
+        case "August":
+          return "08";
+          break;
+        case "September":
+          return "09";
+          break;
+        case "October":
+          return "10";
+          break;
+        case "November":
+          return "11";
+          break;
+        case "December":
+          return "12";
+      }
+    },
+    filter(month, year) {
+      if (month == "All") {
+        this.year = " ";
+        this.loadDelivered();
+      } else {
+        let month_number = this.getMonthNumber(month);
+        axios
+          .post(
+            this.url + "/api/filter/" + month_number + "/" + year,
+            this.config
+          )
+          .then(response => {
+            if (response.data.data.length == 0) {
+              this.is_empty = true;
+              this.deliveredOrder = response.data.data;
+            } else {
+              this.is_empty = false;
+              this.deliveredOrder = response.data.data;
+            }
+          });
+      }
+    },
+    isEmpty(deliveredOrder) {
+      if (deliveredOrder.length == 0) {
+        Swal.fire({
+          position: "center",
+          icon: "warning",
+          title: "Cannot be Downloaded. No Data Available",
+          showConfirmButton: true
+        });
+      } else {
+        this.is_empty = false;
+      }
     }
   }
 };

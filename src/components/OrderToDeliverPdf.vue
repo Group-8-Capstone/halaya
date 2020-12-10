@@ -1,9 +1,11 @@
 <template>
   <div class="mt-5">
     <v-spacer></v-spacer>
-    <v-btn class="mr-5" text float-right small @click="generateReport">
+    <!-- <v-btn class="mr-5" text float-right small @click="generateReport">
       Export as PDF
-    </v-btn>
+    </v-btn> -->
+    <div class="btn btn-default pa-2" @click="generateReport">Export as PDF</div>
+    
     <vue-html2pdf
       :show-layout="false"
       :float-layout="true"
