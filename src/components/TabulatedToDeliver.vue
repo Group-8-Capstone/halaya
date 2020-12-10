@@ -2,17 +2,16 @@
   <div>
     <div>
       <v-card class="pa-5" flat>
-        <h4>Filter</h4>
         <v-row>
-          <v-spacer></v-spacer>
-          <v-col>
+          <!-- <v-spacer></v-spacer> -->
+          <v-col class="float-left" cols="2">
             <div>
               <v-menu offset-y>
                 <template v-slot:activator="{ on, attrs }">
                   <div>
                     <v-btn
                       @click="isEmpty(todelivered)"
-                      class="float-right"
+                      class="float-left"
                       outlined
                       color="purple"
                       v-bind="attrs"
@@ -58,33 +57,69 @@
         <template v-slot:item.order_status="{ item }">
           <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
         </template>
-        <template v-slot:item.action="{ item }">
-          <div v-if="isCanceled(item) === true || isDelivered(item) === true">
-            <v-icon
-              disabled
-              normal
-              class="mr-2"
-              title="Confirm Order"
-              @click="confirmOrder(item)"
-            >mdi mdi-checkbox-marked-outline</v-icon>
-            <v-icon
-              disabled
-              @click="alertCancel(item)"
-              normal
-              class="mr-2"
-              title="Cancel"
-            >mdi-cancel</v-icon>
+        <!-- <template v-slot:item.action="{ item }">
+          <div v-if="isAdmin() === true">
+            <div v-if="isCanceled(item) === true || isDelivered(item) === true">
+              <v-icon
+                disabled
+                normal
+                class="mr-2"
+                title="Delivered"
+                @click="alertDelivered(item)"
+              >mdi-truck-check-outline</v-icon>
+              <v-icon
+                disabled
+                @click="alertCancel(item)"
+                normal
+                class="mr-2"
+                title="Cancel"
+              >mdi-cancel</v-icon>
+            </div>
+            <div v-else>
+              <v-icon
+                disabled
+                normal
+                class="mr-2"
+                title="Delivered"
+                @click="alertDelivered(item)"
+              >mdi-truck-check-outline</v-icon>
+              <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+            </div>
           </div>
-          <div v-else>
-            <v-icon
-              normal
-              class="mr-2"
-              title="Confirm Order"
-              @click="confirmOrder(item)"
-            >mdi mdi-checkbox-marked-outline</v-icon>
-            <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+          <div v-if="isRider() === true">
+            <div v-if="isCanceled(item) === true || isDelivered(item) === true">
+              <v-icon
+                disabled
+                normal
+                class="mr-2"
+                title="Delivered"
+                @click="alertDelivered(item)"
+              >mdi-truck-check-outline</v-icon>
+              <v-icon
+                disabled
+                @click="alertCancel(item)"
+                normal
+                class="mr-2"
+                title="Cancel"
+              >mdi-cancel</v-icon>
+            </div>
+            <div v-else>
+              <v-icon
+                normal
+                class="mr-2"
+                title="Delivered"
+                @click="alertDelivered(item)"
+              >mdi-truck-check-outline</v-icon>
+              <v-icon
+                disabled
+                @click="alertCancel(item)"
+                normal
+                class="mr-2"
+                title="Cancel"
+              >mdi-cancel</v-icon>
+            </div>
           </div>
-        </template>
+        </template> -->
       </v-data-table>
     </v-card>
   </div>
@@ -140,7 +175,7 @@ export default {
           value: "total_payment",
           sortable: false
         },
-        { text: "Actions", value: "action", sortable: false },
+        // { text: "Actions", value: "action", sortable: false },
         { text: "Status", value: "order_status" }
       ]
     };
@@ -186,16 +221,6 @@ export default {
           });
         });
     },
-    isCanceled(item) {
-      if (item.order_status == "Canceled") {
-        return true;
-      }
-    },
-    isDelivered(item) {
-      if (item.order_status == "Delivered") {
-        return true;
-      }
-    },
     isEmpty(todelivered) {
       if (todelivered.length == 0) {
         this.is_empty = true;
@@ -209,6 +234,92 @@ export default {
         this.is_empty = false;
       }
     }
+    // isAdmin() {
+    //   if (localStorage.getItem("role") === "admin") {
+    //     return true;
+    //   }
+    // },
+    // isRider() {
+    //   if (localStorage.getItem("role") === "driver") {
+    //     return true;
+    //   }
+    // },
+    // isCanceled(item) {
+    //   if (item.order_status == "Canceled") {
+    //     return true;
+    //   }
+    // },
+    // isDelivered(item) {
+    //   if (item.order_status == "Delivered") {
+    //     return true;
+    //   }
+    // },
+    // alertDelivered(item) {
+    //   Swal.fire({
+    //     title: "Are you sure item is being delivered?",
+    //     icon: "warning",
+    //     showCancelButton: true,
+    //     confirmButtonColor: "#3085d6",
+    //     cancelButtonColor: "#CFD8D",
+    //     cancelButtonText: "No",
+    //     confirmButtonText: "Yes",
+    //     reverseButtons: true
+    //   }).then(result => {
+    //     if (result.value) {
+    //       this.deliveredItem(item);
+    //       this.getToDelivered();
+    //     }
+    //   });
+    // },
+    
+    // deliveredItem(item) {
+    //   axios
+    //     .post(this.url + "/api/post/updateStat/" + item.id, {}, this.config)
+    //     .then(response => {
+    //       Swal.fire({
+    //         title: "Order has been delivered",
+    //         icon: "success",
+    //         showConfirmButton: false,
+    //         timer: 1500
+    //       });
+    //       this.getToDelivered();
+    //     });
+    // },
+    // alertCancel(item) {
+    //   Swal.fire({
+    //     title: "Are you sure?",
+    //     icon: "warning",
+    //     showCancelButton: true,
+    //     confirmButtonColor: "#3085d6",
+    //     cancelButtonColor: "#CFD8D",
+    //     cancelButtonText: "No",
+    //     confirmButtonText: "Yes",
+    //     reverseButtons: true
+    //   }).then(result => {
+    //     if (result.value) {
+    //       this.deleteItem(item);
+    //       this.getToDelivered();
+    //     }
+    //   });
+    // },
+    // deleteItem(item) {
+    //   axios
+    //     .post(
+    //       this.url + "/api/post/updateCanceledStat/" + item.id,
+    //       {},
+    //       this.config
+    //     )
+    //     .then(response => {
+    //       Swal.fire({
+    //         title: "Canceled!",
+    //         text: "Order has been canceled",
+    //         icon: "success",
+    //         showConfirmButton: false,
+    //         timer: 1500
+    //       });
+    //       this.getToDelivered();
+    //     });
+    // },
   }
 };
 </script>
