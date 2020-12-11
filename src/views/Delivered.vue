@@ -144,6 +144,7 @@ export default {
           setTimeout(() => {
             this.$vloading.hide();
           }, 1000);
+          console.log('---', response.data)
           this.deliveredOrder = response.data.data;
           for (var i = 0; i < this.deliveredOrder.length; i++) {
             var street = response.data.data[i].building_or_street;
@@ -221,7 +222,7 @@ export default {
             this.url + `/api/filter/${month_number}/${year}`, {}, this.config
           )
           .then(response => {
-            console.log("-->>", response.data)
+            // console.log("-->>", response.data)
             if (response.data.data.length == 0) {
               this.is_empty = true;
               this.deliveredOrder = response.data.data;
