@@ -1,11 +1,11 @@
 <template>
   <div>
-    <br/>
+    <br>
     <div id="label">
       <h3 class="ml-2">Color Coding Label</h3>
       <v-row>
         <v-col cols="3">
-          <v-btn color="purple" style="height:13px;"></v-btn> &nbsp; Wawen's Store
+          <v-btn color="purple" style="height:13px;"></v-btn>&nbsp; Wawen's Store
         </v-col>
         <v-col cols="3">
           <v-btn color="blue" style="height:13px;"></v-btn>&nbsp; Ongoing Order
@@ -14,7 +14,7 @@
           <v-btn color="green" style="height:13px;"></v-btn>&nbsp; Delivered Order
         </v-col>
         <v-col cols="3">
-          <v-btn color="orange" style="height:13px;"></v-btn> &nbsp; Canceled Order
+          <v-btn color="orange" style="height:13px;"></v-btn>&nbsp; Canceled Order
         </v-col>
       </v-row>
     </div>
@@ -76,7 +76,7 @@ export default {
         this.$vloading.hide();
       }, 1000);
       var result = response.data.data;
-      console.log("=====", result);
+      // console.log("=====", result);
       result.forEach(element => {
         let {
           building_or_street,
@@ -101,8 +101,18 @@ export default {
         // add markers to map
         var el = document.createElement("div");
         el.className = "marker";
-
-        if (order_status == "Delivered") {
+        if (
+          building_or_street ===
+          "Shambala Veterinary Clinic Hernan Cortes Street" && order_status == "Delivered"
+        ) {
+          new mapboxgl.Marker({ color: "purple" })
+            .setLngLat([123.921969, 10.329892])
+            .setPopup(
+              new mapboxgl.Popup() // add popups
+                .setHTML("<h3>Wawen's Ube Halaya Store</h3>")
+            )
+            .addTo(map); //default marker sa place ni sir clark
+        } else if (order_status == "Delivered") {
           // make a marker for each feature and add to the map
           new mapboxgl.Marker({ color: "green" })
             .setLngLat([longitude, latitude])

@@ -1,25 +1,43 @@
 <template>
   <div>
-    <!-- <v-btn outlined float-right small color="purple">
-        <v-icon>mdi-download</v-icon>Export as PDF
-    </v-btn>-->
-
     <div>
-      <v-menu offset-y>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn outlined small color="purple" v-bind="attrs" v-on="on">
-            <v-icon>mdi-download</v-icon>Export
-          </v-btn>
-        </template>
-        <v-list>
-          <v-col>
-            <OrderToDeliverPdf :headers="headers" :records="todelivered"></OrderToDeliverPdf>
+      <v-card class="pa-5" flat>
+        <v-row>
+          <!-- <v-spacer></v-spacer> -->
+          <v-col class="float-left" cols="2">
             <div>
-              <v-btn class="float-right mr-5" text small>Export as CSV</v-btn>
+              <v-menu offset-y>
+                <template v-slot:activator="{ on, attrs }">
+                  <div>
+                    <v-btn
+                      @click="isEmpty(todelivered)"
+                      class="float-left"
+                      outlined
+                      color="purple"
+                      v-bind="attrs"
+                      v-on="on"
+                    >
+                      <v-icon>mdi-download</v-icon>Export
+                    </v-btn>
+                  </div>
+                </template>
+                <v-list v-show="is_empty === false">
+                  <v-col>
+                    <OrderToDeliverPdf :headers="headers" :records="todelivered"></OrderToDeliverPdf>
+                    <div>
+                      <download-csv
+                        class="btn btn-default pa-2"
+                        :data="todelivered"
+                        name="Deliveries.csv"
+                      >Export as CSV</download-csv>
+                    </div>
+                  </v-col>
+                </v-list>
+              </v-menu>
             </div>
           </v-col>
-        </v-list>
-      </v-menu>
+        </v-row>
+      </v-card>
     </div>
 
     <v-card flat>
@@ -39,47 +57,89 @@
         <template v-slot:item.order_status="{ item }">
           <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
         </template>
-        <template v-slot:item.action="{ item }">
-          <div v-if="isCanceled(item) === true || isDelivered(item) === true">
-            <v-icon
-              disabled
-              normal
-              class="mr-2"
-              title="Confirm Order"
-              @click="confirmOrder(item)"
-            >mdi mdi-checkbox-marked-outline</v-icon>
-            <v-icon
-              disabled
-              @click="alertCancel(item)"
-              normal
-              class="mr-2"
-              title="Cancel"
-            >mdi-cancel</v-icon>
+        <!-- <template v-slot:item.action="{ item }">
+          <div v-if="isAdmin() === true">
+            <div v-if="isCanceled(item) === true || isDelivered(item) === true">
+              <v-icon
+                disabled
+                normal
+                class="mr-2"
+                title="Delivered"
+                @click="alertDelivered(item)"
+              >mdi-truck-check-outline</v-icon>
+              <v-icon
+                disabled
+                @click="alertCancel(item)"
+                normal
+                class="mr-2"
+                title="Cancel"
+              >mdi-cancel</v-icon>
+            </div>
+            <div v-else>
+              <v-icon
+                disabled
+                normal
+                class="mr-2"
+                title="Delivered"
+                @click="alertDelivered(item)"
+              >mdi-truck-check-outline</v-icon>
+              <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+            </div>
           </div>
-          <div v-else>
-            <v-icon
-              normal
-              class="mr-2"
-              title="Confirm Order"
-              @click="confirmOrder(item)"
-            >mdi mdi-checkbox-marked-outline</v-icon>
-            <v-icon @click="alertCancel(item)" normal class="mr-2" title="Cancel">mdi-cancel</v-icon>
+          <div v-if="isRider() === true">
+            <div v-if="isCanceled(item) === true || isDelivered(item) === true">
+              <v-icon
+                disabled
+                normal
+                class="mr-2"
+                title="Delivered"
+                @click="alertDelivered(item)"
+              >mdi-truck-check-outline</v-icon>
+              <v-icon
+                disabled
+                @click="alertCancel(item)"
+                normal
+                class="mr-2"
+                title="Cancel"
+              >mdi-cancel</v-icon>
+            </div>
+            <div v-else>
+              <v-icon
+                normal
+                class="mr-2"
+                title="Delivered"
+                @click="alertDelivered(item)"
+              >mdi-truck-check-outline</v-icon>
+              <v-icon
+                disabled
+                @click="alertCancel(item)"
+                normal
+                class="mr-2"
+                title="Cancel"
+              >mdi-cancel</v-icon>
+            </div>
           </div>
-        </template>
+        </template> -->
       </v-data-table>
     </v-card>
   </div>
 </template>
 
 <script>
+import Vue from "vue";
+import JsonCSV from "vue-json-csv";
 import axios from "axios";
+import Swal from "sweetalert2";
 import OrderToDeliverPdf from "./OrderToDeliverPdf.vue";
+
+Vue.component("downloadCsv", JsonCSV);
+
 export default {
   components: { OrderToDeliverPdf },
   data() {
     return {
       todelivered: [],
-      dropdown: [{ title: "Download as PDF" }, { title: "Download as CSV" }],
+      is_empty: false,
       headers: [
         {
           text: "Receiver Name",
@@ -115,7 +175,7 @@ export default {
           value: "total_payment",
           sortable: false
         },
-        { text: "Actions", value: "action", sortable: false },
+        // { text: "Actions", value: "action", sortable: false },
         { text: "Status", value: "order_status" }
       ]
     };
@@ -161,16 +221,105 @@ export default {
           });
         });
     },
-    isCanceled(item) {
-      if (item.order_status == "Canceled") {
-        return true;
-      }
-    },
-    isDelivered(item) {
-      if (item.order_status == "Delivered") {
-        return true;
+    isEmpty(todelivered) {
+      if (todelivered.length == 0) {
+        this.is_empty = true;
+        Swal.fire({
+          position: "center",
+          icon: "warning",
+          title: "Cannot be Downloaded. No Data Available",
+          showConfirmButton: true
+        });
+      } else {
+        this.is_empty = false;
       }
     }
+    // isAdmin() {
+    //   if (localStorage.getItem("role") === "admin") {
+    //     return true;
+    //   }
+    // },
+    // isRider() {
+    //   if (localStorage.getItem("role") === "driver") {
+    //     return true;
+    //   }
+    // },
+    // isCanceled(item) {
+    //   if (item.order_status == "Canceled") {
+    //     return true;
+    //   }
+    // },
+    // isDelivered(item) {
+    //   if (item.order_status == "Delivered") {
+    //     return true;
+    //   }
+    // },
+    // alertDelivered(item) {
+    //   Swal.fire({
+    //     title: "Are you sure item is being delivered?",
+    //     icon: "warning",
+    //     showCancelButton: true,
+    //     confirmButtonColor: "#3085d6",
+    //     cancelButtonColor: "#CFD8D",
+    //     cancelButtonText: "No",
+    //     confirmButtonText: "Yes",
+    //     reverseButtons: true
+    //   }).then(result => {
+    //     if (result.value) {
+    //       this.deliveredItem(item);
+    //       this.getToDelivered();
+    //     }
+    //   });
+    // },
+    
+    // deliveredItem(item) {
+    //   axios
+    //     .post(this.url + "/api/post/updateStat/" + item.id, {}, this.config)
+    //     .then(response => {
+    //       Swal.fire({
+    //         title: "Order has been delivered",
+    //         icon: "success",
+    //         showConfirmButton: false,
+    //         timer: 1500
+    //       });
+    //       this.getToDelivered();
+    //     });
+    // },
+    // alertCancel(item) {
+    //   Swal.fire({
+    //     title: "Are you sure?",
+    //     icon: "warning",
+    //     showCancelButton: true,
+    //     confirmButtonColor: "#3085d6",
+    //     cancelButtonColor: "#CFD8D",
+    //     cancelButtonText: "No",
+    //     confirmButtonText: "Yes",
+    //     reverseButtons: true
+    //   }).then(result => {
+    //     if (result.value) {
+    //       this.deleteItem(item);
+    //       this.getToDelivered();
+    //     }
+    //   });
+    // },
+    // deleteItem(item) {
+    //   axios
+    //     .post(
+    //       this.url + "/api/post/updateCanceledStat/" + item.id,
+    //       {},
+    //       this.config
+    //     )
+    //     .then(response => {
+    //       Swal.fire({
+    //         title: "Canceled!",
+    //         text: "Order has been canceled",
+    //         icon: "success",
+    //         showConfirmButton: false,
+    //         timer: 1500
+    //       });
+    //       this.getToDelivered();
+    //     });
+    // },
   }
 };
 </script>
