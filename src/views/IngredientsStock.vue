@@ -146,24 +146,57 @@
         <v-tab-item>
           <v-card class="ma-5 mb-12 pa-5">
             <div>
-              <v-menu offset-y>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn outlined small color="purple" v-bind="attrs" v-on="on">
-                    <v-icon>mdi-download</v-icon>Export
-                  </v-btn>
-                </template>
-                <v-list>
-                  <v-col>
-                    <IngredientsPdf
-                      :headersIngredients="headersIngredients"
-                      :displayIngredientsRecords="displayIngredientsRecords"
-                    ></IngredientsPdf>
+              <v-card>
+                <h4>Filter</h4>
+                <v-row>
+                  <v-col cols="3">
+                    <v-select v-model="month" label="Month" :items="months"></v-select>
+                  </v-col>
+                  <v-col cols="3">
+                    <v-text-field v-model="year" label="Year"></v-text-field>
+                  </v-col>
+                  <v-col cols="2">
+                    <v-btn @click="filter(month,year)" outlined medium color="purple">Apply</v-btn>
+                  </v-col>
+                  <v-spacer></v-spacer>
+                  <v-col cols="2">
                     <div>
-                      <v-btn class="float-right mr-5" text small>Export as CSV</v-btn>
+                      <v-menu offset-y>
+                        <template v-slot:activator="{ on, attrs }">
+                          <div>
+                            <v-btn
+                              @click="isEmpty(records)"
+                              class="float-right"
+                              outlined
+                              color="purple"
+                              v-bind="attrs"
+                              v-on="on"
+                            >
+                              <v-icon>mdi-download</v-icon>Export
+                            </v-btn>
+                          </div>
+                        </template>
+                        <v-list v-show="is_empty === false">
+                          <v-col>
+                            <IngredientsPdf
+                              :headersIngredients="headersIngredients"
+                              :displayIngredientsRecords="displayIngredientsRecords"
+                            ></IngredientsPdf>
+                            <div>
+                              <download-csv
+                                :data="displayIngredientsRecords"
+                                name="IngredientsLog.csv"
+                              >
+                                <v-btn text small>Export as CSV</v-btn>
+                              </download-csv>
+                            </div>
+                          </v-col>
+                        </v-list>
+                      </v-menu>
                     </div>
                   </v-col>
-                </v-list>
-              </v-menu>
+                </v-row>
+              </v-card>
             </div>
             <v-card-title>
               Ingredients' Logs
@@ -201,6 +234,7 @@
 </template>
 
 <script>
+import JsonCSV from "vue-json-csv";
 import IngredientsPdf from "./IngredientsPdf.vue";
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -218,6 +252,24 @@ export default {
     return {
       loading: true,
       displayIngredientsRecords: [],
+      month: "",
+      year: " ",
+      is_empty: false,
+      months: [
+        "All",
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+      ],
       dropdown: [{ title: "Download as PDF" }, { title: "Download as CSV" }],
       stockDialog: false,
       editDialog: false,
@@ -428,6 +480,88 @@ export default {
             this.retrieveUsedIngredients();
             this.addUsedStockDialog = false;
           });
+      }
+    },
+    getMonthNumber(month) {
+      switch (month) {
+        case "January":
+          return "01";
+          break;
+        case "February":
+          return "02";
+          break;
+        case "March":
+          return "03";
+          break;
+        case "April":
+          return "04";
+          break;
+        case "May":
+          return "05";
+          break;
+        case "June":
+          return "06";
+          break;
+        case "July":
+          return "07";
+          break;
+        case "August":
+          return "08";
+          break;
+        case "September":
+          return "09";
+          break;
+        case "October":
+          return "10";
+          break;
+        case "November":
+          return "11";
+          break;
+        case "December":
+          return "12";
+      }
+    },
+    filter(month, year) {
+      if (month == "All") {
+        this.year = " ";
+        this.retrieveUsedIngredients();
+      } else if (this.year == " ") {
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          title: "Year cannot be empty",
+          showConfirmButton: true
+        });
+      } else {
+        let month_number = this.getMonthNumber(month);
+        axios
+          .post(
+            this.url + `/api/filterIngredientsLog/${month_number}/${year}`,
+            {},
+            this.config
+          )
+          .then(response => {
+            console.log("-->>", response.data);
+            if (response.data.data.length == 0) {
+              this.is_empty = true;
+              this.displayIngredientsRecords = response.data.data;
+            } else {
+              this.is_empty = false;
+              this.displayIngredientsRecords = response.data.data;
+            }
+          });
+      }
+    },
+    isEmpty(displayIngredientsRecords) {
+      if (displayIngredientsRecords.length == 0) {
+        Swal.fire({
+          position: "center",
+          icon: "warning",
+          title: "Cannot be Downloaded. No Data Available",
+          showConfirmButton: true
+        });
+      } else {
+        this.is_empty = false;
       }
     }
   }

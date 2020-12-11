@@ -184,7 +184,7 @@
                             <v-col>
                               <ProductsPdf :headers="headers" :records="records"></ProductsPdf>
                               <div>
-                                <download-csv :data="records" name="Delivered.csv">
+                                <download-csv :data="records" name="ProductsLog.csv">
                                   <v-btn text small>Export as CSV</v-btn>
                                 </download-csv>
                               </div>
@@ -264,7 +264,7 @@ export default {
       dialog: false,
       records: [],
       month: "",
-      year: "",
+      year: " ",
       is_empty: false,
       months: [
         "All",
@@ -581,15 +581,22 @@ export default {
     filter(month, year) {
       if (month == "All") {
         this.year = " ";
-        this.loadDelivered();
+        this.fetchRecordedProduct();
+      } else if (this.year == " ") {
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          title: "Year cannot be empty",
+          showConfirmButton: true
+        });
       } else {
         let month_number = this.getMonthNumber(month);
         axios
           .post(
-            this.url + "/api/filter/" + month_number + "/" + year,
-            this.config
+            this.url + `/api/filterProductsLog/${month_number}/${year}`, {}, this.config
           )
           .then(response => {
+            console.log("-->>", response.data)
             if (response.data.data.length == 0) {
               this.is_empty = true;
               this.records = response.data.data;
