@@ -226,13 +226,13 @@
           <v-row class="pl-5">
             <v-col md="6" lg="6" sm="12">
               <span>
-                <h4>Receiver's Name:</h4>
+                <h4>Customer's/Receiver's Name:</h4>
                 {{customerName}}
               </span>
             </v-col>
             <v-col md="6" lg="6" sm="12">
               <span>
-                <h4>Receiver's Number:</h4>
+                <h4>Customer's/Receiver's Number:</h4>
                 {{contactNumber}}
               </span>
             </v-col>

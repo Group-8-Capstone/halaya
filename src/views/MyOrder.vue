@@ -68,7 +68,7 @@ export default {
     ubeJar: null,
     ubeTab: null,
     headers: [
-      { text: "Receivers Name", value: "receiver_name" },
+      { text: "Customers Name", value: "receiver_name" },
       { text: "Prefered Delivery Date", value: "preferred_delivery_date" },
       { text: "Halaya Jar Quantity", value: "ubehalayajar_qty" },
       { text: "Halaya Tub Quantity", value: "ubehalayatub_qty" },
@@ -76,7 +76,7 @@ export default {
       { text: "Status", value: "order_status" }
     ],
     headers2: [
-      { text: "Receivers Name", value: "receiver_name" },
+      { text: "Customers Name", value: "receiver_name" },
       { text: "Delivered Date", value: "preferred_delivery_date" },
       { text: "Halaya Jar Quantity", value: "ubehalayajar_qty" },
       { text: "Halaya Tub Quantity", value: "ubehalayatub_qty" },

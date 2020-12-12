@@ -196,7 +196,7 @@ export default {
       barangay_array: [],
       dialog: false,
       notifications: false,
-      sound: true,
+      // sound: true,
       widgets: false,
       orders: [],
       allOrders: [],

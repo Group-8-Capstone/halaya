@@ -285,7 +285,7 @@ export default {
         icon: "mdi-stocking",
         text: "Stock",
         subItem: [
-          { icon: "mdi-cogs", title: "Stock(Ingredients)", link: "/setting" },
+          { icon: "mdi-cogs", title: "Stocks (Ingredients)", link: "/setting" },
           { icon: "mdi-label", title: "Ingredients' Status", link: "/ingredients" },
           {
             icon: "mdi-package-variant",
@@ -364,7 +364,7 @@ export default {
     },
      notif(item){
       let date = moment(item.created_at).format('MM/DD/YYYY HH:mm');
-      return item.receiver_name + ' '+'place an order on'+' '+ date
+      return item.receiver_name + ' '+'placed an order on'+' '+ date
     },
     customerOrder(item, event) {
        this.$router.push('/myorder').catch(err => {});

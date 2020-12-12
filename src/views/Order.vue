@@ -7,7 +7,7 @@
       <v-tabs v-model="tabs" right color="deep-purple accent-4">
         <v-tab>Received Orders</v-tab>
         <v-tab>Pending Orders</v-tab>
-        <v-tab>Walk'in</v-tab>
+        <v-tab>Walk-in</v-tab>
       </v-tabs>
       <v-tabs-items v-model="tabs">
         <v-tab-item>

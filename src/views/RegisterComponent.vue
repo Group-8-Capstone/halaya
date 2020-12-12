@@ -45,7 +45,7 @@
                     </v-snackbar>
                     <v-text-field
                       id="contact"
-                      label="Phone"
+                      label="Mobile Number"
                       name="contact"
                       prepend-icon="mdi-phone"
                       type="text"
