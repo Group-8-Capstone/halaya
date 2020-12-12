@@ -23,7 +23,7 @@ export default {
       products: [
         {
           title: "Delivery Time",
-          description: "Starts at 3:00 PM until orders for the day are all delivered",
+          description: "Starts at 3:00 PM",
           icon:"mdi-clock",
           image: require("@/assets/order.png")
         },
@@ -38,7 +38,7 @@ export default {
           description: "Cash On Delivery",
           icon:"mdi-cash",
           image: require("@/assets/Pay_on_Delivery.png")
-        }
+        },
       ]
     };
   },

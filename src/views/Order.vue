@@ -7,7 +7,7 @@
       <v-tabs v-model="tabs" right color="deep-purple accent-4">
         <v-tab>Received Orders</v-tab>
         <v-tab>Pending Orders</v-tab>
-        <v-tab>Walk in</v-tab>
+        <v-tab>Walk'in</v-tab>
       </v-tabs>
       <v-tabs-items v-model="tabs">
         <v-tab-item>
@@ -84,6 +84,9 @@
             </template>
             <template v-slot:item.contact_number="{ item }">
               <span>{{'0'+item.contact_number}}</span>
+            </template>
+             <template v-slot:item.distance="{ item }">
+              <span>{{item.distance+'km'}}</span>
             </template>
             <template v-slot:item.order_status="{ item }">
               <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>

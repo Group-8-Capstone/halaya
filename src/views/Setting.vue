@@ -86,7 +86,7 @@
       <v-data-table :headers="headersIngredients" :items="estimatedValue" :search="search">
         <template
           #item.ingredients_amount="{ item }"
-        >{{ item.ingredients_need_amount }} {{ item.ingredients_unit }}/s</template>
+        >{{ item.ingredients_need_amount }} {{ item.ingredients_unit }}</template>
         <template v-slot:item.action="{ item }">
           <v-icon
             @click="editDialog = !editDialog, editEstimatedValue(item) "

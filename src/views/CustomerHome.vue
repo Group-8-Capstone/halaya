@@ -17,6 +17,9 @@
     lazy-validation>
     <v-dialog persistent v-model="addOrderDialog" style="height:auto;" width="600px">
       <v-card class="ma-0 pa-0">
+        <!-- <div>
+         <div style="float:right" @click="addOrderDialog = false, isSubmit=false" class="mb-8 mr-5">x</div>
+         </div> -->
         <v-card-title class="align-center">
           <v-list-item-title
             class="d-flex align-center justify-center mx-auto headline black--text"
@@ -28,7 +31,7 @@
             <v-col cols="6">
               <v-text-field
                 prepend-icon="mdi-account-outline"
-                label="Receiver's Name"
+                label="Customer's/Receiver's Name"
                 v-model="customerName"
                 :error-messages="customerErrors"
                 @input="$v.customerName.$touch()"
@@ -51,7 +54,7 @@
             </v-col>
           </v-row>
           <v-icon class="pl-3">mdi-map-marker</v-icon>
-          <label>Receiver Address</label>
+          <label>Customer's/Receiver's Address</label>
         
           <v-row class="pl-3">
             <v-col cols="6">
@@ -89,6 +92,8 @@
               ></v-text-field>
             </v-col>
           </v-row>
+           <p style="font-size: 15px;" class="ma-5"><i>*Note: You can purchase wholesale with 10 and above order 
+             quantity or purchase retail with 9 and below order quantity of ube halaya product</i></p>
 
           <v-row align="center" justify="center">
             <v-col cols="6">

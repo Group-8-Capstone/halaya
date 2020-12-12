@@ -21,7 +21,7 @@
                         </form>
                   </div>
                   <v-divider></v-divider>
-                    <v-card-title >ACCOUNT PASSWORD</v-card-title>
+                    <v-card-title >CHANGE PASSWORD</v-card-title>
                     <span id="message"></span>
                   <v-row>
                     <v-col cols="12">  <v-text-field

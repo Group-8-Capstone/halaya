@@ -260,24 +260,10 @@ export default {
     model: 1,
     mini: true,
     count: 0,
-    sound:'http://soundbible.com/mp3/Elevator Ding-SoundBible.com-685385892.mp3',
     admin: [
       { icon: "mdi-view-dashboard", text: "Dashboard", link: "/dashboard" },
-      {
-        icon: "mdi-history",
-        text: "Stock",
-        subItem: [
-          { icon: "mdi-cogs", title: "Stock Settings", link: "/setting" },
-          { icon: "mdi-stocking", title: "Ingredients", link: "/ingredients" },
-          {
-            icon: "mdi-package-variant",
-            title: "Products",
-            link: "/product"
-          },
-        ]
-      },
-      {
-        icon: "mdi-clipboard-outline",
+        {
+        icon: "mdi-clipboard-text",
         text: "View Orders",
         subItem: [
           { icon: "mdi mdi-cart-plus", title: "Order", link: "/order" },
@@ -295,6 +281,20 @@ export default {
         
         
       },
+      {
+        icon: "mdi-stocking",
+        text: "Stock",
+        subItem: [
+          { icon: "mdi-cogs", title: "Stock(Ingredients)", link: "/setting" },
+          { icon: "mdi-label", title: "Ingredients' Status", link: "/ingredients" },
+          {
+            icon: "mdi-package-variant",
+            title: "Products",
+            link: "/product"
+          },
+        ]
+      },
+    
 
      
       {
@@ -354,10 +354,7 @@ export default {
     this.isAdmin();
   },
   methods: {
-    playSound () {
-        var audio = new Audio(this.sound);
-        audio.play();
-    },
+  
 
      getOrder(item, event) {
        this.$router.push('/order').catch(err => {});
@@ -378,12 +375,11 @@ export default {
     },
   notifCustomerOrder(item){
       let date = moment(item.created_at).format('MM/DD/YYYY');
-      return item.receiver_name +' '+'ordered ube halaya'+' ' + date
+      return 'You ordered ube halaya'+' ' + date
     },
     retrieve(){
       axios.get(this.url + "/api/fetchProcessOrder", this.config).then(response => {
         this.storeData = response.data.data;
-        this.playSound();
       axios
         .get(this.url+"/api/unreadAdminOrder" , this.config)
         .then(response => {
@@ -399,7 +395,6 @@ export default {
         .get(this.url+"/api/fetchOngoingOrder/" + id, this.config)
         .then(response => {
           this.storeConfirm = response.data.post;
-          this.playSound();
         });
       axios
         .get(this.url+"/api/unReadOrder/" + id, this.config)

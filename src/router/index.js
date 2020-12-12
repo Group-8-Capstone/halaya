@@ -18,6 +18,7 @@ import MyOrder from "../views/MyOrder.vue";
 import { verify } from "crypto";
 import axios from "axios";
 import ForgotPassword from "../views/ForgotPassword";
+import NotFound from "../views/notFound.vue";
 
 
 
@@ -31,22 +32,26 @@ const router = new VueRouter({
     {
       path: "/",
       name: "Landing",
-      component: Landing
+      component: Landing,
+      role: ['admin','customer','driver']
     },
     {
       path: "/login",
       name: "Login",
       component: Login,
+      role: ['admin','customer','driver']
     },
     {
       path: "/register",
       name: "Register",
-      component: Register
+      component: Register,
+      role: ['admin','customer','driver']
     },
     {
       path: "/forgotPassword",
       name: "ForgotPassword",
-      component: ForgotPassword
+      component: ForgotPassword,
+      role: ['admin','customer','driver']
     },
     {
       path: "/order",
@@ -54,6 +59,7 @@ const router = new VueRouter({
       component: Order,
       meta: {
         requiresAuth: true,
+        role: ['admin']
       },
     },
     {
@@ -62,6 +68,7 @@ const router = new VueRouter({
       component: Stock,
       meta: {
         requiresAuth: true,
+        role: ['admin']
       },
     },
     {
@@ -70,6 +77,7 @@ const router = new VueRouter({
       component: Delivered,
       meta: {
         requiresAuth: true,
+        role: ['admin', 'driver']
       },
     },
     {
@@ -78,6 +86,7 @@ const router = new VueRouter({
       component: CustomerHome,
       meta: {
         requiresAuth: true,
+        role: ['customer']
       },
     },
     {
@@ -86,6 +95,7 @@ const router = new VueRouter({
       component: MyOrder,
       meta: {
         requiresAuth: true,
+        role: ['customer']
       },
     },
     {
@@ -94,6 +104,7 @@ const router = new VueRouter({
       component: Delivery,
       meta: {
         requiresAuth: true,
+        role: ['admin','driver']
       },
     },
     {
@@ -102,6 +113,7 @@ const router = new VueRouter({
       component: Product,
       meta: {
         requiresAuth: true,
+        role: ['admin']
       },
     },
     {
@@ -110,6 +122,7 @@ const router = new VueRouter({
       component: Logs,
       meta: {
         requiresAuth: true,
+        role: ['admin','rider']
       },
     },
     {
@@ -118,6 +131,7 @@ const router = new VueRouter({
       component: Home,
       meta: {
         requiresAuth: true,
+        role: ['admin']
       },
     },
     {
@@ -126,6 +140,7 @@ const router = new VueRouter({
       component: Setting,
       meta: {
         requiresAuth: true,
+        role: ['admin']
       },
     },
     {
@@ -134,6 +149,7 @@ const router = new VueRouter({
       component: AccountSetting,
       meta: {
         requiresAuth: true,
+        role: ['admin', 'driver', 'customer']
       },
     },
     {
@@ -142,6 +158,7 @@ const router = new VueRouter({
       component: Ingredients,
       meta: {
         requiresAuth: true,
+        role: ['admin']
       },
     },
     {
@@ -149,12 +166,21 @@ const router = new VueRouter({
       name: "About",
       meta: {
         requiresAuth: true,
+        role: ['admin','customer','driver']
       },
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () =>
         import( /* webpackChunkName: "about" */ "../views/About.vue")
+    },
+    {
+      path: "/not_found",
+      name: 'notFound',
+      component: NotFound,
+      meta: {
+        role: ['admin','customer','driver']
+      },
     }
   ]
 
@@ -162,6 +188,11 @@ const router = new VueRouter({
 
 
 router.beforeEach(async(to, from, next) => {
+  const home = {
+    admin: '/dashboard',
+    driver: '/delivery',
+    customer: '/customerHome'
+  }
   const authenticated = await verify_auth().then(res=> {
     return res
   });
@@ -174,17 +205,28 @@ router.beforeEach(async(to, from, next) => {
   //   next('/login')
   // }
   // next();
-  // console.log(to)
   if(requiresAuth){
-    if(authenticated ){
-      // console.log(from.path)
-      next();
+    if(authenticated){
+      if(to.meta.role.includes(localStorage.getItem('role').toLowerCase())){
+        next();
+      }else{
+        next('/not_found')
+      }
     }else{
       next('/login')
+    }
+  }else{
+    if(to.path === '/not_found'){
+      next();
+    }else if(authenticated){
+      next(home[localStorage.getItem('role').toLowerCase()])
+    }else{
+      next();
     }
   }
   next();
 });
+
 const verify_auth = () => {
   // let url="http://localhost:8000"
   let url="https://wawenshalaya.herokuapp.com"

@@ -67,7 +67,7 @@
                </div> -->
                <div align="left" class="forgot mr-5">
                 <span>
-                  <a href="/forgotPassword" >Forgot Password</a>
+                  <a href="/forgotPassword" >Forgot Password?</a>
                 </span>
                 </div>
               <center>

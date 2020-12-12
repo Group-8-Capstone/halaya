@@ -12,11 +12,11 @@
                 <v-row class="mx-auto text-center">
                   <v-list-item>
                     Available Quantity :
-                    <b>{{ item.ingredients_remaining}} {{item.ingredients_unit}}/s</b>
+                    <b>{{ item.ingredients_remaining}} {{item.ingredients_unit}}(s)</b>
                   </v-list-item>
                   <v-list-item>
                     Used Quantity :
-                    <b>{{ item.total}} {{item.ingredients_unit}}/s</b>
+                    <b>{{ item.total}} {{item.ingredients_unit}}(s)</b>
                   </v-list-item>
                   <v-list-item>
                     <v-chip
@@ -76,7 +76,7 @@
         :items="displayIngredientsRecords"
         :search="search"
       >
-        <template #item.used_ingredients_amount="{ item }">{{ item.used_ingredients_amount }} {{ item.ingredients_unit }}</template>
+        <template #item.used_ingredients_amount="{ item }">{{ item.used_ingredients_amount }} {{ item.ingredients_unit }}(s)</template>
          <template v-slot:item.updated_at="{ item }">
            <span>{{new Date(item.updated_at).toISOString().substring(0,10)}}</span>
          </template>
