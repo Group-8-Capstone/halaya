@@ -168,7 +168,7 @@ export default {
   
       axios.post(this.url+"/api/login", userAccount).then((response) => {
         if(response.data.message === 'successfully_login'){
-          console.log("=============== " + JSON.stringify(response.data))
+          // console.log("=============== " + JSON.stringify(response.data))
            setTimeout(() => {
             this.$vloading.hide()
           },1000) 

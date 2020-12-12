@@ -392,7 +392,7 @@ export default {
     let channel = pusher.subscribe('order-channel')
 
     channel.bind('newOrder', data => {
-      console.log(data.order);
+      // console.log(data.order);
       this.fetchOrders();
       this.fetchPendingOrders();
     });
@@ -446,7 +446,7 @@ export default {
       "Access-Control-Allow-Origin": "*"
     };
     this.config = config;
-    console.log("this.config", this.config);
+    // console.log("this.config", this.config);
   },
   created() {
     this.fetchPendingOrders();
@@ -473,7 +473,7 @@ export default {
           }
         }
       }
-      console.log("orderedProducts: ", this.orderedProducts);
+      // console.log("orderedProducts: ", this.orderedProducts);
     },
     closeDialog() {
       this.orderDetails = false;
@@ -635,7 +635,7 @@ export default {
           this.dialog = false;
         })
         .catch(response => {
-          console.log(response);
+          // console.log(response);
         });
     },
     getHalayaJarQty(item) {
@@ -725,7 +725,7 @@ export default {
       axios
         .post(this.url + "/api/post/confirm/" + item.id, {}, this.config)
         .then(response => {
-          console.log(response.data)
+          // console.log(response.data)
           this.$vloading.hide()
           Swal.fire({
             title: "Order has been confirmed",
