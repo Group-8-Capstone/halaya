@@ -37,10 +37,9 @@
                     <DeliveredPdf :headers="headers" :deliveredOrder="deliveredOrder"></DeliveredPdf>
                     <div>
                       <download-csv
-                        class="btn btn-default pa-2"
                         :data="deliveredOrder"
                         name="Delivered.csv"
-                      >Export as CSV</download-csv>
+                      ><v-btn text small>Export as CSV</v-btn></download-csv>
                     </div>
                   </v-col>
                 </v-list>
