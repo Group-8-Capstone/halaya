@@ -26,7 +26,6 @@
               <div>
                 <h4>WAWEN'S UBE HALAYA</h4>
                 <h6>DELIVERED ORDERS</h6>
-                <h6></h6>
                 <br>
               </div>
             </center>
@@ -63,10 +62,6 @@ export default {
   props: ["headers", "deliveredOrder"],
   components: {
     VueHtml2pdf
-  },
-  data() {
-    return {
-    };
   },
   methods: {
     generateReport() {

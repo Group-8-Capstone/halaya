@@ -1,60 +1,57 @@
 <template>
   <div>
     <v-btn class="mr-5" text float-right small @click="generateReport">Export as PDF</v-btn>
-    <center>
-      <vue-html2pdf
-        :show-layout="false"
-        :float-layout="true"
-        :enable-download="true"
-        :preview-modal="false"
-        :paginate-elements-by-height="1100"
-        :filename="'Orders To Deliver'"
-        :pdf-quality="2"
-        :manual-pagination="true"
-        pdf-format="a4"
-        pdf-orientation="portrait"
-        pdf-content-width="1100px"
-        ref="html2Pdf"
-      >
-        <section slot="pdf-content">
-          <section class="pdf-item" justify="center">
-            <center>
-              <div>
-                <br>
-                <img class="logo" width="50" :src="require('@/assets/wawens.png')">
-              </div>
-              <div>
-                <h4>WAWEN'S UBE HALAYA</h4>
-                <h6>TO DELIVER ORDERS</h6>
-                <h6></h6>
-                <br>
-              </div>
-            </center>
+    <vue-html2pdf
+      :show-layout="false"
+      :float-layout="true"
+      :enable-download="true"
+      :preview-modal="false"
+      :paginate-elements-by-height="1100"
+      :filename="'Orders To Deliver'"
+      :pdf-quality="2"
+      :manual-pagination="true"
+      pdf-format="a4"
+      pdf-orientation="landscape"
+      pdf-content-width="1100px"
+      ref="html2Pdf"
+    >
+      <section slot="pdf-content">
+        <section class="pdf-item" justify="center">
+          <center>
             <div>
-              <div>
-                <v-data-table
-                  :headers="headers"
-                  :items="todelivered"
-                  :hide-default-footer="true"
-                  :disable-pagination="true"
-                >
-                  <template v-slot:item.preferred_delivery_date="{ item }">
-                    <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>
-                  </template>
-                  <template v-slot:item.contact_number="{ item }">
-                    <span>{{'0'+item.contact_number}}</span>
-                  </template>
-                  <template v-slot:item.order_status="{ item }">
-                    <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
-                  </template>
-                </v-data-table>
-                <br>
-              </div>
+              <br>
+              <img class="logo" width="50" :src="require('@/assets/wawens.png')">
             </div>
-          </section>
+            <div>
+              <h4>WAWEN'S UBE HALAYA</h4>
+              <h6>TO DELIVER ORDERS</h6>
+              <br>
+            </div>
+          </center>
+          <div style="margin:1px" class="pa-0">
+            <div>
+              <v-data-table
+                :headers="headers"
+                :items="todelivered"
+                :hide-default-footer="true"
+                :disable-pagination="true"
+              >
+                <template v-slot:item.preferred_delivery_date="{ item }">
+                  <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>
+                </template>
+                <template v-slot:item.contact_number="{ item }">
+                  <span>{{'0'+item.contact_number}}</span>
+                </template>
+                <template v-slot:item.order_status="{ item }">
+                  <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
+                </template>
+              </v-data-table>
+              <br>
+            </div>
+          </div>
         </section>
-      </vue-html2pdf>
-    </center>
+      </section>
+    </vue-html2pdf>
   </div>
 </template>
 <script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
@@ -66,9 +63,6 @@ export default {
   props: ["headers", "todelivered"],
   components: {
     VueHtml2pdf
-  },
-  data() {
-    return {};
   },
   methods: {
     generateReport() {

@@ -253,7 +253,7 @@
                       id="adHeader"
                       class="mb-1 font-weight-bold text-h6 [1] text-sm-h5 [1] text-md-h5 [2] text-lg-h4 [2] text-xl-h4 [2]"
                     >WHOLESALE</h1>
-                    <h3>(10 above Wawen's Ube Halaya Jars)</h3>
+                    <h3>(10 or more Wawen's Ube Halaya Jars)</h3>
                   </div>
                   <div>
                     <v-col cols="12" sm="12">
