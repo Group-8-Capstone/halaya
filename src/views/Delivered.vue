@@ -37,10 +37,9 @@
                     <DeliveredPdf :headers="headers" :deliveredOrder="deliveredOrder"></DeliveredPdf>
                     <div>
                       <download-csv
-                        class="btn btn-default pa-2"
                         :data="deliveredOrder"
                         name="Delivered.csv"
-                      >Export as CSV</download-csv>
+                      ><v-btn text small>Export as CSV</v-btn></download-csv>
                     </div>
                   </v-col>
                 </v-list>
@@ -54,6 +53,9 @@
       <template v-slot:item.preferred_delivery_date="{ item }">
         <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>
       </template>
+       <template v-slot:item.distance="{ item }">
+              <span>{{item.distance+'km'}}</span>
+            </template>
       <template v-slot:item.order_status="{ item }">
         <v-chip color="green" text-color="white">{{ item.order_status }}</v-chip>
       </template>

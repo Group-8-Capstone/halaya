@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-card flat>
+      <v-card-title>Grouped Orders for Delivery</v-card-title>
       <template>
         <v-row justify="center">
           <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">

@@ -211,7 +211,7 @@ export default {
           sortable: false,
           value: "ingredients_name"
         },
-        { text: "Available Quantity", value: "ingredients_remaining" },
+        // { text: "Available Quantity", value: "ingredients_remaining" },
         { text: "Used Quantity", value: "used_ingredients_amount" },
         { text: "Recorded Date", value: "updated_at" }
       ]

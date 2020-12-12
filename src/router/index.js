@@ -13,7 +13,8 @@ import AccountSetting from "../components/ProfileAccount.vue";
 import Register from "../views/RegisterComponent.vue";
 import Logs from "../views/Logs.vue";
 import CustomerHome from "../views/CustomerHome.vue";
-import Landing from "../views/Landing.vue";
+// import Landing from "../views/Landing.vue";
+import Landing from "../views/SampleLanding.vue";
 import MyOrder from "../views/MyOrder.vue";
 import { verify } from "crypto";
 import axios from "axios";
@@ -35,6 +36,11 @@ const router = new VueRouter({
       component: Landing,
       role: ['admin','customer','driver']
     },
+    // {
+    //   path: "/",
+    //   name: "Landing",
+    //   component: Landing
+    // },
     {
       path: "/login",
       name: "Login",
