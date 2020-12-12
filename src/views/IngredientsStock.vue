@@ -146,7 +146,7 @@
         <v-tab-item>
           <v-card class="ma-5 mb-12 pa-5">
             <div>
-              <v-card>
+              <v-card flat>
                 <h4>Filter</h4>
                 <v-row>
                   <v-col cols="3">
