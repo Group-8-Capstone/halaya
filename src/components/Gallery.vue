@@ -114,7 +114,7 @@ export default {
 <style scoped>
 #homeImg {
   width: 50%;
-  height: 50%;
+  height: auto;
   object-fit: cover;
 }
 .v-application .display-1,

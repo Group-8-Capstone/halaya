@@ -32,32 +32,34 @@
       <section>
         <v-layout column wrap class="my-5" align-center>
           <v-flex xs12 sm4 class="my-3">
-            <div class="text-xs-center">
-              <h2
-                id="ourStory"
-                class="mb-1 font-weight-bold text-h6 [1] text-sm-h6 [1] text-md-h6 [2] text-lg-h5 [2] text-xl-h5 [2]"
-              >OUR STORY</h2>
+            <div id="planHeader" class="text-center">
+              <h1
+                id="productHeader"
+                class="font-weight-bold text-h6 [1] text-sm-h5 [1] text-md-h5 [2] text-lg-h4 [2] text-xl-h4 [2]"
+              >Our Story</h1>
+              <br>
             </div>
-            <!-- <div class="text-xs-center">
-              <p id="textStory">
-                12 Ube Halaya jars.
-                1 Facebook post. That's how our story began in October 17, 2019. Today, we are 
-                privileged to have bottled and distributed more than 16,000 jars and counting.
-                We are currently located at Mandaue City, Cebu.
-              </p>
-            </div>-->
           </v-flex>
           <v-flex xs12>
             <v-container grid-list-xl>
               <v-layout row wrap align-center>
-                  <v-flex xs12 md3></v-flex>
+                <v-flex xs12 md3></v-flex>
                 <v-flex xs12 md6>
                   <v-card class="elevation-0 transparent">
                     <v-card-text>
-                      12 Ube Halaya jars.
-                      1 Facebook post. That's how our story began in October 17, 2019. Today, we are
-                      privileged to have bottled and distributed more than 16,000 jars and counting.
-                      We are currently located at Mandaue City, Cebu.
+                      <p>
+                        "Ube Halaya na lami, apan dili bidli. Basta matilwan,
+                        dili na gyud mabinlan. Matud pa nila, maablihan
+                        na gani ang botelya sa Wawen's Ube Halaya - dili
+                        na gyud katugpa sa lamesa."
+                      </p>
+
+                      <p>
+                        12 Ube Halaya jars.
+                        1 Facebook post. That's how our story began in October 17, 2019. Today, we are
+                        privileged to have bottled and distributed more than 16,000 jars and counting.
+                        We are currently located at Mandaue City, Cebu.
+                      </p>
                     </v-card-text>
                   </v-card>
                 </v-flex>
@@ -69,95 +71,279 @@
       </section>
 
       <section>
-        <!-- <v-parallax :src="imageLink.main" height="380">
-          <v-layout column align-center justify-center>
-            <div
-              class="headline white--text mb-3 text-xs-center"
-            >Endorfine is a social network that allows everyone to reach a huge audience with a tap</div>
-            <em>With the power of Endorfine you don't need to be famous or post pics of cute cats in order to get visibility</em>
-            <v-btn class="blue lighten-2 mt-5" dark large href="/pre-made-themes">Get more info</v-btn>
-          </v-layout>
-        </v-parallax> -->
-        
-          <Gallery/>
+        <div id="planHeader" class="text-center">
+          <h1
+            id="productHeader"
+            class="font-weight-bold text-h6 [1] text-sm-h5 [1] text-md-h5 [2] text-lg-h4 [2] text-xl-h4 [2]"
+          >Ways To Enjoy Wawen's Ube Halaya</h1>
+          <br>
+        </div>
+        <!-- <v-parallax src="../assets/background.png" height="420"> -->
+        <v-card style="background-color: #ffdd99;">
+          <div>
+            <v-row>
+              <v-col sm="3" md="3" lg="3" xl="3" v-for="(item, i) in gallery" :key="i">
+                <div>
+                  <v-hover v-slot:default="{ hover }">
+                    <v-card flat :elevation="8" data-aos="zoom-out">
+                      <v-img id="photo" height="315" :src="item.src">
+                        <v-expand-transition>
+                          <div
+                            v-if="hover"
+                            justify="center"
+                            align="center"
+                            class="d-flex transition-fast-in-fast-out purple darken-2 v-card--reveal display-1 white--text"
+                            style="height: 100%;"
+                          >{{item.description}}</div>
+                        </v-expand-transition>
+                      </v-img>
+                    </v-card>
+                  </v-hover>
+                </div>
+              </v-col>
+            </v-row>
+          </div>
+        </v-card>
+        <!-- </v-parallax> -->
+
+        <!-- <Gallery/> -->
       </section>
 
+      <br>
+      <br>
+
       <section>
-        <v-container grid-list-md>
-          <v-layout row wrap>
-            <v-flex xs12 text-xs-center class="mt-5">
-              <div class="headline">Are you amazed? Stay tuned!</div>
-              <br>
-              <div>We are lunching the beta in a few time. If you want to be one of the first Endorfine users we will email you as soon as we're ready. In the beginning only few people will test before the launch. Let us know how Endorfine will help you!</div>
-            </v-flex>
-            <v-flex xs8 offset-xs2>
-              <v-card class="elevation-0 transparent">
-                <v-card-text>
-                  <v-flex xs12 v-if="!subscribed">
-                    <v-text-field
-                      box
-                      label="Email address"
-                      :rules="emailRules"
-                      v-model="email"
-                      hint="Enter your email!"
-                      persistent-hint
-                    ></v-text-field>
-                  </v-flex>
-                  <v-flex xs12 v-if="!subscribed">
-                    <v-text-field box multi-line label="Bio and curiosities"></v-text-field>
-                  </v-flex>
-                  <v-flex xs12 class="text-xs-center" v-if="!subscribed">
-                    <v-btn class="blue lighten-2 mb-5" dark large @click="subscribe">Get in touch</v-btn>
-                  </v-flex>
-                  <v-flex xs12 class="text-xs-center" v-if="subscribed">
-                    <v-btn class="green lighten-2 mb-5" dark large>Welcome on board!</v-btn>
-                  </v-flex>
-                </v-card-text>
-              </v-card>
-            </v-flex>
-          </v-layout>
-        </v-container>
+        <br>
+        <br>
+        <div id="planHeader" class="text-center">
+          <h1
+            id="productHeader"
+            class="font-weight-bold text-h6 [1] text-sm-h5 [1] text-md-h5 [2] text-lg-h4 [2] text-xl-h4 [2]"
+          >Products</h1>
+
+          <br>
+          <p>
+            10 or more Wawen's Ube Halaya Jars are considered as a wholesale order.
+            9 Jars and below will be considered as a retail order.
+          </p>
+          <br>
+        </div>
+        <div>
+          <!-- <v-row justify="center"> -->
+          <!-- <v-col class="col-sm-4 col-md-4 col-xl-4 col-lg-4">
+              <template>
+                <v-card flat>
+                  <v-card-title>
+                    <h1 class="header">Ube Halaya in a Tab</h1>
+                  </v-card-title>
+                  <v-card-text class="font-weight-bold">
+                    <h1>Best for Bakers and Cake Makers</h1>
+                    <br>
+                    <p>Price: ₱ {{tubPrice}}</p>
+                    <p>Unit: 1000 grams</p>
+                  </v-card-text>
+                </v-card>
+              </template>
+            </v-col>
+            <v-col class="col-sm-4 col-md-4 col-xl-4 col-lg-4">
+              <template>
+                <v-card flat>
+                  <img
+                    class="white--text align-end"
+                    style="width: 100%; height: 100%;"
+                    src="../assets/halayaTab.jpg"
+                  >
+                </v-card>
+              </template>
+            </v-col>
+          </v-row>
+        </div>
+        <br>
+        <div>
+          <v-row justify="center">
+            <v-col class="col-sm-4 col-md-4 col-xl-4 col-lg-4">
+              <template>
+                <v-card flat>
+                  <img
+                    class="white--text align-end"
+                    style="width: 100%; height: 100%;"
+                    src="../assets/halayaJar.jpg"
+                  >
+                </v-card>
+              </template>
+            </v-col>
+            <v-col class="col-sm-4 col-md-4 col-xl-4 col-lg-4">
+              <template>
+                <v-card flat>
+                  <v-card-title>
+                    <h1 class="header">Ube Halaya in a Jar</h1>
+                  </v-card-title>
+                  <v-card-text class="font-weight-bold">
+                    <h1>Perfect for Snack</h1>
+                    <br>
+                    <p>Price: ₱ {{jarPrice}}</p>
+                    <p>Unit: 230 grams</p>
+                    <p> 10 or more Wawen's Ube Halaya Jars are considered as a wholesale order. 
+                        9 Jars and below will be considered as a retail order.</p>
+                  </v-card-text>
+                </v-card>
+              </template>
+          </v-col>-->
+          <v-row>
+            <v-col sm="12" md="2" lg="2" xl="2"></v-col>
+            <v-col align="center" justify="center" sm="12" md="4" lg="4" xl="4">
+              <v-hover id="productsTub" v-slot:default="{ hover }">
+                <v-card
+                  height="auto"
+                  width="310"
+                  color="grey lighten-4"
+                  :elevation="8"
+                  @click="dialog = true"
+                >
+                  <v-img width="310" height="220" src="../assets/halayaTab.jpg">
+                    <!-- <v-expand-transition>
+                      <div
+                        v-if="hover"
+                        align="center"
+                        justify="center"
+                        class="d-flex transition-fast-in-fast-out purple darken-2 v-card--reveal display-1 white--text"
+                        style="height: 100%;"
+                      >Click To See Tub Promo</div>
+                    </v-expand-transition> -->
+                  </v-img>
+                  <v-card-text class="pt-6">
+                    <center>
+                      <div
+                        class="font-weight-light grey--text title mb-2"
+                      >Best for Bakers & Cake Makers</div>
+                      <h1 class="font-weight-light orange--text mb-2">{{tubName}}</h1>
+                      <p>1000g (1kg)</p>
+                      <div id="price" class="font-weight-light grey--text title mb-2">₱{{tubPrice}}</div>
+                    </center>
+                  </v-card-text>
+                  <v-dialog v-model="dialog" width="500px">
+                    <v-img justify="center" align="center" width="500px" src="../assets/ad1.png"></v-img>
+                  </v-dialog>
+                </v-card>
+              </v-hover>
+            </v-col>
+
+            <v-col align="center" justify="center" sm="12" md="4" lg="4" xl="4">
+              <v-hover id="productsJar" v-slot:default="{ hover }">
+                <v-card height="auto" width="310" color="grey lighten-4" :elevation="8">
+                  <v-img width="310" height="220" src="../assets/halayaJar.jpg"></v-img>
+                  <v-card-text class="pt-6">
+                    <center>
+                      <div class="font-weight-light grey--text title mb-2">Perfect for Snack</div>
+                      <h1 class="font-weight-light orange--text mb-2">{{jarName}}</h1>
+                      <p>230g</p>
+                      <div id="price" class="font-weight-light grey--text title mb-2">₱{{jarPrice}}</div>
+                    </center>
+                  </v-card-text>
+                </v-card>
+              </v-hover>
+            </v-col>
+            <v-col sm="12" md="2" lg="2" xl="2"></v-col>
+          </v-row>
+          <!-- </v-row> -->
+        </div>
       </section>
 
+      <br>
+      <br>
       <section>
-        <v-parallax :src="imageLink.social_cover" height="380">
-          <v-layout column align-center justify-center>
-            <div
-              class="headline white--text mb-3 text-xs-center"
-            >We are dropping cool news and opportunities on socials</div>
-          </v-layout>
-          <v-layout justify-space-around justify-center>
-            <v-icon x-large dark>fab fa-facebook-f</v-icon>
-
-            <v-icon x-large dark>fab fa-twitter</v-icon>
-
-            <v-icon x-large dark>fab fa-reddit-alien</v-icon>
-
-            <v-icon x-large dark>fab fa-instagram</v-icon>
-
-            <v-icon x-large dark>fab fa-discord</v-icon>
-          </v-layout>
-        </v-parallax>
+        <div id="planHeader" class="text-center">
+          <h1
+            id="productHeader"
+            class="font-weight-bold text-h6 [1] text-sm-h5 [1] text-md-h5 [2] text-lg-h4 [2] text-xl-h4 [2]"
+          >Promotions</h1>
+          <br>
+        </div>
+        <!-- <v-parallax src="../assets/background.png" height="420"> -->
+        <v-card style="background-color: purple;">
+          <v-container grid-list-xl>
+            <v-layout row wrap justify-center class="my-5">
+              <v-flex xs12 sm4>
+                <v-card class="elevation-0 transparent">
+                  <v-img src="../assets/ad2.png"></v-img>
+                </v-card>
+              </v-flex>
+              <v-flex xs12 sm4>
+                <v-card class="elevation-0 transparent">
+                  <v-img src="../assets/ad1.png"></v-img>
+                </v-card>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card>
+        <!-- </v-parallax> -->
       </section>
 
+      <br>
+      <br>
       <section>
+        <div id="planHeader" class="text-center">
+          <h1
+            id="productHeader"
+            class="font-weight-bold text-h6 [1] text-sm-h5 [1] text-md-h5 [2] text-lg-h4 [2] text-xl-h4 [2]"
+          >Business Information</h1>
+          <br>
+        </div>
         <v-container grid-list-xl>
           <v-layout row wrap justify-center class="my-5">
             <v-flex xs12 sm4>
-              <v-card class="elevation-0 transparent">
-                <v-card-title primary-title class="layout justify-center">
-                  <div class="headline">Company info</div>
+              <v-card
+                shaped
+                id="infoCards"
+                light
+                max-width="315"
+                height="auto"
+                :elevation="8"
+                data-aos="fade-right"
+              >
+                <v-card-title>
+                  <v-icon large left>mdi-truck</v-icon>Delivery
+                  <v-card-text class="text-wrap">
+                    <v-icon>mdi-clock</v-icon>3:00 PM until all orders for the day are delivered
+                  </v-card-text>
+                  <v-card-text class="text-wrap">
+                    <v-icon>mdi-calendar</v-icon>Monday - Saturday
+                  </v-card-text>
+                  <v-card-text class="text-wrap">
+                    <v-icon>mdi-cart</v-icon>For orders of 10 jars or more, order a day ahead.
+                  </v-card-text>
                 </v-card-title>
-                <v-card-text>We are not a company. We hate companies. Just imagine us like the guys from the Silicon Valley series.</v-card-text>
               </v-card>
             </v-flex>
             <v-flex xs12 sm4 offset-sm1>
-              <v-card class="elevation-0 transparent">
-                <v-card-title primary-title class="layout justify-center">
-                  <div class="headline">We are hiring</div>
-                </v-card-title>
-                <v-card-text>Are you a creative person? Do you like techy stuff? Complete the email form by writing your skills and interests</v-card-text>
-              </v-card>
+              <v-layout wrap>
+                <v-flex>
+                  <v-col sm="12" class="pl-0">
+                    <v-card
+                      shaped
+                      flat
+                      id="infoCards"
+                      max-width="315"
+                      height="auto"
+                      :elevation="8"
+                      data-aos="fade-right"
+                    >
+                      <v-card-title class="purple darken-2 white--text">
+                        <v-icon color="white" large light>mdi-information</v-icon>
+                      </v-card-title>
+                      <v-list-item>
+                        <h2>How to pay?</h2>
+                      </v-list-item>
+                      <center>
+                        <v-img src="../assets/Pay_on_Delivery.png" height="100px" width="100px"></v-img>
+                      </center>
+                      <v-list-item class="justify-center">
+                        <h2>Cash On Delivery</h2>
+                      </v-list-item>
+                    </v-card>
+                  </v-col>
+                </v-flex>
+              </v-layout>
             </v-flex>
           </v-layout>
         </v-container>
@@ -167,23 +353,36 @@
 </template>
 
 <script>
-import Gallery from "../components/Gallery.vue"
+import Gallery from "../components/Gallery.vue";
+import axios from "axios";
 export default {
   name: "App",
-  components: {Gallery},
+  components: { Gallery },
   data: function() {
     return {
-      title: "Endorfine",
-      imageLink: {
-        main:
-          "https://firebasestorage.googleapis.com/v0/b/endorfinevue.appspot.com/o/assets%2Fb13f0434-b228-11e6-8e5d-5252025056ab_web_scale_0.4666667_0.4666667__.jpg?alt=media&token=660df23e-599e-434b-9313-ba69c973eeea",
-        sub_main:
-          "https://firebasestorage.googleapis.com/v0/b/endorfinevue.appspot.com/o/assets%2FNight-Club-Clubbing-Jobs-Abroad2.jpg?alt=media&token=82bbda7d-5df4-430b-9217-adaf1c8485c5",
-        logo:
-          "https://firebasestorage.googleapis.com/v0/b/endorfinevue.appspot.com/o/assets%2Fandroid-chrome-512x512.png?alt=media&token=8a0a66f6-4741-4ff6-8f28-eb9ec74374df",
-        social_cover:
-          "https://firebasestorage.googleapis.com/v0/b/endorfinevue.appspot.com/o/assets%2Fo-NIGHTCLUB-facebook.jpg?alt=media&token=cefc5c4c-9714-41da-9c22-f63caf5e89a4"
-      },
+      jarName: null,
+      tubName: null,
+      tubPrice: null,
+      jarPrice: null,
+      //   title: "Endorfine",
+      gallery: [
+        {
+          src: require("../assets/photos/jar.png"),
+          description: "UBErwhelming Snack"
+        },
+        {
+          src: require("../assets/ube.jpg"),
+          description: "UBElicious Spread"
+        },
+        {
+          src: require("../assets/photos/ubechi.png"),
+          description: "Ube-Filled Butchi"
+        },
+        {
+          src: require("../assets/photos/ubecake.png"),
+          description: "UBEdazzling Cake"
+        }
+      ],
       email: "",
       emailRules: [
         v => {
@@ -196,9 +395,22 @@ export default {
       subscribed: false
     };
   },
+  created() {
+    this.getHalayaTub(), this.getHalayaJar();
+  },
   methods: {
-    subscribe: function() {
-      this.subscribed = !this.subscribed;
+    getHalayaTub(item) {
+      axios.get(this.url + "/api/fetchHalayaTubLanding").then(response => {
+        this.tubName = response.data.product[0].product_name;
+        this.tubPrice = response.data.product[0].product_price;
+      });
+    },
+
+    getHalayaJar(item) {
+      axios.get(this.url + "/api/fetchHalayaJarLanding").then(response => {
+        this.jarName = response.data.product[0].product_name;
+        this.jarPrice = response.data.product[0].product_price;
+      });
     }
   },
 
@@ -217,6 +429,20 @@ export default {
 </script>
 
 <style scoped>
+#adHeader {
+  align-content: center;
+  color: white;
+  font-size: 2.5em;
+  text-transform: uppercase;
+  /* -webkit-background-clip: text; */
+  /* -webkit-text-fill-color: transparent; */
+  /* background-image: linear-gradient(45deg, #7794ff, #44107a, #ff1361, #fff800); */
+  animation: 0.8s shake infinite alternate;
+}
+#productHeader {
+  color: orange;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif !important;
+}
 #createBtn {
   text-decoration: none;
 }
@@ -236,6 +462,7 @@ export default {
   transform: translate(-50%, -50%);
   display: inherit;
 }
+
 .homeContainer {
   height: 400px;
   width: 100%;

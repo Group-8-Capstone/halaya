@@ -166,7 +166,7 @@
               </v-menu>
             </div>
             <v-card-title>
-              Ingredients' Logs
+              Ingredients' Log
               <v-spacer></v-spacer>
               <v-text-field
                 v-model="search"
