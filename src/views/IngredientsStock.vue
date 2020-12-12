@@ -165,7 +165,7 @@
                         <template v-slot:activator="{ on, attrs }">
                           <div>
                             <v-btn
-                              @click="isEmpty(records)"
+                              @click="isEmpty(displayIngredientsRecords)"
                               class="float-right"
                               outlined
                               color="purple"
@@ -399,7 +399,7 @@ export default {
         setTimeout(() => {
           this.$vloading.hide();
         }, 1000);
-        this.displayIngredientsRecords = response.data;
+        this.displayIngredientsRecords = response.data.data;
       });
     },
     getAllIngredientsName() {

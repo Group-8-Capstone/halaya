@@ -247,7 +247,6 @@
 <script>
 import JsonCSV from "vue-json-csv";
 import ProductsPdf from "./ProductPdf.vue";
-import ProductsExcel from "./ProductsExcel.vue";
 import {
   required,
   minLength,
@@ -258,7 +257,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 export default {
   name: "Delivery",
-  components: { ProductsPdf, ProductsExcel },
+  components: { ProductsPdf},
   data() {
     return {
       dialog: false,
@@ -536,7 +535,7 @@ export default {
           setTimeout(() => {
             this.$vloading.hide();
           }, 1000);
-          this.records = response.data.product;
+          this.records = response.data.data;
         });
     },
     getMonthNumber(month) {

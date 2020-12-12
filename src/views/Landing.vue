@@ -41,10 +41,8 @@
                       <p id="textStory">
                         12 Ube Halaya jars.
                         1 Facebook post.
-                        <br>
-                        <br>That's how our story began in October 17, 2019.
-                        <br>
-                        <br>Today, we are privileged to have bottled and distributed more than 16,000 jars and counting.
+                        That's how our story began in October 17, 2019.
+                        Today, we are privileged to have bottled and distributed more than 16,000 jars and counting.
                       </p>
                     </v-card-text>
                   </v-card>
@@ -105,7 +103,7 @@
                   >
                     <v-card-title>
                       <v-icon large left>mdi-bullhorn</v-icon>Suwayi na!
-                      <v-card-text class="text-wrap" id="textAreas">
+                      <v-card-text id="textAreas">
                         "Ube Halaya na lami, apan dili bidli. Basta matilwan,
                         dili na gyud mabinlan. Matud pa nila, maablihan
                         na gani ang botelya sa Wawen's Ube Halaya - dili
@@ -125,13 +123,13 @@
                   >
                     <v-card-title>
                       <v-icon large left>mdi-truck</v-icon>Delivery
-                      <v-card-text class="text-wrap">
-                        <v-icon>mdi-clock</v-icon>3:00 PM onwards
+                      <v-card-text>
+                        <v-icon>mdi-clock</v-icon>3:00 PM until all orders for the day are delivered
                       </v-card-text>
-                      <v-card-text class="text-wrap">
+                      <v-card-text>
                         <v-icon>mdi-calendar</v-icon>Monday - Saturday
                       </v-card-text>
-                      <v-card-text class="text-wrap">
+                      <v-card-text>
                         <v-icon>mdi-cart</v-icon>For orders of 10 jars or more, order a day ahead.
                       </v-card-text>
                     </v-card-title>
@@ -181,6 +179,7 @@
                       id="productsHeader"
                       class="font-weight-bold text-h6 [1] text-sm-h5 [1] text-md-h5 [2] text-lg-h4 [2] text-xl-h4 [2]"
                     >RETAIL</h1>
+                    <h3>(1-9 Wawen's Ube Halaya Jars)</h3>
                     <br>
                   </div>
                   <v-row align="center" justify="center">
@@ -254,6 +253,7 @@
                       id="adHeader"
                       class="mb-1 font-weight-bold text-h6 [1] text-sm-h5 [1] text-md-h5 [2] text-lg-h4 [2] text-xl-h4 [2]"
                     >WHOLESALE</h1>
+                    <h3>(10 above Wawen's Ube Halaya Jars)</h3>
                   </div>
                   <div>
                     <v-col cols="12" sm="12">
@@ -415,7 +415,9 @@ export default {
   justify-content: center;
 }
 #textAreas {
-  word-wrap: initial;
+  word-wrap: normal;
+  display:flex;
+  flex-wrap:wrap;
 }
 #photo {
   width: 100%;

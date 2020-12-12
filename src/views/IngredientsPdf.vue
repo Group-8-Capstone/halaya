@@ -37,6 +37,7 @@
                 :headers="headersIngredients"
                 :items="displayIngredientsRecords"
                 :hide-default-footer="true"
+                :disable-pagination="true"
               >
                 <template
                   #item.used_ingredients_amount="{ item }"

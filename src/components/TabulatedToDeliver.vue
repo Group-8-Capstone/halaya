@@ -1,46 +1,42 @@
 <template>
   <div>
-    <div>
-      <v-card class="pa-5" flat>
-        <v-row>
-          <!-- <v-spacer></v-spacer> -->
-          <v-col class="float-left" cols="2">
-            <div>
-              <v-menu offset-y>
-                <template v-slot:activator="{ on, attrs }">
-                  <div>
-                    <v-btn
-                      @click="isEmpty(todelivered)"
-                      class="float-left"
-                      outlined
-                      color="purple"
-                      v-bind="attrs"
-                      v-on="on"
-                    >
-                      <v-icon>mdi-download</v-icon>Export
-                    </v-btn>
-                  </div>
-                </template>
-                <v-list v-show="is_empty === false">
-                  <v-col>
-                    <OrderToDeliverPdf :headers="headers" :records="todelivered"></OrderToDeliverPdf>
+    <v-card>
+      <div>
+        <v-card flat>
+          <v-row>
+            <v-col class="float-left" cols="2">
+              <div class="ml-5">
+                <v-menu offset-y>
+                  <template v-slot:activator="{ on, attrs }">
                     <div>
-                      <download-csv
-                        class="btn btn-default pa-2"
-                        :data="todelivered"
-                        name="Deliveries.csv"
-                      >Export as CSV</download-csv>
+                      <v-btn
+                        @click="isEmpty(todelivered)"
+                        class="float-left"
+                        outlined
+                        color="purple"
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        <v-icon>mdi-download</v-icon>Export
+                      </v-btn>
                     </div>
-                  </v-col>
-                </v-list>
-              </v-menu>
-            </div>
-          </v-col>
-        </v-row>
-      </v-card>
-    </div>
-
-    <v-card flat>
+                  </template>
+                  <v-list v-show="is_empty === false">
+                    <v-col>
+                      <OrderToDeliverPdf :headers="headers" :todelivered="todelivered"></OrderToDeliverPdf>
+                      <div>
+                        <download-csv :data="todelivered" name="Deliveries.csv">
+                          <v-btn text small>Export as CSV</v-btn>
+                        </download-csv>
+                      </div>
+                    </v-col>
+                  </v-list>
+                </v-menu>
+              </div>
+            </v-col>
+          </v-row>
+        </v-card>
+      </div>
       <br>
       <v-data-table
         :headers="headers"
@@ -119,7 +115,7 @@
               >mdi-cancel</v-icon>
             </div>
           </div>
-        </template> -->
+        </template>-->
       </v-data-table>
     </v-card>
   </div>
@@ -139,6 +135,7 @@ export default {
   data() {
     return {
       todelivered: [],
+      // deliveriesExcel: [],
       is_empty: false,
       headers: [
         {
@@ -190,6 +187,7 @@ export default {
   },
   created() {
     this.getToDelivered();
+    // this.getDeliveries();
   },
   methods: {
     getColor(status) {
@@ -202,7 +200,6 @@ export default {
         .get(this.url + "/api/posts/delivery", this.config)
         .then(response => {
           this.todelivered = response.data.data;
-
           this.todelivered.forEach((order, index) => {
             let {
               building_or_street,
@@ -219,8 +216,19 @@ export default {
             this.todelivered[index]["total_item"] =
               ubehalayatub_qty + ubehalayajar_qty;
           });
+          console.log("-->>>this,todelivered", this.todelivered);
         });
     },
+    // getDeliveries() {
+    //   axios
+    //     .get(this.url + "/api/getDeliveries", this.config)
+    //     .then(response => {
+    //       setTimeout(() => {
+    //         this.$vloading.hide();
+    //       }, 1000);
+    //       this.deliveriesExcel = response.data.data;
+    //     });
+    // },
     isEmpty(todelivered) {
       if (todelivered.length == 0) {
         this.is_empty = true;
@@ -271,7 +279,7 @@ export default {
     //     }
     //   });
     // },
-    
+
     // deliveredItem(item) {
     //   axios
     //     .post(this.url + "/api/post/updateStat/" + item.id, {}, this.config)
