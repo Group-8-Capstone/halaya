@@ -57,6 +57,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 export default {
   name: "MyOrder",
+  //initializing required and called variable for needed data
   data: () => ({
     scrollHorizontal: true,
     search: "",
@@ -67,22 +68,27 @@ export default {
     tabs: null,
     ubeJar: null,
     ubeTab: null,
+    //headers and column called in value attribute for displaying the data 
+    //in the data table for ongoing orders
     headers: [
-      { text: "Receivers Name", value: "receiver_name" },
+      { text: "Customers Name", value: "receiver_name" },
       { text: "Prefered Delivery Date", value: "preferred_delivery_date" },
       { text: "Halaya Jar Quantity", value: "ubehalayajar_qty" },
       { text: "Halaya Tub Quantity", value: "ubehalayatub_qty" },
       { text: "Total Payment", value: "total_payment" },
       { text: "Status", value: "order_status" }
     ],
+    //headers and column called in value attribute for displaying the data 
+    //in the data table for delivered orders
     headers2: [
-      { text: "Receivers Name", value: "receiver_name" },
+      { text: "Customers Name", value: "receiver_name" },
       { text: "Delivered Date", value: "preferred_delivery_date" },
       { text: "Halaya Jar Quantity", value: "ubehalayajar_qty" },
       { text: "Halaya Tub Quantity", value: "ubehalayatub_qty" },
       { text: "Status", value: "order_status" }
     ]
   }),
+  //Calling the token before rendering other data to be displayed
   beforeCreate() {
     let config = {};
     config.headers = {
@@ -91,11 +97,15 @@ export default {
     };
     this.config = config;
   },
+  //renders the fetch data for on order, pending 
+  //and delivered status in created 
   created() {
     this.retrieveOnOrder();
     this.retrieveDeliveredOrder();
   },
+  //renders the fetch data for placed orders in real time
   mounted(){
+    //pusher is used for real time rendering of data
     let pusher = new Pusher('c31b45d58431fd307880', {
         cluster: 'ap1',
         encrypted: false
@@ -106,10 +116,10 @@ export default {
     channel.bind('newOrder', data => {
       this.retrieveDeliveredOrder();
       this.retrieveOnOrder()
-    
     });
   },
   methods: {
+    // fetching the on order and pending place order
     retrieveOnOrder() {
       this.$vloading.show();
       let id = localStorage.getItem("id");
@@ -120,11 +130,13 @@ export default {
           this.onOrder = response.data.post;
         });
     },
+    //identifying the chip color based on order status
     getColor(status) {
       if (status === "Canceled") return "orange";
       else if (status === "On order") return "blue";
       else return "green";
     },
+     // fetching the delivered order
     retrieveDeliveredOrder() {
       this.$vloading.show();
       let id = localStorage.getItem("id");

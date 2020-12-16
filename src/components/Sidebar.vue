@@ -247,6 +247,7 @@ import moment from 'moment';
 export default {
   name: "Sidebar",
   props: {},
+  //initializing required and called variable for needed data
   data: () => ({
     storeData: [],
     countPending:0,
@@ -260,24 +261,11 @@ export default {
     model: 1,
     mini: true,
     count: 0,
-    sound:'http://soundbible.com/mp3/Elevator Ding-SoundBible.com-685385892.mp3',
+    //sidebar tab found in admin side
     admin: [
       { icon: "mdi-view-dashboard", text: "Dashboard", link: "/dashboard" },
-      {
-        icon: "mdi-history",
-        text: "Stock",
-        subItem: [
-          { icon: "mdi-cogs", title: "Stock Settings", link: "/setting" },
-          { icon: "mdi-stocking", title: "Ingredients", link: "/ingredients" },
-          {
-            icon: "mdi-package-variant",
-            title: "Products",
-            link: "/product"
-          },
-        ]
-      },
-      {
-        icon: "mdi-clipboard-outline",
+        {
+        icon: "mdi-clipboard-text",
         text: "View Orders",
         subItem: [
           { icon: "mdi mdi-cart-plus", title: "Order", link: "/order" },
@@ -295,6 +283,20 @@ export default {
         
         
       },
+      {
+        icon: "mdi-stocking",
+        text: "Stock",
+        subItem: [
+          { icon: "mdi-cogs", title: "Stocks (Ingredients)", link: "/setting" },
+          { icon: "mdi-label", title: "Ingredients' Status", link: "/ingredients" },
+          {
+            icon: "mdi-package-variant",
+            title: "Products",
+            link: "/product"
+          },
+        ]
+      },
+    
 
      
       {
@@ -304,6 +306,7 @@ export default {
       },
       { icon: "mdi-logout", text: "Sign out", link: "/login" },
     ],
+    //sidebar tab found in customer side
     customer: [
       { icon: "mdi-home-variant", text: "Home", link: "/customerHome" },
       { icon: "mdi-package-variant-closed", text: "My Order", link: "/myorder" },
@@ -314,6 +317,7 @@ export default {
       },
       { icon: "mdi-logout", text: "Sign out", link: "/login" }
     ],
+    //sidebar tab found in rider side
     driver: [
       { icon: "mdi-clipboard-outline", text: "To Deliver", link: "/delivery" },
       { icon: "mdi-content-copy", text: "Delivered Orders", link: "/delivered" },
@@ -325,6 +329,7 @@ export default {
       { icon: "mdi-logout", text: "Sign out", link: "/login" }
     ]
   }),
+  //rendering the displayed table in realtime
   mounted(){
     this.confirmPending()
     this.retrieve()
@@ -339,7 +344,7 @@ export default {
       this.notifCustomerOrder()
     });
   },
-
+  //Calling the token before rendering other data to be displayed
   beforeCreate() {
     let config = {};
     config.headers = {
@@ -348,27 +353,25 @@ export default {
     };
     this.config = config;
   },
- 
+ //renders the account image and its username
   created() {
     this.avatarRetrieve();
     this.isAdmin();
   },
   methods: {
-    playSound () {
-        var audio = new Audio(this.sound);
-        audio.play();
-    },
-
+  //notifies the new ordes from the customers to the admin side
      getOrder(item, event) {
        this.$router.push('/order').catch(err => {});
        axios.post(this.url + "/api/updateadminStatus/" + item.id, {}, this.config)
         .then(response => {
         });
     },
+  //displayed data in the notification for catch orders
      notif(item){
       let date = moment(item.created_at).format('MM/DD/YYYY HH:mm');
-      return item.receiver_name + ' '+'place an order on'+' '+ date
+      return item.receiver_name + ' '+'placed an order on'+' '+ date
     },
+  //Marking customer order as read in the notification
     customerOrder(item, event) {
        this.$router.push('/myorder').catch(err => {});
       axios.post(this.url + "/api/updateMarkStatus/" + item.id, {}, this.config)
@@ -376,14 +379,16 @@ export default {
         });
   
     },
+  //displayed detail in the customer side after ordering
   notifCustomerOrder(item){
       let date = moment(item.created_at).format('MM/DD/YYYY');
-      return item.receiver_name +' '+'ordered ube halaya'+' ' + date
+      return 'You ordered ube halaya'+' ' + date
     },
+  //fetching new order with on order and pending status
+  //in the admin side and marking it as read 
     retrieve(){
       axios.get(this.url + "/api/fetchProcessOrder", this.config).then(response => {
         this.storeData = response.data.data;
-        this.playSound();
       axios
         .get(this.url+"/api/unreadAdminOrder" , this.config)
         .then(response => {
@@ -392,14 +397,13 @@ export default {
         });
       })
     },
-    
+  //fetching the 
     confirmPending(){
       let id = localStorage.getItem("id");
       axios
         .get(this.url+"/api/fetchOngoingOrder/" + id, this.config)
         .then(response => {
           this.storeConfirm = response.data.post;
-          this.playSound();
         });
       axios
         .get(this.url+"/api/unReadOrder/" + id, this.config)
@@ -411,6 +415,7 @@ export default {
       alert(route);
       this.$router.push(route);
     },
+    //retrieving avatar image
     avatarRetrieve() {
       let id=localStorage.getItem('id')
       axios.get(this.url+"/api/fetchProfile/"+ id, this.config).then(response => {
@@ -418,21 +423,26 @@ export default {
         this.image=response.data.account[0].profile_url
       });
     },
+    //logging out from the account
+    //Clearing the local storage where id and other user detailed is save
     logout(item) {
       if (item.text == "Sign out") {
         localStorage.clear();
       }
     },
+    //condition for the sidebar displayed, admin side
     isAdmin() {
       if (localStorage.getItem("role") == "admin") {
         return true;
       }
     },
+    //condition for the sidebar displayed, customer side
     isCustomer() {
       if (localStorage.getItem("role") == "customer") {
         return true;
       }
     },
+    //condition for the sidebar displayed, rider side
     isDriver() {
       if (localStorage.getItem("role") == "driver") {
         return true;

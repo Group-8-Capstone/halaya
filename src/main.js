@@ -26,7 +26,7 @@ Vue.component('profile-component', require('./components/ProfileAccount.vue').de
 
 Vue.config.productionTip = false;
 Vue.use(LoadingPlugin, {
-  //props
+  //props for loading plugin
   spinnerProps: {
     color: "#6A1B9A",
     width:"5",

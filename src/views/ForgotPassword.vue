@@ -140,7 +140,6 @@ export default {
             axios
               .post(this.url + "/api/forgotPassword", userInfo)
               .then(response => {
-                console.log(response.data);
                 resolve(true);
                     setTimeout(() => {
                       this.$vloading.hide()

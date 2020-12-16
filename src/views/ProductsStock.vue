@@ -258,6 +258,7 @@ import axios from "axios";
 export default {
   name: "Delivery",
   components: { ProductsPdf},
+  //initializing required and called variable for data
   data() {
     return {
       dialog: false,
@@ -305,6 +306,8 @@ export default {
       halayaJarAvailability1: null,
       tabs: null,
       halayaTab: [],
+      //headers and column name in value for 
+      //the data to be rendered in data table
       headers: [
         {
           text: "Product Name",
@@ -322,6 +325,7 @@ export default {
       ]
     };
   },
+   //Calling the token before rendering other data to be displayed
   beforeCreate() {
     let config = {};
     config.headers = {
@@ -330,6 +334,7 @@ export default {
     };
     this.config = config;
   },
+  //renders the fetch data
   created() {
     this.getTotalJar();
     this.gettotalTub();
@@ -339,11 +344,14 @@ export default {
     this.comparedTubAvailability();
     this.fetchRecordedProduct();
   },
+  //validate the required input
   validations: {
     newRemainingProduct: {
       required
     }
   },
+  //Validation for the order form 
+  //shown error message if input not filled
   computed: {
     remainingProductErrors() {
       const errors = [];
@@ -354,22 +362,25 @@ export default {
     }
   },
   methods: {
+  //color for chip based on status of product availability status
     getColor(status) {
       if (status === "low stock") return "orange";
       else if (status === "good") return "green";
       else return "green";
     },
+  //fetching total order of ube halaya jar
     getTotalJar(item) {
       axios.get(this.url + "/api/totalJar", this.config).then(response => {
         this.totalJar = response.data;
       });
     },
+    //fetching total order of ube halaya tub
     gettotalTub(item) {
       axios.get(this.url + "/api/totalTab", this.config).then(response => {
         this.totalTub = response.data;
       });
     },
-
+    //fetching information to edit information in of ube halaya tub
     getHalayaTub(item) {
       axios
         .get(this.url + "/api/fetchHalayaTub", this.config)
@@ -385,7 +396,7 @@ export default {
             this.halayaTubAvailability < 1 ? 0 : this.halayaTubAvailability;
         });
     },
-
+    //fetching information to edit information in of ube halaya jar
     getHalayaJar(item) {
       axios
         .get(this.url + "/api/fetchHalayaJar", this.config)
@@ -401,7 +412,7 @@ export default {
             this.halayaJarAvailability < 1 ? 0 : this.halayaJarAvailability;
         });
     },
-
+  //posting changes in ube halaya tub
     editHalayaTub() {
       let param = {
         product_price: this.editedTubPrice,
@@ -419,7 +430,7 @@ export default {
           this.getHalayaTub();
         });
     },
-
+  //posting changes in ube halaya jar
     editHalayaJar() {
       let param = {
         product_price: this.editedJarPrice,
@@ -437,6 +448,7 @@ export default {
           this.getHalayaJar();
         });
     },
+    //identifying the status of jar availability
     comparedJarAvailability() {
       if (this.totalJar < this.halayaJarAvailability) {
         this.jarStat = "Enough";
@@ -446,6 +458,7 @@ export default {
         return "red";
       }
     },
+    //identifying the status of tub availability
     comparedTubAvailability() {
       if (this.totalTub < this.halayaTubAvailability) {
         this.tubStat = "Enough";
@@ -455,7 +468,8 @@ export default {
         return "red";
       }
     },
-
+  //record the jar information,
+  //called when record button is click in jar
     recordProductJar() {
       this.$vloading.show();
       let param = {
@@ -491,7 +505,8 @@ export default {
           }, 1000);
         });
     },
-
+      //record the jar information,
+      //called when record button is click in jar
     recordProductTub() {
       this.$vloading.show();
       let param = {
@@ -527,6 +542,7 @@ export default {
           }
         });
     },
+    //fetching data after recorded
     fetchRecordedProduct() {
       this.$vloading.show();
       axios
@@ -538,6 +554,7 @@ export default {
           this.records = response.data.data;
         });
     },
+    //option to filter in choosen date
     getMonthNumber(month) {
       switch (month) {
         case "January":
@@ -577,6 +594,8 @@ export default {
           return "12";
       }
     },
+    //filtering the data to be displayed in 
+    //the table according to recorded date
     filter(month, year) {
       if (month == "All") {
         this.year = " ";
@@ -606,6 +625,7 @@ export default {
           });
       }
     },
+    //error message when you have downloaded csv file with no data
     isEmpty(records) {
       if (records.length == 0) {
         Swal.fire({

@@ -53,6 +53,9 @@
       <template v-slot:item.preferred_delivery_date="{ item }">
         <span>{{new Date(item.preferred_delivery_date).toISOString().substring(0,10)}}</span>
       </template>
+       <template v-slot:item.distance="{ item }">
+              <span>{{item.distance+'km'}}</span>
+            </template>
       <template v-slot:item.order_status="{ item }">
         <v-chip color="green" text-color="white">{{ item.order_status }}</v-chip>
       </template>

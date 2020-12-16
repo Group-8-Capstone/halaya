@@ -28,7 +28,7 @@
             <v-col cols="6">
               <v-text-field
                 prepend-icon="mdi-account-outline"
-                label="Receiver's Name"
+                label="Customer's/Receiver's Name"
                 v-model="customerName"
                 :error-messages="customerErrors"
                 @input="$v.customerName.$touch()"
@@ -51,7 +51,7 @@
             </v-col>
           </v-row>
           <v-icon class="pl-3">mdi-map-marker</v-icon>
-          <label>Receiver Address</label>
+          <label>Customer's/Receiver's Address</label>
         
           <v-row class="pl-3">
             <v-col cols="6">
@@ -89,6 +89,8 @@
               ></v-text-field>
             </v-col>
           </v-row>
+           <p style="font-size: 15px;" class="ma-5"><i>*Note: You can purchase wholesale with 10 and above order 
+             quantity or purchase retail with 9 and below order quantity of ube halaya product</i></p>
 
           <v-row align="center" justify="center">
             <v-col cols="6">
@@ -167,13 +169,6 @@
           <v-hover v-slot:default="{ hover }">
             <v-card class="mx-auto " color="grey lighten-4" width="80%">
               <v-img :aspect-ratio="16/8" src="../assets/halayaTab.jpg">
-                <!-- <v-expand-transition>
-                  <div
-                    v-if="hover"
-                    class="d-flex transition-fast-in-fast-out purple darken-2 v-card--reveal display-1 white--text"
-                    style="height: 100%;"
-                  >Take a try</div>
-                </v-expand-transition> -->
               </v-img>
               <v-card-text class="pt-6">
                 <center>
@@ -189,13 +184,6 @@
           <v-hover v-slot:default="{ hover }">
             <v-card class="mx-auto" color="grey lighten-4" width="80%">
               <v-img class="justify-center" :aspect-ratio="16/8" src="../assets/halayaJar.jpg">
-                <!-- <v-expand-transition>
-                  <div
-                    v-if="hover"
-                    class="d-flex transition-fast-in-fast-out purple darken-2 v-card--reveal display-1 white--text"
-                    style="height: 100%;"
-                  >Have a taste</div>
-                </v-expand-transition> -->
               </v-img>
               <v-card-text class="pt-6">
                 <center>
@@ -221,13 +209,13 @@
           <v-row class="pl-5">
             <v-col md="6" lg="6" sm="12">
               <span>
-                <h4>Receiver's Name:</h4>
+                <h4>Customer's/Receiver's Name:</h4>
                 {{customerName}}
               </span>
             </v-col>
             <v-col md="6" lg="6" sm="12">
               <span>
-                <h4>Receiver's Number:</h4>
+                <h4>Customer's/Receiver's Number:</h4>
                 {{contactNumber}}
               </span>
             </v-col>
@@ -312,7 +300,6 @@
     letter-spacing: inherit !important;
     font-family: "Roboto", sans-serif !important;
 }
-
 .col{
   flex-basis: auto !important;
 }
@@ -332,6 +319,7 @@ import {
   between
 } from "vuelidate/lib/validators";
 export default {
+  //initializing required and called variable for needed data
   data() {
     return {
       valid: true,
@@ -405,7 +393,7 @@ export default {
     }
   },
   
-
+  //Validation for the order form 
   computed: {
     isDisabled() {
       return disableButton == false;
@@ -468,6 +456,7 @@ export default {
       return errors;
     }
   },
+  //Calling the token before rendering other data to be displayed
   beforeCreate() {
     let config = {};
     config.headers = {
@@ -476,11 +465,13 @@ export default {
     };
     this.config = config;
   },
+  //Rendering fetch data with created method
   created() {
     this.getHalayaTub(), 
     this.getHalayaJar();
   },
   methods: {
+    //Method in clicking of order button
     showDialog() {
       this.$refs.form.reset()
       this.$v.$reset();
@@ -488,7 +479,6 @@ export default {
       this.customerStreet = null;
       this.customerBarangay = null;
       this.customerMunicipality = null;
-      // this.customerProvince = null;
       this.customerName = null;
       this.contactNumber = null;
       this.jarQuantity = 0;
@@ -496,6 +486,8 @@ export default {
       this.orderQuantity = null;
       this.date = null;
     },   
+    //For clicking the next button in the order form to proceed to the 
+    //next page of ordering 
     submit(customer_municipality){
       if( this.customerName == null ||
         this.contactNumber==null ||
@@ -521,9 +513,11 @@ export default {
       this.barangays = brgy_array;
       }
     }, 
+    //For clicking back button
     back(){
       this.isSubmit = false;
     },
+    //Identify the chip color of based on order status
     getOrderStatus(qty) {
       if (qty <= 9) {
         return "On order";
@@ -538,6 +532,7 @@ export default {
         return 6000;
       }
     },
+    //Getting the latitude and longitude of the city of Cebu and Mandaue
     getProximity(city){
       if(city == "Mandaue city"){
         let proximity = "123.933334, 10.333333"
@@ -547,13 +542,14 @@ export default {
         return proximity ;
       }
     },
+    //Clicking the place order button
     placeOrder() {
       this.$refs.form.validate()
       this.$v.$touch();
       var street = this.customerStreet;
       var barangay = this.customerBarangay;
       var municipality = 
-      // this.customerMunicipality;
+      // this.customerMunicipality; Choosing municipality
          this.customerMunicipality.charAt(0).toUpperCase() +
           this.customerMunicipality.slice(1).toLowerCase();
       var province = this.customerProvince;
@@ -576,10 +572,8 @@ export default {
           }`
         )
         .then(response => {
-          console.log("-----", response.data);
           let res = JSON.stringify(response.data);
           let result = JSON.parse(res);
-          
           var coordinates = result.features[0].geometry.coordinates;
           var from_place = turf.point([123.921969, 10.329892]);
           var to_place = turf.point(coordinates);
@@ -604,11 +598,9 @@ export default {
             latitude: result.features[0].geometry.coordinates[1],
             postcode: this.getPostalCode(municipality)
           };
-          console.log('----', param)
           axios
             .post(this.url + "/api/post/createOrder", param, this.config)
             .then(response => {
-              console.log('>>>', response.data)
               setTimeout(() => {
                 this.$vloading.hide();
               }, 1000);
@@ -618,7 +610,6 @@ export default {
                   icon: "success",
                   title: "Order sent. We will call you to confirm.",
                   showConfirmButton: true,
-                  // timer: 2000
                 });
               }
               this.isSubmit=false
@@ -628,6 +619,8 @@ export default {
     reset () {
         this.$refs.form.reset()
       },
+      //Clicking the add order button to verify 
+      // its input to have order summary detail
     addCard() {
       var total_order_qty =
         parseInt(this.jarQuantity) + parseInt(this.tabQuantity) * 4;
@@ -678,10 +671,12 @@ export default {
           this.jarQuantity * this.jarPrice + this.tabQuantity * this.tubPrice;
       }
     },
+    //Date for preferred delivery date 
+    //so that it can't select past dates
     notLessDate(deliveredDate) {
       return deliveredDate >= new Date().toISOString().substr(0, 10);
     },
-
+    //displaying halaya tub information as price and name
     getHalayaTub(item) {
       axios
         .get(this.url + "/api/fetchHalayaTub", this.config)
@@ -690,7 +685,7 @@ export default {
           this.tubPrice = response.data.product[0].product_price;
         });
     },
-
+    //displaying halaya jar information as price and name
     getHalayaJar(item) {
       axios
         .get(this.url + "/api/fetchHalayaJar", this.config)
@@ -699,9 +694,11 @@ export default {
           this.jarPrice = response.data.product[0].product_price;
         });
     },
+    //Clicking plus icon to increase jar quantity
     increaseJar: function() {
       this.jarQuantity++;
     },
+     //Clicking minus icon to decrease jar quantity
     decreaseJar: function() {
       if (this.jarQuantity == 0) {
         this.jarQuantity = 0;
@@ -709,12 +706,11 @@ export default {
         this.jarQuantity--;
       }
     },
-    resetJar: function() {
-      this.jarQuantity = 0;
-    },
+     //Clicking plus icon to increase tub quantity
     increaseTub: function() {
       this.tabQuantity++;
     },
+     //Clicking minus icon to decrease tub quantity
     decreaseTub: function() {
       if (this.tabQuantity == 0) {
         this.tabQuantity = 0;
@@ -723,9 +719,6 @@ export default {
       }
     },
 
-    resetTub: function() {
-      this.tabQuantity = 0;
-    }
   }
 };
 </script>

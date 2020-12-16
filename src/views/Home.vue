@@ -15,7 +15,7 @@
               <v-card-title class="deep-purple lighten-5" id="title">{{element.ingredients_name}}</v-card-title>
               <hr>
               <v-spacer/>
-              <v-card-text id="qty">{{element.ingredients_remaining}} {{element.ingredients_unit}}/s</v-card-text>
+              <v-card-text id="qty">{{element.ingredients_remaining}} {{element.ingredients_unit}}(s)</v-card-text>
               <v-chip :color="getColor(element.ingredients_status)">{{element.ingredients_status}}</v-chip>
             </v-card>
           </v-col>

@@ -19,11 +19,11 @@
                       <v-row class="mx-auto text-center">
                         <v-list-item>
                           Available Quantity :
-                          <b>{{ item.ingredients_remaining}} {{item.ingredients_unit}}/s</b>
+                          <b>{{ item.ingredients_remaining}} {{item.ingredients_unit}}(s)</b>
                         </v-list-item>
                         <v-list-item>
                           Used Quantity :
-                          <b>{{ item.total}} {{item.ingredients_unit}}/s</b>
+                          <b>{{ item.total}} {{item.ingredients_unit}}(s)</b>
                         </v-list-item>
                         <v-list-item>
                           <v-chip
@@ -295,7 +295,7 @@ export default {
           sortable: false,
           value: "ingredients_name"
         },
-        { text: "Available Quantity", value: "ingredients_remaining" },
+        // { text: "Available Quantity", value: "ingredients_remaining" },
         { text: "Used Quantity", value: "used_ingredients_amount" },
         { text: "Recorded Date", value: "updated_at" }
       ]
@@ -571,6 +571,7 @@ export default {
 #cards {
   padding: 10px !important;
   justify-content: center !important;
+  width: 270px;
 }
 .v-application .mb-6 {
   margin-bottom: 0px !important;

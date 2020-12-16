@@ -7,7 +7,7 @@
       <v-tabs v-model="tabs" right color="deep-purple accent-4">
         <v-tab>Received Orders</v-tab>
         <v-tab>Pending Orders</v-tab>
-        <v-tab>Walk in</v-tab>
+        <v-tab>Walk-in</v-tab>
       </v-tabs>
       <v-tabs-items v-model="tabs">
         <v-tab-item>
@@ -85,6 +85,9 @@
             <template v-slot:item.contact_number="{ item }">
               <span>{{'0'+item.contact_number}}</span>
             </template>
+             <template v-slot:item.distance="{ item }">
+              <span>{{item.distance+'km'}}</span>
+            </template>
             <template v-slot:item.order_status="{ item }">
               <v-chip :color="getColor(item.order_status)" dark>{{ item.order_status }}</v-chip>
             </template>
@@ -116,7 +119,7 @@
             <v-container>
               <v-row class="mx-2">
                 <v-col class="align-center justify-space-between" cols="12">
-                  <v-row align="center" class="mr-0">
+                  <v-row align="center" class="mr-0 pl-4">
                     <v-text-field
                       prepend-icon="mdi-account-outline"
                       label="Receiver's Name"
@@ -127,10 +130,10 @@
                   </v-row>
                 </v-col>
                 <v-icon class="pl-4">mdi-map-marker</v-icon>
-                <label>Receiver Address</label>
+                <label>Receiver's Address</label>
                 <v-row class="pl-5">
                   <v-col cols="6">
-                    <v-text-field v-model="post.building_or_street" label="Building Name/Street" :rules="streetRules"
+                    <v-text-field v-model="post.building_or_street" label="Landmark" :rules="streetRules"
                        required></v-text-field>
                   </v-col>
                   <v-col cols="6">
@@ -161,7 +164,7 @@
                   >
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
-                        v-model="post.preferred_delivery_date"
+                        v-model="dateNew"
                         label="Preferred Delivey Date"
                         prepend-icon="mdi-calendar"
                         readonly
@@ -172,7 +175,7 @@
                       ></v-text-field>
                     </template>
                     <v-date-picker
-                      v-model="post.preferred_delivery_date "
+                      v-model="dateNew"
                       color="deep-purple lighten-1"
                       no-title
                       scrollable
@@ -302,6 +305,7 @@ export default {
       search: "",
       dialog: false,
       disabled: true,
+      dateNew:true,
       headers: [
         {
           text: "Receiver Name",
@@ -388,7 +392,7 @@ export default {
     let channel = pusher.subscribe('order-channel')
 
     channel.bind('newOrder', data => {
-      console.log(data.order);
+      // console.log(data.order);
       this.fetchOrders();
       this.fetchPendingOrders();
     });
@@ -442,7 +446,7 @@ export default {
       "Access-Control-Allow-Origin": "*"
     };
     this.config = config;
-    console.log("this.config", this.config);
+    // console.log("this.config", this.config);
   },
   created() {
     this.fetchPendingOrders();
@@ -469,7 +473,7 @@ export default {
           }
         }
       }
-      console.log("orderedProducts: ", this.orderedProducts);
+      // console.log("orderedProducts: ", this.orderedProducts);
     },
     closeDialog() {
       this.orderDetails = false;
@@ -520,6 +524,7 @@ export default {
             var options = { units: "kilometers" };
             var dist = turf.distance(from_place, to_place, options);
             this.post.distance = dist;
+            this.post.preferred_delivery_date= this.dateNew
             axios
               .post(this.url + "/api/post/update", this.post, this.config)
               .then(response => {
@@ -571,7 +576,9 @@ export default {
       axios
         .get(this.url + "/api/post/edit/" + item.id, this.config)
         .then(response => {
+          this.dateNew=new Date(response.data.preferred_delivery_date).toISOString().substr(0, 10);
           this.post = response.data;
+          // this.post.preferred_delivery_date
         });
     },
     orderDetail() {
@@ -628,7 +635,7 @@ export default {
           this.dialog = false;
         })
         .catch(response => {
-          console.log(response);
+          // console.log(response);
         });
     },
     getHalayaJarQty(item) {
@@ -718,7 +725,7 @@ export default {
       axios
         .post(this.url + "/api/post/confirm/" + item.id, {}, this.config)
         .then(response => {
-          console.log(response.data)
+          // console.log(response.data)
           this.$vloading.hide()
           Swal.fire({
             title: "Order has been confirmed",

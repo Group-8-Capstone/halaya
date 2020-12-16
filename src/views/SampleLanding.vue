@@ -360,6 +360,7 @@ export default {
   components: { Gallery },
   data: function() {
     return {
+      dialog:false,
       jarName: null,
       tubName: null,
       tubPrice: null,
@@ -422,9 +423,9 @@ export default {
     }
   },
 
-  mounted: function() {
-    this.calculateHeight();
-  }
+  // mounted: function() {
+  //   this.calculateHeight();
+  // }
 };
 </script>
 

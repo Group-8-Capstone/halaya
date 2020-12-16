@@ -1,68 +1,68 @@
 <template>
  <div class="container " >
    <center>
-            <v-card style="max-width:500px;height:auto;" class="ml-10">
-                 <v-card-title >ACCOUNT PROFILE</v-card-title>
-                 <div class="modal-body">
-                        <form @submit="formSubmit" enctype="multipart/form-data" action>
-                          <v-container>
-                                  <center>
-                                    <img style="max-width:100%;height:auto;" class="addOnsImage" :src="imageURL"><br>
-                                     <h4 class=" gray--text">{{username}}</h4>
-                                     <br>
-                                     <p class=" gray--text">Update Profile Picture</p>
-                                    <input type="file" class="fileStyle deep-purple--text"  accept="image/jpeg, image/png, image/gif" id="imageUpload"  v-on:change="onImageChange">     
-                            </center>
-                            </v-container>
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-                      <v-btn small type="submit"  for="imageUpload" class="ma-3" color="purple darken-2" outlined>UPLOAD PICTURE</v-btn>
-                      </v-card-actions>
-                        </form>
-                  </div>
-                  <v-divider></v-divider>
-                    <v-card-title >ACCOUNT PASSWORD</v-card-title>
-                    <span id="message"></span>
-                  <v-row>
-                    <v-col cols="12">  <v-text-field
-                      v-model="userPassword"
-                      prepend-icon="mdi-lock"
-                      label="Enter New password"
-                      :append-icon="value ? 'mdi-eye-off' : 'mdi-eye'"
-                      @click:append="() => (value = !value)"
-                      :type="value ? 'password' : 'text'"
-                      :rules="[rules.password]"
-                      outlined
-                      dense
-                      :error-messages="userPasswordErrors"
-                      @input="$v.userPassword.$touch()"
-                      @blur="$v.userPassword.$touch()"
-                      required
-                    ></v-text-field>
-                    <v-text-field
-                     
-                      label="Confirm New Password"
-                      :append-icon="valuePass ? 'mdi-eye-off' : 'mdi-eye'"
-                      @click:append="() => (valuePass = !valuePass)"
-                      :type="valuePass ? 'password' : 'text'"
-                      name="password"
-                      prepend-icon="mdi-lock"
-                      v-model="confirmPassword"
-                      :rules="[passwordConfirmationRule]"
-                      class="border-design"
-                      outlined
-                      dense
-                      :error-messages="confirmPasswordErrors"
-                      @input="$v.confirmPassword.$touch()"
-                      @blur="$v.confirmPassword.$touch()"
-                      required
-                    ></v-text-field></v-col>
-                  </v-row>
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-                  <v-btn outlined small @click="updatePassword" class="ma-3" color="purple darken-2">UPDATE PASSWORD</v-btn>
-                  </v-card-actions>
-            </v-card>
+    <v-card style="max-width:500px;height:auto;" class="ml-10">
+        <v-card-title >ACCOUNT PROFILE</v-card-title>
+        <div class="modal-body">
+          <form @submit="formSubmit" enctype="multipart/form-data" action>
+            <v-container>
+              <center>
+                <img style="max-width:100%;height:auto;" class="addOnsImage" :src="imageURL"><br>
+                <h4 class=" gray--text">{{username}}</h4>
+                <br>
+                <p class=" gray--text">Update Profile Picture</p>
+                <input type="file" class="fileStyle deep-purple--text"  accept="image/jpeg, image/png, image/gif" id="imageUpload"  v-on:change="onImageChange">     
+              </center>
+              </v-container>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn small type="submit"  for="imageUpload" class="ma-3" color="purple darken-2" outlined>UPLOAD PICTURE</v-btn>
+              </v-card-actions>
+                </form>
+          </div>
+          <v-divider></v-divider>
+            <v-card-title >CHANGE PASSWORD</v-card-title>
+            <span id="message"></span>
+          <v-row>
+            <v-col cols="12">  <v-text-field
+              v-model="userPassword"
+              prepend-icon="mdi-lock"
+              label="Enter New password"
+              :append-icon="value ? 'mdi-eye-off' : 'mdi-eye'"
+              @click:append="() => (value = !value)"
+              :type="value ? 'password' : 'text'"
+              :rules="[rules.password]"
+              outlined
+              dense
+              :error-messages="userPasswordErrors"
+              @input="$v.userPassword.$touch()"
+              @blur="$v.userPassword.$touch()"
+              required
+            ></v-text-field>
+            <v-text-field
+            
+              label="Confirm New Password"
+              :append-icon="valuePass ? 'mdi-eye-off' : 'mdi-eye'"
+              @click:append="() => (valuePass = !valuePass)"
+              :type="valuePass ? 'password' : 'text'"
+              name="password"
+              prepend-icon="mdi-lock"
+              v-model="confirmPassword"
+              :rules="[passwordConfirmationRule]"
+              class="border-design"
+              outlined
+              dense
+              :error-messages="confirmPasswordErrors"
+              @input="$v.confirmPassword.$touch()"
+              @blur="$v.confirmPassword.$touch()"
+              required
+            ></v-text-field></v-col>
+          </v-row>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+          <v-btn outlined small @click="updatePassword" class="ma-3" color="purple darken-2">UPDATE PASSWORD</v-btn>
+          </v-card-actions>
+    </v-card>
         </center>
  </div>
 </template>
@@ -79,11 +79,7 @@
     margin-bottom: 3%;
     
 }
-
-
 </style>
-
-
 <script>
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -95,6 +91,7 @@ import {
 } from "vuelidate/lib/validators";
   export default {
     name: "BusinessSetting",
+    //initializing required and called variable for data
     data: () => ({
       rules: [
         value => !!value || 'Required.',
@@ -128,7 +125,8 @@ import {
     value: true,
 
     }),
-     validations: {
+     //validate the required input
+    validations: {
     userPassword: {
       required
     },
@@ -136,6 +134,7 @@ import {
       required
     }
      },
+    //Calling the token before rendering other data to be displayed
     beforeCreate() {
     let config = {};
     config.headers = {
@@ -144,6 +143,8 @@ import {
     };
     this.config = config;
   },
+    //Validation for the order form 
+    //shown error message if input not filled
    computed: {
     passwordConfirmationRule() {
       return () =>
@@ -162,33 +163,24 @@ import {
       return errors;
     },
   },
-
+  //renders the avatar in the avatar 
+  //attribute after the profile picture was updated
     mounted() {
         this.avatarRetrieve()
-    
     },
-
     methods: {
+    //making the password input after being updated
       reloadPassword(){
         this.userPassword=null,
         this.confirmPassword=null
       },
-      editAmount(){
-        this.disabled= false
-        this.btnDisabled=true
-        this.isHidden=false
-      },
-
-      saveChanges(){
-        this.disabled= true
-        this.btnDisabled=false
-        this.isHidden = true
-
-      },
+    //renders the image in the avatar attribute after choosing an image file
       onImageChange(e){
             this.image = e.target.files[0]
             this.imageURL = URL.createObjectURL(e.target.files[0])
         },
+    //submitting the image url
+    //called in update profile
      formSubmit(e) {
         this.$vloading.show();
             if(this.image !== null ){
@@ -204,10 +196,7 @@ import {
                 axios.post(this.url+'/api/ProfilePicUpdate/'+id, formData, this.config).then(function (response) {
                     currentObj.success = response.data.success
                     window.location.reload()
-                  
-                    this.$vloading.hide()
-               
-                     
+                    this.$vloading.hide()   
                 })
                 .catch(function (error) {
                     currentObj.output = error;
@@ -215,10 +204,9 @@ import {
             }else{
                 this.errorMessage = 'All fields are required!'
             }
-           this.$vloading.hide()
-                 
-               
+           this.$vloading.hide()      
         },
+      // for retrieving avatar and renders in the avatar attribut
       avatarRetrieve() {
       this.$vloading.show();
       let id=localStorage.getItem('id')
@@ -234,6 +222,7 @@ import {
         }
       });
     },
+    //updating the password
     updatePassword(){
       if (this.userPassword ==null || this.confirmPassword ==null){
          this.$v.$touch();
@@ -268,9 +257,6 @@ import {
     }
     }
     }
-
- 
-    
   }
 </script>
 
