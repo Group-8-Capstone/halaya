@@ -247,6 +247,7 @@ import moment from 'moment';
 export default {
   name: "Sidebar",
   props: {},
+  //initializing required and called variable for needed data
   data: () => ({
     storeData: [],
     countPending:0,
@@ -260,6 +261,7 @@ export default {
     model: 1,
     mini: true,
     count: 0,
+    //sidebar tab found in admin side
     admin: [
       { icon: "mdi-view-dashboard", text: "Dashboard", link: "/dashboard" },
         {
@@ -304,6 +306,7 @@ export default {
       },
       { icon: "mdi-logout", text: "Sign out", link: "/login" },
     ],
+    //sidebar tab found in customer side
     customer: [
       { icon: "mdi-home-variant", text: "Home", link: "/customerHome" },
       { icon: "mdi-package-variant-closed", text: "My Order", link: "/myorder" },
@@ -314,6 +317,7 @@ export default {
       },
       { icon: "mdi-logout", text: "Sign out", link: "/login" }
     ],
+    //sidebar tab found in rider side
     driver: [
       { icon: "mdi-clipboard-outline", text: "To Deliver", link: "/delivery" },
       { icon: "mdi-content-copy", text: "Delivered Orders", link: "/delivered" },
@@ -325,6 +329,7 @@ export default {
       { icon: "mdi-logout", text: "Sign out", link: "/login" }
     ]
   }),
+  //rendering the displayed table in realtime
   mounted(){
     this.confirmPending()
     this.retrieve()
@@ -339,7 +344,7 @@ export default {
       this.notifCustomerOrder()
     });
   },
-
+  //Calling the token before rendering other data to be displayed
   beforeCreate() {
     let config = {};
     config.headers = {
@@ -348,24 +353,25 @@ export default {
     };
     this.config = config;
   },
- 
+ //renders the account image and its username
   created() {
     this.avatarRetrieve();
     this.isAdmin();
   },
   methods: {
-  
-
+  //notifies the new ordes from the customers to the admin side
      getOrder(item, event) {
        this.$router.push('/order').catch(err => {});
        axios.post(this.url + "/api/updateadminStatus/" + item.id, {}, this.config)
         .then(response => {
         });
     },
+  //displayed data in the notification for catch orders
      notif(item){
       let date = moment(item.created_at).format('MM/DD/YYYY HH:mm');
       return item.receiver_name + ' '+'placed an order on'+' '+ date
     },
+  //Marking customer order as read in the notification
     customerOrder(item, event) {
        this.$router.push('/myorder').catch(err => {});
       axios.post(this.url + "/api/updateMarkStatus/" + item.id, {}, this.config)
@@ -373,10 +379,13 @@ export default {
         });
   
     },
+  //displayed detail in the customer side after ordering
   notifCustomerOrder(item){
       let date = moment(item.created_at).format('MM/DD/YYYY');
       return 'You ordered ube halaya'+' ' + date
     },
+  //fetching new order with on order and pending status
+  //in the admin side and marking it as read 
     retrieve(){
       axios.get(this.url + "/api/fetchProcessOrder", this.config).then(response => {
         this.storeData = response.data.data;
@@ -388,7 +397,7 @@ export default {
         });
       })
     },
-    
+  //fetching the 
     confirmPending(){
       let id = localStorage.getItem("id");
       axios
@@ -406,6 +415,7 @@ export default {
       alert(route);
       this.$router.push(route);
     },
+    //retrieving avatar image
     avatarRetrieve() {
       let id=localStorage.getItem('id')
       axios.get(this.url+"/api/fetchProfile/"+ id, this.config).then(response => {
@@ -413,21 +423,26 @@ export default {
         this.image=response.data.account[0].profile_url
       });
     },
+    //logging out from the account
+    //Clearing the local storage where id and other user detailed is save
     logout(item) {
       if (item.text == "Sign out") {
         localStorage.clear();
       }
     },
+    //condition for the sidebar displayed, admin side
     isAdmin() {
       if (localStorage.getItem("role") == "admin") {
         return true;
       }
     },
+    //condition for the sidebar displayed, customer side
     isCustomer() {
       if (localStorage.getItem("role") == "customer") {
         return true;
       }
     },
+    //condition for the sidebar displayed, rider side
     isDriver() {
       if (localStorage.getItem("role") == "driver") {
         return true;

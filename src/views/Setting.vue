@@ -20,7 +20,6 @@
           hide-details
         ></v-text-field>
         <v-btn small class="ma-5" color="purple darken-2" outlined dark @click="showDialog">
-          <!-- <v-icon>mdi-plus</v-icon> -->
           <v-toolbar-title>ADD INGREDIENT</v-toolbar-title>
         </v-btn>
       </v-card-title>
@@ -103,7 +102,6 @@
         </template>
       </v-data-table>
     </v-card>
-
     <template>
       <v-dialog v-model="editDialog" style="height:auto;" width="400px">
         <v-card class="ma-0 pa-0">
@@ -177,6 +175,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 export default {
   name: "BusinessSetting",
+  //initializing required and called variable for needed data
   data: () => ({
     items: ["kg", "g", "mg", "can"],
     loading: false,
@@ -215,6 +214,7 @@ export default {
     btnDisabled: false,
     isHidden: true
   }),
+  //validations to make the input required
   validations: {
     addedIngredientsName: {
       required
@@ -229,6 +229,7 @@ export default {
       required
     }
   },
+  //Validation for all required inputs
   computed: {
     AddedIngredientsNameErrors() {
       const errors = [];
@@ -258,10 +259,12 @@ export default {
       return errors;
     }
   },
+  //renders  the fetched data using mounted 
   mounted() {
     this.fetchEstimatedValue();
     setInterval(this.fetchEstimatedValue(), 3000);
   },
+//Calling the token before rendering
   beforeCreate() {
     let config = {};
     config.headers = {
@@ -270,23 +273,18 @@ export default {
     };
     this.config = config;
   },
-  created() {},
+//All function used inside the component
   methods: {
-    editAmount() {
-      this.disabled = false;
-      this.btnDisabled = true;
-      this.isHidden = false;
-    },
+//making the input back to empty after 
+//clicking the add ingredients button
     reloadData() {
       (this.addedIngredientsName = null),
         (this.addedEstimatedAmount = null),
         (this.addedIngredientsUnit = null),
         this.$v.$reset();
     },
-
-    reloadProduct() {
-      (this.productName = null), (this.imageURL = null);
-    },
+    //Adding of ingredients, called in 
+    //clicking add button
     addEstimatedValue() {
       if (
         this.addedIngredientsName == null ||
@@ -326,11 +324,12 @@ export default {
           });
       }
     },
+    //displayed the add ingredients button
     showDialog() {
       this.addDialog = true;
       this.reloadData();
     },
-
+    //fetch and displayed ingredients details in the table
     fetchEstimatedValue() {
       this.$vloading.show();
       axios
@@ -342,7 +341,7 @@ export default {
           this.estimatedValue = response.data;
         });
     },
-
+    //fetching the ingredients detail into the edit inputs
     editEstimatedValue(item) {
       axios
         .get(
@@ -353,6 +352,8 @@ export default {
           this.editValue = response.data;
         });
     },
+    //for updating new details for ingredients
+    //used in save update button
     updateEstimatedValue() {
       this.$vloading.show();
       if (
@@ -386,6 +387,7 @@ export default {
           });
       }
     },
+    //delete ingredients in the table
     deleteStockIngredients(item) {
       axios
         .delete(
@@ -394,6 +396,7 @@ export default {
         )
         .then(response => {});
     },
+    //making the null delete into not empty
     deleteIngredients(item) {
       axios
         .delete(this.url + "/api/softDeleteIngredients/" + item.id, this.config)
@@ -401,30 +404,8 @@ export default {
           this.fetchEstimatedValue();
         });
     },
-    AlertDelete(item) {
-      Swal.fire({
-        title: "Are you sure?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#CFD8D",
-        cancelButtonText: "No",
-        confirmButtonText: "Yes",
-        reverseButtons: true
-      }).then(result => {
-        if (result.value) {
-          this.deleteProduct(item);
-          this.deleteStockProduct(item);
-          Swal.fire({
-            title: "Deleted!",
-            text: "Ingredient has been deleted.",
-            icon: "success",
-            showConfirmButton: false,
-            timer: 1500
-          });
-        }
-      });
-    },
+   
+    //deleting the ingredients
     alertDeleteIngredients(item) {
       Swal.fire({
         title: "Are you sure?",
